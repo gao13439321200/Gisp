@@ -45,19 +45,22 @@ public class WelcomeActivity extends BaseActivity {
         }, 4000);
 */
     }
+
     private void intentMethod() {
 //        String tokens = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("token");
         String uid = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("Uid");
-        if (TextUtils.isEmpty(uid)){
-            LogInActivity.actionActivity(this);
-        }else{
+        if (TextUtils.isEmpty(uid)) {
+//            LogInActivity.actionActivity(this);
+            WelcomeSelectActivity.intentActivity(this);
+        } else {
 //            BaseActivity.token = tokens;
             BaseActivity.uid = uid;
-            GiiispActivity.actionActivity(this,getIntent());
+            GiiispActivity.actionActivity(this, getIntent());
         }
         finish();
 
     }
+
     @Override
     protected void onDestroy() {
         if (mPlayServiceConnection != null) {

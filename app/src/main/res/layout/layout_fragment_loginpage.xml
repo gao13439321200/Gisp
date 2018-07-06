@@ -26,13 +26,9 @@
 
     <TextView
         android:id="@+id/tv_register"
-        android:layout_marginBottom="18dp"
-        android:layout_marginTop="36.3dp"
-        android:gravity="center"
         android:text="@string/register"
-        android:background="@mipmap/login_btn_bg"
-        style="@style/text_12sp_colorwhite"
-        android:textSize="@dimen/text_size" />
+        style="@style/btn_blue"
+        />
 
 
     <TextView

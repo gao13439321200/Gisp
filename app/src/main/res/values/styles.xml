@@ -291,4 +291,12 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:paddingTop">8dp</item>
     </style>
+
+    <style name="btn_blue" parent="text_12sp_colorwhite">
+        <item name="android:layout_marginBottom">18dp</item>
+        <item name="android:layout_marginTop">36.3dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@mipmap/login_btn_bg</item>
+        <item name="android:textSize">@dimen/text_size</item>
+    </style>
 </resources>

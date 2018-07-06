@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="欢迎页"
+        android:textSize="28sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="请选择您关注的领域"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@mipmap/domain_icon"
+        android:drawablePadding="10dp"
+        android:text="关注的领域"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@mipmap/keyword_icon"
+        android:drawablePadding="10dp"
+        android:text="关注的关键字"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@mipmap/scholar_icon"
+        android:drawablePadding="10dp"
+        android:text="关注的学者"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/tv_select"
+        style="@style/btn_blue"
+        android:layout_marginTop="100dp"
+        android:text="点击选择您关注的专业领域"/>
+
+    <TextView
+        android:id="@+id/tv_to_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="直接进入首页"
+        android:textColor="@color/colorInterface"/>
+
+</LinearLayout>

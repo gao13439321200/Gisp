@@ -14,6 +14,7 @@ import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.SharedPreferencesHelper;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.GiiispActivity;
+import com.giiisp.giiisp.view.activity.WelcomeSelectActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.umeng.socialize.UMAuthListener;
@@ -68,7 +69,8 @@ public class LoginHintFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
             BaseActivity.uid = entity.getUid();
 //            SharedPreferencesHelper.getInstance(context).putStringValue("token", entity.getToken());
             SharedPreferencesHelper.getInstance(context).putStringValue("Uid", entity.getUid());
-            GiiispActivity.actionActivity(getContext());
+//            GiiispActivity.actionActivity(getContext());
+            WelcomeSelectActivity.intentActivity(getActivity());
         }
     }
 
