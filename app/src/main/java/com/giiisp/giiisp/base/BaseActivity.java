@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -27,14 +26,15 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportActivity;
 
 
-public abstract class BaseActivity extends AppCompatActivity implements NetChangeObserver {
+public abstract class BaseActivity extends SupportActivity implements NetChangeObserver {
 
     private boolean isNetworkConnect;
     protected boolean mLastNetworkConnect; // 上次网络连接状态
     protected boolean isResume = false;
-//    public static String token = "";
+    //    public static String token = "";
     public static String uid = "";
     public static String emailauthen = ""; //  替代原先 isVIP 的功能
     public static String isVip = "";  // 用作身份认证按钮 的判断
@@ -117,6 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity implements NetChang
         MobclickAgent.onPause(this);
         NetworkStateReceiver.removeRegisterObserver(this);
     }
+
     private final void init() {
         initData();
         initView();
@@ -125,8 +126,8 @@ public abstract class BaseActivity extends AppCompatActivity implements NetChang
     public abstract void initView();
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public void onBackPressedSupport() {
+        super.onBackPressedSupport();
         AppManager.getAppManager().finishActivity();
     }
 
@@ -247,7 +248,7 @@ public abstract class BaseActivity extends AppCompatActivity implements NetChang
     public void downloadCompleted() {
     }
 
-    public void collection(int id, int integer, String type, String isFollowed,int parentPosition,int position) {
+    public void collection(int id, int integer, String type, String isFollowed, int parentPosition, int position) {
 
     }
 }

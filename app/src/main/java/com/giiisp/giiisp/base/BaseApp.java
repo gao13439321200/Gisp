@@ -19,6 +19,7 @@ import com.umeng.socialize.UMShareAPI;
 
 import org.greenrobot.greendao.database.Database;
 
+import me.yokeyword.fragmentation.Fragmentation;
 import zlc.season.rxdownload2.RxDownload;
 
 
@@ -83,6 +84,11 @@ public class BaseApp extends Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "notes-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+
+        Fragmentation.builder()
+                // show stack view. Mode: BUBBLE, SHAKE, NONE
+                .stackViewMode(Fragmentation.BUBBLE)
+                .install();
     }
 
     public DaoSession getDaoSession() {
