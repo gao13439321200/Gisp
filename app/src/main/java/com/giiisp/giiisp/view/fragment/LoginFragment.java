@@ -6,7 +6,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -55,16 +54,16 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> imp
         tvTitle.setVisibility(View.VISIBLE);
         tvTitle.setText(getString(R.string.register));
         tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText(getString(R.string.login));
+        tvRight.setText("注册");
     }
 
 
     @Override
     public void onSuccess(BaseEntity entity) {
-        Log.i("--->>",entity.toString());
+        Log.i("--->>", entity.toString());
         if (tvTitle == null)
             return;
-        if ( TextUtils.isEmpty(entity.getUid()) || entity.getResult() != 1) {
+        if (TextUtils.isEmpty(entity.getUid()) || entity.getResult() != 1) {
             Utils.showToast(R.string.login_failed);
             return;
         } else {

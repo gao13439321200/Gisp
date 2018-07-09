@@ -61,6 +61,8 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     TextView tvConfirm;
     @BindView(R.id.fl_edit)
     FrameLayout flEdit;
+    @BindView(R.id.img_photo_big)
+    ImageView mImgBig;
     private String type;
     private String pcid;
     private String uid;
@@ -160,7 +162,7 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
         sIntent.putExtra("type", type);
         sIntent.putExtra("pcid", pcid);
         sIntent.putExtra("uid", uid);
-        context.startActivityForResult(sIntent,1000);
+        context.startActivityForResult(sIntent, 1000);
     }
 
     private void addStatusBarView() {
@@ -177,11 +179,13 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     }
 
 
-    @OnClick({R.id.im_close, R.id.tv_publish, R.id.iv_answer_at, R.id.fl_edit, R.id.iv_answer_link, R.id.tv_empty, R.id.tv_confirm})
+    @OnClick({R.id.im_close, R.id.tv_publish, R.id.iv_answer_at,
+            R.id.fl_edit, R.id.iv_answer_link, R.id.tv_empty, R.id.tv_confirm,
+            R.id.img_photo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.im_close:
-                setResult(RESULT_OK,getIntent());
+                setResult(RESULT_OK, getIntent());
                 finish();
                 break;
             case R.id.tv_publish:
@@ -248,6 +252,9 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                 }
 
                 break;
+            case R.id.img_photo:
+                mImgBig.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -278,11 +285,11 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
             editTextAnswer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                  Utils.showToast(R.string.problem_exists);
+                    Utils.showToast(R.string.problem_exists);
                 }
             });
-        }else{
-            setResult(RESULT_OK,getIntent());
+        } else {
+            setResult(RESULT_OK, getIntent());
             finish();
         }
     }
@@ -290,7 +297,7 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setResult(RESULT_OK,getIntent());
+        setResult(RESULT_OK, getIntent());
         finish();
     }
 
