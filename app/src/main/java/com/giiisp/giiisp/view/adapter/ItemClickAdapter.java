@@ -1,23 +1,19 @@
 package com.giiisp.giiisp.view.adapter;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
@@ -33,7 +29,6 @@ import com.giiisp.giiisp.entity.MyScholarBean;
 import com.giiisp.giiisp.entity.QAEntity;
 import com.giiisp.giiisp.entity.SubscribeEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
-import com.giiisp.giiisp.utils.DensityUtils;
 import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.Utils;
@@ -130,11 +125,11 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     if (item.getUserInfo() != null) {
                         helper.setText(R.id.tv_user_name, item.getUserInfo().getRealName());
                         helper.setText(R.id.tv_user_position, item.getUserInfo().getPosition());
-                        if( item.getUserInfo().getId().equals("admin")){ //   admin
-                            helper.setImageResource(R.id.iv_user_icon,R.mipmap.about_logo);
+                        if (item.getUserInfo().getId().equals("admin")) { //   admin
+                            helper.setImageResource(R.id.iv_user_icon, R.mipmap.about_logo);
 //                          ((ImageView) helper.getView(R.id.iv_user_icon)).setImageResource(R.mipmap.about_logo);
-                                  //setBackgroundResource(R.mipmap.about_logo);
-                        }else{
+                            //setBackgroundResource(R.mipmap.about_logo);
+                        } else {
                             ImageLoader.getInstance().displayCricleImage(activity, item.getUserInfo().getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
                         }
 
@@ -149,6 +144,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     }
                     break;
                 case R.layout.item_questions_answers:
+                    helper.getView(R.id.img_photo).setOnClickListener(view ->
+                            ToastUtils.showShort("点开了一张图片"));
+
                     if (item.getQuizInfoBean() != null) {
                         QAEntity.QuizInfoBean.RowsBeanXXXX quizInfoBean = item.getQuizInfoBean();
                         final String pcid = quizInfoBean.getPcid();
@@ -334,42 +332,42 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     initSwitch(viewSwitch, tvProblem, textViewDescription, answerOne, answerTwo);
                     break;
                 case R.layout.item_paper_label:
-                    final TagFlowLayout tagLabel = helper.getView(R.id.tag_flowlayout);
-                    final TextView tvSwitch = helper.getView(R.id.tv_switch);
-                    ViewGroup.LayoutParams layoutParam = tagLabel.getLayoutParams();
-                    helper.setVisible(R.id.tv_switch, DensityUtils.px2dp(activity, layoutParam.height) > 45);
-
-                    tvSwitch.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (tvSwitch.isSelected()) {
-                                tvSwitch.setText("收起");
-                                ViewGroup.LayoutParams layoutParam = tagLabel.getLayoutParams();
-                                if (DensityUtils.px2dp(activity, layoutParam.height) > 45) {
-                                    layoutParam.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                                    tagLabel.setLayoutParams(layoutParam);
-                                }
-
-                            } else {
-                                tvSwitch.setText("展开");
-                                ViewGroup.LayoutParams layoutParams = tagLabel.getLayoutParams();
-                                layoutParams.height = DensityUtils.dp2px(activity, 45);
-                                tagLabel.setLayoutParams(layoutParams);
-                            }
-                            tvSwitch.setSelected(!tvSwitch.isSelected());
-
-                        }
-                    });
-                    helper.setText(R.id.tv_label, item.getString());
-                    tagLabel.setAdapter(new TagAdapter<String>(item.getList()) {
-                        @Override
-                        public View getView(FlowLayout parent, int position, String s) {
-                            LayoutInflater mInflater = LayoutInflater.from(activity);
-                            TextView tv = (TextView) mInflater.inflate(R.layout.item_paper_tag, tagLabel, false);
-                            tv.setText(s);
-                            return tv;
-                        }
-                    });
+//                    final TagFlowLayout tagLabel = helper.getView(R.id.tag_flowlayout);
+//                    final TextView tvSwitch = helper.getView(R.id.tv_switch);
+//                    ViewGroup.LayoutParams layoutParam = tagLabel.getLayoutParams();
+//                    helper.setVisible(R.id.tv_switch, DensityUtils.px2dp(activity, layoutParam.height) > 45);
+//
+//                    tvSwitch.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if (tvSwitch.isSelected()) {
+//                                tvSwitch.setText("收起");
+//                                ViewGroup.LayoutParams layoutParam = tagLabel.getLayoutParams();
+//                                if (DensityUtils.px2dp(activity, layoutParam.height) > 45) {
+//                                    layoutParam.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//                                    tagLabel.setLayoutParams(layoutParam);
+//                                }
+//
+//                            } else {
+//                                tvSwitch.setText("展开");
+//                                ViewGroup.LayoutParams layoutParams = tagLabel.getLayoutParams();
+//                                layoutParams.height = DensityUtils.dp2px(activity, 45);
+//                                tagLabel.setLayoutParams(layoutParams);
+//                            }
+//                            tvSwitch.setSelected(!tvSwitch.isSelected());
+//
+//                        }
+//                    });
+//                    helper.setText(R.id.tv_label, item.getString());
+//                    tagLabel.setAdapter(new TagAdapter<String>(item.getList()) {
+//                        @Override
+//                        public View getView(FlowLayout parent, int position, String s) {
+//                            LayoutInflater mInflater = LayoutInflater.from(activity);
+//                            TextView tv = (TextView) mInflater.inflate(R.layout.item_paper_tag, tagLabel, false);
+//                            tv.setText(s);
+//                            return tv;
+//                        }
+//                    });
                     break;
                 case R.layout.item_message_notification:
                     if (item.getMsgEntity() != null) {
@@ -498,8 +496,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     }
                     break;
                 case R.layout.item_scholar_education:
-                   final UserInfoEntity.IntroductionBean introductionBean = item.getIntroduction(); // Todo 学者详情需要更改
-                    helper.setText(R.id.tv_description,introductionBean.getSchool() );//introductionBean.getSchool()
+                    final UserInfoEntity.IntroductionBean introductionBean = item.getIntroduction(); // Todo 学者详情需要更改
+                    helper.setText(R.id.tv_description, introductionBean.getSchool());//introductionBean.getSchool()
                     String start = introductionBean.getTimeStart().substring(0, 4);
                     String end = introductionBean.getTimeEnd().substring(0, 4);
                     String major = introductionBean.getMajor();
@@ -507,7 +505,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_university_name, start + "~" + end + ", " + major + ", " + degree);
 //                    helper.setText(R.id.tv_university_name,item.getString()+item.getUrl());
                     helper.getView(R.id.tv_edit).setOnClickListener(new View.OnClickListener() {
-                            @Override
+                        @Override
                         public void onClick(View view) {
                             ExperienceActivity.actionActivity(activity, "edit", introductionBean);
                         }
@@ -674,10 +672,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     } else {
                         viewBg.setVisibility(View.VISIBLE);
                     }
-                    if("mp4".equals(FileUtils.parseSuffix(item.getString()))){ // 视频
+                    if ("mp4".equals(FileUtils.parseSuffix(item.getString()))) { // 视频
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
-                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(item.getString(),1));
-                    }else{
+                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(item.getString(), 1));
+                    } else {
                         ImageLoader.getInstance().displayImage(activity, item.getString(), (ImageView) helper.getView(R.id.iv_pic));
                     }
                     break;

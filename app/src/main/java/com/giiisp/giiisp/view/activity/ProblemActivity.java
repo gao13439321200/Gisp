@@ -16,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
@@ -63,6 +64,8 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     FrameLayout flEdit;
     @BindView(R.id.img_photo_big)
     ImageView mImgBig;
+    @BindView(R.id.rl_img_big)
+    RelativeLayout mRlImgBIg;
     private String type;
     private String pcid;
     private String uid;
@@ -181,7 +184,7 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
 
     @OnClick({R.id.im_close, R.id.tv_publish, R.id.iv_answer_at,
             R.id.fl_edit, R.id.iv_answer_link, R.id.tv_empty, R.id.tv_confirm,
-            R.id.img_photo})
+            R.id.img_photo, R.id.tv_close})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.im_close:
@@ -253,7 +256,10 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
 
                 break;
             case R.id.img_photo:
-                mImgBig.setVisibility(View.VISIBLE);
+                mRlImgBIg.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_close:
+                mRlImgBIg.setVisibility(View.GONE);
                 break;
         }
     }

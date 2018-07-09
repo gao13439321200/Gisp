@@ -3,6 +3,6 @@
     <!--<item android:drawable="@mipmap/ic_launcher" android:state_selected="true"></item>
     <item android:drawable="@android:drawable/ic_input_get" android:state_selected="false"></item>
 </selector>-->
-<item android:drawable="@mipmap/large_label_icon" android:state_selected="true"/>
-<item android:drawable="@mipmap/label_select_icon" android:state_selected="false"/>
+<item android:drawable="@mipmap/img_data_select" android:state_selected="true"/>
+<item android:drawable="@mipmap/img_data_noselect" android:state_selected="false"/>
     </selector>

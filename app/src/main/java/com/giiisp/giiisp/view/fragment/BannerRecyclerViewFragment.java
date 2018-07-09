@@ -653,11 +653,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "paper_label":
                 swipeRefreshLayout.setEnabled(false);
-                this.list.clear();
-                this.list.add(new ClickEntity(getString(R.string.technology_label)));
-                this.list.add(new ClickEntity(getString(R.string.mathematics_label)));
-                this.list.add(new ClickEntity(getString(R.string.data_labels)));
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_label, this.list, type);
+//                this.list.clear();
+//                this.list.add(new ClickEntity(getString(R.string.technology_label)));
+//                this.list.add(new ClickEntity(getString(R.string.mathematics_label)));
+//                this.list.add(new ClickEntity(getString(R.string.data_labels)));
+//                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_label, this.list, type);
 
                 break;
             case "summary_list":

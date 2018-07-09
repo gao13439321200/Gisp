@@ -36,6 +36,18 @@
         android:textColor="@color/colorTranslucentBlack"
         />
 
+    <ImageView
+        android:id="@+id/img_photo"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_user_name"
+        android:layout_marginTop="6.3dp"
+        android:layout_toRightOf="@id/tv_problem"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:src="@mipmap/img_photo_orange"
+        />
+
 
     <TextView
         android:id="@+id/tv_answer_reply"
@@ -172,8 +184,8 @@
                 style="@style/text_12sp_colorauxiliary"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="1dp"
-                android:drawableStart="@mipmap/text_link"
                 android:drawablePadding="5dp"
+                android:drawableStart="@mipmap/text_link"
                 android:text="@string/web_link"
                 android:textSize="11sp"
                 android:visibility="gone"/>
@@ -196,8 +208,8 @@
                 android:id="@+id/tv_switch"
                 style="@style/time_style"
                 android:layout_gravity="bottom"
-                android:drawablePadding="4dp"
                 android:drawableEnd="@drawable/switch_selector"
+                android:drawablePadding="4dp"
                 android:text="@string/open_up"
                 android:textColor="@color/colorBlack"/>
         </LinearLayout>

@@ -10,11 +10,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,15 +33,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -67,7 +61,6 @@ import com.giiisp.giiisp.entity.PaperEntity;
 import com.giiisp.giiisp.entity.Song;
 import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.presenter.WholePresenter;
-import com.giiisp.giiisp.utils.DensityUtils;
 import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.Utils;
@@ -478,6 +471,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
             case "answer":
             case "questions":
                 List<BaseFragment> fragments = new ArrayList<>();
+                //问答、文献索引、统计
                 paperQA = BannerRecyclerViewFragment.newInstance("paper_qa", id + "");
                 fragments.add(paperQA);
                 fragments.add(BannerRecyclerViewFragment.newInstance("paper_literature", id + ""));
@@ -485,7 +479,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                 List<String> mTitles = new ArrayList<>();
                 mTitles.add("问答");
                 mTitles.add("文献索引");
-                mTitles.add("标签");
+                mTitles.add("统计");
                 viewpagerTab.setOffscreenPageLimit(2);
                 tabLayoutPaper.setupWithViewPager(viewpagerTab);
                 viewpagerTab.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments, mTitles));
