@@ -50,8 +50,8 @@ public class WelcomeActivity extends BaseActivity {
 //        String tokens = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("token");
         String uid = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("Uid");
         if (TextUtils.isEmpty(uid)) {
-//            LogInActivity.actionActivity(this);
-            WelcomeSelectActivity.intentActivity(this);
+            LogInActivity.actionActivity(this);
+//            WelcomeSelectActivity.intentActivity(this);
         } else {
 //            BaseActivity.token = tokens;
             BaseActivity.uid = uid;

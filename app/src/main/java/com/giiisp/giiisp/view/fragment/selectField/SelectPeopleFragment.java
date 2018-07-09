@@ -3,7 +3,6 @@ package com.giiisp.giiisp.view.fragment.selectField;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -11,7 +10,6 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.base.BasePresenter;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
-import com.giiisp.giiisp.widget.CustomSpinner;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -23,28 +21,27 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 选择领域
+ * 选择学者
  */
-public class SelectFieldFragment extends BaseMvpFragment {
+public class SelectPeopleFragment extends BaseMvpFragment {
 
-    @BindView(R.id.ll_subject)
-    LinearLayout mLlSubject;
     @BindView(R.id.tag_subject)
     TagFlowLayout mTagSubject;
-    @BindView(R.id.ll_major)
-    LinearLayout mLlMajor;
     @BindView(R.id.tag_major)
     TagFlowLayout mTagMajor;
+    @BindView(R.id.tag_people_system)
+    TagFlowLayout mTagPeopleSystem;
+    @BindView(R.id.tag_people_user)
+    TagFlowLayout mTagPeopleUser;
 
-    public static SelectFieldFragment newInstance() {
+    public static SelectPeopleFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        SelectFieldFragment fragment = new SelectFieldFragment();
+        SelectPeopleFragment fragment = new SelectPeopleFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     protected BasePresenter initPresenter() {
@@ -53,7 +50,7 @@ public class SelectFieldFragment extends BaseMvpFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.layout_fragment_select_field;
+        return R.layout.layout_fragment_select_people;
     }
 
     @Override
@@ -65,28 +62,18 @@ public class SelectFieldFragment extends BaseMvpFragment {
         txt.add("哈哈");
         txt.add("呵呵");
         txt.add("嘿嘿哈哈哈哈哈哈哈");
-        CustomSpinner mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
-        mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
-
-        });
-        mLlSubject.addView(mSpinnerSubject);
-
-        CustomSpinner mSpinnerMajor = new CustomSpinner(getActivity(), "请选择", txt);
-        mSpinnerMajor.setOnCustomItemCheckedListener(position -> {
-
-        });
-        mLlMajor.addView(mSpinnerMajor);
-
+        //学科
         mTagSubject.setAdapter(new TagAdapter<String>(txt) {
             @Override
             public View getView(FlowLayout parent, int position, String o) {
                 TextView tv = (TextView) LayoutInflater
-                        .from(getActivity()).inflate(R.layout.tag_select_item_layout,
+                        .from(getActivity()).inflate(R.layout.tag_select_people_subject_layout,
                                 mTagSubject, false);
                 tv.setText(o);
                 return tv;
             }
         });
+
 
         mTagSubject.setOnSelectListener(selectPosSet -> {
             StringBuffer a = new StringBuffer();
@@ -97,18 +84,62 @@ public class SelectFieldFragment extends BaseMvpFragment {
         });
 
 
+        //专业
         mTagMajor.setAdapter(new TagAdapter<String>(txt) {
             @Override
             public View getView(FlowLayout parent, int position, String o) {
                 TextView tv = (TextView) LayoutInflater
-                        .from(getActivity()).inflate(R.layout.tag_select_item_layout,
-                                mTagSubject, false);
+                        .from(getActivity()).inflate(R.layout.tag_select_people_subject_layout,
+                                mTagMajor, false);
                 tv.setText(o);
                 return tv;
             }
         });
 
+
         mTagMajor.setOnSelectListener(selectPosSet -> {
+            StringBuffer a = new StringBuffer();
+            for (int position : selectPosSet) {
+                a.append(txt.get(position));
+            }
+            ToastUtils.showShort(a);
+        });
+
+        //推荐的学者
+        mTagPeopleSystem.setAdapter(new TagAdapter<String>(txt) {
+            @Override
+            public View getView(FlowLayout parent, int position, String o) {
+                TextView tv = (TextView) LayoutInflater
+                        .from(getActivity()).inflate(R.layout.tag_select_people_layout,
+                                mTagPeopleSystem, false);
+                tv.setText(o);
+                return tv;
+            }
+        });
+
+
+        mTagPeopleSystem.setOnSelectListener(selectPosSet -> {
+            StringBuffer a = new StringBuffer();
+            for (int position : selectPosSet) {
+                a.append(txt.get(position));
+            }
+            ToastUtils.showShort(a);
+        });
+
+        //关注的学者
+        mTagPeopleUser.setAdapter(new TagAdapter<String>(txt) {
+            @Override
+            public View getView(FlowLayout parent, int position, String o) {
+                TextView tv = (TextView) LayoutInflater
+                        .from(getActivity()).inflate(R.layout.tag_select_people_layout,
+                                mTagPeopleUser, false);
+                tv.setText(o);
+                return tv;
+            }
+        });
+
+
+        mTagPeopleUser.setOnSelectListener(selectPosSet -> {
             StringBuffer a = new StringBuffer();
             for (int position : selectPosSet) {
                 a.append(txt.get(position));
@@ -119,7 +150,7 @@ public class SelectFieldFragment extends BaseMvpFragment {
 
     @OnClick(R.id.btn_next)
     public void onViewClicked() {
-        start(SelectWordFragment.newInstance());
-        SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
+        //进入首页
+        SelectFieldActivity.newRxBus(SelectFieldActivity.MAIN);
     }
 }

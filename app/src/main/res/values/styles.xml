@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorWhite</item>
         <item name="colorAccent">@color/colorInterface</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 
@@ -304,7 +305,20 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:button">@null</item>
+        <item name="android:textColor">@color/blue</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="register_rb">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/btn_selector_check</item>
+        <item name="android:button">@null</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@drawable/text_selector_check</item>
     </style>
 </resources>

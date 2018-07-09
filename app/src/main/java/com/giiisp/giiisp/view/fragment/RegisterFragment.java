@@ -14,6 +14,7 @@ import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.CountDownTimerUtils;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
 import com.giiisp.giiisp.utils.Log;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
@@ -47,6 +48,7 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     TextView tvVerificationCode;
     private String phone;
     int type = 0;
+    int registerType = 1;//1是手机号注册 2是邮箱注册
 
     @Override
     public void onDestroyView() {
@@ -67,8 +69,8 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
 
     @Override
     public void onSuccess(BaseEntity entity) {
-        Log.i("--->>",entity.toString());
-        if (context==null)return;
+        Log.i("--->>", entity.toString());
+        if (context == null) return;
         if (entity != null && entity.getResult() == 1) {
             if (entity instanceof PhoneEntity) {
                 if (((PhoneEntity) entity).getIsMobileExist() == 0) {
@@ -95,7 +97,9 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         return new WholePresenter(this);
     }
 
-    @OnClick({R.id.tv_register, R.id.tv_back, R.id.tv_verification_code, R.id.tv_user_agreement})
+    @OnClick({R.id.tv_register, R.id.tv_back,
+            R.id.tv_verification_code, R.id.tv_user_agreement
+            , R.id.rb_phone, R.id.rb_email})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_back:
@@ -107,60 +111,109 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 getLogInActivity().getVpLogin().setCurrentItem(getLogInActivity().getFrom());
                 break;
             case R.id.tv_register:
-                String pwd = edEnterPassword.getText().toString();
-                String code = edEnterCode.getText().toString();
-                String secondPwd = edSecondPassword.getText().toString();
-                String name = edEnterName.getText().toString();
-                String mobile = edEnterPhone.getText().toString();
-                if (TextUtils.isEmpty(name)) {
-                    Utils.showToast(R.string.name_cannot_empty);
-                    break;
+                if (checkInfo()) {
+                    ArrayMap<String, Object> map = new ArrayMap<>();
+                    map.put("mobile", ToolString.getString(edEnterPhone));
+                    map.put("realName", ToolString.getString(edEnterName));
+                    map.put("pwd", ToolString.getString(edEnterPassword));
+                    map.put("code", ToolString.getString(edEnterCode));
+                    type = 2;
+                    presenter.getEnrollData(map);
                 }
-                if (TextUtils.isEmpty(code)) {
-                    Utils.showToast(R.string.verification_code_empty);
-                    break;
-                }
-                if (!Objects.equals(mobile, phone)) {
-                    Utils.showToast(R.string.enter_the_phone);
-                    break;
-                }
-                if (TextUtils.isEmpty(pwd) && TextUtils.isEmpty(secondPwd)) {
-                    Utils.showToast(R.string.password_cannot_empty);
-                    break;
-                }
-                if (!pwd.equals(secondPwd)) {
-                    Utils.showToast(R.string.passwords_match);
-                    break;
-                }
-                if (pwd.length() > 8 | pwd.length() < 6) {
-                    Utils.showToast(R.string.password_can_only);
-                    break;
-                }
-                ArrayMap<String, Object> map = new ArrayMap<>();
-                map.put("mobile", mobile);
-                map.put("realName", name);
-                map.put("pwd", pwd);
-                map.put("code", code);
-                type = 2;
-                presenter.getEnrollData(map);
                 break;
             case R.id.tv_user_agreement:
                 getLogInActivity().setAgreement(2);
                 getLogInActivity().getVpLogin().setCurrentItem(4);
                 break;
             case R.id.tv_verification_code:
-                phone = edEnterPhone.getText().toString();
-                if (!TextUtils.isEmpty(phone)) {
-                    if (Utils.checkMobileNumber(phone)) {
-                        presenter.getPhoneData(phone);
-                    } else {
-                        Utils.showToast(R.string.format_not_correct);
-                    }
-                } else {
-                    Utils.showToast(R.string.input_phone);
+                phone = ToolString.getString(edEnterPhone);
+                if (checkInfoCode()) {
+                    presenter.getPhoneData(phone);
                 }
                 break;
+            case R.id.rb_phone://手机号
+                registerType = 1;
+                edEnterPhone.setHint("手机号码");
+                edEnterCode.setHint("请输入验证码");
+                break;
+            case R.id.rb_email://邮箱
+                registerType = 2;
+                edEnterPhone.setHint("邮箱");
+                edEnterCode.setHint("邮箱验证码");
+                break;
         }
+    }
+
+    private boolean checkInfo() {
+        String pwd = ToolString.getString(edEnterPassword);
+        String code = ToolString.getString(edEnterCode);
+        String secondPwd = ToolString.getString(edSecondPassword);
+        String name = ToolString.getString(edEnterName);
+        String mobile = ToolString.getString(edEnterPhone);
+        if (registerType == 1 && TextUtils.isEmpty(phone)) {
+            Utils.showToast(R.string.input_phone);
+            return false;
+        }
+        if (registerType == 1 && !Utils.checkMobileNumber(phone)) {
+            Utils.showToast(R.string.format_not_correct);
+            return false;
+        }
+        if (registerType == 2 && TextUtils.isEmpty(phone)) {
+            Utils.showToast("请输入邮箱账号");
+            return false;
+        }
+        if (registerType == 2 && !Utils.checkEmail(phone)) {
+            Utils.showToast("邮箱格式不正确");
+            return false;
+        }
+        if (TextUtils.isEmpty(name)) {
+            Utils.showToast(R.string.name_cannot_empty);
+            return false;
+        }
+        if (TextUtils.isEmpty(code)) {
+            Utils.showToast(R.string.verification_code_empty);
+            return false;
+        }
+        if (!Objects.equals(mobile, phone)) {
+            if (registerType == 1)
+                Utils.showToast(R.string.enter_the_phone);
+            if (registerType == 2)
+                Utils.showToast("输入邮箱地址不一致");
+            return false;
+        }
+        if (TextUtils.isEmpty(pwd) && TextUtils.isEmpty(secondPwd)) {
+            Utils.showToast(R.string.password_cannot_empty);
+            return false;
+        }
+        if (!pwd.equals(secondPwd)) {
+            Utils.showToast(R.string.passwords_match);
+            return false;
+        }
+        if (pwd.length() > 8 | pwd.length() < 6) {
+            Utils.showToast(R.string.password_can_only);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkInfoCode() {
+        if (registerType == 1 && TextUtils.isEmpty(phone)) {
+            Utils.showToast(R.string.input_phone);
+            return false;
+        }
+        if (registerType == 1 && !Utils.checkMobileNumber(phone)) {
+            Utils.showToast(R.string.format_not_correct);
+            return false;
+        }
+        if (registerType == 2 && TextUtils.isEmpty(phone)) {
+            Utils.showToast("请输入邮箱账号");
+            return false;
+        }
+        if (registerType == 2 && !Utils.checkEmail(phone)) {
+            Utils.showToast("邮箱格式不正确");
+            return false;
+        }
+        return true;
     }
 
 }

@@ -8,25 +8,48 @@
 
     <include layout="@layout/layout_fragment_banner"/>
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="45.5dp"
+        android:layout_marginStart="45.5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+
+        <RadioButton
+            android:id="@+id/rb_phone"
+            style="@style/register_rb"
+            android:checked="true"
+            android:text="手机号注册"/>
+
+        <RadioButton
+            android:id="@+id/rb_email"
+            style="@style/register_rb"
+            android:text="邮箱注册"/>
+
+
+    </RadioGroup>
+
     <EditText
         android:id="@+id/ed_enter_name"
         style="@style/register_text_colorsizebg"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="24dp"
         android:hint="@string/name"
-        android:textSize="16sp"
         android:imeOptions="actionNext"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:textSize="16sp"/>
 
     <EditText
         android:id="@+id/ed_enter_phone"
         style="@style/register_text_colorsizebg"
         android:layout_marginBottom="10dp"
         android:hint="@string/enter_phone"
-        android:inputType="phone"
-        android:textSize="16sp"
         android:imeOptions="actionNext"
-        android:maxLength="11"/>
+        android:inputType="phone"
+        android:maxLength="11"
+        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -39,8 +62,8 @@
             android:id="@+id/ed_enter_code"
             style="@style/register_text_colorsizebg"
             android:layout_width="140dp"
-            android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
             android:background="@mipmap/register_codeinput_bg"
             android:hint="@string/enter_verification_code"
             android:imeOptions="actionNext"
@@ -66,34 +89,34 @@
         android:layout_marginBottom="10dp"
         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
         android:hint="@string/login_enter_password"
-        android:textSize="16sp"
         android:imeOptions="actionNext"
         android:inputType="textPassword"
-        android:maxLength="8"/>
+        android:maxLength="8"
+        android:textSize="16sp"/>
 
     <EditText
         android:id="@+id/ed_second_password"
         style="@style/register_text_colorsizebg"
-        android:textSize="16sp"
         android:layout_marginBottom="11dp"
         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
         android:hint="@string/login_second_password"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
-        android:maxLength="8"/>
+        android:maxLength="8"
+        android:textSize="16sp"/>
 
     <TextView
-        android:layout_marginBottom="25.3dp"
         style="@style/text_12sp_colorwhite"
+        android:layout_marginBottom="25.3dp"
         android:text="@string/password_can_only"
         android:textColor="@color/colorTextLineGrey"/>
 
     <TextView
         android:id="@+id/tv_register"
+        style="@style/text_12sp_colorwhite"
         android:background="@mipmap/login_btn_bg"
         android:gravity="center"
-        android:text="@string/login"
-        style="@style/text_12sp_colorwhite"
+        android:text="注册"
         android:textSize="@dimen/text_size"/>
 
     <android.support.v4.widget.Space
