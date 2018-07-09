@@ -299,4 +299,12 @@
         <item name="android:background">@mipmap/login_btn_bg</item>
         <item name="android:textSize">@dimen/text_size</item>
     </style>
+
+    <style name="select_field_rb">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我关注的学科："
+                android:textSize="18sp"/>
+
+            <LinearLayout
+                android:id="@+id/ll_subject"
+                android:layout_width="160dp"
+                android:layout_height="30dp"
+                android:background="@drawable/tag_noselect"
+                android:orientation="horizontal"
+                />
+
+        </LinearLayout>
+
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/tag_subject"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            zhy:max_select="-1">
+        </com.zhy.view.flowlayout.TagFlowLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="#999999"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我关注的专业："
+                android:textSize="18sp"/>
+
+            <LinearLayout
+                android:id="@+id/ll_major"
+                android:layout_width="160dp"
+                android:layout_height="30dp"
+                android:background="@drawable/tag_noselect"
+                android:orientation="horizontal"
+                />
+
+        </LinearLayout>
+
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/tag_major"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            zhy:max_select="-1">
+        </com.zhy.view.flowlayout.TagFlowLayout>
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/btn_selector"
+            android:text="下一步：选择关键字"
+            android:textColor="@drawable/text_selector_press"/>
+
+    </LinearLayout>
+</ScrollView>

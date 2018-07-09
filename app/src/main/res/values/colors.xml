@@ -15,5 +15,8 @@
     <color name="colorGray">#d8d8d8</color>
     <color name="colorTranslucentBlack">#CC000000</color>
     <color name="colorPaperBg">#66050405</color>
-
+    <color name="color_line">#999999</color>
+    <color name="blue">#28ACFF</color>
+    <drawable name="text_select">#ffffff</drawable>
+    <drawable name="text_noselect">#28ACFF</drawable>
 </resources>

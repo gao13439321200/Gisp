@@ -94,6 +94,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 static def packageTime() {
@@ -202,4 +206,14 @@ dependencies {
     compile 'com.contrarywind:Android-PickerView:3.2.7'
     //工具类
     compile 'com.blankj:utilcode:1.13.9'
+
+    //fragment管理类
+    compile 'me.yokeyword:fragmentation:1.3.5'
+
+    //rxbus
+    compile 'com.hwangjr.rxbus:rxbus:1.0.6'
+
+    //标签流式布局
+    compile 'com.zhy:flowlayout-lib:1.0.3'
+
 }

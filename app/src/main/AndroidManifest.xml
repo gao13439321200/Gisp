@@ -154,6 +154,7 @@
             android:name=".view.activity.ProblemActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".view.activity.WelcomeSelectActivity"/>
+        <activity android:name=".view.activity.SelectFieldActivity"/>
 
 
         <service android:name=".widget.recording.PlayService" />

@@ -3,9 +3,7 @@ package com.giiisp.giiisp.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +19,9 @@ import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.activity.SettingActivity;
 import com.giiisp.giiisp.view.activity.VerifiedActivity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * 项目名称：ProjectFunction
@@ -40,7 +36,7 @@ import butterknife.Unbinder;
  * Fragment  show   是否隐藏的状态
  */
 
-public abstract class BaseFragment extends Fragment implements NetChangeObserver {
+public abstract class BaseFragment extends SupportFragment implements NetChangeObserver {
     public static final String STATE_IS_HIDDEN = "state_is_hidden";
     public static final String STATE_IS_ADDED = "state_is_added";
     public LayoutInflater inflater;
