@@ -19,4 +19,10 @@
     <color name="blue">#28ACFF</color>
     <drawable name="text_select">#ffffff</drawable>
     <drawable name="text_noselect">#28ACFF</drawable>
+
+    <!--曲线图的资源-->
+    <color name="txt_black_light">#333333</color>
+    <color name="bg_white">#FFFFFF</color>
+    <color name="bg_blue">#58ACED</color>
+    <color name="text_yellow">#FFC800</color>
 </resources>

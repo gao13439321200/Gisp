@@ -155,6 +155,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".view.activity.WelcomeSelectActivity"/>
         <activity android:name=".view.activity.SelectFieldActivity"/>
+        <activity android:name=".view.fragment.StatisticsFragment"/>
 
 
         <service android:name=".widget.recording.PlayService" />

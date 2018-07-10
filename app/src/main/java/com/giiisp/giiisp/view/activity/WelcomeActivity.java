@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.utils.SharedPreferencesHelper;
+import com.giiisp.giiisp.view.fragment.StatisticsFragment;
 import com.giiisp.giiisp.widget.recording.AppCache;
 import com.giiisp.giiisp.widget.recording.PlayService;
 
@@ -50,7 +51,9 @@ public class WelcomeActivity extends BaseActivity {
 //        String tokens = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("token");
         String uid = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("Uid");
         if (TextUtils.isEmpty(uid)) {
-            LogInActivity.actionActivity(this);
+//            LogInActivity.actionActivity(this);
+            Intent intent = new Intent(this, StatisticsFragment.class);
+            startActivity(intent);
 //            WelcomeSelectActivity.intentActivity(this);
         } else {
 //            BaseActivity.token = tokens;

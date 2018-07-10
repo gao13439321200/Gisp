@@ -218,5 +218,8 @@ dependencies {
 
     compile "com.jakewharton.rxrelay2:rxrelay:2.0.0"
 
+    //曲线图
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
 
 }
