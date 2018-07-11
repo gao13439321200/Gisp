@@ -321,4 +321,14 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@drawable/text_selector_check</item>
     </style>
+
+    <style name="tv_statistics">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:textColor">@color/colorMainGrey</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

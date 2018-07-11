@@ -59,9 +59,9 @@ public class ChartUtil {
         // 设置是否启动触摸响应
         lineChart.setTouchEnabled(true);
         // 是否可以拖拽
-        lineChart.setDragEnabled(true);
+        lineChart.setDragEnabled(false);
         // 是否可以缩放
-        lineChart.setScaleEnabled(true);
+        lineChart.setScaleEnabled(false);
         // 如果禁用，可以在x和y轴上分别进行缩放
         lineChart.setPinchZoom(false);
         // lineChart.setMarkerView(mv);
@@ -80,7 +80,7 @@ public class ChartUtil {
         // 图例字体
         // mLegend.setTypeface(mTf);
         // 图例的显示和隐藏
-        mLegend.setEnabled(true);
+        mLegend.setEnabled(false);
         // 隐藏右侧Y轴（只在左侧的Y轴显示刻度）
         lineChart.getAxisRight().setEnabled(false);
 
@@ -139,7 +139,7 @@ public class ChartUtil {
         // lineDataSet.setValueTextSize(9f);
         lineDataSet.setFillAlpha(65);
         // 设置显示曲线和X轴围成的区域阴影
-        lineDataSet.setDrawFilled(true);
+        lineDataSet.setDrawFilled(false);
         // 坐标轴在左侧
         lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         // 设置每条曲线图例标签名

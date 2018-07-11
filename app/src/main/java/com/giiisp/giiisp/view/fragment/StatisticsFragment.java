@@ -1,7 +1,9 @@
 package com.giiisp.giiisp.view.fragment;
 
+import android.os.Bundle;
+
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.utils.ChartUtil;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -14,10 +16,23 @@ import butterknife.BindView;
 /**
  * 论文详情-统计
  */
-public class StatisticsFragment extends BaseActivity {
+public class StatisticsFragment extends BaseFragment {
 
-    @BindView(R.id.lineChart)
-    LineChart mLineChart;
+    @BindView(R.id.lineChart_update)
+    LineChart mLineChartUpdate;
+    @BindView(R.id.lineChart_collection)
+    LineChart mLineChartCollection;
+    @BindView(R.id.lineChart_time)
+    LineChart mLineChartTime;
+
+    public static StatisticsFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        StatisticsFragment fragment = new StatisticsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public int getLayoutId() {
@@ -37,6 +52,8 @@ public class StatisticsFragment extends BaseActivity {
             yDataList.add(new Entry(i, value));
         }
 //显示图表,参数（ 上下文，图表对象， X轴数据，Y轴数据，图表标题，曲线图例名称，坐标点击弹出提示框中数字单位）
-        ChartUtil.showChart(this, mLineChart, xDataList, yDataList, "供热趋势图", "供热量/时间", "kw/h");
+        ChartUtil.showChart(getActivity(), mLineChartUpdate, xDataList, yDataList, "", "", "");
+        ChartUtil.showChart(getActivity(), mLineChartCollection, xDataList, yDataList, "", "", "");
+        ChartUtil.showChart(getActivity(), mLineChartTime, xDataList, yDataList, "", "", "");
     }
 }

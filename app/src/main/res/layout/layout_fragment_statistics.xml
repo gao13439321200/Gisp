@@ -1,14 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="center"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <TextView
+            style="@style/tv_statistics"
+            android:drawableLeft="@mipmap/img_statistics"
+            android:text="下载统计"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorGray"
+            android:padding="10dp"
+            android:paddingStart="30dp"
+            android:text="2018年下载量统计"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorGray"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:ems="1"
+                android:gravity="center"
+                android:text="下载人数"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart_update"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/tv_statistics"
+            android:drawableLeft="@mipmap/img_collection"
+            android:text="收藏统计"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorGray"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:ems="1"
+                android:gravity="center"
+                android:text="下载人数"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart_collection"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/tv_statistics"
+            android:drawableLeft="@mipmap/img_time"
+            android:text="平均播放时长"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorGray"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:ems="1"
+                android:gravity="center"
+                android:text="下载人数"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart_time"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
