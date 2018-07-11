@@ -171,8 +171,8 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
     TextView tvPlayTime;
     @BindView(R.id.tv_duration)
     TextView tvDuration;
-    @BindView(R.id.linear_layout)
-    LinearLayout linearLayout;
+    @BindView(R.id.relative_layout)
+    RelativeLayout mRelativeLayout;
     @BindView(R.id.tv_playlist_number)
     TextView tvPlaylistNumber;
     @BindView(R.id.iv_play_list)
@@ -648,7 +648,12 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
     }
 
     @SuppressLint("WrongConstant")
-    @OnClick({R.id.tv_back, R.id.iv_fullscreen_button, R.id.iv_empty, R.id.tv_empty, R.id.tv_paper_marrow, R.id.tv_paper_complete, R.id.tv_paper_abstract, R.id.tv_cn, R.id.tv_en, R.id.tv_liked_number, R.id.fl_paper_play, R.id.iv_fast_forward, R.id.iv_back_off, R.id.iv_play_stop, R.id.et_comm_post, R.id.fl_download, R.id.fl_collection, R.id.fl_share})
+    @OnClick({R.id.tv_back, R.id.iv_fullscreen_button, R.id.iv_empty, R.id.tv_empty,
+            R.id.tv_paper_marrow, R.id.tv_paper_complete, R.id.tv_paper_abstract,
+            R.id.tv_cn, R.id.tv_en, R.id.tv_liked_number, R.id.fl_paper_play,
+            R.id.iv_fast_forward, R.id.iv_back_off, R.id.iv_play_stop,
+            R.id.et_comm_post, R.id.fl_download, R.id.fl_collection, R.id.fl_share,
+            R.id.tv_left, R.id.tv_right})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_empty:
@@ -890,6 +895,10 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                         });
 
                 break;
+            case R.id.tv_left://快退
+                break;
+            case R.id.tv_right://快进
+                break;
         }
     }
 
@@ -1102,7 +1111,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                 rl_viewpager_full.setVisibility(View.GONE);
                 rl_viewpager_full.removeAllViews();
                 toolbarLayout.addView(relativeFull);
-                linearLayout.setVisibility(View.VISIBLE);
+                mRelativeLayout.setVisibility(View.VISIBLE);
             } else {
                 ViewGroup viewGroup = (ViewGroup) relativeFull.getParent();
                 if (viewGroup == null)
@@ -1110,7 +1119,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                 viewGroup.removeAllViews();
                 rl_viewpager_full.addView(relativeFull);
                 rl_viewpager_full.setVisibility(View.VISIBLE);
-                linearLayout.setVisibility(View.GONE);
+                mRelativeLayout.setVisibility(View.GONE);
                 int mHideFlags =
                         View.SYSTEM_UI_FLAG_LOW_PROFILE
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -1154,12 +1163,12 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
 //        itemClickAdapter.notifyDataSetChanged();
         if (mIsVideo.get(currentViewPagerItem)) { // 当前是视频
             seekBarPaper.setVisibility(View.INVISIBLE);
-            linearLayout.setVisibility(View.GONE);
+            mRelativeLayout.setVisibility(View.GONE);
             mMediaControllerMap.get(currentViewPagerItem).setVisibility(View.VISIBLE);
         } else {
             seekBarPaper.setVisibility(View.VISIBLE);
             if (!isFulllScreen) {
-                linearLayout.setVisibility(View.VISIBLE);
+                mRelativeLayout.setVisibility(View.VISIBLE);
             }
             if (mIsVideo.get(lastItem)) { // 上一个为视频时
                 if (mVideoViewMap.get(lastItem).isPlaying()) {
