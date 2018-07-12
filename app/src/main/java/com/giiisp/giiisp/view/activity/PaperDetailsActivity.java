@@ -896,8 +896,29 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
 
                 break;
             case R.id.tv_left://快退
+                if (getPlayService().getPlayingPosition() < 15) {
+                    seekBarPaper.setProgress(0);//如果已经播放的时间少于15秒，则从头开始播放
+                } else {
+                    int time = (getPlayService().getPlayingMusic().getDuration() *
+                            seekBarPaper.getProgress() / 100) - 15;
+                    seekBarPaper.setProgress(
+                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
+                    getPlayService().seekTo(
+                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
+                }
                 break;
             case R.id.tv_right://快进
+                if (getPlayService().getPlayingMusic().getDuration() *
+                        (1 - (seekBarPaper.getProgress() / 100)) < 15) {
+                    seekBarPaper.setProgress(99);//如果未播放的时间少于15秒，则直接到最后一秒
+                } else {
+                    int time = (getPlayService().getPlayingMusic().getDuration() *
+                            seekBarPaper.getProgress() / 100) + 15;
+                    seekBarPaper.setProgress(
+                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
+                    getPlayService().seekTo(
+                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
+                }
                 break;
         }
     }
