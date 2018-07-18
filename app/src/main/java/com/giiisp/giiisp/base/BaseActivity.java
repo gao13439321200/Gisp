@@ -54,7 +54,7 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
                 conf.setLocale(Locale.ENGLISH);
                 break;
             case "简体中文":
-                conf.setLocale(Locale.CHINESE);
+                conf.setLocale(Locale.SIMPLIFIED_CHINESE);
                 break;
         }
         res.updateConfiguration(conf, dm);
