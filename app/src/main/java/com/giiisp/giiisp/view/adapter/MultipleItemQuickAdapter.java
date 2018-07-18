@@ -218,18 +218,18 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         switch (position) {
-                            case 0:
+                            case 0://综述
                                 FragmentActivity.actionActivity(context, "summary_list");
                                 break;
-                            case 1:
+                            case 1://论文
                                 FragmentActivity.actionActivity(context, "paper_list");
                                 break;
-                            case 2:
+                            case 2://学者
                                 FragmentActivity.actionActivity(context, "scholar_list");
                                 break;
-                            case 3:
+                            case 3://会议
                                 Utils.showToast("暂未开放");
-                                //                                DubbingActivity.actionActivity(context);
+                                //DubbingActivity.actionActivity(context);
                                 break;
 
 

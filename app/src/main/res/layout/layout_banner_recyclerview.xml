@@ -6,11 +6,35 @@
 
     <include
         layout="@layout/layout_fragment_banner"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <include
         layout="@layout/layout_banner_rt"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:id="@+id/ll_spinner_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/ll_spinner1"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
+        <LinearLayout
+            android:id="@+id/ll_spinner2"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
+
+    </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"

@@ -67,6 +67,7 @@ import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.view.adapter.ItemDragAdapter;
 import com.giiisp.giiisp.view.adapter.MultipleItemQuickAdapter;
 import com.giiisp.giiisp.view.impl.BaseImpl;
+import com.giiisp.giiisp.widget.CustomSpinner;
 import com.giiisp.giiisp.widget.recording.Util;
 import com.shuyu.waveview.AudioPlayer;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -126,6 +127,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     ImageView tvHomeNews;
     @BindView(R.id.fl_news)
     FrameLayout flNews;
+    @BindView(R.id.ll_spinner_all)
+    LinearLayout mLLSpinnerAll;
+    @BindView(R.id.ll_spinner1)
+    LinearLayout mLLSpinner1;
+    @BindView(R.id.ll_spinner2)
+    LinearLayout mLLSpinner2;
     ArrayList<ClickEntity> list = new ArrayList<>();
     ItemClickAdapter itemClickAdapter = null;
     private ArrayList<String> listSearch = new ArrayList<>();
@@ -145,6 +152,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     private String filePathTwo = "";
     private String searchContent;
     private TextView tvVoice;
+    private CustomSpinner mSpinnerSubject;
+    private CustomSpinner mSpinnerSubject2;
 
     private int isSave = -1;
     private int changePosition;
@@ -660,9 +669,10 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_label, this.list, type);
 
                 break;
-            case "summary_list":
+            case "summary_list"://综述
                 tvTitleRt.setVisibility(View.VISIBLE);
                 rlBanner.setVisibility(View.VISIBLE);
+                mLLSpinnerAll.setVisibility(View.VISIBLE);
                 lineBanner.setVisibility(View.GONE);
                 tvTitleRt.setText(R.string.review_list);
                 tvBackRt.setVisibility(View.VISIBLE);
@@ -670,17 +680,44 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
+                List<String> txt = new ArrayList<>();
+                //一级菜单
+                mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
+                mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
+
+                });
+                mLLSpinner1.addView(mSpinnerSubject);
+                //二级菜单
+                mSpinnerSubject2 = new CustomSpinner(getActivity(), "请选择", txt);
+                mSpinnerSubject2.setOnCustomItemCheckedListener(position -> {
+
+                });
+                mLLSpinner2.addView(mSpinnerSubject2);
                 break;
-            case "paper_list":
+            case "paper_list"://论文
                 tvTitleRt.setVisibility(View.VISIBLE);
                 tvBackRt.setVisibility(View.VISIBLE);
                 tvTitleRt.setText(R.string.paper_list);
+                mLLSpinnerAll.setVisibility(View.VISIBLE);
                 rlBanner.setVisibility(View.VISIBLE);
                 lineBanner.setVisibility(View.GONE);
                 list.clear();
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
+                List<String>  txt1 = new ArrayList<>();
+                //一级菜单
+                mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt1);
+                mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
+
+                });
+                mLLSpinner1.addView(mSpinnerSubject);
+                //二级菜单
+                mSpinnerSubject2 = new CustomSpinner(getActivity(), "请选择", txt1);
+                mSpinnerSubject2.setOnCustomItemCheckedListener(position -> {
+
+                });
+                mLLSpinner2.addView(mSpinnerSubject2);
                 break;
             case "paper_download":
             case "summary_download":
