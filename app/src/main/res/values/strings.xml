@@ -246,6 +246,7 @@
     <string name="questions_answers">问答</string>
     <string name="literature_index">文献索引</string>
     <string name="label">标签</string>
+    <string name="meeting">会议</string>
     <string name="please_input_answered">请输入你回答的内容…</string>
     <string name="please_input_content">请输入内容…</string>
     <string name="problem_exists">此图片存在改问题</string>
@@ -337,6 +338,7 @@
     <string name="tishi_zsyg">至少选择两个认证人</string>
 
     <string name="title_checkpwd">此文档需要输入密码</string>
+    <string name="time">学时</string>
     <item name="tag_app_size" type="id"/>
 
 </resources>

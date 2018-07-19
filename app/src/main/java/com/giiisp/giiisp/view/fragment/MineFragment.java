@@ -5,12 +5,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
@@ -25,7 +24,6 @@ import com.giiisp.giiisp.view.activity.GiiispActivity;
 import com.giiisp.giiisp.view.activity.SettingActivity;
 import com.giiisp.giiisp.view.activity.VerifiedActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
-import com.sina.weibo.sdk.utils.LogUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,9 +38,9 @@ import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
+import static com.giiisp.giiisp.base.BaseActivity.emailauthen;
 import static com.giiisp.giiisp.base.BaseActivity.isVip;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
-import static com.giiisp.giiisp.base.BaseActivity.emailauthen;
 
 /**
  * '我的'页面
@@ -58,56 +56,54 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     TextView tvTitle;
     @BindView(R.id.iv_user_icon)
     ImageView ivUserIcon;
-    @BindView(R.id.iv_attention)
-    ImageView ivAttention;
+    //    @BindView(R.id.iv_attention)
+//    ImageView ivAttention;
     @BindView(R.id.tv_user_name)
     TextView tvUserName;
     @BindView(R.id.tv_prompt)
     TextView tvPrompt;
     @BindView(R.id.tv_user_position)
     TextView tvUserPosition;
-    @BindView(R.id.tv_user_phone)
-    TextView tvUserPhone;
+    //    @BindView(R.id.tv_user_phone)
+//    TextView tvUserPhone;
     @BindView(R.id.tv_recording_authentication)
     TextView tvRecordinAuthentication;
     @BindView(R.id.tv_user_email)
     TextView tvUserEmail;
-    @BindView(R.id.tv_paper_number)
-    TextView tvPaperNumber;
+    //    @BindView(R.id.tv_paper_number)
+//    TextView tvPaperNumber;
     @BindView(R.id.tv_mine_download)
     TextView tvMineDownload;
     @BindView(R.id.tv_follow_number)
     TextView tvFollowNumber;
-    @BindView(R.id.tv_review_number)
-    TextView tvReviewNumber;
+    //    @BindView(R.id.tv_review_number)
+//    TextView tvReviewNumber;
     @BindView(R.id.tv_fans_number)
     TextView tvFansNumber;
     @BindView(R.id.tv_arrow)
     TextView tvArrow;
-    @BindView(R.id.fl_mine_qa)
-    FrameLayout flMineQa;
-    @BindView(R.id.fl_mine_download)
-    FrameLayout flMineDownload;
-    @BindView(R.id.fl_mine_subscribe)
-    FrameLayout flMineSubscribe;
-    @BindView(R.id.fl_mine_news)
-    FrameLayout flMineNews;
-    @BindView(R.id.fl_mine_contacts)
-    FrameLayout flMineContacts;
-    @BindView(R.id.rl_user_info)
-    RelativeLayout rlUserInfo;
-    @BindView(R.id.fl_mine_collection)
-    FrameLayout flMineCollection;
-    @BindView(R.id.fl_mine_setting)
-    FrameLayout flMineSetting;
+    //    @BindView(R.id.fl_mine_qa)
+//    FrameLayout flMineQa;
+//    @BindView(R.id.fl_mine_download)
+//    FrameLayout flMineDownload;
+//    @BindView(R.id.fl_mine_subscribe)
+//    FrameLayout flMineSubscribe;
+//    @BindView(R.id.fl_mine_news)
+//    FrameLayout flMineNews;
+//    @BindView(R.id.fl_mine_contacts)
+//    FrameLayout flMineContacts;
+//    @BindView(R.id.fl_mine_collection)
+//    FrameLayout flMineCollection;
+//    @BindView(R.id.fl_mine_setting)
+//    FrameLayout flMineSetting;
     @BindView(R.id.ll_empty_view)
     LinearLayout emptyView;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.iv_sex)
     ImageView ivSex;
-    @BindView(R.id.tv_user_web)
-    TextView tvUserWeb;
+    //    @BindView(R.id.tv_user_web)
+//    TextView tvUserWeb;
     @BindView(R.id.tv_verified)
     TextView tvVerified;
     private int downloadNunber;
@@ -156,22 +152,22 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         if (sex == 2) {
             ivSex.setImageResource(R.mipmap.ic_sex_female);
         }
-        if (TextUtils.isEmpty(web)) {
-            tvUserWeb.setText("未添加个人网址");
-        } else {
-            tvUserWeb.setText(web);
-        }
+//        if (TextUtils.isEmpty(web)) {
+//            tvUserWeb.setText("未添加个人网址");
+//        } else {
+//            tvUserWeb.setText(web);
+//        }
         ArrayMap<String, Object> map = new ArrayMap<>();
         map.put("uid", uid);
 //        map.put("token", token);
         map.put("mobile", userInfo.getMobile() + "");
         map.put("loginType", 2);
 //        presenter.saveClientTypeData(map);
-        if (Utils.checkMobileNumber(userInfo.getMobile())) {
-            tvUserPhone.setText(userInfo.getMobile());
-        } else {
-            tvUserPhone.setText("未绑定手机号码");
-        }
+//        if (Utils.checkMobileNumber(userInfo.getMobile())) {
+//            tvUserPhone.setText(userInfo.getMobile());
+//        } else {
+//            tvUserPhone.setText("未绑定手机号码");
+//        }
         if (Utils.checkEmail(userInfo.getEmail())) {
             tvUserEmail.setText(userInfo.getEmail());
         } else {
@@ -226,8 +222,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         if (userInfoEntity.getNum() != null) {
             tvFollowNumber.setText(String.valueOf(userInfoEntity.getNum().getFollowNum()));
             tvFansNumber.setText(String.valueOf(userInfoEntity.getNum().getFollowedNum()));
-            tvPaperNumber.setText(String.valueOf(userInfoEntity.getNum().getPaperNum()));
-            tvReviewNumber.setText(String.valueOf(userInfoEntity.getNum().getSummarizeNum()));
+//            tvPaperNumber.setText(String.valueOf(userInfoEntity.getNum().getPaperNum()));
+//            tvReviewNumber.setText(String.valueOf(userInfoEntity.getNum().getSummarizeNum()));
         }
     }
 
@@ -249,7 +245,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     public void initView() {
         tvBack.setVisibility(View.GONE);
         tvTitle.setText(R.string.mine);
-        ivAttention.setVisibility(View.GONE);
+//        ivAttention.setVisibility(View.GONE);
         tvArrow.setVisibility(View.VISIBLE);
         //        emptyView.setVisibility(View.VISIBLE);
         loadDownloadNunber();
@@ -312,7 +308,12 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     }
 
 
-    @OnClick({R.id.tv_verified,R.id.tv_paper_number, R.id.tv_paper, R.id.iv_empty, R.id.tv_empty, R.id.tv_review_number, R.id.tv_review, R.id.fl_mine_history, R.id.tv_follow_number, R.id.tv_follow, R.id.rl_user_info, R.id.tv_recording_authentication, R.id.tv_fans_number, R.id.tv_fans, R.id.fl_mine_qa, R.id.fl_mine_download, R.id.fl_mine_subscribe, R.id.fl_mine_news, R.id.fl_mine_contacts, R.id.fl_mine_collection, R.id.fl_mine_setting})
+    @OnClick({R.id.tv_verified, R.id.ll_summary, R.id.ll_paper, R.id.iv_empty,
+            R.id.tv_empty, R.id.fl_mine_history, R.id.tv_follow_number, R.id.tv_follow,
+            R.id.rl_user_info, R.id.tv_recording_authentication, R.id.tv_fans_number,
+            R.id.tv_fans, R.id.fl_mine_qa, R.id.fl_mine_download, R.id.fl_mine_subscribe,
+            R.id.ll_meeting, R.id.ll_collection,
+            R.id.fl_mine_news, R.id.fl_mine_contacts, R.id.fl_mine_collection, R.id.fl_mine_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_empty:
@@ -348,12 +349,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 }
 
                 break;
-            case R.id.tv_paper_number:
-            case R.id.tv_paper:
+            case R.id.ll_paper://论文
                 FragmentActivity.actionActivity(getContext(), "my_paper");
                 break;
-            case R.id.tv_review_number:
-            case R.id.tv_review:
+            case R.id.ll_summary://综述
                 FragmentActivity.actionActivity(getContext(), "my_review");
                 break;
             case R.id.tv_follow_number:
@@ -383,6 +382,12 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 if (giiispActivity != null) {
                     giiispActivity.getViewPagerGiiisp().setCurrentItem(3);
                 }
+                break;
+            case R.id.ll_meeting://会议
+                ToastUtils.showShort("这里是会议");
+                break;
+            case R.id.ll_collection://收藏
+                ToastUtils.showShort("这里是收藏");
                 break;
             case R.id.fl_mine_setting:
                 SettingActivity.actionActivity(getContext());
