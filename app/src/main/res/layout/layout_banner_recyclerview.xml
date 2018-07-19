@@ -6,11 +6,11 @@
 
     <include
         layout="@layout/layout_fragment_banner"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <include
         layout="@layout/layout_banner_rt"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/ll_spinner_all"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/ll_spinner1"

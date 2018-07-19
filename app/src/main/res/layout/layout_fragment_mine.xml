@@ -91,7 +91,7 @@
                     <TextView
                         style="@style/setting_item_configure"
                         android:drawableStart="@mipmap/mine_subscribe"
-                        android:text="@string/subscribe" />
+                        android:text="@string/follow" />
 
                     <TextView
                         android:id="@+id/tv_mine_subscribe"

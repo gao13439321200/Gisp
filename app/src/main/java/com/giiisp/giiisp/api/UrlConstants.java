@@ -5,8 +5,8 @@ package com.giiisp.giiisp.api;
 
 public class UrlConstants {
     public static class RequestUrl {
-                        public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
-        //        public static final String BASE_URL = "http://101.201.49.42/bamboo/";
+//                        public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
+                public static final String BASE_URL = "http://www.giiisp.cn/";
 //                        public static final String BASE_URL = "https://192.168.1.155/giiisp/";
 
 //                public static final String BASE_URL = "https://47.93.23.62/giiisp/";

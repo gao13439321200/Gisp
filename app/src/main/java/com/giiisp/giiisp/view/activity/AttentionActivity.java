@@ -14,7 +14,9 @@ import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.Log;
 import com.giiisp.giiisp.view.adapter.ViewPagerAdapter;
-import com.giiisp.giiisp.view.fragment.AttentionFragment;
+import com.giiisp.giiisp.view.fragment.selectField.SelectFieldFragment;
+import com.giiisp.giiisp.view.fragment.selectField.SelectPeopleFragment;
+import com.giiisp.giiisp.view.fragment.selectField.SelectWordFragment;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.MViewPager;
 
@@ -91,9 +93,12 @@ public class AttentionActivity extends BaseMvpActivity<BaseImpl, WholePresenter>
         titleList.add(getString(R.string.field));
         titleList.add(getString(R.string.keyword));
         titleList.add(getString(R.string.scholars));
-        fragmentList.add(AttentionFragment.newInstance(type, "1"));
-        fragmentList.add(AttentionFragment.newInstance(type, "2"));
-        fragmentList.add(AttentionFragment.newInstance(type, "3"));
+//        fragmentList.add(AttentionFragment.newInstance(type, "1"));
+//        fragmentList.add(AttentionFragment.newInstance(type, "2"));
+//        fragmentList.add(AttentionFragment.newInstance(type, "3"));
+        fragmentList.add(SelectFieldFragment.newInstance());
+        fragmentList.add(SelectWordFragment.newInstance());
+        fragmentList.add(SelectPeopleFragment.newInstance());
         vpMySubscription.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList));
         tlMySubscription.setupWithViewPager(vpMySubscription);
         vpMySubscription.setCurrentItem(0);

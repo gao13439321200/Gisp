@@ -261,6 +261,8 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
     /*** 记录当前page页面是否为视频 ***/
     static Map<Integer, Boolean> mIsVideo;
 
+    private int progress = 0;//播放进度
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -665,7 +667,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                     getPlayService().playPause();
                 finish();
                 break;
-            case R.id.tv_paper_complete:
+            case R.id.tv_paper_complete://完整
 
                 ArrayList<String> complete = new ArrayList<>();
                 complete.add("0");
@@ -677,7 +679,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                 }
                 PaperDetailsActivity.actionActivity(this, id, complete, "online_paper");
                 break;
-            case R.id.tv_paper_marrow:
+            case R.id.tv_paper_marrow://精华
                 ArrayList<String> marrow = new ArrayList<>();
                 marrow.add("1");
                 if (version.contains((Integer) 1))
@@ -689,7 +691,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                 PaperDetailsActivity.actionActivity(this, id, marrow, "online_paper");
 
                 break;
-            case R.id.tv_paper_abstract:
+            case R.id.tv_paper_abstract://摘要
                 ArrayList<String> abstracts = new ArrayList<>();
                 abstracts.add("2");
                 if (version.contains((Integer) 2))
@@ -727,17 +729,17 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                     tvEn.setSelected(false);
                 }
                 break;
-            case R.id.iv_fast_forward:
+            case R.id.iv_fast_forward://下一页
                 if (getPlayService() != null)
                     getPlayService().next();
 
                 break;
-            case R.id.iv_back_off:
+            case R.id.iv_back_off://上一页
                 if (getPlayService() != null)
                     getPlayService().prev();
 
                 break;
-            case R.id.iv_play_stop:
+            case R.id.iv_play_stop://暂停
                 if (getPlayService() != null)
                     getPlayService().playPause();
 
@@ -763,7 +765,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
                 }
                 isFulllScreen = !isFulllScreen;
                 break;
-            case R.id.et_comm_post:
+            case R.id.et_comm_post://提问
                 if (photosBeanRows == null || photosBeanRows.size() <= position)
                     return;
                 if (BaseActivity.uid.equals("15")) {
@@ -896,28 +898,24 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
 
                 break;
             case R.id.tv_left://快退
-                if (getPlayService().getPlayingPosition() < 15) {
+                if (progress < 15000) {
                     seekBarPaper.setProgress(0);//如果已经播放的时间少于15秒，则从头开始播放
+                    getPlayService().seekTo(0);
                 } else {
-                    int time = (getPlayService().getPlayingMusic().getDuration() *
-                            seekBarPaper.getProgress() / 100) - 15;
-                    seekBarPaper.setProgress(
-                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
-                    getPlayService().seekTo(
-                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
+                    int time = progress - 15000;
+                    seekBarPaper.setProgress(time);
+                    getPlayService().seekTo(time);
                 }
                 break;
             case R.id.tv_right://快进
-                if (getPlayService().getPlayingMusic().getDuration() *
-                        (1 - (seekBarPaper.getProgress() / 100)) < 15) {
-                    seekBarPaper.setProgress(99);//如果未播放的时间少于15秒，则直接到最后一秒
+                Log.d("PaperDetailsActivity", "seekBarPaper.getMax():" + seekBarPaper.getMax());
+                if (seekBarPaper.getMax() - progress < 15000) {
+                    seekBarPaper.setProgress(seekBarPaper.getMax() - 1000);//如果未播放的时间少于15秒，则直接到最后一秒
+                    getPlayService().seekTo(seekBarPaper.getMax() - 1000);
                 } else {
-                    int time = (getPlayService().getPlayingMusic().getDuration() *
-                            seekBarPaper.getProgress() / 100) + 15;
-                    seekBarPaper.setProgress(
-                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
-                    getPlayService().seekTo(
-                            (time / getPlayService().getPlayingMusic().getDuration()) * 100);
+                    int time = progress + 15000;
+                    seekBarPaper.setProgress(time);
+                    getPlayService().seekTo(time);
                 }
                 break;
         }
@@ -1450,7 +1448,8 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+        Log.d("PaperDetailsActivity", "progress:" + progress);
+        this.progress = progress;
         tvPlayTime.setText(Util.formatSeconds(progress / 1000));
 
     }
