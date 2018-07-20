@@ -251,8 +251,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         loadDownloadNunber();
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAuxiliary);
         swipeRefreshLayout.setOnRefreshListener(this);
-        //        ivMenu.setVisibility(View.VISIBLE);
-        //        ivMenu.setBackgroundResource(android.R.drawable.ic_menu_manage);
+        ivMenu.setVisibility(View.VISIBLE);
+        ivMenu.setBackgroundResource(R.mipmap.img_setting);
     }
 
     @Override
@@ -312,13 +312,16 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             R.id.tv_empty, R.id.fl_mine_history, R.id.tv_follow_number, R.id.tv_follow,
             R.id.rl_user_info, R.id.tv_recording_authentication, R.id.tv_fans_number,
             R.id.tv_fans, R.id.fl_mine_qa, R.id.fl_mine_download, R.id.fl_mine_subscribe,
-            R.id.ll_meeting, R.id.ll_collection,
+            R.id.ll_meeting, R.id.ll_collection, R.id.iv_menu,
             R.id.fl_mine_news, R.id.fl_mine_contacts, R.id.fl_mine_collection, R.id.fl_mine_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_empty:
             case R.id.tv_empty:
                 initNetwork();
+                break;
+            case R.id.iv_menu://设置
+                SettingActivity.actionActivity(getContext());
                 break;
             case R.id.rl_user_info:
                 FragmentActivity.actionActivity(getContext(), "he", uid + "");
@@ -390,7 +393,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 ToastUtils.showShort("这里是收藏");
                 break;
             case R.id.fl_mine_setting:
-                SettingActivity.actionActivity(getContext());
+//                SettingActivity.actionActivity(getContext());
                 break;
             case R.id.tv_verified:
                 switch (isVip) {

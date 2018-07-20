@@ -155,15 +155,30 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_qa"/>
+                            android:src="@mipmap/mine_download"/>
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/download"
-                            android:textSize="18sp"/>
+                            android:orientation="horizontal">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/download"
+                                android:textSize="18sp"/>
+
+                            <TextView
+                                android:id="@+id/tv_mine_download"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:textSize="18sp"/>
+
+                        </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -178,7 +193,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_qa"/>
+                            android:src="@mipmap/mine_subscribe"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -201,7 +216,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_qa"/>
+                            android:src="@mipmap/img_history"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -235,7 +250,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_qa"/>
+                            android:src="@mipmap/img_meet"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -258,7 +273,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_qa"/>
+                            android:src="@mipmap/img_news"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -281,7 +296,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_qa"/>
+                            android:src="@mipmap/mine_collection"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -330,7 +345,8 @@
                     android:id="@+id/fl_mine_setting"
                     style="@style/mine_frame"
                     android:layout_marginBottom="1dp"
-                    android:layout_marginTop="7dp">
+                    android:layout_marginTop="7dp"
+                    android:visibility="gone">
 
                     <TextView
                         style="@style/setting_item_configure"
