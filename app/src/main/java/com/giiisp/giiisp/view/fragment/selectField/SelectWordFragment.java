@@ -3,6 +3,7 @@ package com.giiisp.giiisp.view.fragment.selectField;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -25,14 +26,18 @@ import butterknife.OnClick;
  */
 public class SelectWordFragment extends BaseMvpFragment {
 
+    public static final String TYPE = "type";
     @BindView(R.id.tag_word_system)
     TagFlowLayout mTagWordSystem;
     @BindView(R.id.tag_word_user)
     TagFlowLayout mTagWordUser;
+    @BindView(R.id.btn_next)
+    Button mButton;
 
-    public static SelectWordFragment newInstance() {
+    public static SelectWordFragment newInstance(int type) {
 
         Bundle args = new Bundle();
+        args.putInt(TYPE, type);
 
         SelectWordFragment fragment = new SelectWordFragment();
         fragment.setArguments(args);
@@ -52,6 +57,16 @@ public class SelectWordFragment extends BaseMvpFragment {
 
     @Override
     public void initView() {
+        int type = getArguments().getInt(TYPE);
+        switch (type) {
+            case 1://未选择
+                mButton.setVisibility(View.VISIBLE);
+                break;
+            case 2://已选择
+                mButton.setVisibility(View.GONE);
+                break;
+        }
+
         List<String> txt = new ArrayList<>();
         txt.add("哈哈");
         txt.add("呵呵");
@@ -102,7 +117,7 @@ public class SelectWordFragment extends BaseMvpFragment {
 
     @OnClick(R.id.btn_next)
     public void onViewClicked() {
-        start(SelectPeopleFragment.newInstance());
+        start(SelectPeopleFragment.newInstance(1));
         SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
     }
 }

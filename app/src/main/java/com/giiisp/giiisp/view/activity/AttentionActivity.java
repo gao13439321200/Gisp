@@ -96,9 +96,9 @@ public class AttentionActivity extends BaseMvpActivity<BaseImpl, WholePresenter>
 //        fragmentList.add(AttentionFragment.newInstance(type, "1"));
 //        fragmentList.add(AttentionFragment.newInstance(type, "2"));
 //        fragmentList.add(AttentionFragment.newInstance(type, "3"));
-        fragmentList.add(SelectFieldFragment.newInstance());
-        fragmentList.add(SelectWordFragment.newInstance());
-        fragmentList.add(SelectPeopleFragment.newInstance());
+        fragmentList.add(SelectFieldFragment.newInstance(2));
+        fragmentList.add(SelectWordFragment.newInstance(2));
+        fragmentList.add(SelectPeopleFragment.newInstance(2));
         vpMySubscription.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList));
         tlMySubscription.setupWithViewPager(vpMySubscription);
         vpMySubscription.setCurrentItem(0);

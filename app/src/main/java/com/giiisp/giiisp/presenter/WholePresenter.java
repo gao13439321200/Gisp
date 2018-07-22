@@ -1,10 +1,19 @@
 package com.giiisp.giiisp.presenter;
 
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Environment;
 import android.support.v4.util.ArrayMap;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
+import com.blankj.utilcode.util.LogUtils;
+import com.facebook.stetho.common.LogUtil;
+import com.giiisp.giiisp.api.ApiResponse;
+import com.giiisp.giiisp.api.ApiStore;
+import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BasePresenter;
 import com.giiisp.giiisp.entity.AnswerEntity;
 import com.giiisp.giiisp.entity.AntistopEntity;
@@ -30,7 +39,9 @@ import com.giiisp.giiisp.entity.UpDateAppEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.entity.WaitRecordPaperEntity;
 import com.giiisp.giiisp.model.ModelFactory;
+import com.giiisp.giiisp.utils.DESedeUtils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
+import com.giiisp.giiisp.view.impl.MyCallBack;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,7 +49,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -48,9 +61,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.chad.library.adapter.base.listener.SimpleClickListener.TAG;
+
 
 public class WholePresenter extends BasePresenter<BaseImpl> {
     private BaseImpl impl = null;
+    private String pid = "";
 
 
     public WholePresenter(BaseImpl impl) {
@@ -870,8 +886,8 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         });
     }
 
-    public void getSaveRecordData(ArrayMap<String, Object> options,MultipartBody.Part part) {
-        ModelFactory.getBaseModel().getSaveRecordData(options,part, new Callback<BaseEntity>() {
+    public void getSaveRecordData(ArrayMap<String, Object> options, MultipartBody.Part part) {
+        ModelFactory.getBaseModel().getSaveRecordData(options, part, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
                 if (response.isSuccessful()) {
@@ -970,8 +986,8 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         });
     }
 
-    public void getAuthenUserlData(String email,String uid,MultipartBody.Part part) {
-        ModelFactory.getBaseModel().getAuthenUserlData(email,uid,part, new Callback<BaseEntity>() {
+    public void getAuthenUserlData(String email, String uid, MultipartBody.Part part) {
+        ModelFactory.getBaseModel().getAuthenUserlData(email, uid, part, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
                 if (response.isSuccessful()) {
@@ -984,7 +1000,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             @Override
             public void onFailure(Call<BaseEntity> call, Throwable t) {
                 impl.onFailure(call + "", (Exception) t);
-                Log.e("Presenter", "onFailure: "+t.toString() );
+                Log.e("Presenter", "onFailure: " + t.toString());
             }
 
 
@@ -1348,5 +1364,61 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 impl.onFailure(call + "", (Exception) t);
             }
         });
+    }
+
+    // 普通回调，无特殊数据
+    public void getDataAll(String por, HashMap<String, Object> options, MyCallBack callback) {
+        ApiStore.getInstance().getApiService().getDataAll(getHashMap(por, options))
+                .enqueue(new Callback<BaseEntity>() {
+                    @Override
+                    public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
+                        if (response.body() != null) {
+                            if (response.body().getStatusCode() == 1) {
+                                callback.onSuccess(por, response.body());
+                            } else {
+                                callback.onFail(por, response.body().getMessage());
+                            }
+                        } else {
+                            callback.onFail(por, "信息获取失败");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseEntity> call, Throwable t) {
+                        LogUtils.v("异常信息：" + t);
+                        callback.onFail(por, "信息获取失败");
+                    }
+                });
+    }
+
+
+    private String getHashMap(String por, HashMap dMap) {
+        String cipher = DESedeUtils.getDesede(toJsonStr(dMap), getDevUUID());
+        LogUtil.d(TAG, "data:cipher；" + cipher);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("por", por);   // 请求接口
+        map.put("pid", getDevUUID()); // 设备唯一码
+        map.put("cipher", cipher); // c参数密文
+        return toJsonStr(map);
+    }
+
+    private String toJsonStr(Object object) {
+        String str_json = JSONObject.toJSONString(object);
+        LogUtil.d(TAG, "toJsonStr: " + str_json);
+        return str_json;
+    }
+
+    @SuppressLint("HardwareIds")
+    private String getDevUUID() {
+        if (pid == null) {
+            final TelephonyManager tm = (TelephonyManager) BaseApp.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            final String tmDevice, tmSerial, androidId;
+            tmDevice = "" + tm.getDeviceId();
+            tmSerial = "" + tm.getSimSerialNumber();
+            androidId = "" + android.provider.Settings.Secure.getString(BaseApp.getContext().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+            pid = deviceUuid.toString();
+        }
+        return pid;
     }
 }

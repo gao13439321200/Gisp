@@ -3,6 +3,7 @@ package com.giiisp.giiisp.view.fragment.selectField;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,7 +11,9 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.base.BasePresenter;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
+import com.giiisp.giiisp.view.impl.MyCallBack;
 import com.giiisp.giiisp.widget.CustomSpinner;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -25,8 +28,9 @@ import butterknife.OnClick;
 /**
  * 选择领域
  */
-public class SelectFieldFragment extends BaseMvpFragment {
+public class SelectFieldFragment extends BaseMvpFragment implements MyCallBack<BaseEntity> {
 
+    public static final String TYPE = "type";
     @BindView(R.id.ll_subject)
     LinearLayout mLlSubject;
     @BindView(R.id.tag_subject)
@@ -35,11 +39,13 @@ public class SelectFieldFragment extends BaseMvpFragment {
     LinearLayout mLlMajor;
     @BindView(R.id.tag_major)
     TagFlowLayout mTagMajor;
+    @BindView(R.id.btn_next)
+    Button mButton;
 
-    public static SelectFieldFragment newInstance() {
+    public static SelectFieldFragment newInstance(int type) {
 
         Bundle args = new Bundle();
-
+        args.putInt(TYPE, type);
         SelectFieldFragment fragment = new SelectFieldFragment();
         fragment.setArguments(args);
         return fragment;
@@ -58,6 +64,17 @@ public class SelectFieldFragment extends BaseMvpFragment {
 
     @Override
     public void initView() {
+        int type = getArguments().getInt(TYPE);
+        switch (type) {
+            case 1://未选择
+                mButton.setVisibility(View.VISIBLE);
+                break;
+            case 2://已选择
+                mButton.setVisibility(View.GONE);
+                break;
+        }
+
+
         List<String> txt = new ArrayList<>();
         txt.add("哈哈");
         txt.add("呵呵");
@@ -119,7 +136,17 @@ public class SelectFieldFragment extends BaseMvpFragment {
 
     @OnClick(R.id.btn_next)
     public void onViewClicked() {
-        start(SelectWordFragment.newInstance());
+        start(SelectWordFragment.newInstance(1));
         SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
+    }
+
+    @Override
+    public void onSuccess(String url, BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onFail(String url, String msg) {
+
     }
 }

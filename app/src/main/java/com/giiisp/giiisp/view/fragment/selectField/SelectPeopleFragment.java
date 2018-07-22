@@ -3,6 +3,7 @@ package com.giiisp.giiisp.view.fragment.selectField;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -25,6 +26,7 @@ import butterknife.OnClick;
  */
 public class SelectPeopleFragment extends BaseMvpFragment {
 
+    public static final String TYPE = "type";
     @BindView(R.id.tag_subject)
     TagFlowLayout mTagSubject;
     @BindView(R.id.tag_major)
@@ -33,10 +35,13 @@ public class SelectPeopleFragment extends BaseMvpFragment {
     TagFlowLayout mTagPeopleSystem;
     @BindView(R.id.tag_people_user)
     TagFlowLayout mTagPeopleUser;
+    @BindView(R.id.btn_next)
+    Button mButton;
 
-    public static SelectPeopleFragment newInstance() {
+    public static SelectPeopleFragment newInstance(int type) {
 
         Bundle args = new Bundle();
+        args.putInt(TYPE, type);
 
         SelectPeopleFragment fragment = new SelectPeopleFragment();
         fragment.setArguments(args);
@@ -55,6 +60,17 @@ public class SelectPeopleFragment extends BaseMvpFragment {
 
     @Override
     public void initView() {
+        int type = getArguments().getInt(TYPE);
+        switch (type) {
+            case 1://未选择
+                mButton.setVisibility(View.VISIBLE);
+                break;
+            case 2://已选择
+                mButton.setVisibility(View.GONE);
+                break;
+        }
+
+
         List<String> txt = new ArrayList<>();
         txt.add("哈哈");
         txt.add("呵呵");

@@ -125,7 +125,7 @@ dependencies {
 
     //gson数据解析
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile group: 'com.squareup.retrofit2', name: 'converter-scalars', version: '2.3.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.3.0'
 
     //    compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
 
@@ -204,6 +204,7 @@ dependencies {
 
     //date
     compile 'com.contrarywind:Android-PickerView:3.2.7'
+
     //工具类
     compile 'com.blankj:utilcode:1.13.9'
 
@@ -215,11 +216,10 @@ dependencies {
 
     //标签流式布局
     compile 'com.zhy:flowlayout-lib:1.0.3'
-
-    compile "com.jakewharton.rxrelay2:rxrelay:2.0.0"
+    compile 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     //曲线图
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-
-
+    implementation files('libs/selenium-common-2.0a4.jar')
+    implementation files('libs/fastjson-1.1.34.android.jar')
 }

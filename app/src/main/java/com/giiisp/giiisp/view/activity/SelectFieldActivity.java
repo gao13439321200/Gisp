@@ -62,7 +62,7 @@ public class SelectFieldActivity extends BaseActivity {
     @SuppressLint("CheckResult")
     @Override
     public void initView() {
-        loadRootFragment(R.id.rl_select_field, SelectFieldFragment.newInstance());
+        loadRootFragment(R.id.rl_select_field, SelectFieldFragment.newInstance(1));
         RxBus.getInstance().toObservable(Map.class)
                 .subscribe((Map map) -> {
                     if (TAG.equals(map.get(APPConstants.MyBus.TO))) {

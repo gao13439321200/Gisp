@@ -28,14 +28,11 @@ import com.giiisp.giiisp.entity.UpDateAppEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.entity.WaitRecordPaperEntity;
 
-import java.io.File;
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Callback;
-import retrofit2.http.Part;
 
 /**
  * Created by Administrator on 2017/5/3.
@@ -57,8 +54,8 @@ public class BaseModel {
         ApiStore.getInstance().getApiService().saveClientTypeInfo(token).enqueue(callback);
     }
 
-    public void getUpdatePortraitData(String uid,  MultipartBody.Part filePart, Callback<BaseEntity> callback) {
-        ApiStore.getInstance().getApiService().getUpdatePortraitInfo(uid,filePart).enqueue(callback);
+    public void getUpdatePortraitData(String uid, MultipartBody.Part filePart, Callback<BaseEntity> callback) {
+        ApiStore.getInstance().getApiService().getUpdatePortraitInfo(uid, filePart).enqueue(callback);
     }
 
     public void getLoginData(String mobile, String pwd, Callback<BaseEntity> callback) {
@@ -214,8 +211,8 @@ public class BaseModel {
         ApiStore.getInstance().getApiService().getListFollowedPaperInfo(options).enqueue(callback);
     }
 
-    public void getSaveRecordData( ArrayMap<String, Object> options,MultipartBody.Part part, Callback<BaseEntity> callback) {
-        ApiStore.getInstance().getApiService().getSaveRecordInfo(options,part).enqueue(callback);
+    public void getSaveRecordData(ArrayMap<String, Object> options, MultipartBody.Part part, Callback<BaseEntity> callback) {
+        ApiStore.getInstance().getApiService().getSaveRecordInfo(options, part).enqueue(callback);
     }
 
     public void gethomePageData(ArrayMap<String, Object> options, Callback<HomeEntity> callback) {
@@ -254,8 +251,8 @@ public class BaseModel {
         ApiStore.getInstance().getApiService().getMsgDelInfo(options).enqueue(callback);
     }
 
-    public void getAuthenUserlData(String email,String uid,MultipartBody.Part part, Callback<BaseEntity> callback) {
-        ApiStore.getInstance().getApiService().getAuthenUserInfo(email,uid,part).enqueue(callback);
+    public void getAuthenUserlData(String email, String uid, MultipartBody.Part part, Callback<BaseEntity> callback) {
+        ApiStore.getInstance().getApiService().getAuthenUserInfo(email, uid, part).enqueue(callback);
     }
 
     public void getUserLogOutData(Callback<BaseEntity> callback) {
@@ -269,12 +266,15 @@ public class BaseModel {
     public void addIntroduction(ArrayMap<String, Object> options, Callback<BaseEntity> callback) {
         ApiStore.getInstance().getApiService().addIntroduction(options).enqueue(callback);
     }
+
     public void updateIntroduction(ArrayMap<String, Object> options, Callback<BaseEntity> callback) {
         ApiStore.getInstance().getApiService().updateIntroduction(options).enqueue(callback);
     }
+
     public void deleteIntroduction(ArrayMap<String, Object> options, Callback<BaseEntity> callback) {
         ApiStore.getInstance().getApiService().deleteIntroduction(options).enqueue(callback);
     }
+
     public void userAuthen(List<MultipartBody.Part> parts, Callback<BaseEntity> callback) {
         ApiStore.getInstance().getApiService().userAuthen(parts).enqueue(callback);
     }

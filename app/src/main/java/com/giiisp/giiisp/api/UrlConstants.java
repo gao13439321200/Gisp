@@ -5,11 +5,11 @@ package com.giiisp.giiisp.api;
 
 public class UrlConstants {
     public static class RequestUrl {
-//                        public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
-                public static final String BASE_URL = "http://www.giiisp.cn/";
+        //                        public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
+        public static final String BASE_URL = "http://www.giiisp.cn/";
 //                        public static final String BASE_URL = "https://192.168.1.155/giiisp/";
 
-//                public static final String BASE_URL = "https://47.93.23.62/giiisp/";
+        //                public static final String BASE_URL = "https://47.93.23.62/giiisp/";
 //        public static final String BASE_URL = "http://121.21.34.153:7777/jsp/";//z
 //        public static final String BASE_URL = "http://47.104.97.60/";//fhttp://www.wwfgzs.com/jsp/
         //
@@ -235,14 +235,14 @@ public class UrlConstants {
         /**
          * 验证论文密码 根据homePage 返回的isEncrypt 判断 0:需要验证，1：不需要验证密码
          * {
-         "result": 1,
-         "code": "",
-         "info": "操作成功！"
-         }
-         *
-         * */
+         * "result": 1,
+         * "code": "",
+         * "info": "操作成功！"
+         * }
+         */
         public static final String CHECK_PAPERPWD = "/jsp/api/post/checkPaperPwd.do";
 
+        public static final String URL = "";
 
     }
 

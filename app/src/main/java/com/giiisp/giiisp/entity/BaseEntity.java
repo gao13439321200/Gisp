@@ -9,9 +9,30 @@ public class BaseEntity {
 
     private int result;
     private String code;
+    private int statusCode;
     private String info;
     private String uid;
     private String firstUser ;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    private String message;
+
+
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
 
     public String getNewUser() {
         return firstUser;
