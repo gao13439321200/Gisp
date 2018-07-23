@@ -300,7 +300,7 @@
     <string name="hot_recommended">热门推荐</string>
     <string name="login_failed">登录失败</string>
     <string name="in_authentication">认证中…</string>
-    <string name="log_in_again">,请重新登录</string>
+    <string name="log_in_again">修改成功！请重新登录</string>
     <string name="look_profile">谁可以看我的资料</string>
     <string name="privacy_settings">隐私设置</string>
     <string name="clear_the_cache">确定清除缓存?</string>

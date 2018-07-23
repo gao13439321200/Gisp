@@ -8,6 +8,7 @@ import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.giiisp.giiisp.BuildConfig;
 import com.giiisp.giiisp.base.BaseApp;
+import com.giiisp.giiisp.utils.OkhttpManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -139,11 +140,17 @@ public class ApiStore {
 
         //        builder.interceptors().add(new ReceivedCookiesInterceptor(BaseApp.app));
         if (retrofit == null) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkhttpManager.getInstance().setTrustrCertificates();
+            OkHttpClient httpClient = OkhttpManager.getInstance().build(logging);
+            httpClient.newBuilder().connectTimeout(10, TimeUnit.SECONDS);
             retrofit = new Retrofit.Builder().client(getUnsafeOkHttpClient())
-                    .baseUrl(UrlConstants.RequestUrl.BASE_URL)
+                    .baseUrl(UrlConstants.RequestUrl.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     //可以接收自定义的Gson，当然也可以不传
                     .addConverterFactory(GsonConverterFactory.create(getGson()))
+                    .client(httpClient)
                     .build();
         }
         return retrofit;

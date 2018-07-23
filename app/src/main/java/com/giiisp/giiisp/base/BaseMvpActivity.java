@@ -2,7 +2,11 @@ package com.giiisp.giiisp.base;
 
 import android.os.Bundle;
 
-public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseActivity {
+import com.blankj.utilcode.util.ToastUtils;
+import com.giiisp.giiisp.entity.BaseEntity;
+import com.giiisp.giiisp.view.impl.MyCallBack;
+
+public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseActivity implements MyCallBack<BaseEntity> {
     public T presenter;
 
     @Override
@@ -28,4 +32,14 @@ public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseAc
     }
 
     protected abstract T initPresenter();
+
+    @Override
+    public void onSuccess(String url, BaseEntity baseEntity) {
+
+    }
+
+    @Override
+    public void onFail(String url, String msg) {
+        ToastUtils.showShort(msg);
+    }
 }

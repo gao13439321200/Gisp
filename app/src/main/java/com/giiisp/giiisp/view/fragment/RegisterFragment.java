@@ -1,27 +1,33 @@
 package com.giiisp.giiisp.view.fragment;
 
-import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
-import com.giiisp.giiisp.entity.BaseEntity;
-import com.giiisp.giiisp.entity.PhoneEntity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.CountDownTimerUtils;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
-import com.giiisp.giiisp.utils.Log;
 import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.activity.WelcomeSelectActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.giiisp.giiisp.base.BaseActivity.uid;
+
 
 /**
  * 注册页面
@@ -29,7 +35,7 @@ import butterknife.OnClick;
  */
 
 
-public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements BaseImpl {
+public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
 
 
     @BindView(R.id.tv_title)
@@ -66,32 +72,6 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         tvTitle.setText(R.string.login);
     }
 
-
-    @Override
-    public void onSuccess(BaseEntity entity) {
-        Log.i("--->>", entity.toString());
-        if (context == null) return;
-        if (entity != null && entity.getResult() == 1) {
-            if (entity instanceof PhoneEntity) {
-                if (((PhoneEntity) entity).getIsMobileExist() == 0) {
-                    type = 1;
-                    presenter.getSendCodeData(phone, "1");
-                } else {
-                    Utils.showToast(R.string.phone_existing);
-                }
-            } else if (type == 1) {
-                CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(tvVerificationCode, 60000, 1000);
-                mCountDownTimerUtils.start();
-                Utils.showToast(entity.getInfo());
-            } else if (type == 2) {
-                getLogInActivity().getVpLogin().setCurrentItem(1);
-                Utils.showToast(entity.getInfo());
-            }
-        } else if (entity != null) {
-            Utils.showToast(entity.getInfo());
-        }
-    }
-
     @Override
     protected WholePresenter initPresenter() {
         return new WholePresenter(this);
@@ -112,23 +92,26 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 break;
             case R.id.tv_register:
                 if (checkInfo()) {
-                    ArrayMap<String, Object> map = new ArrayMap<>();
-                    map.put("mobile", ToolString.getString(edEnterPhone));
-                    map.put("realName", ToolString.getString(edEnterName));
-                    map.put("pwd", ToolString.getString(edEnterPassword));
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("loginname", ToolString.getString(edEnterPhone));
+                    map.put("name", ToolString.getString(edEnterName));
+                    map.put("password", ToolString.getString(edEnterPassword));
                     map.put("code", ToolString.getString(edEnterCode));
-                    type = 2;
-                    presenter.getEnrollData(map);
+                    presenter.getDataAll("104", map);
                 }
                 break;
-            case R.id.tv_user_agreement:
+            case R.id.tv_user_agreement://用户协议
                 getLogInActivity().setAgreement(2);
                 getLogInActivity().getVpLogin().setCurrentItem(4);
                 break;
             case R.id.tv_verification_code:
                 phone = ToolString.getString(edEnterPhone);
                 if (checkInfoCode()) {
-                    presenter.getPhoneData(phone);
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("loginname", phone);
+                    map.put("sendtype", registerType);
+                    map.put("type", 1);
+                    presenter.getDataAll("101", map);
                 }
                 break;
             case R.id.rb_phone://手机号
@@ -216,4 +199,27 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         return true;
     }
 
+    @Override
+    public void onSuccess(String url, BaseBean entity) {
+        switch (url) {
+            case "101":
+                //发送验证码成功！
+                CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(tvVerificationCode, 60000, 1000);
+                mCountDownTimerUtils.start();
+                ToastUtils.showShort(entity.getMessage());
+                break;
+            case "104":
+                LoginBean bean = (LoginBean) entity;
+                //注册并登录成功！
+                uid = bean.getId();
+                SPUtils.getInstance().put(UrlConstants.UID, bean.getId());
+                Utils.showToast(entity.getMessage());
+                //选择领域
+                WelcomeSelectActivity.intentActivity(getActivity());
+                getActivity().finish();
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -96,7 +96,7 @@ public class DESedeUtils {
 	 * @return
 	 */
 	public static String getDesede(String data, String imei) {
-		String key = "haoshantang2018" + imei;
+		String key = "giiisp2018" + imei;
 		byte[] arr = {};
 		try {
 			arr = encrypt(data.getBytes("utf-8"), key.getBytes("utf-8"));
@@ -116,7 +116,7 @@ public class DESedeUtils {
 	 */
 	//解密
 	public static String getdeCrypt(String data, String imei) {
-		String key = "haoshantang2018" + imei;
+		String key = "giiisp2018" + imei;
 		Base64Encoder base = new Base64Encoder();
 		String deText = "";
 		try {

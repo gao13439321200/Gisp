@@ -365,7 +365,7 @@ public interface ApiService {
 
     //普通请求，无特殊数据
     @FormUrlEncoded
-    @POST(UrlConstants.RequestUrl.URL)
-    Call<BaseEntity> getDataAll(@Field("data") String data);
+    @POST("outinterface")
+    Call<String> getDataString(@Field("data") String data);
 
 }

@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
-import com.giiisp.giiisp.base.BasePresenter;
-import com.giiisp.giiisp.entity.BaseEntity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
 import com.giiisp.giiisp.view.impl.MyCallBack;
 import com.giiisp.giiisp.widget.CustomSpinner;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
 /**
  * 选择领域
  */
-public class SelectFieldFragment extends BaseMvpFragment implements MyCallBack<BaseEntity> {
+public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresenter> implements MyCallBack<BaseBean> {
 
     public static final String TYPE = "type";
     @BindView(R.id.ll_subject)
@@ -53,8 +53,8 @@ public class SelectFieldFragment extends BaseMvpFragment implements MyCallBack<B
 
 
     @Override
-    protected BasePresenter initPresenter() {
-        return null;
+    protected WholePresenter initPresenter() {
+        return new WholePresenter(this);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class SelectFieldFragment extends BaseMvpFragment implements MyCallBack<B
     }
 
     @Override
-    public void onSuccess(String url, BaseEntity entity) {
+    public void onSuccess(String url, BaseBean entity) {
 
     }
 

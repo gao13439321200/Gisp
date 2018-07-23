@@ -5,17 +5,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
-import com.giiisp.giiisp.entity.BaseEntity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
-import com.giiisp.giiisp.utils.Log;
-import com.giiisp.giiisp.utils.SharedPreferencesHelper;
 import com.giiisp.giiisp.utils.Utils;
-import com.giiisp.giiisp.view.activity.AttentionActivity;
-import com.giiisp.giiisp.view.activity.GiiispActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -28,7 +29,7 @@ import static com.giiisp.giiisp.base.BaseActivity.uid;
  */
 
 
-public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements BaseImpl {
+public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -58,29 +59,29 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> imp
     }
 
 
-    @Override
-    public void onSuccess(BaseEntity entity) {
-        Log.i("--->>", entity.toString());
-        if (tvTitle == null)
-            return;
-        if (TextUtils.isEmpty(entity.getUid()) || entity.getResult() != 1) {
-            Utils.showToast(R.string.login_failed);
-            return;
-        } else {
-            Utils.showToast(entity.getInfo());
-        }
-
-//        BaseActivity.token = entity.getToken();
-        uid = entity.getUid();
-//        SharedPreferencesHelper.getInstance(context).putStringValue("token", entity.getToken());
-        SharedPreferencesHelper.getInstance(context).putStringValue("Uid", entity.getUid());
-        if ("0".equals(entity.getNewUser() + "")) {
-            GiiispActivity.actionActivity(getContext());
-        } else {
-            AttentionActivity.actionActivity(getActivity(), "first");
-        }
-        getActivity().finish();
-    }
+//    @Override
+//    public void onSuccess(BaseEntity entity) {
+//        Log.i("--->>", entity.toString());
+//        if (tvTitle == null)
+//            return;
+//        if (TextUtils.isEmpty(entity.getUid()) || entity.getResult() != 1) {
+//            Utils.showToast(R.string.login_failed);
+//            return;
+//        } else {
+//            Utils.showToast(entity.getInfo());
+//        }
+//
+////        BaseActivity.token = entity.getToken();
+//        uid = entity.getUid();
+////        SharedPreferencesHelper.getInstance(context).putStringValue("token", entity.getToken());
+//        SharedPreferencesHelper.getInstance(context).putStringValue("Uid", entity.getUid());
+//        if ("0".equals(entity.getNewUser() + "")) {
+//            GiiispActivity.actionActivity(getContext());
+//        } else {
+//            AttentionActivity.actionActivity(getActivity(), "first");
+//        }
+//        getActivity().finish();
+//    }
 
     @Override
     protected WholePresenter initPresenter() {
@@ -115,7 +116,10 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> imp
                     Utils.showToast(R.string.password_cannot_empty);
                     break;
                 }
-                presenter.getLoginData(mobile, pwd);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("loginname", mobile);
+                map.put("password", pwd);
+                presenter.getDataAll("102", map);
 
                 break;
             case R.id.tv_right:
@@ -131,4 +135,20 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> imp
                 break;
         }
     }
+
+    @Override
+    public void onSuccess(String url, BaseBean entity) {
+        super.onSuccess(url, entity);
+        LoginBean bean = (LoginBean) entity;
+        uid = bean.getId();
+        SPUtils.getInstance().put(UrlConstants.UID,bean.getId());
+        // TODO: 2018/7/23 高鹏 这里怎么知道选没选择过关注人呢？
+//        if ("0".equals(bean.getNewUser() + "")) {
+//            GiiispActivity.actionActivity(getContext());
+//        } else {
+//            AttentionActivity.actionActivity(getActivity(), "first");
+//        }
+        getActivity().finish();
+    }
+
 }

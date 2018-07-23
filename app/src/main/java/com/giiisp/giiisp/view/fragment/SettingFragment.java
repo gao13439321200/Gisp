@@ -1,24 +1,26 @@
 package com.giiisp.giiisp.view.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ImageLoader;
-import com.giiisp.giiisp.utils.SharedPreferencesHelper;
 import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -128,15 +130,14 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
         normalDialog.setIcon(null);
         normalDialog.setTitle(R.string.determine_cancellation);
         normalDialog.setPositiveButton(R.string.confirm,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferencesHelper.getInstance(getContext()).putStringValue("token", "");
-                        SharedPreferencesHelper.getInstance(getContext()).putIntValue("Uid", 0);
-                        LogInActivity.actionActivity(getContext());
-                        presenter.getUserLogOutData();
-                        getActivity().finish();
-                    }
+                (dialog, which) -> {
+                    String uid = SPUtils.getInstance().getString(UrlConstants.UID);
+                    SPUtils.getInstance().put(UrlConstants.UID,"");
+                    LogInActivity.actionActivity(getContext());
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("id", uid);
+                    presenter.getDataAll("105", map);
+                    getActivity().finish();
                 });
         normalDialog.setNegativeButton(R.string.cancel, null);
         // 显示

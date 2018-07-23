@@ -3,7 +3,9 @@ package com.giiisp.giiisp.base;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.impl.MyCallBack;
 
 
 /**
@@ -19,7 +21,7 @@ import com.giiisp.giiisp.utils.Utils;
  * Fragment  show   是否隐藏的状态
  */
 
-public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFragment {
+public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFragment implements MyCallBack<BaseBean> {
     public P presenter;
 
     @Override
@@ -46,16 +48,28 @@ public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFr
 
     protected abstract P initPresenter();
 
+    @Override
+    public void onSuccess(String url, BaseBean baseBean) {
+
+    }
+
+    @Override
+    public void onFail(String url, String msg) {
+        timeout = true;
+        Log.i("--->>", "onFailure: " + "P: " + presenter.getClass().getSimpleName() + " : " + msg + "" + msg);
+        Utils.showToast(msg);
+    }
+
     public void onFailure(String msg, Exception ex) {
         timeout = true;
-        Log.i("--->>", "onFailure: " +"P: "+presenter.getClass().getSimpleName()+" : "+ msg + "" + ex.toString());
+        Log.i("--->>", "onFailure: " + "P: " + presenter.getClass().getSimpleName() + " : " + msg + "" + ex.toString());
         if (isShow)
             Utils.showToast(msg);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        Log.i("--->>", "onHiddenChanged: " + hidden );
+        Log.i("--->>", "onHiddenChanged: " + hidden);
         if (timeout)
             initNetwork();
         if (!hidden) {

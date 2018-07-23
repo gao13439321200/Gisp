@@ -7,6 +7,7 @@ import android.os.Environment;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+import com.blankj.utilcode.util.Utils;
 import com.giiisp.giiisp.entity.DaoMaster;
 import com.giiisp.giiisp.entity.DaoSession;
 import com.giiisp.giiisp.net.NetworkStateReceiver;
@@ -78,6 +79,8 @@ public class BaseApp extends Application {
         AppCache.init(this);
         initCloudChannel(this);
 //        UMShareAPI.get(this);
+        //初始化工具类
+        Utils.init(app);
         UMShareAPI.init(this, "594a0f71a40fa31919001163");
         initNetState();
 

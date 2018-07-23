@@ -6,16 +6,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.PhoneEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.CountDownTimerUtils;
-import com.giiisp.giiisp.utils.SharedPreferencesHelper;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
+import com.giiisp.giiisp.view.impl.MyCallBack;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -60,21 +65,21 @@ public class ModifyPhoneFragment extends BaseMvpFragment<BaseImpl, WholePresente
             }
         } else {
             if (entity.getResult() == 1 && number == 100) {
-                SharedPreferencesHelper.getInstance(getContext()).putStringValue("token", "");
-                SharedPreferencesHelper.getInstance(getContext()).putIntValue("Uid", 0);
+                String uid = SPUtils.getInstance().getString(UrlConstants.UID);
+                SPUtils.getInstance().put(UrlConstants.UID,"");
                 LogInActivity.actionActivity(getContext());
-                number = 2000;
-                Utils.showToast(entity.getInfo() + getString(R.string.log_in_again));
-                presenter.getUserLogOutData();
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("id", uid);
+                presenter.getDataAll("105", map);
+                ToastUtils.showShort(R.string.log_in_again);
                 getActivity().finish();
-                //AppManager.getAppManager().finishActivity(BambooActivity.class);
             }
         }
     }
 
     @Override
     protected WholePresenter initPresenter() {
-        return new WholePresenter(this);
+        return new WholePresenter((MyCallBack) this);
     }
 
 

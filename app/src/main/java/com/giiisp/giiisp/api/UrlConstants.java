@@ -6,7 +6,8 @@ package com.giiisp.giiisp.api;
 public class UrlConstants {
     public static class RequestUrl {
         //                        public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
-        public static final String BASE_URL = "http://www.giiisp.cn/";
+//        public static final String BASE_URL = "http://www.giiisp.cn/";
+        public static final String BASE_URL = "";
 //                        public static final String BASE_URL = "https://192.168.1.155/giiisp/";
 
         //                public static final String BASE_URL = "https://47.93.23.62/giiisp/";
@@ -242,12 +243,15 @@ public class UrlConstants {
          */
         public static final String CHECK_PAPERPWD = "/jsp/api/post/checkPaperPwd.do";
 
-        public static final String URL = "";
+        public static final String URL = "http://mall.xdiandian.cn/jsp/app/";
 
     }
 
     public static class RequestPrams {
     }
+
+    public static final String UUID = "uuid";
+    public static final String UID = "uid";
 
 
 }

@@ -1,20 +1,17 @@
 package com.giiisp.giiisp.presenter;
 
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.LogUtils;
 import com.facebook.stetho.common.LogUtil;
-import com.giiisp.giiisp.api.ApiResponse;
 import com.giiisp.giiisp.api.ApiStore;
-import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BasePresenter;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.entity.AnswerEntity;
 import com.giiisp.giiisp.entity.AntistopEntity;
 import com.giiisp.giiisp.entity.AttentionEntity;
@@ -42,6 +39,7 @@ import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.utils.DESedeUtils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.view.impl.MyCallBack;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,7 +49,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -62,16 +59,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.chad.library.adapter.base.listener.SimpleClickListener.TAG;
+import static com.giiisp.giiisp.utils.ToolString.getUUID;
+import static com.giiisp.giiisp.utils.ToolString.toJsonStr;
 
 
 public class WholePresenter extends BasePresenter<BaseImpl> {
     private BaseImpl impl = null;
+    private MyCallBack mMyCallBack = null;
     private String pid = "";
 
 
-    public WholePresenter(BaseImpl impl) {
-        this.impl = impl;
+    public WholePresenter(MyCallBack myCallBack) {
+        this.mMyCallBack = myCallBack;
     }
+
+//    public WholePresenter(BaseImpl impl) {
+//        this.impl = impl;
+//    }
 
     public void getSendCodeData(String mobile, String codeType) {
         Callback<BaseEntity> callback = new Callback<BaseEntity>() {
@@ -1367,58 +1371,57 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     // 普通回调，无特殊数据
-    public void getDataAll(String por, HashMap<String, Object> options, MyCallBack callback) {
-        ApiStore.getInstance().getApiService().getDataAll(getHashMap(por, options))
-                .enqueue(new Callback<BaseEntity>() {
+    public void getDataAll(String por, HashMap<String, Object> options) {
+        ApiStore.getInstance().getApiService().getDataString(getHashMap(por, options))
+                .enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.body() != null) {
-                            if (response.body().getStatusCode() == 1) {
-                                callback.onSuccess(por, response.body());
+                            BaseBean entity = stringToBody(por, response.body());
+                            if (1 == entity.getStatusCode()) {
+                                mMyCallBack.onSuccess(por, entity);
                             } else {
-                                callback.onFail(por, response.body().getMessage());
+                                mMyCallBack.onFail(por, entity.getMessage());
                             }
                         } else {
-                            callback.onFail(por, "信息获取失败");
+                            mMyCallBack.onFail(por, "信息获取失败");
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<BaseEntity> call, Throwable t) {
-                        LogUtils.v("异常信息：" + t);
-                        callback.onFail(por, "信息获取失败");
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        LogUtils.v("okHttp异常信息：" + t);
+                        mMyCallBack.onFail(por, "信息获取失败");
                     }
                 });
     }
 
 
+    //参数统一处理
     private String getHashMap(String por, HashMap dMap) {
-        String cipher = DESedeUtils.getDesede(toJsonStr(dMap), getDevUUID());
+        String cipher = DESedeUtils.getDesede(toJsonStr(dMap), getUUID());
         LogUtil.d(TAG, "data:cipher；" + cipher);
         HashMap<String, Object> map = new HashMap<>();
         map.put("por", por);   // 请求接口
-        map.put("pid", getDevUUID()); // 设备唯一码
+        map.put("pid", getUUID()); // 设备唯一码
         map.put("cipher", cipher); // c参数密文
+        LogUtils.v("okHttp:" + toJsonStr(map));
         return toJsonStr(map);
     }
 
-    private String toJsonStr(Object object) {
-        String str_json = JSONObject.toJSONString(object);
-        LogUtil.d(TAG, "toJsonStr: " + str_json);
-        return str_json;
-    }
-
-    @SuppressLint("HardwareIds")
-    private String getDevUUID() {
-        if (pid == null) {
-            final TelephonyManager tm = (TelephonyManager) BaseApp.getContext().getSystemService(Context.TELEPHONY_SERVICE);
-            final String tmDevice, tmSerial, androidId;
-            tmDevice = "" + tm.getDeviceId();
-            tmSerial = "" + tm.getSimSerialNumber();
-            androidId = "" + android.provider.Settings.Secure.getString(BaseApp.getContext().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-            UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-            pid = deviceUuid.toString();
+    private BaseBean stringToBody(String url, String result) {
+        String cipher = DESedeUtils.getdeCrypt(result, getUUID());
+        LogUtils.v("接口：" + url + ",okHttp回调解密：" + cipher);
+        BaseBean baseEntity;
+        switch (url) {
+            case "102":
+            case "104":
+                baseEntity = new Gson().fromJson(cipher, LoginBean.class);
+                break;
+            default://101、105
+                baseEntity = new Gson().fromJson(cipher, BaseBean.class);
+                break;
         }
-        return pid;
+        return baseEntity;
     }
 }

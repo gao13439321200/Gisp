@@ -7,12 +7,10 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
-import com.giiisp.giiisp.utils.SharedPreferencesHelper;
 import com.giiisp.giiisp.widget.recording.AppCache;
 import com.giiisp.giiisp.widget.recording.PlayService;
 
@@ -48,15 +46,15 @@ public class WelcomeActivity extends BaseActivity {
 
     private void intentMethod() {
 //        String tokens = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("token");
-        String uid = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("Uid");
-        if (TextUtils.isEmpty(uid)) {
+//        String uid = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("Uid");
+//        if (TextUtils.isEmpty(uid)) {
             LogInActivity.actionActivity(this);
 //            WelcomeSelectActivity.intentActivity(this);
-        } else {
+//        } else {
 //            BaseActivity.token = tokens;
-            BaseActivity.uid = uid;
-            GiiispActivity.actionActivity(this, getIntent());
-        }
+//            BaseActivity.uid = uid;
+//            GiiispActivity.actionActivity(this, getIntent());
+//        }
         finish();
 
     }
