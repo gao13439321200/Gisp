@@ -67,6 +67,7 @@ public class ModifyPhoneFragment extends BaseMvpFragment<BaseImpl, WholePresente
             if (entity.getResult() == 1 && number == 100) {
                 String uid = SPUtils.getInstance().getString(UrlConstants.UID);
                 SPUtils.getInstance().put(UrlConstants.UID,"");
+                SPUtils.getInstance().put(UrlConstants.UNAME,"");
                 LogInActivity.actionActivity(getContext());
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("id", uid);

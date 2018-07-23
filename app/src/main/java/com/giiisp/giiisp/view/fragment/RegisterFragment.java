@@ -93,7 +93,7 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             case R.id.tv_register:
                 if (checkInfo()) {
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("loginname", ToolString.getString(edEnterPhone));
+                    map.put("loginname", phone);
                     map.put("name", ToolString.getString(edEnterName));
                     map.put("password", ToolString.getString(edEnterPassword));
                     map.put("code", ToolString.getString(edEnterCode));
@@ -213,6 +213,7 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 //注册并登录成功！
                 uid = bean.getId();
                 SPUtils.getInstance().put(UrlConstants.UID, bean.getId());
+                SPUtils.getInstance().put(UrlConstants.UNAME, phone);
                 Utils.showToast(entity.getMessage());
                 //选择领域
                 WelcomeSelectActivity.intentActivity(getActivity());

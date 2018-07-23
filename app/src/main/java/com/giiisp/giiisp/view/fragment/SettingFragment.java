@@ -133,6 +133,7 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
                 (dialog, which) -> {
                     String uid = SPUtils.getInstance().getString(UrlConstants.UID);
                     SPUtils.getInstance().put(UrlConstants.UID,"");
+                    SPUtils.getInstance().put(UrlConstants.UNAME,"");
                     LogInActivity.actionActivity(getContext());
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("id", uid);

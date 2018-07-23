@@ -141,7 +141,10 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
         super.onSuccess(url, entity);
         LoginBean bean = (LoginBean) entity;
         uid = bean.getId();
-        SPUtils.getInstance().put(UrlConstants.UID,bean.getId());
+        SPUtils.getInstance().put(UrlConstants.UID, bean.getId());
+        SPUtils.getInstance().put(UrlConstants.UNAME,
+                edEnterPhone.getText().toString().trim());
+
         // TODO: 2018/7/23 高鹏 这里怎么知道选没选择过关注人呢？
 //        if ("0".equals(bean.getNewUser() + "")) {
 //            GiiispActivity.actionActivity(getContext());

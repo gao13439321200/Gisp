@@ -1,34 +1,33 @@
 package com.giiisp.giiisp.view.fragment;
 
-import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
-import com.giiisp.giiisp.entity.BaseEntity;
-import com.giiisp.giiisp.entity.PhoneEntity;
+import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.CountDownTimerUtils;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
-import com.giiisp.giiisp.utils.Log;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 修改密码界面
+ * 找回密码界面
  * Created by Android on 2017/5/3.
  */
 
 
-public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements BaseImpl {
+public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
 
 
     @BindView(R.id.tv_title)
@@ -44,7 +43,6 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
     @BindView(R.id.tv_verification_code)
     TextView tvVerificationCode;
     private String phone;
-    private int successType;
 
     @Override
     public void onDestroyView() {
@@ -62,36 +60,6 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
         tvTitle.setText(R.string.retrieve_password);
     }
 
-
-    @Override
-    public void onSuccess(BaseEntity entity) {
-        Log.i("--->>",entity.toString());
-        if (entity == null || context == null)
-            return;
-        switch (successType) {
-            case 1:
-                if (entity instanceof PhoneEntity) {
-                    if (((PhoneEntity) entity).getIsMobileExist() == 1) {
-                        presenter.getSendCodeData(phone, "2");
-                        successType = 2;
-                        CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(tvVerificationCode, 60000, 1000);
-                        mCountDownTimerUtils.start();
-                    } else {
-                        Utils.showToast(R.string.phone_not_registered);
-                    }
-                }
-                break;
-            case 2:
-                Utils.showToast(entity.getInfo());
-                break;
-            case 3:
-                if (entity.getResult() == 1) {
-                    getLogInActivity().getVpLogin().setCurrentItem(1);
-                }
-                Utils.showToast(entity.getInfo());
-                break;
-        }
-    }
 
     @Override
     protected WholePresenter initPresenter() {
@@ -130,20 +98,22 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
                     Utils.showToast(R.string.password_can_only);
                     break;
                 }
-                ArrayMap<String, Object> map = new ArrayMap<>();
-                map.put("mobile", mobile);
-                map.put("pwd", pwd);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("loginname", mobile);
+                map.put("password", pwd);
                 map.put("code", code);
-                successType = 3;
-                presenter.getRetrieveData(map);//Retrieve
+                presenter.getDataAll("107", map);//Retrieve
                 break;
 
             case R.id.tv_verification_code:
                 phone = edEnterPhones.getText().toString();
                 if (!TextUtils.isEmpty(phone)) {
                     if (Utils.checkMobileNumber(phone)) {
-                        successType = 1;
-                        presenter.getPhoneData(phone);
+                        HashMap<String, Object> map1 = new HashMap<>();
+                        map1.put("loginname", phone);
+                        map1.put("sendtype", 1);
+                        map1.put("type", 3);
+                        presenter.getDataAll("101", map1);
                     } else {
                         Utils.showToast(R.string.format_not_correct);
                     }
@@ -154,4 +124,21 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
         }
     }
 
+    @Override
+    public void onSuccess(String url, BaseBean baseBean) {
+        super.onSuccess(url, baseBean);
+        switch (url) {
+            case "101":
+                ToastUtils.showShort("验证码发送成功！");
+                CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(tvVerificationCode, 60000, 1000);
+                mCountDownTimerUtils.start();
+                break;
+            case "107":
+                ToastUtils.showShort("密码重置成功！");
+                getLogInActivity().getVpLogin().setCurrentItem(1);
+                break;
+            default:
+                break;
+        }
+    }
 }

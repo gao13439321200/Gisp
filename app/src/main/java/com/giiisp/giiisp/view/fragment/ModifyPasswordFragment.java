@@ -1,7 +1,6 @@
 package com.giiisp.giiisp.view.fragment;
 
 import android.graphics.Color;
-import android.support.v4.util.ArrayMap;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -12,19 +11,21 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
-import com.giiisp.giiisp.entity.BaseEntity;
+import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.presenter.WholePresenter;
-import com.giiisp.giiisp.utils.SharedPreferencesHelper;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 //import static com.giiisp.giiisp.base.BaseActivity.token;
 
@@ -33,7 +34,7 @@ import static com.giiisp.giiisp.base.BaseActivity.uid;
  * Created by Thinkpad on 2017/5/4.
  */
 
-public class ModifyPasswordFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements BaseImpl {
+public class ModifyPasswordFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
 
     @BindView(R.id.tv_back)
     TextView tvBack;
@@ -50,17 +51,17 @@ public class ModifyPasswordFragment extends BaseMvpFragment<BaseImpl, WholePrese
     @BindView(R.id.tv_info)
     TextView tvInfo;
 
-    @Override
-    public void onSuccess(BaseEntity entity) {
-        if (context == null)
-            return;
-        Utils.showToast(entity.getInfo());
-        if (entity.getResult() == 1) {
-            getSettingActivity().getVpLogin().setCurrentItem(2, false);
-            uid = entity.getUid();
-            SharedPreferencesHelper.getInstance(context).putStringValue("uid", entity.getUid());
-        }
-    }
+//    @Override
+//    public void onSuccess(BaseEntity entity) {
+//        if (context == null)
+//            return;
+//        Utils.showToast(entity.getInfo());
+//        if (entity.getResult() == 1) {
+//            getSettingActivity().getVpLogin().setCurrentItem(2, false);
+//            uid = entity.getUid();
+//            SharedPreferencesHelper.getInstance(context).putStringValue("uid", entity.getUid());
+//        }
+//    }
 
     @Override
     protected WholePresenter initPresenter() {
@@ -137,9 +138,9 @@ public class ModifyPasswordFragment extends BaseMvpFragment<BaseImpl, WholePrese
                 getSettingActivity().getVpLogin().setCurrentItem(2, false);
                 break;
             case R.id.tv_confirm:
-                String opwd = etCurrentPassword.getText() + "";
-                String pwd = etNewPwd.getText() + "";
-                String confirmPwd = etConfirmPwd.getText() + "";
+                String opwd = ToolString.getString(etCurrentPassword);
+                String pwd = ToolString.getString(etNewPwd);
+                String confirmPwd = ToolString.getString(etConfirmPwd);
 
                 if (pwd.equals(confirmPwd)) {
                     if (pwd.length() > 8 | pwd.length() < 6) {
@@ -148,15 +149,28 @@ public class ModifyPasswordFragment extends BaseMvpFragment<BaseImpl, WholePrese
                     } else if (opwd.equals(pwd)) {
                         Utils.showToast(R.string.newpassword_oldpassword_same);
                     } else {
-                        ArrayMap<String, Object> map = new ArrayMap<>();
-                        map.put("uid", uid);
-                        map.put("opwd", opwd);
-                        map.put("pwd", pwd);
-                        presenter.getResetPwdData(map);
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("loginname", SPUtils.getInstance().getString(UrlConstants.UNAME));
+                        map.put("oldpwd", opwd);
+                        map.put("newpwd", pwd);
+                        presenter.getDataAll("106", map);
                     }
                 } else {
                     Utils.showToast(R.string.passwords_match);
                 }
+                break;
+        }
+    }
+
+    @Override
+    public void onSuccess(String url, BaseBean baseBean) {
+        super.onSuccess(url, baseBean);
+        switch(url){
+            case "106":
+                ToastUtils.showShort("密码修改成功！");
+                getSettingActivity().getVpLogin().setCurrentItem(2, false);
+                break;
+            default:
                 break;
         }
     }

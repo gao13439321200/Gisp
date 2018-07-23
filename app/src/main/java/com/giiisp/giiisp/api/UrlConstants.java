@@ -252,6 +252,7 @@ public class UrlConstants {
 
     public static final String UUID = "uuid";
     public static final String UID = "uid";
+    public static final String UNAME = "uname";
 
 
 }
