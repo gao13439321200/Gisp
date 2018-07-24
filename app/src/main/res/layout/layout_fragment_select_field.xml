@@ -16,22 +16,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我关注的学科："
+                android:text="学科："
                 android:textSize="18sp"/>
 
-            <LinearLayout
-                android:id="@+id/ll_subject"
+            <EditText
+                android:id="@+id/et_subject"
                 android:layout_width="160dp"
                 android:layout_height="30dp"
                 android:background="@drawable/tag_noselect"
                 android:orientation="horizontal"
                 />
+
+            <Button
+                android:id="@+id/btn_select"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/tag_select"
+                android:text="搜索"
+                android:textColor="@color/bg_white"/>
 
         </LinearLayout>
 
@@ -59,7 +69,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我关注的专业："
+                android:text="专业："
                 android:textSize="18sp"/>
 
             <LinearLayout
@@ -68,6 +78,7 @@
                 android:layout_height="30dp"
                 android:background="@drawable/tag_noselect"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 />
 
         </LinearLayout>

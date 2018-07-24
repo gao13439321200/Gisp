@@ -4,22 +4,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ObjectUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.MajorBean;
+import com.giiisp.giiisp.dto.MajorVO;
+import com.giiisp.giiisp.dto.SubjectBean;
+import com.giiisp.giiisp.dto.SubjectVO;
 import com.giiisp.giiisp.presenter.WholePresenter;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
 import com.giiisp.giiisp.view.impl.MyCallBack;
-import com.giiisp.giiisp.widget.CustomSpinner;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,19 +36,28 @@ import butterknife.OnClick;
 /**
  * 选择领域
  */
-public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresenter> implements MyCallBack<BaseBean> {
+public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresenter> {
 
     public static final String TYPE = "type";
-    @BindView(R.id.ll_subject)
-    LinearLayout mLlSubject;
+    //    @BindView(R.id.ll_subject)
+//    LinearLayout mLlSubject;
+    @BindView(R.id.et_subject)
+    EditText mEtSubject;
     @BindView(R.id.tag_subject)
     TagFlowLayout mTagSubject;
-    @BindView(R.id.ll_major)
-    LinearLayout mLlMajor;
+    //    @BindView(R.id.ll_major)
+//    LinearLayout mLlMajor;
     @BindView(R.id.tag_major)
     TagFlowLayout mTagMajor;
     @BindView(R.id.btn_next)
     Button mButton;
+    private List<SubjectVO> mSubjectVOList = new ArrayList<>();
+    private List<MajorVO> mMajorVOList = new ArrayList<>();
+    private TagAdapter mSubjectAdapter;
+    private TagAdapter mMajorAdapter;
+    private String pid = "";
+    private String cid = "";
+    private String etText = "";
 
     public static SelectFieldFragment newInstance(int type) {
 
@@ -82,71 +99,103 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
         txt.add("哈哈");
         txt.add("呵呵");
         txt.add("嘿嘿哈哈哈哈哈哈哈");
-        CustomSpinner mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
-        mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
+//        CustomSpinner mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
+//        mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
 
-        });
-        mLlSubject.addView(mSpinnerSubject);
+//        });
+//        mLlSubject.addView(mSpinnerSubject);
 
-        CustomSpinner mSpinnerMajor = new CustomSpinner(getActivity(), "请选择", txt);
-        mSpinnerMajor.setOnCustomItemCheckedListener(position -> {
-
-        });
-        mLlMajor.addView(mSpinnerMajor);
-
-        mTagSubject.setAdapter(new TagAdapter<String>(txt) {
+//        CustomSpinner mSpinnerMajor = new CustomSpinner(getActivity(), "请选择", txt);
+//        mSpinnerMajor.setOnCustomItemCheckedListener(position -> {
+//
+//        });
+//        mLlMajor.addView(mSpinnerMajor);
+        mSubjectAdapter = new TagAdapter<SubjectVO>(mSubjectVOList) {
             @Override
-            public View getView(FlowLayout parent, int position, String o) {
+            public View getView(FlowLayout parent, int position, SubjectVO o) {
                 TextView tv = (TextView) LayoutInflater
                         .from(getActivity()).inflate(R.layout.tag_select_item_layout,
                                 mTagSubject, false);
-                tv.setText(o);
+                tv.setText(isChinese() ? o.getName() : o.getEnarea());
                 return tv;
             }
-        });
+        };
+        mTagSubject.setMaxSelectCount(1);
+        mTagSubject.setAdapter(mSubjectAdapter);
 
         mTagSubject.setOnSelectListener(selectPosSet -> {
-            StringBuffer a = new StringBuffer();
-            for (int position : selectPosSet) {
-                a.append(txt.get(position));
-            }
-            ToastUtils.showShort(a);
+            pid = mSubjectVOList.get((int) (new ArrayList(selectPosSet)).get(0)).getId();
+            //单选
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("pid", pid);
+            map.put("uid", getUserID());
+            map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+            map.put("sname", etText);
+            presenter.getDataAll("110", map);
         });
 
-
-        mTagMajor.setAdapter(new TagAdapter<String>(txt) {
+        mMajorAdapter = new TagAdapter<MajorVO>(mMajorVOList) {
             @Override
-            public View getView(FlowLayout parent, int position, String o) {
+            public View getView(FlowLayout parent, int position, MajorVO o) {
                 TextView tv = (TextView) LayoutInflater
                         .from(getActivity()).inflate(R.layout.tag_select_item_layout,
                                 mTagSubject, false);
-                tv.setText(o);
+                tv.setText(isChinese() ? o.getName() : o.getEnarea());
                 return tv;
             }
-        });
-
-        mTagMajor.setOnSelectListener(selectPosSet -> {
-            StringBuffer a = new StringBuffer();
-            for (int position : selectPosSet) {
-                a.append(txt.get(position));
-            }
-            ToastUtils.showShort(a);
-        });
-    }
-
-    @OnClick(R.id.btn_next)
-    public void onViewClicked() {
-        start(SelectWordFragment.newInstance(1));
-        SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
+        };
+        mTagMajor.setAdapter(mMajorAdapter);
+        mTagMajor.setMaxSelectCount(1);
+        mTagMajor.setOnSelectListener(selectPosSet -> cid = mMajorVOList.get((int) (new ArrayList(selectPosSet)).get(0)).getId());
     }
 
     @Override
     public void onSuccess(String url, BaseBean entity) {
-
+        super.onSuccess(url, entity);
+        switch (url) {
+            case "109":
+                SubjectBean bean = (SubjectBean) entity;
+                mSubjectVOList.clear();
+                mSubjectVOList.addAll(bean.getMajors());
+                mSubjectAdapter.notifyDataChanged();
+                mMajorVOList.clear();
+                mMajorAdapter.notifyDataChanged();
+                break;
+            case "110":
+                MajorBean bean1 = (MajorBean) entity;
+                mMajorVOList.clear();
+                mMajorVOList.addAll(bean1.getMajors());
+                mMajorAdapter.notifyDataChanged();
+                break;
+            case "111":
+                start(SelectWordFragment.newInstance(1));
+                SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
+                break;
+            default:
+                break;
+        }
     }
 
-    @Override
-    public void onFail(String url, String msg) {
-
+    @OnClick({R.id.btn_select, R.id.btn_next})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_select:
+                if (ObjectUtils.isEmpty(ToolString.getString(mEtSubject))) {
+                    ToastUtils.showShort("请输入搜索内容");
+                    break;
+                }
+                etText = ToolString.getString(mEtSubject);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+                map.put("pname", ToolString.getString(mEtSubject));
+                presenter.getDataAll("109", map);
+                break;
+            case R.id.btn_next:
+                HashMap<String, Object> map1 = new HashMap<>();
+                map1.put("mid", cid);
+                map1.put("uid", getUserID());
+                presenter.getDataAll("111", map1);
+                break;
+        }
     }
 }

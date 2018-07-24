@@ -3,6 +3,8 @@ package com.giiisp.giiisp.base;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.MyCallBack;
@@ -77,6 +79,14 @@ public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFr
         }
         super.onHiddenChanged(hidden);
 
+    }
+
+    public boolean isChinese() {
+        return "1".equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+    }
+
+    public String getUserID() {
+        return SPUtils.getInstance().getString(UrlConstants.UID, "");
     }
 
 }
