@@ -7,9 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
@@ -91,17 +93,6 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
                 break;
         }
 
-//        CustomSpinner mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
-//        mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
-
-//        });
-//        mLlSubject.addView(mSpinnerSubject);
-
-//        CustomSpinner mSpinnerMajor = new CustomSpinner(getActivity(), "请选择", txt);
-//        mSpinnerMajor.setOnCustomItemCheckedListener(position -> {
-//
-//        });
-//        mLlMajor.addView(mSpinnerMajor);
         mSubjectAdapter = new TagAdapter<SubjectVO>(mSubjectVOList) {
             @Override
             public View getView(FlowLayout parent, int position, SubjectVO o) {
@@ -112,6 +103,7 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
                 return tv;
             }
         };
+        mTagSubject.setMaxSelectCount(1);
         mTagSubject.setAdapter(mSubjectAdapter);
 
         mTagSubject.setOnTagClickListener((view, position, parent) -> {
@@ -152,21 +144,26 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
         switch (url) {
             case "109":
                 SubjectBean bean = (SubjectBean) entity;
+                if (bean.getList().size() == 0) {
+                    ToastUtils.showShort("暂无学科信息");
+                }
                 mSubjectVOList.clear();
-                mSubjectVOList.addAll(bean.getMajors());
+                mSubjectVOList.addAll(bean.getList());
                 mSubjectAdapter.notifyDataChanged();
                 mMajorVOList.clear();
                 mMajorAdapter.notifyDataChanged();
                 break;
             case "110":
                 MajorBean bean1 = (MajorBean) entity;
+                if (bean1.getMajors().size() == 0) {
+                    ToastUtils.showShort("暂无专业信息");
+                }
                 mMajorVOList.clear();
                 mMajorVOList.addAll(bean1.getMajors());
                 mMajorAdapter.notifyDataChanged();
                 break;
             case "111":
-                start(SelectWordFragment.newInstance(1));
-                SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
+//                ToastUtils.showShort("成功！");
                 break;
             default:
                 break;
@@ -177,6 +174,7 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_select:
+                KeyboardUtils.hideSoftInput(mEtSubject);
                 etText = ToolString.getString(mEtSubject);
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
@@ -184,10 +182,8 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
                 presenter.getDataAll("109", map);
                 break;
             case R.id.btn_next:
-                HashMap<String, Object> map1 = new HashMap<>();
-                map1.put("mid", cid);
-                map1.put("uid", getUserID());
-                presenter.getDataAll("111", map1);
+                start(SelectWordFragment.newInstance(1));
+                SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
                 break;
         }
     }

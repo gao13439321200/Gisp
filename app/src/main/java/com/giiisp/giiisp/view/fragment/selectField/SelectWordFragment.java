@@ -91,11 +91,12 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
 
         mTagWordSystem.setAdapter(systemAdapter);
 
-        mTagWordSystem.setOnSelectListener(selectPosSet -> {
+        mTagWordSystem.setOnTagClickListener((view, position, parent) -> {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("aid", wordSystemList.get((int) (new ArrayList(selectPosSet)).get(0)).getId());
+            map.put("aid", wordSystemList.get(position).getId());
             map.put("uid", getUserID());
             presenter.getDataAll("114", map);
+            return true;
         });
 
         userAdapter = new TagAdapter<WordVO>(wordUserList) {
@@ -110,11 +111,12 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         };
         mTagWordUser.setAdapter(userAdapter);
 
-        mTagWordUser.setOnSelectListener(selectPosSet -> {
+        mTagWordUser.setOnTagClickListener((view, position, parent) -> {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("aid", wordUserList.get((int) (new ArrayList(selectPosSet)).get(0)).getId());
+            map.put("aid", wordUserList.get(position).getId());
             map.put("uid", getUserID());
             presenter.getDataAll("114", map);
+            return true;
         });
 
         HashMap<String, Object> map = new HashMap<>();
@@ -149,7 +151,7 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
                 userAdapter.notifyDataChanged();
                 break;
             case "114":
-                ToastUtils.showShort("关注成功！");
+//                ToastUtils.showShort("关注成功！");
                 break;
             default:
                 break;

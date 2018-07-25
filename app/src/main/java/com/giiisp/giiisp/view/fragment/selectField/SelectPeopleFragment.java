@@ -197,7 +197,7 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
             case "109":
                 SubjectBean bean3 = (SubjectBean) baseBean;
                 mSubjectVOS.clear();
-                mSubjectVOS.addAll(bean3.getMajors());
+                mSubjectVOS.addAll(bean3.getList());
                 majorAdapter.notifyDataChanged();
                 break;
             case "110":

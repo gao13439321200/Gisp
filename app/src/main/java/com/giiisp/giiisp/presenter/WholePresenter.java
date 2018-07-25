@@ -1383,7 +1383,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.body() != null) {
                             BaseBean entity = stringToBody(por, response.body());
-                            if (1 == entity.getStatusCode()) {
+                            if (1 == entity.getStatusCode() || 0 == entity.getStatusCode()) {
                                 mMyCallBack.onSuccess(por, entity);
                             } else {
                                 mMyCallBack.onFail(por, entity.getMessage());
@@ -1415,7 +1415,10 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     private BaseBean stringToBody(String url, String result) {
+        LogUtils.v("接口：" + url + ",okHttp回调未解密：" + result);
         String cipher = DESedeUtils.getdeCrypt(result, getUUID());
+        cipher = cipher.replace("\"[", "[");
+        cipher = cipher.replace("]\"", "]");
         LogUtils.v("接口：" + url + ",okHttp回调解密：" + cipher);
         BaseBean baseEntity;
         switch (url) {

@@ -3,13 +3,14 @@ package com.giiisp.giiisp.dto;
 import java.util.List;
 
 public class SubjectBean extends BaseBean {
-    private List<SubjectVO> majors;
+    private List<SubjectVO> list;
 
-    public List<SubjectVO> getMajors() {
-        return majors;
+    public List<SubjectVO> getList() {
+        return list;
     }
 
-    public void setMajors(List<SubjectVO> majors) {
-        this.majors = majors;
+    public void setList(List<SubjectVO> list) {
+        this.list = list;
     }
+
 }
