@@ -1376,6 +1376,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
 
     // 普通回调，无特殊数据
     public void getDataAll(String por, HashMap<String, Object> options) {
+        LogUtils.v("okHttp---por:" + por + " 参数：" + options);
         ApiStore.getInstance().getApiService().getDataString(getHashMap(por, options))
                 .enqueue(new Callback<String>() {
                     @Override

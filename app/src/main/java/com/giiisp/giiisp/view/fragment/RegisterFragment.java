@@ -44,6 +44,8 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     EditText edEnterName;
     @BindView(R.id.ed_enter_phone)
     EditText edEnterPhone;
+    @BindView(R.id.ed_enter_email)
+    EditText edEnterEmail;
     @BindView(R.id.ed_enter_code)
     EditText edEnterCode;
     @BindView(R.id.ed_enter_password)
@@ -52,7 +54,7 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     EditText edSecondPassword;
     @BindView(R.id.tv_verification_code)
     TextView tvVerificationCode;
-    private String phone;
+    private String userName;
     int type = 0;
     int registerType = 1;//1是手机号注册 2是邮箱注册
 
@@ -93,7 +95,7 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             case R.id.tv_register:
                 if (checkInfo()) {
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("loginname", phone);
+                    map.put("loginname", userName);
                     map.put("name", ToolString.getString(edEnterName));
                     map.put("password", ToolString.getString(edEnterPassword));
                     map.put("code", ToolString.getString(edEnterCode));
@@ -105,10 +107,13 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 getLogInActivity().getVpLogin().setCurrentItem(4);
                 break;
             case R.id.tv_verification_code:
-                phone = ToolString.getString(edEnterPhone);
+                if (registerType == 1)
+                    userName = ToolString.getString(edEnterPhone);
+                if (registerType == 2)
+                    userName = ToolString.getString(edEnterEmail);
                 if (checkInfoCode()) {
                     HashMap<String, Object> map = new HashMap<>();
-                    map.put("loginname", phone);
+                    map.put("loginname", userName);
                     map.put("sendtype", registerType);
                     map.put("type", 1);
                     presenter.getDataAll("101", map);
@@ -116,12 +121,14 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 break;
             case R.id.rb_phone://手机号
                 registerType = 1;
-                edEnterPhone.setHint("手机号码");
+                edEnterPhone.setVisibility(View.VISIBLE);
+                edEnterEmail.setVisibility(View.GONE);
                 edEnterCode.setHint("请输入验证码");
                 break;
             case R.id.rb_email://邮箱
                 registerType = 2;
-                edEnterPhone.setHint("邮箱");
+                edEnterEmail.setVisibility(View.VISIBLE);
+                edEnterPhone.setVisibility(View.GONE);
                 edEnterCode.setHint("邮箱验证码");
                 break;
         }
@@ -133,19 +140,20 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         String secondPwd = ToolString.getString(edSecondPassword);
         String name = ToolString.getString(edEnterName);
         String mobile = ToolString.getString(edEnterPhone);
-        if (registerType == 1 && TextUtils.isEmpty(phone)) {
+        String email = ToolString.getString(edEnterEmail);
+        if (registerType == 1 && TextUtils.isEmpty(mobile)) {
             Utils.showToast(R.string.input_phone);
             return false;
         }
-        if (registerType == 1 && !Utils.checkMobileNumber(phone)) {
+        if (registerType == 1 && !Utils.checkMobileNumber(mobile)) {
             Utils.showToast(R.string.format_not_correct);
             return false;
         }
-        if (registerType == 2 && TextUtils.isEmpty(phone)) {
+        if (registerType == 2 && TextUtils.isEmpty(email)) {
             Utils.showToast("请输入邮箱账号");
             return false;
         }
-        if (registerType == 2 && !Utils.checkEmail(phone)) {
+        if (registerType == 2 && !Utils.checkEmail(email)) {
             Utils.showToast("邮箱格式不正确");
             return false;
         }
@@ -157,11 +165,12 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             Utils.showToast(R.string.verification_code_empty);
             return false;
         }
-        if (!Objects.equals(mobile, phone)) {
-            if (registerType == 1)
-                Utils.showToast(R.string.enter_the_phone);
-            if (registerType == 2)
-                Utils.showToast("输入邮箱地址不一致");
+        if (registerType == 1 && !Objects.equals(mobile, userName)) {
+            Utils.showToast(R.string.enter_the_phone);
+            return false;
+        }
+        if (registerType == 2 && !Objects.equals(email, userName)) {
+            Utils.showToast("输入邮箱地址不一致");
             return false;
         }
         if (TextUtils.isEmpty(pwd) && TextUtils.isEmpty(secondPwd)) {
@@ -180,19 +189,19 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     }
 
     private boolean checkInfoCode() {
-        if (registerType == 1 && TextUtils.isEmpty(phone)) {
+        if (registerType == 1 && TextUtils.isEmpty(userName)) {
             Utils.showToast(R.string.input_phone);
             return false;
         }
-        if (registerType == 1 && !Utils.checkMobileNumber(phone)) {
+        if (registerType == 1 && !Utils.checkMobileNumber(userName)) {
             Utils.showToast(R.string.format_not_correct);
             return false;
         }
-        if (registerType == 2 && TextUtils.isEmpty(phone)) {
+        if (registerType == 2 && TextUtils.isEmpty(userName)) {
             Utils.showToast("请输入邮箱账号");
             return false;
         }
-        if (registerType == 2 && !Utils.checkEmail(phone)) {
+        if (registerType == 2 && !Utils.checkEmail(userName)) {
             Utils.showToast("邮箱格式不正确");
             return false;
         }
@@ -206,15 +215,15 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 //发送验证码成功！
                 CountDownTimerUtils mCountDownTimerUtils = new CountDownTimerUtils(tvVerificationCode, 60000, 1000);
                 mCountDownTimerUtils.start();
-                ToastUtils.showShort(entity.getMessage());
+                ToastUtils.showShort("验证码发送成功！");
                 break;
             case "104":
                 LoginBean bean = (LoginBean) entity;
                 //注册并登录成功！
                 uid = bean.getId();
                 SPUtils.getInstance().put(UrlConstants.UID, bean.getId());
-                SPUtils.getInstance().put(UrlConstants.UNAME, phone);
-                Utils.showToast(entity.getMessage());
+                SPUtils.getInstance().put(UrlConstants.UNAME, userName);
+                Utils.showToast("注册成功！");
                 //选择领域
                 WelcomeSelectActivity.intentActivity(getActivity());
                 getActivity().finish();

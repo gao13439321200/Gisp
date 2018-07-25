@@ -7,9 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
@@ -91,14 +91,6 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
                 break;
         }
 
-
-        List<String> txt = new ArrayList<>();
-        txt.add("哈哈");
-        txt.add("呵呵");
-        txt.add("嘿嘿哈哈哈哈哈哈哈");
-        txt.add("哈哈");
-        txt.add("呵呵");
-        txt.add("嘿嘿哈哈哈哈哈哈哈");
 //        CustomSpinner mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
 //        mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
 
@@ -120,18 +112,17 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
                 return tv;
             }
         };
-        mTagSubject.setMaxSelectCount(1);
         mTagSubject.setAdapter(mSubjectAdapter);
 
-        mTagSubject.setOnSelectListener(selectPosSet -> {
-            pid = mSubjectVOList.get((int) (new ArrayList(selectPosSet)).get(0)).getId();
-            //单选
+        mTagSubject.setOnTagClickListener((view, position, parent) -> {
+            LogUtils.v("id:" + mSubjectVOList.get(position).getId());
             HashMap<String, Object> map = new HashMap<>();
-            map.put("pid", pid);
+            map.put("pid", mSubjectVOList.get(position).getId());
             map.put("uid", getUserID());
             map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
             map.put("sname", etText);
             presenter.getDataAll("110", map);
+            return true;
         });
 
         mMajorAdapter = new TagAdapter<MajorVO>(mMajorVOList) {
@@ -145,8 +136,14 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
             }
         };
         mTagMajor.setAdapter(mMajorAdapter);
-        mTagMajor.setMaxSelectCount(1);
-        mTagMajor.setOnSelectListener(selectPosSet -> cid = mMajorVOList.get((int) (new ArrayList(selectPosSet)).get(0)).getId());
+        mTagMajor.setOnTagClickListener((view, position, parent) -> {
+            LogUtils.v("id:" + mMajorVOList.get(position).getId());
+            HashMap<String, Object> map1 = new HashMap<>();
+            map1.put("mid", mMajorVOList.get(position).getId());
+            map1.put("uid", getUserID());
+            presenter.getDataAll("111", map1);
+            return true;
+        });
     }
 
     @Override
@@ -180,14 +177,10 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_select:
-                if (ObjectUtils.isEmpty(ToolString.getString(mEtSubject))) {
-                    ToastUtils.showShort("请输入搜索内容");
-                    break;
-                }
                 etText = ToolString.getString(mEtSubject);
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
-                map.put("pname", ToolString.getString(mEtSubject));
+                map.put("pname", ObjectUtils.isNotEmpty(etText) ? etText : "");
                 presenter.getDataAll("109", map);
                 break;
             case R.id.btn_next:

@@ -14,6 +14,7 @@ import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.activity.WelcomeSelectActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import java.util.HashMap;
@@ -151,6 +152,7 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
 //        } else {
 //            AttentionActivity.actionActivity(getActivity(), "first");
 //        }
+        WelcomeSelectActivity.intentActivity(getActivity());
         getActivity().finish();
     }
 

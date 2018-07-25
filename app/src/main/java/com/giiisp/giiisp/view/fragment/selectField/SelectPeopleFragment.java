@@ -15,6 +15,8 @@ import com.giiisp.giiisp.dto.MajorBean;
 import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.PeopleVO;
+import com.giiisp.giiisp.dto.SubjectBean;
+import com.giiisp.giiisp.dto.SubjectVO;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
@@ -46,6 +48,7 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
     @BindView(R.id.btn_next)
     Button mButton;
     private List<MajorVO> mMajorVOS = new ArrayList<>();
+    private List<SubjectVO> mSubjectVOS = new ArrayList<>();
     private List<PeopleVO> mPeopleVOSystem = new ArrayList<>();
     private List<PeopleVO> mPeopleVOUser = new ArrayList<>();
     private TagAdapter majorAdapter;
@@ -86,26 +89,29 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
         }
 
 
-//        //学科
-//        mTagSubject.setAdapter(new TagAdapter<String>(txt) {
-//            @Override
-//            public View getView(FlowLayout parent, int position, String o) {
-//                TextView tv = (TextView) LayoutInflater
-//                        .from(getActivity()).inflate(R.layout.tag_select_people_subject_layout,
-//                                mTagSubject, false);
-//                tv.setText(o);
-//                return tv;
-//            }
-//        });
-//
-//
-//        mTagSubject.setOnSelectListener(selectPosSet -> {
-//            StringBuffer a = new StringBuffer();
-//            for (int position : selectPosSet) {
-//                a.append(txt.get(position));
-//            }
-//            ToastUtils.showShort(a);
-//        });
+        //学科
+        mTagSubject.setAdapter(new TagAdapter<SubjectVO>(mSubjectVOS) {
+            @Override
+            public View getView(FlowLayout parent, int position, SubjectVO o) {
+                TextView tv = (TextView) LayoutInflater
+                        .from(getActivity()).inflate(R.layout.tag_select_people_subject_layout,
+                                mTagSubject, false);
+                tv.setText(isChinese() ? o.getName() : o.getEnarea());
+                return tv;
+            }
+        });
+
+
+        mTagSubject.setOnTagClickListener((view, position, parent) -> {
+            // TODO: 2018/7/25 高鹏 这里需不需要获取学科对应的专业？
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("pid", mSubjectVOS.get(position).getId());
+            map.put("uid", getUserID());
+            map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+            map.put("sname", "");
+            presenter.getDataAll("110", map);
+            return true;
+        });
 
         majorAdapter = new TagAdapter<MajorVO>(mMajorVOS) {
             @Override
@@ -139,12 +145,11 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
             }
         };
         mTagPeopleSystem.setAdapter(peopleSystemAdapter);
-        mTagPeopleSystem.setOnSelectListener(selectPosSet -> {
-//            StringBuffer a = new StringBuffer();
-//            for (int position : selectPosSet) {
-//                a.append(txt.get(position));
-//            }
-//            ToastUtils.showShort(a);
+        mTagPeopleSystem.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                return true;
+            }
         });
 
         //关注的学者
@@ -171,9 +176,11 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
-        presenter.getDataAll("115", map);
+        presenter.getDataAll("115", map);// TODO: 2018/7/25 高鹏 这里是默认获取关注的专业吗？
         map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
-        presenter.getDataAll("117", map);
+        presenter.getDataAll("117", map);//获取专注的学者
+        map.put("pname", "");
+        presenter.getDataAll("109", map);//获取学科
 
     }
 
@@ -187,6 +194,18 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
     public void onSuccess(String url, BaseBean baseBean) {
         super.onSuccess(url, baseBean);
         switch (url) {
+            case "109":
+                SubjectBean bean3 = (SubjectBean) baseBean;
+                mSubjectVOS.clear();
+                mSubjectVOS.addAll(bean3.getMajors());
+                majorAdapter.notifyDataChanged();
+                break;
+            case "110":
+                MajorBean bean4 = (MajorBean) baseBean;
+                mMajorVOS.clear();
+                mMajorVOS.addAll(bean4.getMajors());
+                majorAdapter.notifyDataChanged();
+                break;
             case "115":
                 MajorBean bean = (MajorBean) baseBean;
                 mMajorVOS.clear();

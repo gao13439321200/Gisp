@@ -50,6 +50,15 @@
         android:inputType="phone"
         android:maxLength="11"
         android:textSize="16sp"/>
+    <EditText
+        android:id="@+id/ed_enter_email"
+        style="@style/register_text_colorsizebg"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/email"
+        android:imeOptions="actionNext"
+        android:maxLength="11"
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
