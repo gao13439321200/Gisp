@@ -705,7 +705,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
-                List<String>  txt1 = new ArrayList<>();
+                List<String> txt1 = new ArrayList<>();
                 //一级菜单
                 mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt1);
                 mSpinnerSubject.setOnCustomItemCheckedListener(position -> {
@@ -997,7 +997,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("page", page);
                 presenter.getWaitRecordPaperListData(map);
                 break;
-            case "subscribe":
+            case "subscribe"://订阅
             case "newest":
                 this.list.clear();
                 map.put("uid", uid);

@@ -10,7 +10,10 @@ import com.blankj.utilcode.util.LogUtils;
 import com.facebook.stetho.common.LogUtil;
 import com.giiisp.giiisp.api.ApiStore;
 import com.giiisp.giiisp.base.BasePresenter;
+import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.HeadImgBean;
+import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.dto.MajorBean;
 import com.giiisp.giiisp.dto.PeopleBean;
@@ -37,7 +40,6 @@ import com.giiisp.giiisp.entity.SearchHistoryEntity;
 import com.giiisp.giiisp.entity.SelectUser;
 import com.giiisp.giiisp.entity.SubscribeEntity;
 import com.giiisp.giiisp.entity.UpDateAppEntity;
-import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.entity.WaitRecordPaperEntity;
 import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.utils.DESedeUtils;
@@ -250,22 +252,22 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     public void getUserInfoData(ArrayMap<String, Object> map) {
-        ModelFactory.getBaseModel().getUserInfoData(map, new Callback<UserInfoEntity>() {
-            @Override
-            public void onResponse(Call<UserInfoEntity> call, Response<UserInfoEntity> response) {
-                if (response.isSuccessful()) {
-                    UserInfoEntity entity = response.body();
-                    if (entity != null /*&& entity.getResult() == 1*/) {
-                        impl.onSuccess(entity);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserInfoEntity> call, Throwable t) {
-                impl.onFailure(call + "", (Exception) t);
-            }
-        });
+//        ModelFactory.getBaseModel().getUserInfoData(map, new Callback<UserInfoEntity>() {
+//            @Override
+//            public void onResponse(Call<UserInfoEntity> call, Response<UserInfoEntity> response) {
+//                if (response.isSuccessful()) {
+//                    UserInfoEntity entity = response.body();
+//                    if (entity != null /*&& entity.getResult() == 1*/) {
+//                        impl.onSuccess(entity);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UserInfoEntity> call, Throwable t) {
+//                impl.onFailure(call + "", (Exception) t);
+//            }
+//        });
     }
 
     public void getUpdateUserInfoData(ArrayMap<String, Object> mobile) {
@@ -835,23 +837,23 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     public void getlistFollowPaperData(ArrayMap<String, Object> options) {
-        ModelFactory.getBaseModel().getlistFollowPaperData(options, new Callback<SubscribeEntity>() {
-            @Override
-            public void onResponse(Call<SubscribeEntity> call, Response<SubscribeEntity> response) {
-                if (response.isSuccessful()) {
-                    // response.body() 返回 ResponseBody
-                    BaseEntity entity = response.body();
-                    impl.onSuccess(entity);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SubscribeEntity> call, Throwable t) {
-                impl.onFailure(call + "", (Exception) t);
-            }
-
-
-        });
+//        ModelFactory.getBaseModel().getlistFollowPaperData(options, new Callback<SubscribeEntity>() {
+//            @Override
+//            public void onResponse(Call<SubscribeEntity> call, Response<SubscribeEntity> response) {
+//                if (response.isSuccessful()) {
+//                    // response.body() 返回 ResponseBody
+//                    BaseEntity entity = response.body();
+//                    impl.onSuccess(entity);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<SubscribeEntity> call, Throwable t) {
+//                impl.onFailure(call + "", (Exception) t);
+//            }
+//
+//
+//        });
     }
 
     public void getListOfQuizAndAnswerData(ArrayMap<String, Object> options) {
@@ -875,23 +877,23 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     public void getListFollowedPaperData(ArrayMap<String, Object> options) {
-        ModelFactory.getBaseModel().getListFollowedPaperData(options, new Callback<SubscribeEntity>() {
-            @Override
-            public void onResponse(Call<SubscribeEntity> call, Response<SubscribeEntity> response) {
-                if (response.isSuccessful()) {
-                    // response.body() 返回 ResponseBody
-                    BaseEntity entity = response.body();
-                    impl.onSuccess(entity);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SubscribeEntity> call, Throwable t) {
-                impl.onFailure(call + "", (Exception) t);
-            }
-
-
-        });
+//        ModelFactory.getBaseModel().getListFollowedPaperData(options, new Callback<SubscribeEntity>() {
+//            @Override
+//            public void onResponse(Call<SubscribeEntity> call, Response<SubscribeEntity> response) {
+//                if (response.isSuccessful()) {
+//                    // response.body() 返回 ResponseBody
+//                    BaseEntity entity = response.body();
+//                    impl.onSuccess(entity);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<SubscribeEntity> call, Throwable t) {
+//                impl.onFailure(call + "", (Exception) t);
+//            }
+//
+//
+//        });
     }
 
     public void getSaveRecordData(ArrayMap<String, Object> options, MultipartBody.Part part) {
@@ -1417,8 +1419,6 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     private BaseBean stringToBody(String url, String result) {
         LogUtils.v("接口：" + url + ",okHttp回调未解密：" + result);
         String cipher = DESedeUtils.getdeCrypt(result, getUUID());
-        cipher = cipher.replace("\"[", "[");
-        cipher = cipher.replace("]\"", "]");
         LogUtils.v("接口：" + url + ",okHttp回调解密：" + cipher);
         BaseBean baseEntity;
         switch (url) {
@@ -1440,6 +1440,15 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             case "116":
             case "117":
                 baseEntity = new Gson().fromJson(cipher, PeopleBean.class);
+                break;
+            case "108":
+                baseEntity = new Gson().fromJson(cipher, AppInfoBean.class);
+                break;
+            case "201":
+                baseEntity = new Gson().fromJson(cipher, HeadImgBean.class);
+                break;
+            case "202":
+                baseEntity = new Gson().fromJson(cipher, HotImgBean.class);
                 break;
             default://101、105、111
                 baseEntity = new Gson().fromJson(cipher, BaseBean.class);

@@ -38,6 +38,7 @@
                 android:textColor="@color/colorWhite"/>
 
             <View
+                android:id="@+id/line_left"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:background="@color/colorInterface"/>
@@ -48,6 +49,7 @@
                 android:text="关键字"/>
 
             <View
+                android:id="@+id/line_right"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:background="@color/colorInterface"/>

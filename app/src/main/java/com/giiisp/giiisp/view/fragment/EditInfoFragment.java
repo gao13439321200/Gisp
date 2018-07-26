@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
-import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
@@ -33,7 +32,6 @@ import com.giiisp.giiisp.view.impl.BaseImpl;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;

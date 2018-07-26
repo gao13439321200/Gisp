@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,6 +40,10 @@ public class SelectFieldActivity extends BaseActivity {
     ImageView mImgPeople;
     @BindView(R.id.rg_title)
     RadioGroup mRgTitle;
+    @BindView(R.id.line_left)
+    View mLeft;
+    @BindView(R.id.line_right)
+    View mRight;
 
     public static void intentActivity(Activity context) {
         Bundle bundle = new Bundle();
@@ -97,6 +102,8 @@ public class SelectFieldActivity extends BaseActivity {
                 getResources().getColor(toFragment == WORD ? R.color.colorWhite : R.color.blue));
         mRbPeople.setTextColor(
                 getResources().getColor(toFragment == PEOPLE ? R.color.colorWhite : R.color.blue));
+        mRight.setVisibility(toFragment == FIELD ? View.VISIBLE : View.GONE);
+        mLeft.setVisibility(toFragment == PEOPLE ? View.VISIBLE : View.GONE);
     }
 
 }

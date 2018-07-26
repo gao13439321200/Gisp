@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.dto.HeadImgBean;
+import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -350,10 +352,28 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private UserInfoEntity userInfoEntity;
     private QAEntity.QuizInfoBean.RowsBeanXXXX quizInfoBean;
     private HomeEntity homeEntity;
+    private HeadImgBean headImgBean;
+    private HotImgBean hotImgBean;
 
     private SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX paperBan;
 
     UserInfoEntity.SummarizeBean summarizeBean;
+
+    public HotImgBean getHotImgBean() {
+        return hotImgBean;
+    }
+
+    public void setHotImgBean(HotImgBean hotImgBean) {
+        this.hotImgBean = hotImgBean;
+    }
+
+    public HeadImgBean getHeadImgBean() {
+        return headImgBean;
+    }
+
+    public void setHeadImgBean(HeadImgBean headImgBean) {
+        this.headImgBean = headImgBean;
+    }
 
     public ClickEntity(UserInfoEntity.SummarizeBean summarizeBean) {
         this.summarizeBean = summarizeBean;

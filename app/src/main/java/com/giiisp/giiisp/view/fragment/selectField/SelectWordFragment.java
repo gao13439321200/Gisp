@@ -6,10 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.WordBean;
@@ -122,7 +119,7 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
         map.put("language",
-                SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+                getLanguage());
         presenter.getDataAll("112", map);
         presenter.getDataAll("113", map);
 
@@ -131,7 +128,7 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
     @OnClick(R.id.btn_next)
     public void onViewClicked() {
         start(SelectPeopleFragment.newInstance(1));
-        SelectFieldActivity.newRxBus(SelectFieldActivity.WORD);
+        SelectFieldActivity.newRxBus(SelectFieldActivity.PEOPLE);
     }
 
     @Override
@@ -151,22 +148,14 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
                 userAdapter.notifyDataChanged();
                 break;
             case "114":
-//                ToastUtils.showShort("关注成功！");
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("uid", getUserID());
+                map.put("language",getLanguage());
+                presenter.getDataAll("113", map);
                 break;
             default:
                 break;
         }
     }
 
-    @Override
-    public void onFail(String url, String msg) {
-        super.onFail(url, msg);
-        switch (url) {
-            case "114":
-                ToastUtils.showShort("关注失败，请重试");
-                break;
-            default:
-                break;
-        }
-    }
 }

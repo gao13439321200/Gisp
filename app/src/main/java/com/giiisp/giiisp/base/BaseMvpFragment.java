@@ -85,6 +85,10 @@ public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFr
         return "1".equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
     }
 
+    public String getLanguage() {
+        return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1");
+    }
+
     public String getUserID() {
         return SPUtils.getInstance().getString(UrlConstants.UID, "");
     }

@@ -1,6 +1,7 @@
 package com.giiisp.giiisp.view.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseFragment;
-import com.giiisp.giiisp.entity.Constant;
 import com.giiisp.giiisp.utils.AppManager;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ViewPagerAdapter;
@@ -32,7 +32,6 @@ import com.giiisp.giiisp.widget.recording.Extras;
 import com.jpeng.jptabbar.DensityUtils;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.JPTabItem;
-import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,8 +42,6 @@ import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.downloadId;
 import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.paperId;
@@ -109,72 +106,62 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
         parseIntent();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void initData() {
         super.initData();
         type = getIntent().getStringExtra("type");
         RxPermissions rxPermissions = new RxPermissions(this);
         rxPermissions.requestEach(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .subscribe(new Consumer<Permission>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Permission permission) throws Exception {
-                        switch (permission.name) {
-                            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
-                                if (permission.granted) {
-                                } else if (permission.shouldShowRequestPermissionRationale) {
-                                    // Denied permission without ask never again
-                                    Utils.showToast("取消存储授权,不能存储录音文件");
-                                } else {
-                                    // Denied permission with ask never again
-                                    // Need to go to the
-                                    Utils.showToast("您已经禁止弹出存储的授权操作,请在设置中手动开启");
-                                }
-                                break;
-                            case Manifest.permission.RECORD_AUDIO:
-                                if (permission.granted) {
-                                } else if (permission.shouldShowRequestPermissionRationale) {
-                                    // Denied permission without ask never again
-                                    Utils.showToast("取消录音授权,不能录音");
-                                } else {
-                                    // Denied permission with ask never again
-                                    // Need to go to the
-                                    Utils.showToast("您已经禁止弹出录音的授权操作,请在设置中手动开启");
-                                }
-                                break;
-                           /* case Manifest.permission.SYSTEM_ALERT_WINDOW:
-                                if (permission.granted) {
-                                } else if (permission.shouldShowRequestPermissionRationale) {
-                                    // Denied permission without ask never again
-                                    Utils.showToast("取消悬浮窗授权");
-                                } else {
-                                    // Denied permission with ask never again
-                                    // Need to go to the
-                                    Utils.showToast("您已经禁止弹出悬浮窗的授权操作,请在设置中手动开启");
-                                }break;*/
-                            case Manifest.permission.CAMERA:
-                                if (permission.granted) {
-                                } else if (permission.shouldShowRequestPermissionRationale) {
-                                    // Denied permission without ask never again
-                                    Utils.showToast("取消照相机授权");
-                                } else {
-                                    // Denied permission with ask never again
-                                    // Need to go to the
-                                    Utils.showToast("您已经禁止弹出照相机的授权操作,请在设置中手动开启");
-                                }
-                                break;
-                        }
+                .subscribe(permission -> {
+                    switch (permission.name) {
+                        case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                            if (permission.granted) {
+                            } else if (permission.shouldShowRequestPermissionRationale) {
+                                // Denied permission without ask never again
+                                Utils.showToast("取消存储授权,不能存储录音文件");
+                            } else {
+                                // Denied permission with ask never again
+                                // Need to go to the
+                                Utils.showToast("您已经禁止弹出存储的授权操作,请在设置中手动开启");
+                            }
+                            break;
+                        case Manifest.permission.RECORD_AUDIO:
+                            if (permission.granted) {
+                            } else if (permission.shouldShowRequestPermissionRationale) {
+                                // Denied permission without ask never again
+                                Utils.showToast("取消录音授权,不能录音");
+                            } else {
+                                // Denied permission with ask never again
+                                // Need to go to the
+                                Utils.showToast("您已经禁止弹出录音的授权操作,请在设置中手动开启");
+                            }
+                            break;
+                       /* case Manifest.permission.SYSTEM_ALERT_WINDOW:
+                            if (permission.granted) {
+                            } else if (permission.shouldShowRequestPermissionRationale) {
+                                // Denied permission without ask never again
+                                Utils.showToast("取消悬浮窗授权");
+                            } else {
+                                // Denied permission with ask never again
+                                // Need to go to the
+                                Utils.showToast("您已经禁止弹出悬浮窗的授权操作,请在设置中手动开启");
+                            }break;*/
+                        case Manifest.permission.CAMERA:
+                            if (permission.granted) {
+                            } else if (permission.shouldShowRequestPermissionRationale) {
+                                // Denied permission without ask never again
+                                Utils.showToast("取消照相机授权");
+                            } else {
+                                // Denied permission with ask never again
+                                // Need to go to the
+                                Utils.showToast("您已经禁止弹出照相机的授权操作,请在设置中手动开启");
+                            }
+                            break;
+                    }
 
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
-                        Log.i("--->>", "onError", throwable);
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
+                }, throwable -> Log.i("--->>", "onError", throwable), () -> {
 
-                    }
                 });
     }
 

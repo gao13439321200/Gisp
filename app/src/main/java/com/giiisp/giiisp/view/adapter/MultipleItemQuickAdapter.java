@@ -17,7 +17,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
-import com.giiisp.giiisp.entity.HomeEntity;
+import com.giiisp.giiisp.dto.HeadImgBean;
+import com.giiisp.giiisp.dto.HeadImgVO;
+import com.giiisp.giiisp.dto.HotImgBean;
+import com.giiisp.giiisp.dto.HotImgVO;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.Utils;
@@ -185,22 +188,16 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                 }
 
                 break;
-            case R.layout.item_home_head:
-                if (item.getHomeEntity() != null) {
-                    HomeEntity homeEntity = item.getHomeEntity();
-                    List<HomeEntity.PageInfoBean> pageInfo = homeEntity.getPageInfo();
-
+            case R.layout.item_home_head://首页上部分
+                if (item.getHeadImgBean() != null) {
+                    HeadImgBean homeEntity = item.getHeadImgBean();
                     ViewPager viewPager = helper.getView(R.id.viewPager);
-                    List<HomeEntity.PageInfoBean.ActivityBean.RowsBeanXX> rows = null;
-                    if (pageInfo.get(0).getActivity().getRows() != null && pageInfo.get(0).getActivity().getRows().size() > 0) {
-                        rows = pageInfo.get(0).getActivity().getRows();
-                    }
                     List<String> imageUrl = new ArrayList<>();
                     List<String> pathUrl = new ArrayList<>();
-                    if (rows != null && rows.size() > 0) {
-                        for (HomeEntity.PageInfoBean.ActivityBean.RowsBeanXX row : rows) {
-                            imageUrl.add(row.getPath());
-                            pathUrl.add(row.getLink());
+                    if (homeEntity.getBlist() != null && homeEntity.getBlist().size() > 0) {
+                        for (HeadImgVO row : homeEntity.getBlist()) {
+                            imageUrl.add(row.getImg());
+                            pathUrl.add(row.getUrl());
                         }
                         viewPager.setAdapter(new ImageAdapter(context, imageUrl, pathUrl));
                     }
@@ -238,35 +235,39 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                 });
                 recyclerview.setAdapter(itemClickAdapter);
                 break;
-            case R.layout.item_home_recycler:
+            case R.layout.item_home_recycler://热门综述
                 helper.setText(R.id.tv_item_title, item.getString());
                 RecyclerView view = helper.getView(R.id.recycler_view_child);
                 List<ClickEntity> list = new ArrayList<>();
-                if (item.getHomeEntity() != null) {
-                    HomeEntity homeEntity = item.getHomeEntity();
-                    List<HomeEntity.PageInfoBean> pageInfo = homeEntity.getPageInfo();
-                    List<HomeEntity.PageInfoBean.PaperBean.RowsBeanX> rows = null;
-                    if (pageInfo != null && pageInfo.size() > 0) {
+                if (item.getHotImgBean() != null) {
+                    HotImgBean hotImgBean = item.getHotImgBean();
+                    if (hotImgBean.getList() != null && hotImgBean.getList().size() > 0) {
                         switch (item.getString()) {
                             case "综述专栏":
-                                if (pageInfo.get(0).getSummarize() != null && pageInfo.get(0).getSummarize().getRows() != null)
-                                    rows = pageInfo.get(0).getSummarize().getRows();
+                                for (HotImgVO vo : hotImgBean.getList()) {
+                                    if ("2".equals(vo.getType())) {
+                                        ClickEntity clickEntity = new ClickEntity(vo.getTitle(), vo.getImg());
+                                        clickEntity.setPaperId(vo.getId() + "");
+                                        // TODO: 2018/7/26 高鹏 暂时不知道干啥用的
+//                                        clickEntity.setVersion(vo.getVersion());
+//                                        clickEntity.setIsEncrypt(vo.getIsEncrypt());
+                                        list.add(clickEntity);
+                                    }
+                                }
                                 break;
                             case "热门推荐":
-                                if (pageInfo.get(0).getPaper() != null && pageInfo.get(0).getPaper().getRows() != null)
-                                    rows = pageInfo.get(0).getPaper().getRows();
+                                for (HotImgVO vo : hotImgBean.getList()) {
+                                    if ("1".equals(vo.getType())) {
+                                        ClickEntity clickEntity = new ClickEntity(vo.getTitle(), vo.getImg());
+                                        clickEntity.setPaperId(vo.getId() + "");
+                                        // TODO: 2018/7/26 高鹏 暂时不知道干啥用的
+//                                        clickEntity.setVersion(vo.getVersion());
+//                                        clickEntity.setIsEncrypt(vo.getIsEncrypt());
+                                        list.add(clickEntity);
+                                    }
+                                }
                                 break;
                         }
-                        if (rows != null)
-                            for (HomeEntity.PageInfoBean.PaperBean.RowsBeanX row : rows) {
-                                ClickEntity clickEntity = new ClickEntity(row.getTitle(), row.getPath());
-                                clickEntity.setPaperId(row.getId() + "");
-                                clickEntity.setVersion(row.getVersion());
-                                clickEntity.setIsEncrypt(row.getIsEncrypt());
-                                list.add(clickEntity);
-
-                            }
-
                     }
                 }
 
@@ -275,34 +276,30 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                 view.setLayoutManager(mLayoutManager);
                 ItemClickAdapter itemClickAdapterChild = new ItemClickAdapter(context, R.layout.item_home_child, list, "");
                 view.setAdapter(itemClickAdapterChild);
-                itemClickAdapterChild.setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        ClickEntity clickEntity = (ClickEntity) adapter.getItem(position);
-                        if (clickEntity != null) {
-                            String paperId = clickEntity.getPaperId();
-                            String version = clickEntity.getVersion();
-                            ArrayList<String> arrayVersion = new ArrayList<>();
-                            arrayVersion.add(version);
-//                            PaperDetailsActivity.actionActivity(context, paperId, arrayVersion, "home");
+                itemClickAdapterChild.setOnItemClickListener((adapter, view1, position) -> {
+                    ClickEntity clickEntity = (ClickEntity) adapter.getItem(position);
+                    if (clickEntity != null) {
+                        String paperId = clickEntity.getPaperId();
+                        String version = clickEntity.getVersion();
+                        ArrayList<String> arrayVersion = new ArrayList<>();
+                        arrayVersion.add(version);
 
-                            switch (item.getString()) {
-                                case "综述专栏":
-                                case "热门推荐":
-                                    if (clickEntity.getIsEncrypt().equals("0")) {
-                                        PaperDetailsActivity.checkPwd(context, paperId, arrayVersion, "home");
-                                    }else{
-                                        PaperDetailsActivity.actionActivity(context, paperId, arrayVersion, "home");
-                                    }
-                                    break;
-                                default:
-                                    break;
+                        switch (item.getString()) {
+                            case "综述专栏":
+                            case "热门推荐":
+                                if (clickEntity.getIsEncrypt().equals("0")) {
+                                    PaperDetailsActivity.checkPwd(context, paperId, arrayVersion, "home");
+                                } else {
+                                    PaperDetailsActivity.actionActivity(context, paperId, arrayVersion, "home");
+                                }
+                                break;
+                            default:
+                                break;
 
-                            }
                         }
-
-
                     }
+
+
                 });
                 break;
         }

@@ -10,10 +10,8 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.MajorBean;
@@ -111,7 +109,7 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
             HashMap<String, Object> map = new HashMap<>();
             map.put("pid", mSubjectVOList.get(position).getId());
             map.put("uid", getUserID());
-            map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+            map.put("language", getLanguage());
             map.put("sname", etText);
             presenter.getDataAll("110", map);
             return true;
@@ -177,7 +175,7 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
                 KeyboardUtils.hideSoftInput(mEtSubject);
                 etText = ToolString.getString(mEtSubject);
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("language", SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+                map.put("language", getLanguage());
                 map.put("pname", ObjectUtils.isNotEmpty(etText) ? etText : "");
                 presenter.getDataAll("109", map);
                 break;

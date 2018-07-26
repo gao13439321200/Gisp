@@ -1,5 +1,6 @@
 package com.giiisp.giiisp.widget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -9,7 +10,7 @@ import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.entity.UpDateAppEntity;
+import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.utils.PackageUtil;
 import com.giiisp.giiisp.utils.Utils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -38,11 +39,11 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class UpdatePopupWindow extends BasePopupWindow implements View.OnClickListener {
     private final RxDownload mRxDownload;
     private View popupView;
-    private UpDateAppEntity.AppInfoBean appInfo;
+    private AppInfoBean appInfo;
     private Activity context;
     private DownloadRecord record;
 
-    public UpdatePopupWindow(Activity context, UpDateAppEntity.AppInfoBean appInfo) {
+    public UpdatePopupWindow(Activity context, AppInfoBean appInfo) {
         super(context);
         bindEvent();
         this.appInfo = appInfo;
@@ -52,7 +53,8 @@ public class UpdatePopupWindow extends BasePopupWindow implements View.OnClickLi
         ininView(appInfo);
     }
 
-    private void ininView(UpDateAppEntity.AppInfoBean appInfo) {
+    @SuppressLint("CheckResult")
+    private void ininView(AppInfoBean appInfo) {
         if (appInfo == null)
             return;
         TextView updateInfo = popupView.findViewById(R.id.update_info);

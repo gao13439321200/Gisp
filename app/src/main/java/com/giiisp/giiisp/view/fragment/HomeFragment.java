@@ -1,9 +1,7 @@
 package com.giiisp.giiisp.view.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
-import com.giiisp.giiisp.entity.BaseEntity;
-import com.giiisp.giiisp.entity.HomeEntity;
-import com.giiisp.giiisp.entity.UpDateAppEntity;
+import com.giiisp.giiisp.dto.AppInfoBean;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.HeadImgBean;
+import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
-import com.giiisp.giiisp.view.activity.GiiispActivity;
 import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
@@ -30,6 +29,7 @@ import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.UpdatePopupWindow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,7 +44,7 @@ import static com.giiisp.giiisp.base.BaseActivity.uid;
  * Created by Thinkpad on 2017/5/19.
  */
 
-public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements BaseImpl, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements SwipeRefreshLayout.OnRefreshListener {
     @BindView(recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.tv_news_spot)
@@ -97,16 +97,12 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     @Override
     public void initNetwork() {
         super.initNetwork();
-        ArrayMap<String, Object> map = new ArrayMap<>();
-        map.put("uid", uid);
-        map.put("type", 1);
-        if (string != null) {
-            map.put("firstUser", string);
-        } else {
-            map.put("firstUser", 0);
-        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("language", getLanguage());
         swipeRefreshLayout.setRefreshing(true);
-        presenter.gethomePageData(map);
+        presenter.getDataAll("201", map);
+        if (multipleItemQuickAdapter != null)
+            multipleItemQuickAdapter.setNewData(null);
     }
 
     @Override
@@ -128,12 +124,7 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     normalDialog.setIcon(null);
                     normalDialog.setTitle(R.string.need_login);
                     normalDialog.setPositiveButton(R.string.register,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    LogInActivity.actionActivity(getActivity());
-                                }
-                            });
+                            (dialogInterface, i) -> LogInActivity.actionActivity(getActivity()));
                     normalDialog.setNegativeButton(R.string.cancel, null);
                     // 显示
                     normalDialog.show();
@@ -150,45 +141,41 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     }
 
     @Override
-    public void onSuccess(BaseEntity entity) {
-        if (swipeRefreshLayout == null)
-            return;
-  /*      if(entity!=null&&entity.){
-
-        }*/
-        swipeRefreshLayout.setRefreshing(false);
-        if (entity instanceof HomeEntity) {
-            List<HomeEntity.PageInfoBean> pageInfo = ((HomeEntity) entity).getPageInfo();
-            if (pageInfo != null && pageInfo.size() > 0) {
-                multipleItemQuickAdapter.setNewData(null);
-
-                ClickEntity clickEntityHead = new ClickEntity(R.layout.item_home_head, "head");
-                clickEntityHead.setHomeEntity((HomeEntity) entity);
-                multipleItemQuickAdapter.addData(clickEntityHead);
-
-                ClickEntity clickEntityReview = new ClickEntity(R.layout.item_home_recycler, getString(R.string.in_a_column));
-                clickEntityReview.setHomeEntity((HomeEntity) entity);
-                multipleItemQuickAdapter.addData(clickEntityReview);
-
-                ClickEntity clickEntityHot = new ClickEntity(R.layout.item_home_recycler, getString(R.string.hot_recommended));
-                clickEntityHot.setHomeEntity((HomeEntity) entity);
-                multipleItemQuickAdapter.addData(clickEntityHot);
-            }
-            ArrayMap<String, Object> map = new ArrayMap<>();
-            map.put("version", Utils.getAppVersionCode());
-            map.put("pbid", 1);
-            presenter.getAppInfoData(map);
-
-        } else if (entity instanceof UpDateAppEntity) {
-            if (getActivity() instanceof GiiispActivity) {
-                UpDateAppEntity.AppInfoBean appInfo = ((UpDateAppEntity) entity).getAppInfo();
-                if (appInfo != null) {
-                    if (appInfo.getVersionCode() > Utils.getAppVersionCode()) {
+    public void onSuccess(String url, BaseBean baseBean) {
+        super.onSuccess(url, baseBean);
+        if (swipeRefreshLayout != null)
+            swipeRefreshLayout.setRefreshing(false);
+        switch (url) {
+            case "108"://更新
+                AppInfoBean appInfo = (AppInfoBean) baseBean;
+                if (appInfo != null && ObjectUtils.isNotEmpty(appInfo.getVersionCode())) {
+                    if (Integer.parseInt(appInfo.getVersionCode()) > Utils.getAppVersionCode()) {
                         UpdatePopupWindow updatePopupWindow = new UpdatePopupWindow(getActivity(), appInfo);
                         updatePopupWindow.showPopupWindow();
                     }
                 }
-            }
+                break;
+            case "201"://首页轮播图
+                HeadImgBean bean = (HeadImgBean) baseBean;
+                ClickEntity clickEntityHead = new ClickEntity(R.layout.item_home_head, "head");
+                clickEntityHead.setHeadImgBean(bean);
+                multipleItemQuickAdapter.addData(clickEntityHead);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("language", getLanguage());
+                swipeRefreshLayout.setRefreshing(true);
+                presenter.getDataAll("202", map);
+                break;
+            case "202"://热门和综述
+                HotImgBean bean1 = (HotImgBean) baseBean;
+                ClickEntity clickEntityHot = new ClickEntity(R.layout.item_home_recycler, getString(R.string.in_a_column));
+                clickEntityHot.setHotImgBean(bean1);
+                multipleItemQuickAdapter.addData(clickEntityHot);
+                ClickEntity clickEntity = new ClickEntity(R.layout.item_home_recycler, getString(R.string.hot_recommended));
+                clickEntity.setHotImgBean(bean1);
+                multipleItemQuickAdapter.addData(clickEntity);
+                break;
+            default:
+                break;
         }
     }
 

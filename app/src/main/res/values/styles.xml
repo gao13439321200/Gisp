@@ -312,6 +312,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:button">@null</item>
+        <item name="android:weightSum">1</item>
         <item name="android:textColor">@color/blue</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
