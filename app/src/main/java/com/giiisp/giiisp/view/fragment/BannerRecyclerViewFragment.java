@@ -30,6 +30,10 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.PaperBean;
+import com.giiisp.giiisp.dto.PaperMainBean;
+import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.entity.AnswerBean;
 import com.giiisp.giiisp.entity.AnswerEntity;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
@@ -77,6 +81,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.greendao.query.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -158,6 +163,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     private int isSave = -1;
     private int changePosition;
     private int version = -1;
+    private int pageSize = 20;//每页的数据个数
 
     public String getImageId() {
         return imageId;
@@ -890,6 +896,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         if (swipeRefreshLayout == null)
             return;
         ArrayMap<String, Object> map = new ArrayMap<>();
+        HashMap<String, Object> hMap = new HashMap<>();
 //        map.put("token", token);
         switch (type) {
             case "he":
@@ -944,17 +951,17 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("id", string);
                 presenter.getListOfAntistopData(map);
                 break;
-            case "summary_list":
-                map.put("uid", uid);
-                map.put("page", page);
-                map.put("paperOrSummarize", 2);
-                presenter.getListSummarizeData(map);
+            case "summary_list"://首页综述列表
+                hMap.put("uid", getUserID());
+                hMap.put("page", page);
+                hMap.put("type", 2);
+                presenter.getDataAll("209", hMap);
                 break;
-            case "paper_list":
-                map.put("uid", uid);
-                map.put("page", page);
-                map.put("paperOrSummarize", 1);
-                presenter.getListSummarizeData(map);
+            case "paper_list"://首页论文列表
+                hMap.put("uid", getUserID());
+                hMap.put("page", page);
+                hMap.put("type", 1);
+                presenter.getDataAll("209", hMap);
                 break;
             case "paper_download":
             case "summary_download":
@@ -964,10 +971,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 loadDownloadData();
                 break;
             case "my_paper":
-                map.put("uid", uid);
-                map.put("page", page);
-                map.put("isOneOrTwo", 1);
-                presenter.getListNewPaperData(map);
+                hMap.put("uid", getUserID());
+                hMap.put("type", 1);
+                presenter.getDataAll("203", hMap);
                 break;
             case "my_review":
                 map.put("uid", uid);
@@ -993,17 +999,18 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "popular":
                 break;
             case "wait_dubbing":
-                map.put("uid", uid);
-                map.put("page", page);
-                presenter.getWaitRecordPaperListData(map);
+//                map.put("uid", uid);
+//                map.put("page", page);
+//                presenter.getWaitRecordPaperListData(map);
                 break;
             case "subscribe"://订阅
             case "newest":
-                this.list.clear();
-                map.put("uid", uid);
-                map.put("page", page);
-                map.put("upTime", "asc");
-                presenter.getlistFollowPaperData(map);
+
+//                this.list.clear();
+//                map.put("uid", uid);
+//                map.put("page", page);
+//                map.put("upTime", "asc");
+//                presenter.getlistFollowPaperData(map);
                 break;
             case "notice":
                 map.put("uid", uid);
@@ -1509,7 +1516,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     }
                     if (page == 1) {
                         itemClickAdapter.setNewData(null);
-                    }
+                    }// 2018/7/28 高鹏  
                     SubscribeEntity.PageInfoBean pageInfo = ((SubscribeEntity) entity).getPageInfo();
                     if (pageInfo != null) {
                         List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = pageInfo.getRows();
@@ -2632,6 +2639,54 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                     }
                 });
+                break;
+        }
+    }
+
+    @Override
+    public void onSuccess(String url, BaseBean baseBean) {
+        super.onSuccess(url, baseBean);
+        switch (url) {// TODO: 2018/7/28 高鹏 没有我的论文和综述的界面
+            case "203":
+                PaperBean bean = (PaperBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (itemClickAdapter == null || bean == null
+                        || bean.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+                if (page == 1) {
+                    itemClickAdapter.setNewData(null);
+                }
+                ClickEntity entity = new ClickEntity();
+                entity.setPaperBean(bean);
+                itemClickAdapter.addData(entity);
+
+
+                break;
+            case "209"://首页的论文和综述
+                PaperMainBean mainBean = (PaperMainBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (itemClickAdapter == null || mainBean == null
+                        || mainBean.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+                if (page == 1) {
+                    itemClickAdapter.setNewData(null);
+                }
+                for (PaperMainVO vo : mainBean.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setPaperMainVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+                if (mainBean.getList().size()>=pageSize){
+                    page++;
+                }else{
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                break;
+            default:
                 break;
         }
     }

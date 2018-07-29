@@ -10,6 +10,8 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
+import com.giiisp.giiisp.dto.PaperBean;
+import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -354,6 +356,29 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private HomeEntity homeEntity;
     private HeadImgBean headImgBean;
     private HotImgBean hotImgBean;
+    private PaperBean mPaperBean;
+    private PaperMainVO mPaperMainVO;
+    private PaperMainVO.VlistBean bean;
+
+    public PaperMainVO.VlistBean getBean() {
+        return bean;
+    }
+
+    public void setBean(PaperMainVO.VlistBean bean) {
+        this.bean = bean;
+    }
+
+    public PaperMainVO getPaperMainVO() {
+        return mPaperMainVO;
+    }
+
+    public void setPaperMainVO(PaperMainVO paperMainVO) {
+        mPaperMainVO = paperMainVO;
+    }
+
+    public void setPaperBean(PaperBean paperBean) {
+        mPaperBean = paperBean;
+    }
 
     private SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX paperBan;
 

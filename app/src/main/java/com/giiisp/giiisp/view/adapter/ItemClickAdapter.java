@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -18,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -29,6 +31,7 @@ import com.giiisp.giiisp.entity.MyScholarBean;
 import com.giiisp.giiisp.entity.QAEntity;
 import com.giiisp.giiisp.entity.SubscribeEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
+import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.Utils;
@@ -37,8 +40,8 @@ import com.giiisp.giiisp.view.activity.FragmentActivity;
 import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.giiisp.giiisp.view.activity.ProblemActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
-import com.giiisp.giiisp.widget.CompanyNamePopupWindow;
 import com.giiisp.giiisp.widget.recording.Util;
+import com.xiaochen.progressroundbutton.AnimDownloadProgressButton;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -591,66 +594,88 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     ImageLoader.getInstance().displayCricleImage(activity, myScholarBean.getAvatar(), imageView);
                     helper.setText(R.id.tv_scholar_name, myScholarBean.getRealName()).addOnClickListener(R.id.iv_scholar_icon);
                     break;
-                case R.layout.item_paper:
-                    if (item.getSubscribeEntityRows() != null) {
-                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows = item.getSubscribeEntityRows();
-                        helper.setText(R.id.tv_paper_title, subscribeEntityRows.getTitle());
-                        helper.setText(R.id.tv_user_name, subscribeEntityRows.getRealName());
-                        helper.setText(R.id.tv_user_time, subscribeEntityRows.getCreateTime());
-                        helper.setText(R.id.tv_user_education, subscribeEntityRows.getDegree() + "");
-                        helper.setText(R.id.tv_user_position, subscribeEntityRows.getJobTitle() + "");
-                        helper.setText(R.id.tv_user_mechanism, subscribeEntityRows.getOrgEng() + "");
+                case R.layout.item_paper://首页综述、论文、订阅
+                    if (item.getPaperMainVO() != null) {
+                        PaperMainVO vo = item.getPaperMainVO();
+                        helper.setText(R.id.tv_no, "[" + getParentPosition(item) + "]" + vo.getCode());
+                        helper.setText(R.id.tv_naov, vo.getUserorgeng());
+                        helper.setText(R.id.tv_title, vo.getTitle());
+                        helper.setText(R.id.tv_author, vo.getAuthors());
+                        helper.setText(R.id.tv_subject, vo.getSubject());
+                        GlideApp.with(mContext)
+                                .load(vo.getUseravatar())
+                                .into((ImageView) helper.getView(R.id.im_user_icon));
+                        List<ClickEntity> list = new ArrayList<>();
+                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                            ClickEntity entity = new ClickEntity();
+                            bean.setEnglish(false);
+                            entity.setBean(bean);
+                            list.add(entity);
+                        }
 
-                        final String orgEng = subscribeEntityRows.getOrganization();
-                        final String uid = subscribeEntityRows.getUid();
-                        helper.getView(R.id.tv_user_mechanism).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                new CompanyNamePopupWindow(activity, orgEng).showPopupWindow(v);
+                        ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list);
+                        ((RecyclerView) helper.getView(R.id.recycler_view)).setAdapter(adapter);
+                        ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {
+                            helper.getView(R.id.recycler_view).setVisibility(b ? View.VISIBLE : View.GONE);
+                        });
+                        ((RadioButton) helper.getView(R.id.tv_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
+                            if (b) {
+                                list.clear();
+                                for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                    ClickEntity entity = new ClickEntity();
+                                    bean.setEnglish(false);
+                                    entity.setBean(bean);
+                                    list.add(entity);
+                                }
+                                adapter.notifyDataSetChanged();
                             }
                         });
-                        helper.getView(R.id.iv_user_icon).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                FragmentActivity.actionActivity(activity, "he", uid + "");
-                                //                                new CompanyNamePopupWindow(activity, orgEng).showPopupWindow(v);
+                        ((RadioButton) helper.getView(R.id.tv_en)).setOnCheckedChangeListener((compoundButton, b) -> {
+                            if (b) {
+                                list.clear();
+                                for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                    ClickEntity entity = new ClickEntity();
+                                    bean.setEnglish(true);
+                                    entity.setBean(bean);
+                                    list.add(entity);
+                                }
+                                adapter.notifyDataSetChanged();
                             }
                         });
-
-                        ImageLoader.getInstance().displayCricleImage(activity, subscribeEntityRows.getAAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
-                        initReclerView(helper, subscribeEntityRows);
-
-                        List<String> list = new ArrayList<>();
-                        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.AntistopsBean.RowsBean> antistopsrows = subscribeEntityRows.getAntistops().getRows();
-                        for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX.AntistopsBean.RowsBean antistopsrow : antistopsrows) {
-                            list.add(antistopsrow.getAntistop());
-                        }
-                        if (list.size() <= 0) {
-                            list.add("无");
-                        }
-                        initFlow(helper, subscribeEntityRows.getAuthors().getRows());
-
-                     /*   List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.AuthorsBean.RowsBeanX> AuthorsBeanrows = subscribeEntityRows.getAuthors().getRows();
-                        StringBuffer buffer = new StringBuffer();
-
-                        for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX.AuthorsBean.RowsBeanX authorsBeanrow : AuthorsBeanrows) {
-                            buffer.append(authorsBeanrow.getAuthor());
-                            buffer.append("  ");
-                        }
-                        helper.setText(R.id.tv_author, buffer);*/
-                        final TagFlowLayout view = helper.getView(R.id.tag_flowlayout);
-                        TagAdapter<String> tagAdapter = new TagAdapter<String>(list) {
-                            @Override
-                            public View getView(FlowLayout parent, int position, String s) {
-                                LayoutInflater mInflater = LayoutInflater.from(activity);
-                                TextView tv = (TextView) mInflater.inflate(R.layout.item_paper_tag,
-                                        view, false);
-                                tv.setText(s);
-                                return tv;
-                            }
-                        };
-                        view.setAdapter(tagAdapter);
                     }
+                    break;
+                case R.layout.item_paper_child_new://论文综述订阅子列表
+                    if (item.getBean() != null) {
+                        PaperMainVO.VlistBean vlistBean = item.getBean();
+                        switch (vlistBean.getVersion()) {
+                            case "2":
+                                helper.setImageResource(R.id.img_icon, R.mipmap.img_wanzheng);
+                                helper.setText(R.id.tv_icon, "完整");
+                                break;
+                            case "3":
+                                helper.setImageResource(R.id.img_icon, R.mipmap.img_zhaiyao);
+                                helper.setText(R.id.tv_icon, "摘要");
+                                break;
+                            case "4":
+                                helper.setImageResource(R.id.img_icon, R.mipmap.img_jinghua);
+                                helper.setText(R.id.tv_icon, "精华");
+                                break;
+                            default:
+                                break;
+                        }
+                        helper.setChecked(R.id.cb_collect, "1".equals(vlistBean.getIsfollow()));
+                        helper.setChecked(R.id.cb_download, "1".equals(vlistBean.getIsdownload()));
+                        helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
+                        String btnString;
+                        if (vlistBean.isEnglish()) {
+                            btnString = "EN ▷" + vlistBean.getEnduration() + " " + vlistBean.getEnsize();
+                        } else {
+                            btnString = "CN ▷" + vlistBean.getCnduration() + " " + vlistBean.getCnsize();
+                        }
+                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).setText(btnString);
+//                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).set
+                    }
+
                     break;
                 case R.layout.item_paper_tag:
                     helper.setText(R.id.tv_tag, item.getString());
