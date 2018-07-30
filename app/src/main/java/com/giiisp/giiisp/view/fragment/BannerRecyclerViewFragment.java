@@ -149,7 +149,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     private String imageId = "";
     int downloadNunber;
     private ExpandableItemAdapter dubbingAdapter;
-    private int page = 1;
+    private int page = 0;
     protected AudioPlayer audioPlayer;
     private boolean mIsPlay;
     private boolean isPause;
@@ -953,13 +953,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "summary_list"://首页综述列表
                 hMap.put("uid", getUserID());
-                hMap.put("page", page);
+                hMap.put("pageno", page);
                 hMap.put("type", 2);
                 presenter.getDataAll("209", hMap);
                 break;
             case "paper_list"://首页论文列表
                 hMap.put("uid", getUserID());
-                hMap.put("page", page);
+                hMap.put("pageno", page);
                 hMap.put("type", 1);
                 presenter.getDataAll("209", hMap);
                 break;
@@ -2646,6 +2646,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     @Override
     public void onSuccess(String url, BaseBean baseBean) {
         super.onSuccess(url, baseBean);
+        if (swipeRefreshLayout == null)
+            return;
+        swipeRefreshLayout.setRefreshing(false);
         switch (url) {// TODO: 2018/7/28 高鹏 没有我的论文和综述的界面
             case "203":
                 PaperBean bean = (PaperBean) baseBean;

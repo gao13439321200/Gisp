@@ -41,7 +41,6 @@ import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.giiisp.giiisp.view.activity.ProblemActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
 import com.giiisp.giiisp.widget.recording.Util;
-import com.xiaochen.progressroundbutton.AnimDownloadProgressButton;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -604,44 +603,46 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setText(R.id.tv_subject, vo.getSubject());
                         GlideApp.with(mContext)
                                 .load(vo.getUseravatar())
-                                .into((ImageView) helper.getView(R.id.im_user_icon));
-                        List<ClickEntity> list = new ArrayList<>();
-                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
-                            ClickEntity entity = new ClickEntity();
-                            bean.setEnglish(false);
-                            entity.setBean(bean);
-                            list.add(entity);
-                        }
+                                .into((ImageView) helper.getView(R.id.iv_user_icon));
+                        if (vo.getVlist() != null && vo.getVlist().size() != 0) {
+                            List<ClickEntity> list = new ArrayList<>();
+                            for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                ClickEntity entity = new ClickEntity();
+                                bean.setEnglish(false);
+                                entity.setBean(bean);
+                                list.add(entity);
+                            }
 
-                        ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list);
-                        ((RecyclerView) helper.getView(R.id.recycler_view)).setAdapter(adapter);
-                        ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {
-                            helper.getView(R.id.recycler_view).setVisibility(b ? View.VISIBLE : View.GONE);
-                        });
-                        ((RadioButton) helper.getView(R.id.tv_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
-                            if (b) {
-                                list.clear();
-                                for (PaperMainVO.VlistBean bean : vo.getVlist()) {
-                                    ClickEntity entity = new ClickEntity();
-                                    bean.setEnglish(false);
-                                    entity.setBean(bean);
-                                    list.add(entity);
+                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list);
+                            ((RecyclerView) helper.getView(R.id.recycler_view)).setAdapter(adapter);
+                            ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {
+                                helper.getView(R.id.recycler_view).setVisibility(b ? View.VISIBLE : View.GONE);
+                            });
+                            ((RadioButton) helper.getView(R.id.tv_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
+                                if (b) {
+                                    list.clear();
+                                    for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                        ClickEntity entity = new ClickEntity();
+                                        bean.setEnglish(false);
+                                        entity.setBean(bean);
+                                        list.add(entity);
+                                    }
+                                    adapter.notifyDataSetChanged();
                                 }
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        ((RadioButton) helper.getView(R.id.tv_en)).setOnCheckedChangeListener((compoundButton, b) -> {
-                            if (b) {
-                                list.clear();
-                                for (PaperMainVO.VlistBean bean : vo.getVlist()) {
-                                    ClickEntity entity = new ClickEntity();
-                                    bean.setEnglish(true);
-                                    entity.setBean(bean);
-                                    list.add(entity);
+                            });
+                            ((RadioButton) helper.getView(R.id.tv_en)).setOnCheckedChangeListener((compoundButton, b) -> {
+                                if (b) {
+                                    list.clear();
+                                    for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                        ClickEntity entity = new ClickEntity();
+                                        bean.setEnglish(true);
+                                        entity.setBean(bean);
+                                        list.add(entity);
+                                    }
+                                    adapter.notifyDataSetChanged();
                                 }
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
+                            });
+                        }
                     }
                     break;
                 case R.layout.item_paper_child_new://论文综述订阅子列表
@@ -672,7 +673,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         } else {
                             btnString = "CN ▷" + vlistBean.getCnduration() + " " + vlistBean.getCnsize();
                         }
-                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).setText(btnString);
+                        helper.setText(R.id.tv_play, btnString);
+//                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).setText(btnString);
 //                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).set
                     }
 

@@ -20,16 +20,29 @@
         android:layout_weight="1"
         android:text=""/>
 
-    <com.xiaochen.progressroundbutton.AnimDownloadProgressButton
-        android:id="@+id/anim_btn"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_weight="1"
-        app:progressbtn_backgroud_color="@android:color/holo_orange_light"
-        app:progressbtn_backgroud_second_color="@android:color/holo_green_light"
-        app:progressbtn_radius="5"
-        app:progressbtn_text_color="@color/bg_white"
-        app:progressbtn_text_covercolor="@color/colorBlack"/>
+    <!--<com.xiaochen.progressroundbutton.AnimDownloadProgressButton-->
+    <!--android:id="@+id/anim_btn"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:layout_weight="1"-->
+    <!--app:progressbtn_backgroud_color="@android:color/holo_orange_light"-->
+    <!--app:progressbtn_backgroud_second_color="@android:color/holo_green_light"-->
+    <!--app:progressbtn_radius="5"-->
+    <!--app:progressbtn_text_color="@color/bg_white"-->
+    <!--app:progressbtn_text_covercolor="@color/colorBlack"/>-->
+
+    <TextView
+        android:id="@+id/tv_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_paper_progress_no"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp"
+        android:text=""
+        android:textColor="@color/colorAuxiliary"
+        android:textSize="13sp"/>
 
     <TextView
         android:id="@+id/tv_progress"
