@@ -10,3 +10,5 @@
 /rxdownload2/build
 /captures
 .externalNativeBuild
+
+*.ser
