@@ -145,7 +145,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         });
                     }
                     break;
-                case R.layout.item_questions_answers:
+                case R.layout.item_questions_answers://论文详情问答列表
                     helper.getView(R.id.img_photo).setOnClickListener(view ->
                             ToastUtils.showShort("点开了一张图片"));
 
@@ -596,7 +596,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_paper://首页综述、论文、订阅
                     if (item.getPaperMainVO() != null) {
                         PaperMainVO vo = item.getPaperMainVO();
-                        helper.setText(R.id.tv_no, "[" + getParentPosition(item) + "]" + vo.getCode());
+                        helper.setText(R.id.tv_no, "[" + getParentPosition(item) + 1 + "]" + vo.getCode());
+                        // TODO: 2018/7/30 高鹏 没有userorgeng这个字段和 vlist列表
                         helper.setText(R.id.tv_naov, vo.getUserorgeng());
                         helper.setText(R.id.tv_title, vo.getTitle());
                         helper.setText(R.id.tv_author, vo.getAuthors());

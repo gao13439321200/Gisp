@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
@@ -34,6 +35,8 @@ import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperMainVO;
+import com.giiisp.giiisp.dto.PaperQaBean;
+import com.giiisp.giiisp.dto.PaperQaVO;
 import com.giiisp.giiisp.entity.AnswerBean;
 import com.giiisp.giiisp.entity.AnswerEntity;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
@@ -655,7 +658,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
                 tvTitle.setText(R.string.play);
                 break;
-            case "paper_qa":
+            case "paper_qa"://论文详情评论问答列表
                 list.clear();
                 swipeRefreshLayout.setEnabled(false);
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_questions_answers, this.list, type);
@@ -935,13 +938,17 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter.setNewData(list);
                 swipeRefreshLayout.setRefreshing(false);
                 break;
-            case "paper_qa":
+            case "paper_qa"://论文详情评论问答
                 if (TextUtils.isEmpty(imageId))
                     return;
-                map.put("id", imageId);
-                if (swipeRefreshLayout != null) {
-                    presenter.getListOfQuizAndAnswerData(map);
-                }
+                hMap.put("pid", imageId);
+                presenter.getDataAll("206", hMap);
+
+
+//                map.put("id", imageId);
+//                if (swipeRefreshLayout != null) {
+//                    presenter.getListOfQuizAndAnswerData(map);
+//                }
                 break;
             case "paper_literature":
                 map.put("id", string);
@@ -959,7 +966,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "paper_list"://首页论文列表
                 hMap.put("uid", getUserID());
-                hMap.put("pageno", page);
+                hMap.put("pageno", 1);
                 hMap.put("type", 1);
                 presenter.getDataAll("209", hMap);
                 break;
@@ -2675,7 +2682,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.loadMoreEnd(false);
                     return;
                 }
-                if (page == 1) {
+                if (page == 0) {
                     itemClickAdapter.setNewData(null);
                 }
                 for (PaperMainVO vo : mainBean.getList()) {
@@ -2683,14 +2690,56 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     mainEntity.setPaperMainVO(vo);
                     itemClickAdapter.addData(mainEntity);
                 }
-                if (mainBean.getList().size()>=pageSize){
+                if (mainBean.getList().size() == 0) {
+                    if (page != 0)
+                        ToastUtils.showShort("数据已经全部加载了");
+                    else
+                        ToastUtils.showShort("暂无数据");
+                }
+                if (mainBean.getList().size() >= pageSize) {
                     page++;
-                }else{
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                break;
+            case "206"://论文详情问答列表
+                PaperQaBean qaBean = (PaperQaBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (itemClickAdapter == null || qaBean == null
+                        || qaBean.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+                for (PaperQaVO vo : qaBean.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setPaperQaVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+                if (qaBean.getList().size() == 0) {
+                    if (page != 0)
+                        ToastUtils.showShort("数据已经全部加载了");
+                    else
+                        ToastUtils.showShort("暂无数据");
+                }
+                if (qaBean.getList().size() >= pageSize) {
+                    page++;
+                } else {
                     itemClickAdapter.loadMoreEnd(false);
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onFail(String url, String msg) {
+        if (swipeRefreshLayout == null)
+            return;
+        swipeRefreshLayout.setRefreshing(false);
+        super.onFail(url, msg);
     }
 }

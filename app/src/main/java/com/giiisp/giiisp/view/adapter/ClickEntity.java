@@ -12,6 +12,7 @@ import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperMainVO;
+import com.giiisp.giiisp.dto.PaperQaVO;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -359,6 +360,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private PaperBean mPaperBean;
     private PaperMainVO mPaperMainVO;
     private PaperMainVO.VlistBean bean;
+    private PaperQaVO mPaperQaVO;
+
+    public PaperQaVO getPaperQaVO() {
+        return mPaperQaVO;
+    }
+
+    public void setPaperQaVO(PaperQaVO paperQaVO) {
+        mPaperQaVO = paperQaVO;
+    }
 
     public PaperMainVO.VlistBean getBean() {
         return bean;

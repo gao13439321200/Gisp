@@ -14,7 +14,7 @@ import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
 import com.giiisp.giiisp.utils.Utils;
-import com.giiisp.giiisp.view.activity.WelcomeSelectActivity;
+import com.giiisp.giiisp.view.activity.GiiispActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import java.util.HashMap;
@@ -143,16 +143,17 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
         LoginBean bean = (LoginBean) entity;
         uid = bean.getId();
         SPUtils.getInstance().put(UrlConstants.UID, bean.getId());
+        SPUtils.getInstance().put(UrlConstants.ISVIP, bean.getIsvip());
+        SPUtils.getInstance().put(UrlConstants.EMAILAUTHEN, bean.getEmailauthen());
         SPUtils.getInstance().put(UrlConstants.UNAME,
                 edEnterPhone.getText().toString().trim());
 
-        // TODO: 2018/7/23 高鹏 这里怎么知道选没选择过关注人呢？
 //        if ("0".equals(bean.getNewUser() + "")) {
-//            GiiispActivity.actionActivity(getContext());
+        GiiispActivity.actionActivity(getContext());
 //        } else {
 //            AttentionActivity.actionActivity(getActivity(), "first");
 //        }
-        WelcomeSelectActivity.intentActivity(getActivity());
+//        WelcomeSelectActivity.intentActivity(getActivity());
         getActivity().finish();
     }
 
