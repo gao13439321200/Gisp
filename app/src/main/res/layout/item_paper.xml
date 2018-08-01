@@ -90,6 +90,7 @@
                 android:layout_marginRight="10dp"
                 android:background="@drawable/cn_en_selector"
                 android:button="@null"
+                android:checked="true"
                 android:gravity="center"
                 android:text="@string/cn"/>
 
@@ -110,7 +111,7 @@
             android:id="@+id/cb_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@mipmap/subscribe_item_menu"
+            android:button="@drawable/menu_check"
             android:checked="false"/>
 
     </LinearLayout>
