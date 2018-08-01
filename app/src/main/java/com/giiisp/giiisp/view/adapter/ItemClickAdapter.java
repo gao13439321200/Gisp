@@ -34,6 +34,7 @@ import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ImageLoader;
+import com.giiisp.giiisp.utils.MyRecyclerView;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.ExperienceActivity;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
@@ -614,12 +615,13 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 list.add(entity);
                             }
 
-                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list);
-                            ((RecyclerView) helper.getView(R.id.recycler_view)).setAdapter(adapter);
+                            ItemClickAdapter adapter = new ItemClickAdapter(activity,R.layout.item_paper_child_new,list);
+                            ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setLayoutManager(new LinearLayoutManager(activity));
+                            ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setAdapter(adapter);
                             ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {
-                                helper.getView(R.id.recycler_view).setVisibility(b ? View.VISIBLE : View.GONE);
+                                helper.getView(R.id.my_recycler_view).setVisibility(b ? View.VISIBLE : View.GONE);
                             });
-                            ((RadioButton) helper.getView(R.id.tv_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
+                            ((RadioButton) helper.getView(R.id.rb_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
                                 if (b) {
                                     list.clear();
                                     for (PaperMainVO.VlistBean bean : vo.getVlist()) {
@@ -631,7 +633,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     adapter.notifyDataSetChanged();
                                 }
                             });
-                            ((RadioButton) helper.getView(R.id.tv_en)).setOnCheckedChangeListener((compoundButton, b) -> {
+                            ((RadioButton) helper.getView(R.id.rb_en)).setOnCheckedChangeListener((compoundButton, b) -> {
                                 if (b) {
                                     list.clear();
                                     for (PaperMainVO.VlistBean bean : vo.getVlist()) {
@@ -670,9 +672,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
                         String btnString;
                         if (vlistBean.isEnglish()) {
-                            btnString = "EN ▷" + vlistBean.getEnduration() + " " + vlistBean.getEnsize();
+                            btnString = "EN   ▷" + vlistBean.getEnduration() + "   " + vlistBean.getEnsize();
                         } else {
-                            btnString = "CN ▷" + vlistBean.getCnduration() + " " + vlistBean.getCnsize();
+                            btnString = "CN   ▷" + vlistBean.getCnduration() + "   " + vlistBean.getCnsize();
                         }
                         helper.setText(R.id.tv_play, btnString);
 //                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).setText(btnString);

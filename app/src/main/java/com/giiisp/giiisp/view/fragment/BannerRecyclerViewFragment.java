@@ -966,7 +966,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "paper_list"://首页论文列表
                 hMap.put("uid", getUserID());
-                hMap.put("pageno", 1);
+                hMap.put("pageno", page);
                 hMap.put("type", 1);
                 presenter.getDataAll("209", hMap);
                 break;

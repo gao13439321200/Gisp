@@ -5,8 +5,7 @@
               android:layout_marginBottom="5dp"
               android:background="@color/colorWhite"
               android:orientation="vertical"
-              android:paddingLeft="10dp"
-              android:paddingRight="10dp">
+              android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -101,6 +100,7 @@
                 android:layout_marginRight="10dp"
                 android:background="@drawable/cn_en_selector"
                 android:button="@null"
+                android:checked="false"
                 android:gravity="center"
                 android:text="@string/en"/>
 
@@ -110,18 +110,17 @@
             android:id="@+id/cb_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@mipmap/subscribe_item_menu"/>
+            android:button="@mipmap/subscribe_item_menu"
+            android:checked="false"/>
 
     </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <com.giiisp.giiisp.utils.MyRecyclerView
+        android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tag_flowlayout"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginRight="11dp"/>
+        android:visibility="gone"/>
 
 </LinearLayout>
