@@ -598,8 +598,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     if (item.getPaperMainVO() != null) {
                         PaperMainVO vo = item.getPaperMainVO();
                         helper.setText(R.id.tv_no, "[" + getParentPosition(item) + 1 + "]" + vo.getCode());
-                        // TODO: 2018/7/30 高鹏 没有userorgeng这个字段和 vlist列表
-                        helper.setText(R.id.tv_naov, vo.getUserorgeng());
+                        helper.setText(R.id.tv_naov, vo.getUsername());
                         helper.setText(R.id.tv_title, vo.getTitle());
                         helper.setText(R.id.tv_author, vo.getAuthors());
                         helper.setText(R.id.tv_subject, vo.getSubject());
@@ -615,7 +614,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 list.add(entity);
                             }
 
-                            ItemClickAdapter adapter = new ItemClickAdapter(activity,R.layout.item_paper_child_new,list);
+                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list);
                             ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setLayoutManager(new LinearLayoutManager(activity));
                             ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setAdapter(adapter);
                             ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {
@@ -652,15 +651,15 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     if (item.getBean() != null) {
                         PaperMainVO.VlistBean vlistBean = item.getBean();
                         switch (vlistBean.getVersion()) {
-                            case "2":
+                            case 2:
                                 helper.setImageResource(R.id.img_icon, R.mipmap.img_wanzheng);
                                 helper.setText(R.id.tv_icon, "完整");
                                 break;
-                            case "3":
+                            case 3:
                                 helper.setImageResource(R.id.img_icon, R.mipmap.img_zhaiyao);
                                 helper.setText(R.id.tv_icon, "摘要");
                                 break;
-                            case "4":
+                            case 4:
                                 helper.setImageResource(R.id.img_icon, R.mipmap.img_jinghua);
                                 helper.setText(R.id.tv_icon, "精华");
                                 break;
@@ -787,7 +786,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     });
 
                     break;
-                case R.layout.item_paper_indexes:
+                case R.layout.item_paper_indexes://论文详情文献
                     TextView viewSwitch1 = helper.getView(R.id.tv_switch);
                     if (item.getLiteratureInfoBean() != null) {
                         helper.setVisible(R.id.tv_title, false);
@@ -827,6 +826,20 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     } else {
                         initSwitch(viewSwitch1, new TextView(activity), textViewDescription1, new TextView(activity), new TextView(activity));
 
+                    }
+                    break;
+                case R.layout.item_paper_indexes_new://论文详情文献
+                    if (item.getPaperLiteratureVO() != null) {
+                        helper.setText(R.id.tv_title, item.getPaperLiteratureVO().getTitle());
+                        helper.setText(R.id.tv_info, item.getPaperLiteratureVO().getDigest()
+                                +item.getPaperLiteratureVO().getDigest()+item.getPaperLiteratureVO().getDigest());
+                        helper.setText(R.id.tv_author, item.getPaperLiteratureVO().getAuthor());
+                        TextView tv = helper.getView(R.id.tv_switch);
+                        TextView tvInfo = helper.getView(R.id.tv_info);
+                        tv.setOnClickListener(v -> {
+                            tv.setText(tvInfo.getMaxLines() == 1 ? "收起" : "展开");
+                            tvInfo.setMaxLines(tvInfo.getMaxLines() == 1 ? 100 : 1);
+                        });
                     }
                     break;
                 case R.layout.item_search_scholar:

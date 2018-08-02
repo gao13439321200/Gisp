@@ -361,13 +361,13 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
             string = version.get(0);
             for (int i = 0; i < version.size(); i++) {
                 switch (version.get(i)) {
-                    case "0":
+                    case "0"://完整
                         tvPaperComplete.setVisibility(View.VISIBLE);
                         break;
-                    case "1":
+                    case "1"://精华
                         tvPaperMarrow.setVisibility(View.VISIBLE);
                         break;
-                    case "2":
+                    case "2"://摘要
                         tvPaperAbstract.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -644,7 +644,8 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
         Log.i("--->>", "initNetwork: " + string);
         if (!TextUtils.isEmpty(string)) {
             map.put("version", string);
-            presenter.getPaperBaseByIdData(map);
+            // TODO: 2018/8/2 高鹏 这里需要获取论文详情 暂时不写了，先写录音那块
+//            presenter.getPaperBaseByIdData(map);
         }
         super.initNetwork();
     }

@@ -21,9 +21,18 @@ public class PaperMainVO {
     private String subject;
     private String useravatar;
     private String userorgeng;
+    private String usernmae;
     private String type;
     private String code;
     private List<VlistBean> vlist;
+
+    public String getUsername() {
+        return usernmae;
+    }
+
+    public void setUsername(String username) {
+        this.usernmae = username;
+    }
 
     public String getCode() {
         return code;
@@ -116,7 +125,7 @@ public class PaperMainVO {
         private String isfollow;
         private String isdownload;
         private String isaddplay;
-        private String version;
+        private int version;
         private String cnfinish;
         private String enfinish;
         private String cnduration;
@@ -165,11 +174,11 @@ public class PaperMainVO {
             this.isaddplay = isaddplay;
         }
 
-        public String getVersion() {
+        public int getVersion() {
             return version;
         }
 
-        public void setVersion(String version) {
+        public void setVersion(int version) {
             this.version = version;
         }
 

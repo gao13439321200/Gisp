@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.giiisp.giiisp.R;
@@ -33,6 +34,8 @@ import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.PaperBean;
+import com.giiisp.giiisp.dto.PaperLiteratureBean;
+import com.giiisp.giiisp.dto.PaperLiteratureVO;
 import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaBean;
@@ -665,9 +668,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter.setOnItemChildClickListener(this);
                 initpaly();
                 break;
-            case "paper_literature":
+            case "paper_literature"://论文详情文献
                 swipeRefreshLayout.setEnabled(false);
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_indexes, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_indexes_new, this.list, type);
                 break;
             case "paper_label":
                 swipeRefreshLayout.setEnabled(false);
@@ -689,6 +692,27 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
+                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+                    @Override
+                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        PaperMainVO vo = itemClickAdapter.getData().get(position).getPaperMainVO();
+                        ArrayList<String> arrayVersion = new ArrayList<>();
+                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                            switch (bean.getVersion()) {
+                                case 2://完整
+                                    arrayVersion.add("0");
+                                    break;
+                                case 3://摘要
+                                    arrayVersion.add("2");
+                                    break;
+                                case 4://精华
+                                    arrayVersion.add("1");
+                                    break;
+                            }
+                        }
+                        PaperDetailsActivity.actionActivity(context, vo.getId(), arrayVersion, "home");
+                    }
+                });
                 List<String> txt = new ArrayList<>();
                 //一级菜单
                 mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
@@ -713,6 +737,27 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 list.clear();
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
+                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+                    @Override
+                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        PaperMainVO vo = itemClickAdapter.getData().get(position).getPaperMainVO();
+                        ArrayList<String> arrayVersion = new ArrayList<>();
+                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                            switch (bean.getVersion()) {
+                                case 2://完整
+                                    arrayVersion.add("0");
+                                    break;
+                                case 3://摘要
+                                    arrayVersion.add("2");
+                                    break;
+                                case 4://精华
+                                    arrayVersion.add("1");
+                                    break;
+                            }
+                        }
+                        PaperDetailsActivity.actionActivity(context, vo.getId(), arrayVersion, "home");
+                    }
+                });
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 List<String> txt1 = new ArrayList<>();
                 //一级菜单
@@ -950,9 +995,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                    presenter.getListOfQuizAndAnswerData(map);
 //                }
                 break;
-            case "paper_literature":
-                map.put("id", string);
-                presenter.getListOfLiteratureData(map);
+            case "paper_literature"://论文详情文献
+                hMap.put("pid", string);
+                presenter.getDataAll("208", hMap);
                 break;
             case "paper_label":
                 map.put("id", string);
@@ -1353,6 +1398,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
                 break;
             case "paper_literature":
+
+
                 if (entity instanceof LiteratureEntity) {
                     itemClickAdapter.setNewData(null);
                     List<LiteratureEntity.LiteratureInfoBean> literatureInfo = ((LiteratureEntity) entity).getLiteratureInfo();
@@ -2725,6 +2772,37 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         ToastUtils.showShort("暂无数据");
                 }
                 if (qaBean.getList().size() >= pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                break;
+            case "208":
+                PaperLiteratureBean bean1 = (PaperLiteratureBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (itemClickAdapter == null || bean1 == null
+                        || bean1.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+
+                for (PaperLiteratureVO vo : bean1.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setPaperLiteratureVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+
+                if (bean1.getList().size() == 0) {
+                    if (page != 0)
+                        ToastUtils.showShort("数据已经全部加载了");
+                    else
+                        ToastUtils.showShort("暂无数据");
+                }
+
+                if (bean1.getList().size() >= pageSize) {
                     page++;
                 } else {
                     itemClickAdapter.loadMoreEnd(false);

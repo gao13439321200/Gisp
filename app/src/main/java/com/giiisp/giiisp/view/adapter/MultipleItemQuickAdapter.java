@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -282,16 +283,18 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                         String paperId = clickEntity.getPaperId();
                         String version = clickEntity.getVersion();
                         ArrayList<String> arrayVersion = new ArrayList<>();
-                        arrayVersion.add(version);
+                        if (ObjectUtils.isNotEmpty(version))
+                            arrayVersion.add(version);
 
                         switch (item.getString()) {
                             case "综述专栏":
                             case "热门推荐":
-                                if (clickEntity.getIsEncrypt().equals("0")) {
-                                    PaperDetailsActivity.checkPwd(context, paperId, arrayVersion, "home");
-                                } else {
-                                    PaperDetailsActivity.actionActivity(context, paperId, arrayVersion, "home");
-                                }
+                                // TODO: 2018/8/2 高鹏 这里需要判断一下有没有密码、
+//                                if (clickEntity.getIsEncrypt().equals("0")) {
+//                                    PaperDetailsActivity.checkPwd(context, paperId, arrayVersion, "home");
+//                                } else {
+                                PaperDetailsActivity.actionActivity(context, paperId, arrayVersion, "home");
+//                                }
                                 break;
                             default:
                                 break;
