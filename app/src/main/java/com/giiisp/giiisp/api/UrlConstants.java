@@ -5,17 +5,17 @@ package com.giiisp.giiisp.api;
 
 public class UrlConstants {
     public static class RequestUrl {
-        //                        public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
+        //public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
 //        public static final String BASE_URL = "http://www.giiisp.cn/";
-        public static final String BASE_URL = "";
-//                        public static final String BASE_URL = "https://192.168.1.155/giiisp/";
+        public static final String BASE_URL = "http://mall.xdiandian.cn/jsp/";
+//        public static final String BASE_URL = "https://192.168.1.155/giiisp/";
 
-        //                public static final String BASE_URL = "https://47.93.23.62/giiisp/";
+        //public static final String BASE_URL = "https://47.93.23.62/giiisp/";
 //        public static final String BASE_URL = "http://121.21.34.153:7777/jsp/";//z
 //        public static final String BASE_URL = "http://47.104.97.60/";//fhttp://www.wwfgzs.com/jsp/
         //
 //        public static final String BASE_URL = "http://app.giiisp.com/";
-        //        public static final String MP3_URL = "http://o9kg05vzs.bkt.clouddn.com/";
+        //public static final String MP3_URL = "http://o9kg05vzs.bkt.clouddn.com/";
         public static final String MP3_URL = "http://oq2xwecq0.bkt.clouddn.com/";
 
         //保存客户端设备类型

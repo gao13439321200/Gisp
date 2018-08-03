@@ -1,89 +1,117 @@
 package com.giiisp.giiisp.dto;
 
 public class PaperQaVO {
-
-
     /**
-     * id : asdfas4545d4f5s
-     * content : 内容
-     * firstquiz :  是否是首问
-     * createtime : 时间
-     * parentid : 父问题id
-     * isrecord : 是否录音
-     * record : 录音地址
-     * timing : 录音时长
+     * username : 提问者名字
+     * avatar : 提问者头像
+     * time : 提问时间
+     * qid : 问题ID
+     * quiz : 问题内容
+     * qrecord : 问题录音
+     * hasanswer : 是否回答 1是2否
+     * ausername : 回答者姓名
+     * answer : 回答内容
+     * arecord : 回答录音
+     * imgurl : 图片地址
      */
 
-    private String id;
-    private String content;
-    private String firstquiz;
-    private String createtime;
-    private String parentid;
-    private String isrecord;
-    private String record;
-    private String timing;
+    private String username;
+    private String avatar;
+    private String time;
+    private String qid;
+    private String quiz;
+    private String qrecord;
+    private String hasanswer;
+    private String ausername;
+    private String answer;
+    private String arecord;
+    private String imgurl;
 
-    public String getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getContent() {
-        return content;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getFirstquiz() {
-        return firstquiz;
+    public String getTime() {
+        return time;
     }
 
-    public void setFirstquiz(String firstquiz) {
-        this.firstquiz = firstquiz;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getCreatetime() {
-        return createtime;
+    public String getQid() {
+        return qid;
     }
 
-    public void setCreatetime(String createtime) {
-        this.createtime = createtime;
+    public void setQid(String qid) {
+        this.qid = qid;
     }
 
-    public String getParentid() {
-        return parentid;
+    public String getQuiz() {
+        return quiz;
     }
 
-    public void setParentid(String parentid) {
-        this.parentid = parentid;
+    public void setQuiz(String quiz) {
+        this.quiz = quiz;
     }
 
-    public String getIsrecord() {
-        return isrecord;
+    public String getQrecord() {
+        return qrecord;
     }
 
-    public void setIsrecord(String isrecord) {
-        this.isrecord = isrecord;
+    public void setQrecord(String qrecord) {
+        this.qrecord = qrecord;
     }
 
-    public String getRecord() {
-        return record;
+    public String getHasanswer() {
+        return hasanswer;
     }
 
-    public void setRecord(String record) {
-        this.record = record;
+    public void setHasanswer(String hasanswer) {
+        this.hasanswer = hasanswer;
     }
 
-    public String getTiming() {
-        return timing;
+    public String getAusername() {
+        return ausername;
     }
 
-    public void setTiming(String timing) {
-        this.timing = timing;
+    public void setAusername(String ausername) {
+        this.ausername = ausername;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public String getArecord() {
+        return arecord;
+    }
+
+    public void setArecord(String arecord) {
+        this.arecord = arecord;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 }

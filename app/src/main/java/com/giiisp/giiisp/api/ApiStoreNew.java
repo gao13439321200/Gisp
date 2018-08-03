@@ -30,20 +30,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-
-public class ApiStore {
-    private static volatile ApiStore instance = null;
+//暂时不用，这里区别不同域名的情况
+public class ApiStoreNew {
+    private static volatile ApiStoreNew instance = null;
     private static Retrofit retrofit;
 
-    private ApiStore() {
+    private ApiStoreNew() {
 
     }
 
-    public static ApiStore getInstance() {
+    public static ApiStoreNew getInstance() {
         if (instance == null) {
-            synchronized (ApiStore.class) {
+            synchronized (ApiStoreNew.class) {
                 if (instance == null) {
-                    instance = new ApiStore();
+                    instance = new ApiStoreNew();
                 }
             }
         }
@@ -146,7 +146,7 @@ public class ApiStore {
             OkHttpClient httpClient = OkhttpManager.getInstance().build(logging);
             httpClient.newBuilder().connectTimeout(10, TimeUnit.SECONDS);
             retrofit = new Retrofit.Builder().client(getUnsafeOkHttpClient())
-                    .baseUrl(UrlConstants.RequestUrl.BASE_URL)
+                    .baseUrl(UrlConstants.RequestUrl.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     //可以接收自定义的Gson，当然也可以不传
                     .addConverterFactory(GsonConverterFactory.create(getGson()))
@@ -200,7 +200,7 @@ public class ApiStore {
 //                    .addHeader("Access-Control-Allow-Headers", "X-Requested-With")
 //                    .addHeader("Vary", "Accept-Encoding")
 //                    .addHeader("Cookie", "add cookies here")
-                    .addHeader("Connection","close")
+                    .addHeader("Connection", "close")
                     .build();
 
             Log.e("Presenter", "request:" + request.toString());

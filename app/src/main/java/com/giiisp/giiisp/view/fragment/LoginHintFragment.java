@@ -134,7 +134,7 @@ public class LoginHintFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
             case R.id.tv_phone_login:
                 getLogInActivity().getVpLogin().setCurrentItem(1);
                 break;
-            case R.id.tv_weixin_login:
+            case R.id.tv_weixin_login://微信登录
                 UMShareAPI.get(getActivity()).getPlatformInfo(getActivity(), SHARE_MEDIA.WEIXIN, umAuthListener);
                 break;
             case R.id.tv_tourist:

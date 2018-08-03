@@ -14,12 +14,14 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.dto.PaperMainVO;
+import com.giiisp.giiisp.dto.PaperQaVO;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -35,6 +37,7 @@ import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.MyRecyclerView;
+import com.giiisp.giiisp.utils.PlayerUtil;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.ExperienceActivity;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
@@ -146,7 +149,35 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         });
                     }
                     break;
-                case R.layout.item_questions_answers://论文详情问答列表
+                case R.layout.item_questions_answers_new://论文详情问答列表(新)
+                    PaperQaVO qaVO = item.getPaperQaVO();
+                    GlideApp.with(mContext).load(qaVO.getAvatar()).into((ImageView) helper.getView(R.id.img_head));
+                    helper.setText(R.id.tv_name, qaVO.getUsername());
+                    helper.setText(R.id.tv_time, qaVO.getTime());
+                    helper.setText(R.id.tv_sound_time_answer, "？？：？？");
+                    helper.setText(R.id.tv_sound_time_qa, "？？：？？");
+                    helper.setText(R.id.tv_qa_title, qaVO.getQuiz());
+                    helper.setText(R.id.tv_answer_info, "A:" + qaVO.getAusername() + qaVO.getAnswer());
+                    helper.setVisible(R.id.img_photo, ObjectUtils.isNotEmpty(qaVO.getImgurl()));
+                    helper.setVisible(R.id.tv_answer_info, !"1".equals(qaVO.getHasanswer()));
+                    helper.setVisible(R.id.tv_open, "1".equals(qaVO.getHasanswer()));
+                    helper.getView(R.id.tv_open).setOnClickListener(v -> {
+                        helper.setVisible(R.id.tv_open, false);
+                        helper.setVisible(R.id.ll_qa_all, true);
+                        helper.setVisible(R.id.tv_answer_info, true);
+                    });
+                    helper.getView(R.id.tv_close).setOnClickListener(v -> {
+                        helper.setVisible(R.id.tv_open, true);
+                        helper.setVisible(R.id.ll_qa_all, false);
+                        helper.setVisible(R.id.tv_answer_info, false);
+                    });
+                    helper.getView(R.id.img_photo).setOnClickListener(v -> {
+                        ToastUtils.showShort("点击了图片");
+                    });
+                    helper.getView(R.id.ll_answer).setOnClickListener(v -> PlayerUtil.getInstance().playUrl(qaVO.getArecord()));
+                    helper.getView(R.id.ll_qa).setOnClickListener(v -> PlayerUtil.getInstance().playUrl(qaVO.getQrecord()));
+                    break;
+                case R.layout.item_questions_answers://论文详情问答列表(旧)
                     helper.getView(R.id.img_photo).setOnClickListener(view ->
                             ToastUtils.showShort("点开了一张图片"));
 
@@ -832,7 +863,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     if (item.getPaperLiteratureVO() != null) {
                         helper.setText(R.id.tv_title, item.getPaperLiteratureVO().getTitle());
                         helper.setText(R.id.tv_info, item.getPaperLiteratureVO().getDigest()
-                                +item.getPaperLiteratureVO().getDigest()+item.getPaperLiteratureVO().getDigest());
+                                + item.getPaperLiteratureVO().getDigest() + item.getPaperLiteratureVO().getDigest());
                         helper.setText(R.id.tv_author, item.getPaperLiteratureVO().getAuthor());
                         TextView tv = helper.getView(R.id.tv_switch);
                         TextView tvInfo = helper.getView(R.id.tv_info);

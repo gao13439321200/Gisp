@@ -664,7 +664,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "paper_qa"://论文详情评论问答列表
                 list.clear();
                 swipeRefreshLayout.setEnabled(false);
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_questions_answers, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_questions_answers_new, this.list, type);
                 itemClickAdapter.setOnItemChildClickListener(this);
                 initpaly();
                 break;
@@ -833,7 +833,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_collection, this.list, type);
                 break;
-            case "wait_dubbing": //  test
+            case "wait_dubbing": // 待配音列表
                 tvTitle.setText(R.string.voice_file_list);
                 ivMenu.setImageResource(R.mipmap.dubbing_refresh);
                 ivMenu.setVisibility(View.VISIBLE);

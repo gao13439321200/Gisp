@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.facebook.stetho.common.LogUtil;
-import com.giiisp.giiisp.api.ApiStore;
+import com.giiisp.giiisp.api.ApiStoreNew;
 import com.giiisp.giiisp.base.BasePresenter;
 import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
@@ -17,9 +17,9 @@ import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.dto.MajorBean;
 import com.giiisp.giiisp.dto.PaperBean;
+import com.giiisp.giiisp.dto.PaperLiteratureBean;
 import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperQaBean;
-import com.giiisp.giiisp.dto.PaperLiteratureBean;
 import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.SubjectBean;
 import com.giiisp.giiisp.dto.WordBean;
@@ -1383,7 +1383,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     // 普通回调，无特殊数据
     public void getDataAll(String por, HashMap<String, Object> options) {
         LogUtils.v("okHttp---por:" + por + " 参数：" + options);
-        ApiStore.getInstance().getApiService().getDataString(getHashMap(por, options))
+        ApiStoreNew.getInstance().getApiService().getDataString(getHashMap(por, options))
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
