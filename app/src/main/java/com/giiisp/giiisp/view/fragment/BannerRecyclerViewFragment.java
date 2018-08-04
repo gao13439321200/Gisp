@@ -987,6 +987,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 if (TextUtils.isEmpty(imageId))
                     return;
                 hMap.put("pid", imageId);
+                hMap.put("pageno", 0);
                 presenter.getDataAll("206", hMap);
 
 

@@ -50,6 +50,9 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.PaperInfoBean;
+import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.DaoSession;
 import com.giiisp.giiisp.entity.DownloadController;
@@ -122,7 +125,13 @@ import static com.giiisp.giiisp.widget.recording.AppCache.getPlayService;
  * Created by Thinkpad on 2017/5/10.
  */
 
-public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresenter> implements BaseQuickAdapter.OnItemClickListener, ViewPager.OnPageChangeListener, BaseImpl, SeekBar.OnSeekBarChangeListener, OnPlayerEventListener {
+public class PaperDetailsActivity extends
+        BaseMvpActivity<BaseImpl, WholePresenter>
+        implements BaseQuickAdapter.OnItemClickListener,
+        BaseImpl,
+        ViewPager.OnPageChangeListener,
+        SeekBar.OnSeekBarChangeListener,
+        OnPlayerEventListener {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.viewpager_paper)
@@ -637,16 +646,17 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
 
     @Override
     protected void initNetwork() {
-        ArrayMap<String, Object> map = new ArrayMap<>();
+        HashMap<String, Object> map = new HashMap<>();
 //        map.put("token", token);
-        map.put("id", id);
-        map.put("uid", uid);
-        Log.i("--->>", "initNetwork: " + string);
-        if (!TextUtils.isEmpty(string)) {
-            map.put("version", string);
-            // TODO: 2018/8/2 高鹏 这里需要获取论文详情 暂时不写了，先写录音那块
+        map.put("pid", id);
+        presenter.getDataAll("204", map);
+//        map.put("uid", uid);
+//        Log.i("--->>", "initNetwork: " + string);
+//        if (!TextUtils.isEmpty(string)) {
+//            map.put("version", string);
+        // TODO: 2018/8/2 高鹏 这里需要获取论文详情 暂时不写了，先写录音那块
 //            presenter.getPaperBaseByIdData(map);
-        }
+//        }
         super.initNetwork();
     }
 
@@ -1232,6 +1242,7 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
         } else if (entity instanceof LiteratureEntity) {
 
         } else if (entity instanceof PaperDatailEntity) {
+            // TODO: 2018/8/4 高鹏
             if (baseImpl != null)
                 baseImpl.onSuccess(entity);
             //            progressPopupWindow.dismiss();
@@ -1876,4 +1887,36 @@ public class PaperDetailsActivity extends BaseMvpActivity<BaseImpl, WholePresent
     }
 
 
+    @Override
+    public void onSuccess(String url, BaseBean baseBean) {
+        super.onSuccess(url, baseBean);
+        switch (url) {
+            case "204":
+                PaperInfoBean bean = (PaperInfoBean) baseBean;
+                if (bean == null) {
+                    return;
+                }
+                llEmptyView.setVisibility(View.GONE);
+                if (photoList != null) {
+                    photoList.clear();
+                } else {
+                    photoList = new ArrayList<>();
+                }
+                for (PaperInfoVO vo : bean.getImglist()) {
+                    itemClickAdapter.addData(new ClickEntity(vo.getUrl(), vo.getId()));
+                    photoList.add(vo.getUrl());
+                    imageId.add(vo.getId());
+                }
+                if (!TextUtils.isEmpty(bean.getDigest()))
+                    title = bean.getDigest();
+
+
+
+
+                break;
+            default:
+                break;
+        }
+
+    }
 }

@@ -3,10 +3,10 @@ package com.giiisp.giiisp.base;
 import android.os.Bundle;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.giiisp.giiisp.entity.BaseEntity;
+import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.view.impl.MyCallBack;
 
-public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseActivity implements MyCallBack<BaseEntity> {
+public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseActivity implements MyCallBack<BaseBean> {
     public T presenter;
 
     @Override
@@ -33,8 +33,9 @@ public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseAc
 
     protected abstract T initPresenter();
 
+
     @Override
-    public void onSuccess(String url, BaseEntity baseEntity) {
+    public void onSuccess(String url, BaseBean baseEntity) {
 
     }
 
