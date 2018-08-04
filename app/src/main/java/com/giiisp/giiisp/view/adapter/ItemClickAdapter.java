@@ -20,13 +20,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.dto.FansVO;
+import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
 import com.giiisp.giiisp.entity.DownloadController;
-import com.giiisp.giiisp.entity.FansConcernedEntity;
 import com.giiisp.giiisp.entity.HomeSearchEntity;
 import com.giiisp.giiisp.entity.MsgEntity;
 import com.giiisp.giiisp.entity.MyScholarBean;
@@ -767,21 +768,21 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_empty, item.getUrl());
 
                     break;
-                case R.layout.item_search_result:
+                case R.layout.item_search_result://搜索结果
                     final int layoutPosition = helper.getLayoutPosition();
                     RecyclerView recyclerResult = helper.getView(R.id.recyclerview);
                     recyclerResult.setLayoutManager(new LinearLayoutManager(activity));
 
                     List<ClickEntity> listResult = new ArrayList<>();
 
-                    if (item.getScholarBean() != null) {
+                    if (item.getScholarBean() != null) {//搜索粉丝
                         List<HomeSearchEntity.ScholarBean.RowsBean> rowsX = item.getScholarBean().getRows();
                         for (HomeSearchEntity.ScholarBean.RowsBean rowsBean : rowsX) {
                             listResult.add(new ClickEntity(rowsBean));
                         }
                         ItemClickAdapter searchScholar = new ItemClickAdapter(activity, R.layout.item_search_scholar, listResult, "search_scholar");
                         recyclerResult.setAdapter(searchScholar);
-                    } else if (item.getPaperBean() != null) {
+                    } else if (item.getPaperBean() != null) {//搜索论文
                         List<HomeSearchEntity.PaperBean.RowsBeanX> paperBeanRows = item.getPaperBean().getRows();
                         for (HomeSearchEntity.PaperBean.RowsBeanX paperBeanRow : paperBeanRows) {
                             listResult.add(new ClickEntity(paperBeanRow));
@@ -873,16 +874,18 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         });
                     }
                     break;
-                case R.layout.item_search_scholar:
-                    if (item.getRowsBeanHomeEntity() != null) {
-                        HomeSearchEntity.ScholarBean.RowsBean rowsBeanHomeEntity = item.getRowsBeanHomeEntity();
-                        TextView textViewAttention = helper.getView(R.id.tv_attention);
-                        helper.setText(R.id.tv_user_name, rowsBeanHomeEntity.getRealName());
-                        helper.setText(R.id.tv_position, rowsBeanHomeEntity.getOrganization());
-                        ImageLoader.getInstance().displayCricleImage(activity, rowsBeanHomeEntity.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
+                case R.layout.item_search_scholar://我的粉丝，搜索粉丝，我的关注
+                    if (item.getFansVO() != null) {//粉丝
+                        FansVO fansVO = item.getFansVO();
 
-                        final String isFollowed = rowsBeanHomeEntity.getIsFollowed(); // todo 关注
-                        final String id = rowsBeanHomeEntity.getId();
+//                        HomeSearchEntity.ScholarBean.RowsBean rowsBeanHomeEntity = item.getRowsBeanHomeEntity();
+                        TextView textViewAttention = helper.getView(R.id.tv_attention);
+                        helper.setText(R.id.tv_user_name, fansVO.getName());
+                        helper.setText(R.id.tv_position, fansVO.getOrganization());
+                        ImageLoader.getInstance().displayCricleImage(activity, fansVO.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
+
+                        final String isFollowed = fansVO.getIsfollow(); // todo 关注
+                        final String id = fansVO.getId();
                         helper.getView(R.id.iv_user_icon).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -954,13 +957,13 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         }
 
                     }
-                    if (item.getUserEntity() != null) {
+                    if (item.getFollowVO() != null) {//关注
                         TextView textViewAttention = helper.getView(R.id.tv_attention);
-                        FansConcernedEntity.PageInfoBean.RowsBean userEntity = item.getUserEntity();
-                        helper.setText(R.id.tv_user_name, userEntity.getRealName());
-                        helper.setText(R.id.tv_position, userEntity.getOrganization());
-                        ImageLoader.getInstance().displayCricleImage(activity, userEntity.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
-                        final String id = userEntity.getUid();
+                        FollowVO followVO = item.getFollowVO();
+                        helper.setText(R.id.tv_user_name, followVO.getName());
+                        helper.setText(R.id.tv_position, followVO.getOrganization());
+                        ImageLoader.getInstance().displayCricleImage(activity, followVO.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
+                        final String id = followVO.getId();
                         helper.getView(R.id.iv_user_icon).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

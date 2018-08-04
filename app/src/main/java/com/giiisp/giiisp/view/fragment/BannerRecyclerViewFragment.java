@@ -33,6 +33,10 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.FansBean;
+import com.giiisp.giiisp.dto.FansVO;
+import com.giiisp.giiisp.dto.FollowBean;
+import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperLiteratureBean;
 import com.giiisp.giiisp.dto.PaperLiteratureVO;
@@ -888,11 +892,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 swipeRefreshLayout.setEnabled(false);
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_search_result, this.list, type);
                 break;
-            case "search_scholar":
+            case "search_scholar"://搜索粉丝
                 swipeRefreshLayout.setEnabled(false);
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_search_scholar, this.list, type);
                 break;
-            case "mine_scholar":
+            case "mine_scholar"://我的粉丝
                 lineBanner.setVisibility(View.VISIBLE);
                 if (Objects.equals("" + uid, string)) {
                     tvTitle.setText(R.string.my_fans);
@@ -904,7 +908,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 break;
-            case "mine_follow":
+            case "mine_follow"://我的关注
                 lineBanner.setVisibility(View.VISIBLE);
                 if (Objects.equals("" + uid, string)) {
                     tvTitle.setText(R.string.my_follow);
@@ -916,7 +920,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 break;
-            case "search_paper":
+            case "search_paper"://搜索论文
                 swipeRefreshLayout.setEnabled(false);
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_indexes, this.list, type);
                 break;
@@ -1097,14 +1101,18 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "search_scholar":
                 break;
             case "mine_scholar":
-                map.put("page", page);
-                map.put("uid", string);
-                presenter.getListUserFollowedData(map);
+//                map.put("page", page);
+//                map.put("uid", string);
+//                presenter.getListUserFollowedData(map);
+                hMap.put("uid", uid);
+                presenter.getDataAll("307", hMap);
                 break;
             case "mine_follow":
-                map.put("page", page);
-                map.put("uid", string);
-                presenter.getListUserFollowData(map);
+//                map.put("page", page);
+//                map.put("uid", string);
+//                presenter.getListUserFollowData(map);
+                hMap.put("uid", uid);
+                presenter.getDataAll("308", hMap);
                 break;
             case "search_paper":
                 break;
@@ -2808,6 +2816,70 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 } else {
                     itemClickAdapter.loadMoreEnd(false);
                 }
+                break;
+            case "307":
+                FansBean bean2 = (FansBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (itemClickAdapter == null || bean2 == null
+                        || bean2.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+
+                for (FansVO vo : bean2.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setFansVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+
+                if (bean2.getList().size() == 0) {
+                    if (page != 0)
+                        ToastUtils.showShort("数据已经全部加载了");
+                    else
+                        ToastUtils.showShort("暂无数据");
+                }
+
+                if (bean2.getList().size() >= pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                break;
+            case "308":
+                FollowBean bean3 = (FollowBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (itemClickAdapter == null || bean3 == null
+                        || bean3.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+
+                for (FollowVO vo : bean3.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setFollowVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+
+                if (bean3.getList().size() == 0) {
+                    if (page != 0)
+                        ToastUtils.showShort("数据已经全部加载了");
+                    else
+                        ToastUtils.showShort("暂无数据");
+                }
+
+                if (bean3.getList().size() >= pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+
+
                 break;
             default:
                 break;

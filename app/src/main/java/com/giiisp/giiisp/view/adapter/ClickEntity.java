@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.dto.FansVO;
+import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.PaperBean;
@@ -363,6 +365,24 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private PaperMainVO.VlistBean bean;
     private PaperQaVO mPaperQaVO;
     private PaperLiteratureVO mPaperLiteratureVO;
+    private FansVO mFansVO;
+    private FollowVO mFollowVO;
+
+    public FollowVO getFollowVO() {
+        return mFollowVO;
+    }
+
+    public void setFollowVO(FollowVO followVO) {
+        mFollowVO = followVO;
+    }
+
+    public FansVO getFansVO() {
+        return mFansVO;
+    }
+
+    public void setFansVO(FansVO fansVO) {
+        mFansVO = fansVO;
+    }
 
     public PaperLiteratureVO getPaperLiteratureVO() {
         return mPaperLiteratureVO;
