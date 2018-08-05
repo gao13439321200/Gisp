@@ -52,31 +52,93 @@
         android:layout_height="3dp"
         android:background="@color/colorBackground"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBlack"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_hint"
-            style="@style/time_style"
-            android:layout_alignParentEnd="false"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginTop="8dp"
-            android:textSize="@dimen/sp_16"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_time"
-            style="@style/time_style"
-            android:layout_alignParentEnd="false"
-            android:layout_below="@+id/tv_hint"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/timer"
-            android:textSize="@dimen/sp_20"/>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/stop_icon"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_hint"
+                style="@style/time_style"
+                android:layout_width="0dp"
+                android:layout_alignParentEnd="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="正在配音"
+                android:textSize="@dimen/sp_16"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/stop_icon"/>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:text="调用"
+                android:textColor="@color/bg_white"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                style="@style/time_style"
+                android:layout_width="0dp"
+                android:layout_alignParentEnd="false"
+                android:layout_below="@+id/tv_hint"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/timer"
+                android:textSize="@dimen/sp_20"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="标记"
+                android:textColor="@color/bg_white"/>
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_btn"
@@ -88,20 +150,20 @@
             android:src="@mipmap/in_recording_spot"/>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_btn"
             android:layout_marginTop="5dp"
-          >
+            android:visibility="gone"
+            >
 
             <TextView
                 android:id="@+id/tv_dubbing_audition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="72dp"
                 android:layout_marginEnd="65dp"
+                android:layout_marginStart="72dp"
                 android:drawableTop="@drawable/dubbing_audition"
                 android:text="@string/audition"
                 android:textColor="@color/colorWhite"/>
@@ -118,13 +180,13 @@
                 android:id="@+id/tv_dubbing_determine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="72dp"
                 android:layout_marginEnd="65dp"
+                android:layout_marginStart="72dp"
                 android:drawableTop="@mipmap/dubbing_determine"
                 android:text="@string/complete"
                 android:textColor="@color/colorWhite"/>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_dubbing"

@@ -1242,7 +1242,7 @@ public class PaperDetailsActivity extends
         } else if (entity instanceof LiteratureEntity) {
 
         } else if (entity instanceof PaperDatailEntity) {
-            // TODO: 2018/8/4 高鹏
+            // TODO: 2018/8/4 高鹏 论文详情
             if (baseImpl != null)
                 baseImpl.onSuccess(entity);
             //            progressPopupWindow.dismiss();

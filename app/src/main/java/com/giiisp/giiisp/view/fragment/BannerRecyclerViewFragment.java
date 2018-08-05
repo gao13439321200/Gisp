@@ -2030,7 +2030,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "popular":
                 //                PaperDetailsActivity.actionActivity(getContext());
                 break;
-            case "wait_dubbing":
+            case "wait_dubbing"://配音列表点击事件
                 ClickEntity dubbing = dubbingAdapter.getItem(position);
                 if (dubbing != null) {
                     SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX paperBan = dubbing.getPaperBan();
