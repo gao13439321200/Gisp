@@ -19,6 +19,8 @@
     <color name="blue">#28ACFF</color>
     <drawable name="text_select">#ffffff</drawable>
     <drawable name="text_noselect">#28ACFF</drawable>
+    <color name="red">#FF0000</color>
+    <color name="green">#00DDDD</color>
 
     <!--曲线图的资源-->
     <color name="txt_black_light">#333333</color>
