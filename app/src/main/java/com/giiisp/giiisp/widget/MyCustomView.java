@@ -52,6 +52,7 @@ public class MyCustomView extends View {
 
     public void clearData() {
         mPointList.clear();
+        invalidate();//清空数据并且清空界面
     }
 
     @Override

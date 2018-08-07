@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/colorBackground"
-              android:gravity="center_horizontal"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorBackground"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-    <include layout="@layout/layout_fragment_banner"/>
+    <include
+        android:id="@+id/title"
+        layout="@layout/layout_fragment_banner"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,6 +36,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="270dp"
                     android:background="#00000000"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/img_big"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/img_diaoyong_big"/>
+
+                    <Button
+                        android:id="@+id/btn_yes"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignBottom="@+id/img_big"
+                        android:layout_alignRight="@+id/img_big"
+                        android:background="@mipmap/dubbing_determine"/>
+
+                    <Button
+                        android:id="@+id/btn_no"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignBottom="@+id/img_big"
+                        android:layout_alignLeft="@+id/img_big"
+                        android:background="@mipmap/guide_delete_icon"/>
+
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btn_full"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/fullscreen_button"/>
+
+
             </RelativeLayout>
 
             <View
@@ -231,4 +277,19 @@
 
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_full"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/red"
+        android:src="@mipmap/ic_launcher"/>
+
+    <Button
+        android:id="@+id/btn_small"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@mipmap/fullscreen_button"/>
+</RelativeLayout>

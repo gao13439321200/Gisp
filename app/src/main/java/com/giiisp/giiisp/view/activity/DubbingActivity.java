@@ -14,17 +14,21 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ScreenUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.PlayEvent;
 import com.giiisp.giiisp.entity.SubscribeEntity;
+import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.SDFileHelper;
 import com.giiisp.giiisp.utils.Utils;
@@ -35,6 +39,7 @@ import com.giiisp.giiisp.widget.recording.Util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -72,6 +77,15 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     MyCustomView mMyCustomView;
     @BindView(R.id.img_mark)
     CheckBox mCbMark;
+    @BindView(R.id.rl_big)
+    RelativeLayout mRlBig;
+    @BindView(R.id.tv_use)
+    TextView mTvUse;
+    @BindView(R.id.img_full)
+    ImageView mImgFull;
+    @BindView(R.id.btn_small)
+    Button mBtnSmall;
+
 
     String typeActivity;
     //    private ItemClickAdapter itemClickAdapter;
@@ -83,6 +97,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows;
     private int language = 0;
     private boolean canMark = false;
+    private boolean showDiaoYong = false;
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, DubbingActivity.class);
@@ -120,7 +135,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     @Override
     public void initView() {
         super.initView();
-
+        ScreenUtils.setPortrait(this);
         tvTime = (TextView) findViewById(R.id.tv_time);
         List<String> list_url = new ArrayList<>();
         List<ClickEntity> list = new ArrayList<>();
@@ -254,7 +269,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     @OnClick({R.id.tv_back, R.id.iv_btn, R.id.tv_right, R.id.iv_dubbing,
             R.id.tv_dubbing_audition, R.id.tv_dubbing_determine,
             R.id.tv_dubbing_re_record, R.id.iv_left_slip, R.id.iv_right_slide,
-            R.id.tv_mark, R.id.img_mark, R.id.btn_use, R.id.tv_use})
+            R.id.tv_mark, R.id.img_mark, R.id.btn_use, R.id.tv_use,
+            R.id.btn_yes, R.id.btn_no, R.id.btn_full, R.id.img_full, R.id.btn_small})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_mark://开始标记
@@ -265,6 +281,17 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 break;
             case R.id.tv_use://调用
             case R.id.btn_use:
+                showDiaoYong = !showDiaoYong;
+                mRlBig.setVisibility(showDiaoYong ? View.VISIBLE : View.GONE);
+                mTvUse.setText(showDiaoYong ? "调用" : "返回");
+                break;
+            case R.id.btn_yes://调用-确定
+                // TODO: 2018/8/7 高鹏 304接口调用开始和调用结束是什么意思？
+                break;
+            case R.id.btn_no://调用-取消
+                showDiaoYong = !showDiaoYong;
+                mRlBig.setVisibility(showDiaoYong ? View.VISIBLE : View.GONE);
+                mTvUse.setText(showDiaoYong ? "调用" : "返回");
                 break;
             case R.id.tv_back:
                 back = true;
@@ -298,11 +325,27 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             case R.id.iv_btn://录音
                 toggleRecording(view);
                 break;
+            case R.id.btn_full://全屏
+                // TODO: 2018/8/7 高鹏 这里需要设置图片的地址
+                GlideApp.with(this).load("图片地址").into(mImgFull);
+                ScreenUtils.setLandscape(this);
+                mImgFull.setVisibility(View.VISIBLE);
+                mBtnSmall.setVisibility(View.VISIBLE);
+                sendData304(0, 0, "1");
+                break;
             case R.id.iv_dubbing:
                 linearLayout.setVisibility(View.VISIBLE);
                 tvHint.setText(R.string.click_start_voice);
                 recorderSecondsElapsed = 0;
                 tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
+                break;
+            case R.id.img_full://全屏时的图片
+                break;
+            case R.id.btn_small://缩小全屏
+                ScreenUtils.setPortrait(this);
+                mImgFull.setVisibility(View.GONE);
+                mBtnSmall.setVisibility(View.GONE);
+                sendData304(0, 0, "2");
                 break;
             case R.id.tv_right:
      /*           if (linearLayout.getVisibility() == View.VISIBLE) {
@@ -464,7 +507,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
 
     @Override
     public void drawListen(float x, float y) {
-
+        sendData304(x, y, "3");
     }
 
     private static class ImageAdapter extends PagerAdapter {
@@ -554,6 +597,18 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                         break;
                 }
         }
+    }
+
+    private void sendData304(float x, float y, String type) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pid", "");
+        map.put("imgid", "");
+        map.put("language", "中英文？");
+        map.put("type", type);// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
+        map.put("time", recorderSecondsElapsed + "");
+        map.put("x", x);
+        map.put("y", y);
+        presenter.getDataAll("304", map);
     }
 
 }
