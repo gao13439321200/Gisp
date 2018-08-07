@@ -10,18 +10,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.PlayEvent;
@@ -31,8 +30,8 @@ import com.giiisp.giiisp.utils.SDFileHelper;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
+import com.giiisp.giiisp.widget.MyCustomView;
 import com.giiisp.giiisp.widget.recording.Util;
-import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ import okhttp3.RequestBody;
  * 配音的页面
  * Created by Thinkpad on 2017/6/5.
  */
-public class DubbingActivity extends DubbingPermissionActivity implements BaseQuickAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
+public class DubbingActivity extends DubbingPermissionActivity implements BaseQuickAdapter.OnItemClickListener, ViewPager.OnPageChangeListener, MyCustomView.DrawListen {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_right)
@@ -69,7 +68,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     RecyclerView recyclerViewDubbing;
     @BindView(R.id.iv_dubbing)
     ImageView ivDubbing;
-    ProgressWheel progressWheel;
+    @BindView(R.id.cv_mark)
+    MyCustomView mMyCustomView;
+    @BindView(R.id.img_mark)
+    CheckBox mCbMark;
 
     String typeActivity;
     //    private ItemClickAdapter itemClickAdapter;
@@ -80,6 +82,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
     private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows;
     private int language = 0;
+    private boolean canMark = false;
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, DubbingActivity.class);
@@ -111,6 +114,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         typeActivity = getIntent().getStringExtra("type");
         recordRows = getIntent().getParcelableArrayListExtra("recordRows");
         photoRows = getIntent().getParcelableArrayListExtra("photoRows");
+        mMyCustomView.setDrawListen(this);
     }
 
     @Override
@@ -247,14 +251,26 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     }
 
 
-    @OnClick({R.id.tv_back, R.id.iv_btn, R.id.tv_right, R.id.iv_dubbing, R.id.tv_dubbing_audition, R.id.tv_dubbing_determine, R.id.tv_dubbing_re_record, R.id.iv_left_slip, R.id.iv_right_slide})
+    @OnClick({R.id.tv_back, R.id.iv_btn, R.id.tv_right, R.id.iv_dubbing,
+            R.id.tv_dubbing_audition, R.id.tv_dubbing_determine,
+            R.id.tv_dubbing_re_record, R.id.iv_left_slip, R.id.iv_right_slide,
+            R.id.tv_mark, R.id.img_mark, R.id.btn_use, R.id.tv_use})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_mark://开始标记
+                mCbMark.setChecked(!canMark);
+            case R.id.img_mark:
+                canMark = !canMark;
+                mMyCustomView.setCanMark(canMark);
+                break;
+            case R.id.tv_use://调用
+            case R.id.btn_use:
+                break;
             case R.id.tv_back:
                 back = true;
                 finish();
                 break;
-            case R.id.tv_dubbing_determine:
+            case R.id.tv_dubbing_determine://完成
 
                 type = 0;
                 back = false;
@@ -263,23 +279,23 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 upAudio();
 
                 break;
-            case R.id.tv_dubbing_re_record:
+            case R.id.tv_dubbing_re_record://重录
                 resolveStopRecord();
                 tvHint.setText(R.string.click_start_voice);
                 recorderSecondsElapsed = 0;
                 tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
                 resolvePausePlayRecord();
                 break;
-            case R.id.tv_dubbing_audition:
+            case R.id.tv_dubbing_audition://试听
                 togglePlaying(view);
                 break;
-            case R.id.iv_left_slip:
+            case R.id.iv_left_slip://上一张图片
                 viewPager.setCurrentItem(viewPager.getCurrentItem() > 1 ? viewPager.getCurrentItem() - 1 : 0);
                 break;
-            case R.id.iv_right_slide:
+            case R.id.iv_right_slide://下一张图片
                 viewPager.setCurrentItem(viewPager.getCurrentItem() < viewPager.getChildCount() ? viewPager.getCurrentItem() + 1 : 0);
                 break;
-            case R.id.iv_btn:
+            case R.id.iv_btn://录音
                 toggleRecording(view);
                 break;
             case R.id.iv_dubbing:
@@ -305,7 +321,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     /**
      * @param key
      */
-     File file ;
+    File file;
+
     @Override
     protected void keyCompete(String key) {
         super.keyCompete(key);
@@ -335,14 +352,15 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
 //            map.put("path", UrlConstants.RequestUrl.MP3_URL + key);
-            presenter.getSaveRecordData(map,part);
+            presenter.getSaveRecordData(map, part);
         }
 
     }
+
     /*
-    * 传录音
-    * */
-    public void upAudio(){
+     * 传录音
+     * */
+    public void upAudio() {
         ArrayMap<String, Object> map = new ArrayMap<>();
         if (photoRows != null && photoRows.size() > position) {
             String id = photoRows.get(position).getId();
@@ -360,18 +378,18 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             if (recordRows != null && recordRows.size() > position) {
                 String recordId = recordRows.get(position).getId();
                 map.put("id", recordId);
-            }else{
-                map.put("id","0");
+            } else {
+                map.put("id", "0");
             }
 //            map.put("token", token);
             map.put("uid", uid);
             map.put("pcid", id);
             map.put("size", fileSize);
-            map.put("duration", (long)recorderSecondsElapsed);
+            map.put("duration", (long) recorderSecondsElapsed);
             map.put("language", language); //application/x-www-form-urlencoded ,multipart/form-data
             RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
-            presenter.getSaveRecordData(map,part);
+            presenter.getSaveRecordData(map, part);
         }
 
 
@@ -442,6 +460,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         //        ClickEntity item = (ClickEntity) adapter.getItem(position);
         //        Utils.showToast(item.getString());
         //        Log.i("--->>", "onItemClick: " + item.getString());
+    }
+
+    @Override
+    public void drawListen(float x, float y) {
+
     }
 
     private static class ImageAdapter extends PagerAdapter {

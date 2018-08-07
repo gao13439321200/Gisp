@@ -165,11 +165,10 @@
                     android:layout_margin="5dp"
                     android:src="@mipmap/in_recording_spot"/>
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/linear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_btn"
                     android:layout_marginTop="5dp"
                     android:visibility="visible"
                     >
@@ -180,6 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="65dp"
                         android:layout_marginStart="72dp"
+                        android:layout_toLeftOf="@+id/tv_dubbing_re_record"
                         android:drawableTop="@drawable/dubbing_audition"
                         android:text="@string/audition"
                         android:textColor="@color/colorWhite"/>
@@ -188,6 +188,7 @@
                         android:id="@+id/tv_dubbing_re_record"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:drawableTop="@mipmap/dubbing_re_record"
                         android:text="@string/remake"
                         android:textColor="@color/colorWhite"/>
@@ -198,10 +199,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="65dp"
                         android:layout_marginStart="72dp"
+                        android:layout_toRightOf="@+id/tv_dubbing_re_record"
                         android:drawableTop="@mipmap/dubbing_determine"
                         android:text="@string/complete"
                         android:textColor="@color/colorWhite"/>
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
