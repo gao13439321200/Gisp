@@ -33,6 +33,8 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DubbingListBean;
+import com.giiisp.giiisp.dto.DubbingListVO;
 import com.giiisp.giiisp.dto.FansBean;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowBean;
@@ -842,7 +844,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 ivMenu.setImageResource(R.mipmap.dubbing_refresh);
                 ivMenu.setVisibility(View.VISIBLE);
                 list.clear();
-                dubbingAdapter = new ExpandableItemAdapter((BaseActivity) getActivity(), R.layout.item_title_dubbing, R.layout.item_waiting_dubbing, this.list, type);
+                dubbingAdapter = new ExpandableItemAdapter((BaseActivity) getActivity(),
+                        R.layout.item_title_dubbing, R.layout.item_waiting_dubbing, this.list, type);
                 recyclerView.setAdapter(dubbingAdapter);
                 dubbingAdapter.setOnItemChildClickListener(this);
                 dubbingAdapter.setOnItemClickListener(this);
@@ -991,7 +994,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 if (TextUtils.isEmpty(imageId))
                     return;
                 hMap.put("pid", imageId);
-                hMap.put("pageno", 0);
+                hMap.put("pageno", page);
                 presenter.getDataAll("206", hMap);
 
 
@@ -1055,10 +1058,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "popular":
                 break;
-            case "wait_dubbing":
+            case "wait_dubbing"://待配音列表
 //                map.put("uid", uid);
 //                map.put("page", page);
 //                presenter.getWaitRecordPaperListData(map);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+                presenter.getDataAll("316", hMap);
                 break;
             case "subscribe"://订阅
             case "newest":
@@ -2561,7 +2567,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             itemClickAdapter.setEnableLoadMore(false);
         if (dubbingAdapter != null)
             dubbingAdapter.setEnableLoadMore(false);
-        page = 1;
+        page = 0;
         if (swipeRefreshLayout != null)
             swipeRefreshLayout.setRefreshing(true);
         initNetwork();
@@ -2707,8 +2713,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     }
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
-        super.onSuccess(url, baseBean);
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         if (swipeRefreshLayout == null)
             return;
         swipeRefreshLayout.setRefreshing(false);
@@ -2878,8 +2884,34 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 } else {
                     itemClickAdapter.loadMoreEnd(false);
                 }
+                break;
+            case "316"://待配音列表
+                DubbingListBean bean4 = (DubbingListBean) baseBean;
+                dubbingAdapter.loadMoreComplete();
+                if (bean4.getList() == null) {
+                    dubbingAdapter.loadMoreEnd(false);
+                    return;
+                }
+                List<ClickEntity> list = new ArrayList<>();
+                for (DubbingListVO vo :
+                        bean4.getList()) {
+                    ClickEntity entity1 = new ClickEntity();
+                    entity1.setDubbingListVO(vo);
+                    list.add(entity1);
+                }
 
+                if (page == 0) {
+                    dubbingAdapter.setNewData(list);
+                }else{
+                    dubbingAdapter.addData(list);
+                }
 
+                if (bean4.getList().size() == pageSize){
+                    page++;
+                }else{
+                    dubbingAdapter.loadMoreEnd(false);
+                }
+                dubbingAdapter.expandAll();
                 break;
             default:
                 break;
@@ -2887,10 +2919,10 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     }
 
     @Override
-    public void onFail(String url, String msg) {
+    public void onFailNew(String url, String msg) {
         if (swipeRefreshLayout == null)
             return;
         swipeRefreshLayout.setRefreshing(false);
-        super.onFail(url, msg);
+        super.onFailNew(url, msg);
     }
 }

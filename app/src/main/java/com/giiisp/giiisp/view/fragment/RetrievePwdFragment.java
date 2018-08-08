@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.CountDownTimerUtils;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
@@ -125,8 +126,13 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
     }
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
-        super.onSuccess(url, baseBean);
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         switch (url) {
             case "101":
                 ToastUtils.showShort("验证码发送成功！");

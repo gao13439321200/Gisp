@@ -22,9 +22,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DubbingListVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.PlayEvent;
 import com.giiisp.giiisp.entity.SubscribeEntity;
@@ -95,9 +98,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private int position = 0;
     private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
     private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows;
+    private DubbingListVO mVO;
+
     private int language = 0;
     private boolean canMark = false;
     private boolean showDiaoYong = false;
+    private int myType = 0;
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, DubbingActivity.class);
@@ -286,9 +292,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 mTvUse.setText(showDiaoYong ? "调用" : "返回");
                 break;
             case R.id.btn_yes://调用-确定
-                // TODO: 2018/8/7 高鹏 304接口调用开始和调用结束是什么意思？
+                sendData304(0, 0, 4);
+                showDiaoYong = !showDiaoYong;
+                mRlBig.setVisibility(showDiaoYong ? View.VISIBLE : View.GONE);
+                mTvUse.setText(showDiaoYong ? "调用" : "返回");
                 break;
             case R.id.btn_no://调用-取消
+                sendData304(0, 0, 5);
                 showDiaoYong = !showDiaoYong;
                 mRlBig.setVisibility(showDiaoYong ? View.VISIBLE : View.GONE);
                 mTvUse.setText(showDiaoYong ? "调用" : "返回");
@@ -303,15 +313,21 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 back = false;
                 resolveStopRecord();
                 resolvePausePlayRecord();
-                upAudio();
+                upAudio();//上传录音
 
                 break;
             case R.id.tv_dubbing_re_record://重录
                 resolveStopRecord();
+                mMyCustomView.clearData();
                 tvHint.setText(R.string.click_start_voice);
                 recorderSecondsElapsed = 0;
                 tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
                 resolvePausePlayRecord();
+                //清空当前图片事件
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("imgid", "");
+                map.put("language", language);
+                presenter.getDataAll("135", map);
                 break;
             case R.id.tv_dubbing_audition://试听
                 togglePlaying(view);
@@ -331,7 +347,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 ScreenUtils.setLandscape(this);
                 mImgFull.setVisibility(View.VISIBLE);
                 mBtnSmall.setVisibility(View.VISIBLE);
-                sendData304(0, 0, "1");
+                sendData304(0, 0, 1);
                 break;
             case R.id.iv_dubbing:
                 linearLayout.setVisibility(View.VISIBLE);
@@ -345,7 +361,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 ScreenUtils.setPortrait(this);
                 mImgFull.setVisibility(View.GONE);
                 mBtnSmall.setVisibility(View.GONE);
-                sendData304(0, 0, "2");
+                sendData304(0, 0, 2);
                 break;
             case R.id.tv_right:
      /*           if (linearLayout.getVisibility() == View.VISIBLE) {
@@ -426,10 +442,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             }
 //            map.put("token", token);
             map.put("uid", uid);
-            map.put("pcid", id);
             map.put("size", fileSize);
             map.put("duration", (long) recorderSecondsElapsed);
             map.put("language", language); //application/x-www-form-urlencoded ,multipart/form-data
+            map.put("resolution", ScreenUtils.getScreenWidth() + "*" + ScreenUtils.getScreenHeight());//手机分辨率
             RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
             presenter.getSaveRecordData(map, part);
@@ -507,7 +523,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
 
     @Override
     public void drawListen(float x, float y) {
-        sendData304(x, y, "3");
+        sendData304(x, y, 3);
     }
 
     private static class ImageAdapter extends PagerAdapter {
@@ -567,6 +583,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         if (entity.getResult() != 1) {
             Utils.showToast(entity.getInfo());
         } else {
+            //重置标记状态
+            mCbMark.setChecked(false);
+            canMark = false;
+            mMyCustomView.clearData();
+            mMyCustomView.setCanMark(false);
+
             Utils.showToast(R.string.uploaded_successfully);
             tvHint.setText(R.string.click_start_voice);
             recorderSecondsElapsed = 0;
@@ -599,16 +621,38 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         }
     }
 
-    private void sendData304(float x, float y, String type) {
+    private void sendData304(float x, float y, int type) {
+        myType = type;
         HashMap<String, Object> map = new HashMap<>();
         map.put("pid", "");
         map.put("imgid", "");
         map.put("language", "中英文？");
-        map.put("type", type);// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
+        map.put("type", type + "");// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
         map.put("time", recorderSecondsElapsed + "");
         map.put("x", x);
         map.put("y", y);
         presenter.getDataAll("304", map);
     }
 
+    @Override
+    public void onSuccessNew(String url, BaseBean baseEntity) {
+        super.onSuccessNew(url, baseEntity);
+        switch (url) {
+            case "304":
+                switch (type) {
+                    case 4:
+                        ToastUtils.showShort("调用开始！");
+                        break;
+                    case 5:
+                        ToastUtils.showShort("调用结束！");
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
 }

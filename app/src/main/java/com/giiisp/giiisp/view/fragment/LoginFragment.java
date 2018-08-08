@@ -11,6 +11,7 @@ import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.LoginBean;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
 import com.giiisp.giiisp.utils.Utils;
@@ -138,8 +139,13 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
     }
 
     @Override
-    public void onSuccess(String url, BaseBean entity) {
-        super.onSuccess(url, entity);
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean entity) {
+        super.onSuccessNew(url, entity);
         LoginBean bean = (LoginBean) entity;
         uid = bean.getId();
         SPUtils.getInstance().put(UrlConstants.UID, bean.getId());

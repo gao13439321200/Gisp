@@ -18,7 +18,6 @@ import com.giiisp.giiisp.utils.CountDownTimerUtils;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
-import com.giiisp.giiisp.view.impl.MyCallBack;
 
 import java.util.HashMap;
 
@@ -80,7 +79,7 @@ public class ModifyPhoneFragment extends BaseMvpFragment<BaseImpl, WholePresente
 
     @Override
     protected WholePresenter initPresenter() {
-        return new WholePresenter((MyCallBack) this);
+        return new WholePresenter(this);
     }
 
 

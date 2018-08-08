@@ -18,6 +18,7 @@ import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
@@ -141,8 +142,8 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     }
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
-        super.onSuccess(url, baseBean);
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         if (swipeRefreshLayout != null)
             swipeRefreshLayout.setRefreshing(false);
         switch (url) {
@@ -177,6 +178,11 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onSuccess(BaseEntity entity) {
+
     }
 
     @Override

@@ -1888,8 +1888,8 @@ public class PaperDetailsActivity extends
 
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
-        super.onSuccess(url, baseBean);
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         switch (url) {
             case "204":
                 PaperInfoBean bean = (PaperInfoBean) baseBean;
@@ -1917,6 +1917,11 @@ public class PaperDetailsActivity extends
             default:
                 break;
         }
+
+    }
+
+    @Override
+    public void onFailNew(String url, String msg) {
 
     }
 }

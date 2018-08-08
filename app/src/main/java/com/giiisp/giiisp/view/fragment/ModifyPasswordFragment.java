@@ -17,6 +17,7 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
@@ -163,8 +164,13 @@ public class ModifyPasswordFragment extends BaseMvpFragment<BaseImpl, WholePrese
     }
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
-        super.onSuccess(url, baseBean);
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         switch(url){
             case "106":
                 ToastUtils.showShort("密码修改成功！");

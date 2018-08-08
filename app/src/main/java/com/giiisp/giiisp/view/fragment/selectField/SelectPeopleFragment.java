@@ -15,6 +15,7 @@ import com.giiisp.giiisp.dto.MajorBean;
 import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.PeopleVO;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
@@ -201,8 +202,13 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
     }
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
-        super.onSuccess(url, baseBean);
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         switch (url) {
 //            case "109":
 //                SubjectBean bean3 = (SubjectBean) baseBean;

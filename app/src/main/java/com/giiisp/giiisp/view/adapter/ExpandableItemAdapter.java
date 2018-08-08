@@ -16,6 +16,7 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
+import com.giiisp.giiisp.dto.DubbingListVO;
 import com.giiisp.giiisp.entity.DaoSession;
 import com.giiisp.giiisp.entity.Note;
 import com.giiisp.giiisp.entity.NoteDao;
@@ -26,7 +27,6 @@ import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.widget.DurationSizePopupWindow;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-
 
 import org.greenrobot.greendao.query.Query;
 
@@ -172,11 +172,11 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
 
                         break;
                     case R.layout.item_title_dubbing:
-                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows = item.getSubscribeEntityRows();
-                        if (subscribeEntityRows == null)
+                        DubbingListVO vo = item.getDubbingListVO();
+                        if (vo == null)
                             return;
-                        holder.setText(R.id.tv_title, subscribeEntityRows.getTitle());
-                        holder.setText(R.id.tv_time, subscribeEntityRows.getUpdateTime());
+                        holder.setText(R.id.tv_title, vo.getTitle());
+                        holder.setText(R.id.tv_time, vo.getTime());
 
                         break;
                 }
@@ -186,7 +186,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                 break;
             case TYPE_LEVEL_1:
                 switch (type_level_1) {
-                    case R.layout.item_waiting_dubbing:
+                    case R.layout.item_waiting_dubbing://待配音列表
 
                         if (!TextUtils.isEmpty(item.getVersion())) {
                             switch (item.getVersion()) {

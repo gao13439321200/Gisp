@@ -11,6 +11,7 @@ import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.WordBean;
 import com.giiisp.giiisp.dto.WordVO;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
@@ -132,8 +133,13 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
     }
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
-        super.onSuccess(url, baseBean);
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         switch (url) {
             case "112":
                 WordBean bean = (WordBean) baseBean;

@@ -7,7 +7,7 @@ import com.blankj.utilcode.util.SPUtils;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.utils.Utils;
-import com.giiisp.giiisp.view.impl.MyCallBack;
+import com.giiisp.giiisp.view.impl.BaseImpl;
 
 
 /**
@@ -23,7 +23,7 @@ import com.giiisp.giiisp.view.impl.MyCallBack;
  * Fragment  show   是否隐藏的状态
  */
 
-public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFragment implements MyCallBack<BaseBean> {
+public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFragment implements BaseImpl {
     public P presenter;
 
     @Override
@@ -51,12 +51,12 @@ public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFr
     protected abstract P initPresenter();
 
     @Override
-    public void onSuccess(String url, BaseBean baseBean) {
+    public void onSuccessNew(String url, BaseBean baseBean) {
 
     }
 
     @Override
-    public void onFail(String url, String msg) {
+    public void onFailNew(String url, String msg) {
         timeout = true;
         Log.i("--->>", "onFailure: " + "P: " + presenter.getClass().getSimpleName() + " : " + msg + "" + msg);
         Utils.showToast(msg);

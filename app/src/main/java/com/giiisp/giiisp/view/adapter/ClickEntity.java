@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.dto.DubbingListVO;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.HeadImgBean;
@@ -367,6 +368,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private PaperLiteratureVO mPaperLiteratureVO;
     private FansVO mFansVO;
     private FollowVO mFollowVO;
+    private DubbingListVO mDubbingListVO;
+
+    public DubbingListVO getDubbingListVO() {
+        return mDubbingListVO;
+    }
+
+    public void setDubbingListVO(DubbingListVO dubbingListVO) {
+        mDubbingListVO = dubbingListVO;
+    }
 
     public FollowVO getFollowVO() {
         return mFollowVO;

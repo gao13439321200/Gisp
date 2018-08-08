@@ -18,10 +18,11 @@ import com.giiisp.giiisp.dto.MajorBean;
 import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.SubjectBean;
 import com.giiisp.giiisp.dto.SubjectVO;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
-import com.giiisp.giiisp.view.impl.MyCallBack;
+import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -36,7 +37,7 @@ import butterknife.OnClick;
 /**
  * 选择领域
  */
-public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresenter> {
+public class SelectFieldFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
 
     public static final String TYPE = "type";
     //    @BindView(R.id.ll_subject)
@@ -137,8 +138,13 @@ public class SelectFieldFragment extends BaseMvpFragment<MyCallBack, WholePresen
     }
 
     @Override
-    public void onSuccess(String url, BaseBean entity) {
-        super.onSuccess(url, entity);
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean entity) {
+        super.onSuccessNew(url, entity);
         switch (url) {
             case "109":
                 SubjectBean bean = (SubjectBean) entity;

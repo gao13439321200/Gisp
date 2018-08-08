@@ -12,6 +12,7 @@ import com.giiisp.giiisp.api.ApiStoreNew;
 import com.giiisp.giiisp.base.BasePresenter;
 import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DubbingListBean;
 import com.giiisp.giiisp.dto.FansBean;
 import com.giiisp.giiisp.dto.FollowBean;
 import com.giiisp.giiisp.dto.HeadImgBean;
@@ -51,7 +52,6 @@ import com.giiisp.giiisp.entity.WaitRecordPaperEntity;
 import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.utils.DESedeUtils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
-import com.giiisp.giiisp.view.impl.MyCallBack;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -78,17 +78,11 @@ import static com.giiisp.giiisp.utils.ToolString.toJsonStr;
 
 public class WholePresenter extends BasePresenter<BaseImpl> {
     private BaseImpl impl = null;
-    private MyCallBack mMyCallBack = null;
     private String pid = "";
 
-
-    public WholePresenter(MyCallBack myCallBack) {
-        this.mMyCallBack = myCallBack;
+    public WholePresenter(BaseImpl impl) {
+        this.impl = impl;
     }
-
-//    public WholePresenter(BaseImpl impl) {
-//        this.impl = impl;
-//    }
 
     public void getSendCodeData(String mobile, String codeType) {
         Callback<BaseEntity> callback = new Callback<BaseEntity>() {
@@ -1393,19 +1387,19 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                         if (response.body() != null) {
                             BaseBean entity = stringToBody(por, response.body());
                             if (1 == entity.getStatusCode() || 0 == entity.getStatusCode()) {
-                                mMyCallBack.onSuccess(por, entity);
+                                impl.onSuccessNew(por, entity);
                             } else {
-                                mMyCallBack.onFail(por, entity.getMessage());
+                                impl.onFailNew(por, entity.getMessage());
                             }
                         } else {
-                            mMyCallBack.onFail(por, "信息获取失败");
+                            impl.onFailNew(por, "信息获取失败");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                         LogUtils.v("okHttp异常信息：" + t);
-                        mMyCallBack.onFail(por, "信息获取失败");
+                        impl.onFailNew(por, "信息获取失败");
                     }
                 });
     }
@@ -1478,7 +1472,10 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             case "308":
                 baseEntity = new Gson().fromJson(cipher, FollowBean.class);
                 break;
-            default://101、105、111
+            case "316":
+                baseEntity = new Gson().fromJson(cipher, DubbingListBean.class);
+                break;
+            default://101、105、111、304
                 baseEntity = new Gson().fromJson(cipher, BaseBean.class);
                 break;
         }
