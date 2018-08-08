@@ -176,7 +176,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                         if (vo == null)
                             return;
                         holder.setText(R.id.tv_title, vo.getTitle());
-                        holder.setText(R.id.tv_time, vo.getTime());
+                        holder.setText(R.id.tv_time, vo.getCreatetime());
 
                         break;
                 }

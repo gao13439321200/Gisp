@@ -22,14 +22,15 @@ public class DubbingListVO {
     private String cnstatus;
     private String enstatus;
     private String version;
-    private String time;
+    private String createtime;
 
-    public String getTime() {
-        return time;
+
+    public String getCreatetime() {
+        return createtime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setCreatetime(String createtime) {
+        this.createtime = createtime;
     }
 
     public String getVersion() {
