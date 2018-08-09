@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.PaperDatailEntity;
 import com.giiisp.giiisp.entity.Song;
@@ -282,6 +283,16 @@ public class FullScreenPopupWindow extends BasePopupWindow implements View.OnCli
 
     @Override
     public void onFailure(String msg, Exception ex) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+
+    }
+
+    @Override
+    public void onFailNew(String url, String msg) {
 
     }
 

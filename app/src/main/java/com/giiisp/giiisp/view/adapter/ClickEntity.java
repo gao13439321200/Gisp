@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.dto.DubbingListVO;
+import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.HeadImgBean;
@@ -369,6 +370,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private FansVO mFansVO;
     private FollowVO mFollowVO;
     private DubbingListVO mDubbingListVO;
+    private DubbingVO mDubbingVO;
+
+    public DubbingVO getDubbingVO() {
+        return mDubbingVO;
+    }
+
+    public void setDubbingVO(DubbingVO dubbingVO) {
+        mDubbingVO = dubbingVO;
+    }
 
     public DubbingListVO getDubbingListVO() {
         return mDubbingListVO;

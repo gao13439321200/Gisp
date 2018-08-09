@@ -2158,6 +2158,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         final ArrayMap<String, Object> map = new ArrayMap<>();
+        HashMap<String, Object> hMap = new HashMap<>();
 //        map.put("token", token);
         switch (view.getId()) {
             case R.id.tv_paper_collected:
@@ -2205,39 +2206,24 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
 
             case R.id.tv_release_dubbing:  //  发布
-
                 if (dubbingAdapter != null) {
-                    ClickEntity item = dubbingAdapter.getItem(position);
-                    if (item != null) {
-                        String paperId = item.getPaperId();
-                        if (!TextUtils.isEmpty(paperId)) {
-                            String id = paperId;
-                            String version = item.getVersion();
-                            int photoNumber = item.getPhotoNumber();
-                            int recordNumber = item.getRecordNumber();
-                            int recordTwoNumber = item.getRecordTwoNumber();
-                            if (!TextUtils.isEmpty(version) && photoNumber != 0 && !TextUtils.isEmpty(id) && recordNumber != 0) {
-                                if (recordTwoNumber == 0) {
-                                    map.put("id", id);
-                                    map.put("uid", uid);
-                                    map.put("version", version);
-                                    presenter.getUpdatePaperData(map);
-                                    Utils.showToast(R.string.version_only_language);
-                                } else if (recordTwoNumber == photoNumber) {
-                                    map.put("id", id);
-                                    map.put("uid", uid);
-                                    map.put("version", version);
-                                    presenter.getUpdatePaperData(map);
-                                } else {
-                                    Utils.showToast(R.string.unfinished);
-                                }
-
-                            }
-                        }
-
-                    }
+                    String id = dubbingAdapter.getItem(position).getDubbingListVO().getId();
+                    hMap.put("pid", id);
+                    hMap.put("language", 1);
+                    presenter.getDataAll("318", hMap);
+                } else {
+                    ToastUtils.showShort("发布失败！");
                 }
-
+                break;
+            case R.id.tv_release_dubbing_EN:  //  英文发布
+                if (dubbingAdapter != null) {
+                    String id = dubbingAdapter.getItem(position).getDubbingListVO().getId();
+                    hMap.put("pid", id);
+                    hMap.put("language", 2);
+                    presenter.getDataAll("318", hMap);
+                } else {
+                    ToastUtils.showShort("发布失败！");
+                }
                 break;
             case R.id.tv_preview_dubbing: //  预览按钮
                 if (dubbingAdapter != null) {
@@ -2902,16 +2888,19 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 if (page == 0) {
                     dubbingAdapter.setNewData(list);
-                }else{
+                } else {
                     dubbingAdapter.addData(list);
                 }
 
-                if (bean4.getList().size() == pageSize){
+                if (bean4.getList().size() == pageSize) {
                     page++;
-                }else{
+                } else {
                     dubbingAdapter.loadMoreEnd(false);
                 }
                 dubbingAdapter.expandAll();
+                break;
+            case "318"://发布论文
+                ToastUtils.showShort("发布成功！");
                 break;
             default:
                 break;

@@ -171,7 +171,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
 
 
                         break;
-                    case R.layout.item_title_dubbing:
+                    case R.layout.item_title_dubbing://待配音列表
                         DubbingListVO vo = item.getDubbingListVO();
                         if (vo == null)
                             return;
@@ -187,40 +187,74 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
             case TYPE_LEVEL_1:
                 switch (type_level_1) {
                     case R.layout.item_waiting_dubbing://待配音列表
-
-                        if (!TextUtils.isEmpty(item.getVersion())) {
-                            switch (item.getVersion()) {
-                                case "0":
-                                    holder.setText(R.id.tv_version, "完整版");
-                                    holder.setText(R.id.tv_version_complete, "完整版");
-                                    break;
+                        DubbingListVO vo = item.getDubbingListVO();
+                        if (!TextUtils.isEmpty(vo.getVersion())) {
+                            switch (vo.getVersion()) {
                                 case "1":
-                                    holder.setText(R.id.tv_version, "精华版");
-                                    holder.setText(R.id.tv_version_complete, "精华版");
+                                    holder.setText(R.id.tv_version, "论文主体");
+                                    holder.setText(R.id.tv_version_complete, "论文主体");
+                                    holder.setText(R.id.tv_version_EN, "论文主体");
+                                    holder.setText(R.id.tv_version_complete_EN, "论文主体");
                                     break;
                                 case "2":
+                                    holder.setText(R.id.tv_version, "完整版");
+                                    holder.setText(R.id.tv_version_complete, "完整版");
+                                    holder.setText(R.id.tv_version_EN, "完整版");
+                                    holder.setText(R.id.tv_version_complete_EN, "完整版");
+                                    break;
+                                case "3":
                                     holder.setText(R.id.tv_version, "摘要版");
                                     holder.setText(R.id.tv_version_complete, "摘要版");
+                                    holder.setText(R.id.tv_version_EN, "摘要版");
+                                    holder.setText(R.id.tv_version_complete_EN, "摘要版");
+                                    break;
+                                case "4":
+                                    holder.setText(R.id.tv_version, "精华版");
+                                    holder.setText(R.id.tv_version_complete, "精华版");
+                                    holder.setText(R.id.tv_version_EN, "精华版");
+                                    holder.setText(R.id.tv_version_complete_EN, "精华版");
                                     break;
                             }
                         }
-                        ImageView ivIcon = holder.getView(R.id.iv_icon);
-                        ProgressBar progressBar = holder.getView(R.id.progressbar_dubbing);
-                        ImageLoader.getInstance().displayCricleImage(activity, item.getUrl(), ivIcon);
-                        progressBar.setMax(item.getPhotoNumber());
-                        progressBar.setProgress(item.getRecordNumber());
-                        double rint = Math.rint((item.getRecordNumber() / (float) item.getPhotoNumber()) * 100);
-                        holder.setText(R.id.tv_progress, String.valueOf(rint) + "%");
 
-                        holder.setText(R.id.tv_language, item.getLanguage());
-                        holder.setText(R.id.tv_language_complete, item.getLanguage());
-
+                        switch (vo.getCnfinish()) {
+                            case "1"://完成
+                                holder.setVisible(R.id.ll_waiting_dubbing, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon));
+                                break;
+                            case "2"://未完成
+                                holder.setVisible(R.id.ll_dubbing_complete, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_complete));
+                                ProgressBar progressBar = holder.getView(R.id.progressbar_dubbing);
+                                progressBar.setMax(100);
+                                progressBar.setProgress(Integer.parseInt(vo.getCnper()));
+                                holder.setText(R.id.tv_progress, vo.getCnper() + "%");
+                                break;
+                            default:
+                                break;
+                        }
+                        switch (vo.getEnfinish()) {
+                            case "1"://完成
+                                holder.setVisible(R.id.ll_waiting_dubbing_EN, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_EN));
+                                break;
+                            case "2"://未完成
+                                holder.setVisible(R.id.ll_dubbing_complete_EN, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_complete_EN));
+                                ProgressBar progressBar = holder.getView(R.id.progressbar_dubbing);
+                                progressBar.setMax(100);
+                                progressBar.setProgress(Integer.parseInt(vo.getEnper()));
+                                holder.setText(R.id.tv_progress, vo.getEnper() + "%");
+                                break;
+                            default:
+                                break;
+                        }
                         holder.addOnClickListener(R.id.tv_preview_dubbing)
                                 .addOnClickListener(R.id.tv_edit_dubbing)
-                                .addOnClickListener(R.id.tv_release_dubbing);
-                        holder.setVisible(R.id.ll_waiting_dubbing, !(item.getPhotoNumber() == item.getRecordNumber()));
-                        holder.setVisible(R.id.ll_dubbing_complete, item.getPhotoNumber() == item.getRecordNumber());
-
+                                .addOnClickListener(R.id.tv_release_dubbing)
+                                .addOnClickListener(R.id.tv_preview_dubbing_EN)
+                                .addOnClickListener(R.id.tv_edit_dubbing_EN)
+                                .addOnClickListener(R.id.tv_release_dubbing_EN);
                         break;
                     case R.layout.item_paper_page:
 
@@ -378,6 +412,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                             });*/
                 break;
         }
+
     }
 
     private void initPaperChild(BaseViewHolder holder, ClickEntity item) {

@@ -27,7 +27,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DubbingBean;
 import com.giiisp.giiisp.dto.DubbingListVO;
+import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.PlayEvent;
 import com.giiisp.giiisp.entity.SubscribeEntity;
@@ -96,14 +98,17 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private ItemClickAdapter itemClickAdapte;
 
     private int position = 0;
-    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
-    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows;
+    //    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
+//    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows;
     private DubbingListVO mVO;
 
     private int language = 0;
     private boolean canMark = false;
     private boolean showDiaoYong = false;
     private int myType = 0;
+    private String pid = "";
+    private List<ClickEntity> dataList = new ArrayList<>();
+
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, DubbingActivity.class);
@@ -123,6 +128,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         context.startActivityForResult(sIntent, 3000);
     }
 
+    public static void actionActivity(Activity context, String id, int language, String type) {
+        Intent sIntent = new Intent(context, DubbingActivity.class);
+        sIntent.putExtra("id", id);
+        sIntent.putExtra("type", type);
+        sIntent.putExtra("language", language);
+        context.startActivityForResult(sIntent, 3000);
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.layout_fragment_dubbing;
@@ -133,41 +146,43 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         super.initData();
         language = getIntent().getIntExtra("language", 0);
         typeActivity = getIntent().getStringExtra("type");
-        recordRows = getIntent().getParcelableArrayListExtra("recordRows");
-        photoRows = getIntent().getParcelableArrayListExtra("photoRows");
+        pid = getIntent().getStringExtra("id");
+//        recordRows = getIntent().getParcelableArrayListExtra("recordRows");
+//        photoRows = getIntent().getParcelableArrayListExtra("photoRows");
         mMyCustomView.setDrawListen(this);
+        getImageData();
     }
 
     @Override
     public void initView() {
         super.initView();
         ScreenUtils.setPortrait(this);
-        tvTime = (TextView) findViewById(R.id.tv_time);
-        List<String> list_url = new ArrayList<>();
-        List<ClickEntity> list = new ArrayList<>();
-        if (photoRows != null) {
-            for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX photoRow : photoRows) {
-                list_url.add(photoRow.getPath());
-                list.add(new ClickEntity(photoRow.getPath()));
-            }
-            if (recordRows != null && photoRows.size() > recordRows.size()) {
-                position = recordRows.size();
-            }
-        }
+        tvTime = findViewById(R.id.tv_time);
+//        List<String> list_url = new ArrayList<>();
+//        List<ClickEntity> list = new ArrayList<>();
+//        if (photoRows != null) {
+//            for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX photoRow : photoRows) {
+//                list_url.add(photoRow.getPath());
+//                list.add(new ClickEntity(photoRow.getPath()));
+//            }
+//            if (recordRows != null && photoRows.size() > recordRows.size()) {
+//                position = recordRows.size();
+//            }
+//        }
 
-        viewPager.setAdapter(new ImageAdapter(this, list_url));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        itemClickAdapte = new ItemClickAdapter(this, R.layout.item_paper_pic, list, "paper_pic");
-        recyclerView.setAdapter(itemClickAdapte);
-        itemClickAdapte.setOnItemClickListener(this);
-        viewPager.addOnPageChangeListener(this);
+//        viewPager.setAdapter(new ImageAdapter(this, list_url));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+//        itemClickAdapte = new ItemClickAdapter(this, R.layout.item_paper_pic, list, "paper_pic");
+//        recyclerView.setAdapter(itemClickAdapte);
+//        itemClickAdapte.setOnItemClickListener(this);
+//        viewPager.addOnPageChangeListener(this);
         tvHint.setText(R.string.click_start_recording);
         //        tvRight.setText("保存");
         tvTitle.setText(R.string.dubbing);
-        itemClickAdapte.setSelectedPosition(position);
-        itemClickAdapte.notifyDataSetChanged();
-        recyclerView.scrollToPosition(position);
-        viewPager.setCurrentItem(position);
+//        itemClickAdapte.setSelectedPosition(position);
+//        itemClickAdapte.notifyDataSetChanged();
+//        recyclerView.scrollToPosition(position);
+//        viewPager.setCurrentItem(position);
         //        recyclerViewDubbing.setLayoutManager(new LinearLayoutManager(this));
         //        itemClickAdapter = new ItemClickAdapter(this, R.layout.item_dubbing_sound, null, "dubbing_sound");
         //        recyclerViewDubbing.setAdapter(itemClickAdapter);
@@ -199,6 +214,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         playEvent.setHandler(handler);
         EventBus.getDefault().post(playEvent);*/
 
+    }
+
+    private void getImageData() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pid", pid);
+        map.put("language", language);
+        presenter.getDataAll("317", map);
     }
 
 
@@ -386,33 +408,33 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     protected void keyCompete(String key) {
         super.keyCompete(key);
         ArrayMap<String, Object> map = new ArrayMap<>();
-        if (photoRows != null && photoRows.size() > position) {
-            String id = photoRows.get(position).getId();
-
-            double duration = 0;
-            try {
-                file = new File(filePath);
-                long fileSize = SDFileHelper.getFileSize(new File(filePath));
-                double rint = SDFileHelper.FormetFileSize(fileSize);
-                duration = Math.rint(rint * 100) / 100;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (recordRows != null && recordRows.size() > position) {
-                String recordId = recordRows.get(position).getId();
-                map.put("id", recordId);
-            }
-//            map.put("token", token);
-            map.put("uid", uid);
-            map.put("pcid", id);
-            map.put("size", duration);
-            map.put("duration", recorderSecondsElapsed);
-            map.put("language", language);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
-//            map.put("path", UrlConstants.RequestUrl.MP3_URL + key);
-            presenter.getSaveRecordData(map, part);
-        }
+//        if (photoRows != null && photoRows.size() > position) {
+//            String id = photoRows.get(position).getId();
+//
+//            double duration = 0;
+//            try {
+//                file = new File(filePath);
+//                long fileSize = SDFileHelper.getFileSize(new File(filePath));
+//                double rint = SDFileHelper.FormetFileSize(fileSize);
+//                duration = Math.rint(rint * 100) / 100;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            if (recordRows != null && recordRows.size() > position) {
+//                String recordId = recordRows.get(position).getId();
+//                map.put("id", recordId);
+//            }
+////            map.put("token", token);
+//            map.put("uid", uid);
+//            map.put("pcid", id);
+//            map.put("size", duration);
+//            map.put("duration", recorderSecondsElapsed);
+//            map.put("language", language);
+//            RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
+//            MultipartBody.Part part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
+////            map.put("path", UrlConstants.RequestUrl.MP3_URL + key);
+//            presenter.getSaveRecordData(map, part);
+//        }
 
     }
 
@@ -421,35 +443,37 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
      * */
     public void upAudio() {
         ArrayMap<String, Object> map = new ArrayMap<>();
-        if (photoRows != null && photoRows.size() > position) {
-            String id = photoRows.get(position).getId();
+        // TODO: 2018/8/9 高鹏 这里需要和修改
+//        if (photoRows != null && photoRows.size() > position) {
+//            String id = photoRows.get(position).getId();
 
-            double duration = 0;
-            long fileSize = 0;
-            try {
-                file = new File(filePath);
-                fileSize = SDFileHelper.getFileSize(new File(filePath));
-                double rint = SDFileHelper.FormetFileSize(fileSize);
-                duration = Math.rint(rint * 100) / 100;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (recordRows != null && recordRows.size() > position) {
-                String recordId = recordRows.get(position).getId();
-                map.put("id", recordId);
-            } else {
-                map.put("id", "0");
-            }
-//            map.put("token", token);
-            map.put("uid", uid);
-            map.put("size", fileSize);
-            map.put("duration", (long) recorderSecondsElapsed);
-            map.put("language", language); //application/x-www-form-urlencoded ,multipart/form-data
-            map.put("resolution", ScreenUtils.getScreenWidth() + "*" + ScreenUtils.getScreenHeight());//手机分辨率
-            RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
-            presenter.getSaveRecordData(map, part);
+        double duration = 0;
+        long fileSize = 0;
+        try {
+            file = new File(filePath);
+            fileSize = SDFileHelper.getFileSize(new File(filePath));
+            double rint = SDFileHelper.FormetFileSize(fileSize);
+            duration = Math.rint(rint * 100) / 100;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+//            if (recordRows != null && recordRows.size() > position) {
+//                String recordId = recordRows.get(position).getId();
+//                map.put("id", recordId);
+//            } else {
+        map.put("id", "");//修改录音是使用，第一次录音 传 “”
+//            }
+//            map.put("token", token);
+        map.put("uid", uid);
+        map.put("pid", dataList.get(position).getDubbingVO().getPcid());
+        map.put("size", fileSize);
+        map.put("duration", (long) recorderSecondsElapsed);
+        map.put("language", language); //application/x-www-form-urlencoded ,multipart/form-data
+        map.put("resolution", ScreenUtils.getScreenWidth() + "*" + ScreenUtils.getScreenHeight());//手机分辨率
+        RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
+        presenter.getSaveRecordData(map, part);
+//        }
 
 
     }
@@ -528,11 +552,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
 
     private static class ImageAdapter extends PagerAdapter {
 
-        private List<String> viewlist;
+        private List<DubbingVO> viewlist;
         private BaseActivity activity;
 
 
-        public ImageAdapter(BaseActivity activity, List<String> viewlist) {
+        public ImageAdapter(BaseActivity activity, List<DubbingVO> viewlist) {
             this.viewlist = viewlist;
             this.activity = activity;
         }
@@ -562,7 +586,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             if (position < 0) {
                 position = viewlist.size() + position;
             }
-            String path = viewlist.get(position);
+            String path = viewlist.get(position).getUrl();
             //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
             ViewParent vp = imageView.getParent();
             if (vp != null) {
@@ -600,12 +624,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 switch (typeActivity) {
                     case "wait_dubbing":
                         position++;
-                        if (photoRows != null)
-                            if (position == photoRows.size()) {
-                                Utils.showToast(R.string.complete_dubbing);
-                                setResult(3000);
-                                finish();
-                            }
+//                        if (photoRows != null)
+//                            if (position == photoRows.size()) {
+//                                Utils.showToast(R.string.complete_dubbing);
+//                                setResult(3000);
+//                                finish();
+//                            }
                         if (position < itemClickAdapte.getItemCount()) {
                             itemClickAdapte.setSelectedPosition(position);
                             itemClickAdapte.notifyDataSetChanged();
@@ -624,9 +648,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private void sendData304(float x, float y, int type) {
         myType = type;
         HashMap<String, Object> map = new HashMap<>();
-        map.put("pid", "");
+        map.put("pid", pid);
         map.put("imgid", "");
-        map.put("language", "中英文？");
+        map.put("language", language);
         map.put("type", type + "");// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
         map.put("time", recorderSecondsElapsed + "");
         map.put("x", x);
@@ -635,11 +659,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     }
 
     @Override
-    public void onSuccessNew(String url, BaseBean baseEntity) {
-        super.onSuccessNew(url, baseEntity);
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
         switch (url) {
             case "304":
-                switch (type) {
+                switch (myType) {
                     case 4:
                         ToastUtils.showShort("调用开始！");
                         break;
@@ -649,7 +673,24 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                     default:
                         break;
                 }
-
+                break;
+            case "317"://论文图片信息
+                DubbingBean bean = (DubbingBean) baseBean;
+                for (DubbingVO vo : bean.getList()) {
+                    ClickEntity clickEntity = new ClickEntity();
+                    clickEntity.setDubbingVO(vo);
+                    dataList.add(clickEntity);
+                }
+                viewPager.setAdapter(new ImageAdapter(this, bean.getList()));
+                viewPager.addOnPageChangeListener(this);
+                viewPager.setCurrentItem(position);
+                itemClickAdapte = new ItemClickAdapter(this, R.layout.item_paper_pic, dataList, "paper_pic");
+                itemClickAdapte.setOnItemClickListener(this);
+                itemClickAdapte.setSelectedPosition(position);
+                itemClickAdapte.notifyDataSetChanged();
+                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setAdapter(itemClickAdapte);
+                recyclerView.scrollToPosition(position);
                 break;
             default:
                 break;
