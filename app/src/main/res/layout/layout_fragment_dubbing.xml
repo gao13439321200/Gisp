@@ -56,7 +56,7 @@
                         android:layout_height="30dp"
                         android:layout_alignBottom="@+id/img_big"
                         android:layout_alignRight="@+id/img_big"
-                        android:background="@mipmap/dubbing_determine"/>
+                        android:background="@mipmap/yes"/>
 
                     <Button
                         android:id="@+id/btn_no"
@@ -64,7 +64,7 @@
                         android:layout_height="30dp"
                         android:layout_alignBottom="@+id/img_big"
                         android:layout_alignLeft="@+id/img_big"
-                        android:background="@mipmap/guide_delete_icon"/>
+                        android:background="@mipmap/no"/>
 
 
                 </RelativeLayout>

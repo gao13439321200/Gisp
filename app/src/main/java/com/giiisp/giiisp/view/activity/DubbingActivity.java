@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -90,6 +91,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     ImageView mImgFull;
     @BindView(R.id.btn_small)
     Button mBtnSmall;
+    @BindView(R.id.tv_mark)
+    TextView mTvMark;
 
 
     String typeActivity;
@@ -106,7 +109,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private boolean canMark = false;
     private boolean showDiaoYong = false;
     private int myType = 0;
-    private String pid = "";
+    private String pid = "";//论文id
+    private String imgId = "";//录音图片id
     private List<ClickEntity> dataList = new ArrayList<>();
 
 
@@ -356,16 +360,23 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 break;
             case R.id.iv_left_slip://上一张图片
                 viewPager.setCurrentItem(viewPager.getCurrentItem() > 1 ? viewPager.getCurrentItem() - 1 : 0);
+                //设置是否显示标记按钮
+                mTvMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
+                mCbMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
                 break;
             case R.id.iv_right_slide://下一张图片
                 viewPager.setCurrentItem(viewPager.getCurrentItem() < viewPager.getChildCount() ? viewPager.getCurrentItem() + 1 : 0);
+                //设置是否显示标记按钮
+                mTvMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
+                mCbMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
                 break;
             case R.id.iv_btn://录音
                 toggleRecording(view);
                 break;
             case R.id.btn_full://全屏
-                // TODO: 2018/8/7 高鹏 这里需要设置图片的地址
-                GlideApp.with(this).load("图片地址").into(mImgFull);
+                GlideApp.with(this)
+                        .load(dataList.get(viewPager.getCurrentItem()).getDubbingVO().getUrl())
+                        .into(mImgFull);
                 ScreenUtils.setLandscape(this);
                 mImgFull.setVisibility(View.VISIBLE);
                 mBtnSmall.setVisibility(View.VISIBLE);
@@ -443,27 +454,23 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
      * */
     public void upAudio() {
         ArrayMap<String, Object> map = new ArrayMap<>();
-        // TODO: 2018/8/9 高鹏 这里需要和修改
-//        if (photoRows != null && photoRows.size() > position) {
-//            String id = photoRows.get(position).getId();
-
-        double duration = 0;
+//        double duration = 0;
         long fileSize = 0;
+        file = new File(filePath);
         try {
-            file = new File(filePath);
             fileSize = SDFileHelper.getFileSize(new File(filePath));
-            double rint = SDFileHelper.FormetFileSize(fileSize);
-            duration = Math.rint(rint * 100) / 100;
+//            double rint = SDFileHelper.FormetFileSize(fileSize);
+//            duration = Math.rint(rint * 100) / 100;
         } catch (Exception e) {
             e.printStackTrace();
         }
-//            if (recordRows != null && recordRows.size() > position) {
-//                String recordId = recordRows.get(position).getId();
-//                map.put("id", recordId);
-//            } else {
-        map.put("id", "");//修改录音是使用，第一次录音 传 “”
-//            }
-//            map.put("token", token);
+//      if (recordRows != null && recordRows.size() > position) {
+//          String recordId = recordRows.get(position).getId();
+//          map.put("id", recordId);
+//      } else {
+        map.put("id", dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRid());//修改录音是使用，第一次录音 传 “”
+//      }
+//      map.put("token", token);
         map.put("uid", uid);
         map.put("pid", dataList.get(position).getDubbingVO().getPcid());
         map.put("size", fileSize);
@@ -522,6 +529,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         if (typeActivity != null)
             switch (typeActivity) {
                 case "wait_dubbing":
+
                     break;
                 case "edit_dubbing":
                     this.position = position;
@@ -649,7 +657,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         myType = type;
         HashMap<String, Object> map = new HashMap<>();
         map.put("pid", pid);
-        map.put("imgid", "");
+        map.put("imgid", getImageId());
         map.put("language", language);
         map.put("type", type + "");// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
         map.put("time", recorderSecondsElapsed + "");
@@ -681,6 +689,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                     clickEntity.setDubbingVO(vo);
                     dataList.add(clickEntity);
                 }
+                //确定第一个未录音的图片位置，如果全都录过了就是从修改进来的，默认也是从第0个开始
+                for (int i = 0; i < bean.getList().size(); i++) {
+                    if (ObjectUtils.isEmpty(bean.getList().get(i).getRid())) {
+                        position = i;
+                        break;
+                    }
+                }
                 viewPager.setAdapter(new ImageAdapter(this, bean.getList()));
                 viewPager.addOnPageChangeListener(this);
                 viewPager.setCurrentItem(position);
@@ -695,5 +710,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             default:
                 break;
         }
+    }
+
+    private String getImageId() {
+        return dataList.get(viewPager.getCurrentItem()).getDubbingVO().getPcid();
     }
 }
