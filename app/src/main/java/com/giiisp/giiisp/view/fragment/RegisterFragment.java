@@ -12,6 +12,7 @@ import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.LoginBean;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.CountDownTimerUtils;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
@@ -209,7 +210,7 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     }
 
     @Override
-    public void onSuccess(String url, BaseBean entity) {
+    public void onSuccessNew(String url, BaseBean entity) {
         switch (url) {
             case "101":
                 //发送验证码成功！
@@ -231,5 +232,10 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onSuccess(BaseEntity entity) {
+
     }
 }

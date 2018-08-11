@@ -19,7 +19,9 @@ import com.giiisp.giiisp.dto.FollowBean;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.LoginBean;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.dto.MajorBean;
+import com.giiisp.giiisp.dto.MyAnswerBean;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperInfoBean;
 import com.giiisp.giiisp.dto.PaperLiteratureBean;
@@ -1467,11 +1469,18 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             case "209":
                 baseEntity = new Gson().fromJson(cipher, PaperMainBean.class);
                 break;
+            case "306":
+                baseEntity = new Gson().fromJson(cipher, MIneInfoBean.class);
+                break;
             case "307":
                 baseEntity = new Gson().fromJson(cipher, FansBean.class);
                 break;
             case "308":
                 baseEntity = new Gson().fromJson(cipher, FollowBean.class);
+                break;
+            case "313":
+            case "314":
+                baseEntity = new Gson().fromJson(cipher, MyAnswerBean.class);
                 break;
             case "316":
                 baseEntity = new Gson().fromJson(cipher, DubbingListBean.class);

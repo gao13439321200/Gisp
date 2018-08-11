@@ -1,6 +1,6 @@
 package com.giiisp.giiisp.view.fragment;
 
-import android.support.v4.util.ArrayMap;
+import android.annotation.SuppressLint;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +13,8 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -25,9 +27,8 @@ import com.giiisp.giiisp.view.activity.SettingActivity;
 import com.giiisp.giiisp.view.activity.VerifiedActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -106,6 +107,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //    TextView tvUserWeb;
     @BindView(R.id.tv_verified)
     TextView tvVerified;
+    @BindView(R.id.tv_code_number)
+    TextView mTvCodeNumber;
+    @BindView(R.id.tv_time_number)
+    TextView mTvTimeNumber;
     private int downloadNunber;
     private String imageUrl = "";
 
@@ -120,14 +125,15 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             swipeRefreshLayout.setRefreshing(false);
         }
         if (entity instanceof UserInfoEntity) {
-            UserInfoEntity userInfoEntity = (UserInfoEntity) entity;
-            if (userInfoEntity.getUserInfo() != null) {
-                initUser(userInfoEntity);
-            }
+//            UserInfoEntity userInfoEntity = (UserInfoEntity) entity;
+//            if (userInfoEntity.getUserInfo() != null) {
+//                initUser(userInfoEntity);
+//            }
         }
     }
 
-    private void initUser(UserInfoEntity userInfoEntity) {
+    @SuppressLint("SetTextI18n")
+    private void initUser(MIneInfoBean infoBean) {
         if (context == null)
             return;
         timeout = false;
@@ -135,21 +141,19 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             return;
         }
         emptyView.setVisibility(View.GONE);
-        EventBus.getDefault().post(userInfoEntity);
-        UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
-        String nickName = userInfo.getRealName();
-        String avatar = userInfo.getAvatar();
+//        EventBus.getDefault().post(userInfoEntity);
+//        UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
+        String avatar = infoBean.getAvatar();
         if (!avatar.equals(imageUrl))
             ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), avatar, ivUserIcon);
         imageUrl = avatar;
-        tvUserName.setText(nickName);
-        tvUserEmail.setText(userInfo.getEmail());
-        int sex = userInfo.getSex();
-        String web = userInfo.getWeb();
-        if (sex == 1) {
+        tvUserName.setText(infoBean.getName());
+        tvUserEmail.setText(infoBean.getEmail());
+        String sex = infoBean.getSex();
+        if ("1".equals(sex)) {
             ivSex.setImageResource(R.mipmap.ic_sex_male);
         }
-        if (sex == 2) {
+        if ("2".equals(sex)) {
             ivSex.setImageResource(R.mipmap.ic_sex_female);
         }
 //        if (TextUtils.isEmpty(web)) {
@@ -157,39 +161,35 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //        } else {
 //            tvUserWeb.setText(web);
 //        }
-        ArrayMap<String, Object> map = new ArrayMap<>();
-        map.put("uid", uid);
+//        ArrayMap<String, Object> map = new ArrayMap<>();
+//        map.put("uid", uid);
 //        map.put("token", token);
-        map.put("mobile", userInfo.getMobile() + "");
-        map.put("loginType", 2);
+//        map.put("mobile", userInfo.getMobile() + "");
+//        map.put("loginType", 2);
 //        presenter.saveClientTypeData(map);
 //        if (Utils.checkMobileNumber(userInfo.getMobile())) {
 //            tvUserPhone.setText(userInfo.getMobile());
 //        } else {
 //            tvUserPhone.setText("未绑定手机号码");
 //        }
-        if (Utils.checkEmail(userInfo.getEmail())) {
-            tvUserEmail.setText(userInfo.getEmail());
-        } else {
-            tvUserEmail.setText("未绑定邮箱");
-        }
-        if (TextUtils.isEmpty(userInfo.getEmailauthen())) {  //  Test TextUtils.isEmpty(userInfo.getIsVIP()) 修改字段 isvip 替换
-            Log.d("Presenter", "initUser: isIVP: " + userInfo.getIsVIP());
+        tvUserEmail.setText(Utils.checkEmail(infoBean.getEmail()) ? infoBean.getEmail() : "未绑定邮箱");
+        if (TextUtils.isEmpty(infoBean.getEmailauthen())) {  //  Test TextUtils.isEmpty(userInfo.getIsVIP()) 修改字段 isvip 替换
+            Log.d("Presenter", "initUser: isIVP: " + infoBean.getIsvip());
             emailauthen = "0";
             tvRecordinAuthentication.setText("去认证");
             tvRecordinAuthentication.setCompoundDrawables(null, null, null, null);
         } else {
-            emailauthen = userInfo.getEmailauthen(); // isvip = 1,2 认证完成 （身份认证判断），0 ：身份认证，3：认证中；
-            isVip = userInfo.getIsVIP();
+            emailauthen = infoBean.getEmailauthen(); // isvip = 1,2 认证完成 （身份认证判断），0 ：身份认证，3：认证中；
+            isVip = infoBean.getIsvip();
             switch (emailauthen) { // 新认证字段 // userInfo.getEmailauthen()
-                case "0":
+                case "3":
                     tvRecordinAuthentication.setText("去认证");
                     tvRecordinAuthentication.setCompoundDrawables(null, null, null, null);
                     break;
-                case "1":
+                case "2":
                     tvRecordinAuthentication.setText("开始配音");
                     break;
-                case "2":
+                case "1":
                     tvRecordinAuthentication.setText("正在认证中");
                     break;
                 default:
@@ -213,18 +213,16 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     break;
             }
         }
-        tvPrompt.setText(userInfo.getSchool() + " " + userInfo.getDegree());
-        if (!TextUtils.isEmpty(userInfo.getDomain()) && TextUtils.isEmpty(userInfo.getPosition())) {
-            tvUserPosition.setText(userInfo.getDomain() + " " + userInfo.getPosition());
+        tvPrompt.setText(infoBean.getSchool());
+        if (!TextUtils.isEmpty(infoBean.getDepartment()) && TextUtils.isEmpty(infoBean.getPosition())) {
+            tvUserPosition.setText(infoBean.getDepartment() + "|" + infoBean.getPosition());
         } else {
             tvUserPosition.setVisibility(View.GONE);
         }
-        if (userInfoEntity.getNum() != null) {
-            tvFollowNumber.setText(String.valueOf(userInfoEntity.getNum().getFollowNum()));
-            tvFansNumber.setText(String.valueOf(userInfoEntity.getNum().getFollowedNum()));
-//            tvPaperNumber.setText(String.valueOf(userInfoEntity.getNum().getPaperNum()));
-//            tvReviewNumber.setText(String.valueOf(userInfoEntity.getNum().getSummarizeNum()));
-        }
+        tvFansNumber.setText(infoBean.getFansnum());
+        tvFollowNumber.setText(infoBean.getFollownum());
+        mTvCodeNumber.setText(infoBean.getScore() + "分");
+        mTvTimeNumber.setText(infoBean.getStudytime() + "小时");
     }
 
     @Override
@@ -264,15 +262,9 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 
     @Override
     public void initNetwork() {
-        ArrayMap<String, Object> userMap = new ArrayMap<>();
-        //        userMap.put("token", "A760880003E7DDEDFEF56ACB3B09697F");
-//        userMap.put("token", token);
-        //        userMap.put("oid", 1);
-        userMap.put("uid", uid);
-        if (presenter != null)
-            presenter.getUserInfoData(userMap);
-        //        presenter.getUserNumsData(uid+"", token);
-        Log.i("--->>", "initNetwork: " + "MINE");
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("uid", getUserID());
+        presenter.getDataAll("306", map);
         super.initNetwork();
     }
 
@@ -366,7 +358,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.tv_fans:
                 FragmentActivity.actionActivity(getContext(), "mine_scholar", uid + "");
                 break;
-            case R.id.fl_mine_qa:
+            case R.id.fl_mine_qa://问答
                 FragmentActivity.actionActivity(getContext(), "qa");
                 break;
             case R.id.fl_mine_download:
@@ -445,5 +437,18 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     public void onRefresh() {
         initNetwork();
         loadDownloadNunber();
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
+        switch (url) {
+            case "306":
+                MIneInfoBean bean = (MIneInfoBean) baseBean;
+                initUser(bean);
+                break;
+            default:
+                break;
+        }
     }
 }

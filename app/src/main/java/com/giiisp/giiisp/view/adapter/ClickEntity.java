@@ -14,6 +14,7 @@ import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
+import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperLiteratureVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
@@ -371,6 +372,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private FollowVO mFollowVO;
     private DubbingListVO mDubbingListVO;
     private DubbingVO mDubbingVO;
+    private MyAnswerVO mMyAnswerVO;
+
+    public MyAnswerVO getMyAnswerVO() {
+        return mMyAnswerVO;
+    }
+
+    public void setMyAnswerVO(MyAnswerVO myAnswerVO) {
+        mMyAnswerVO = myAnswerVO;
+    }
 
     public DubbingVO getDubbingVO() {
         return mDubbingVO;

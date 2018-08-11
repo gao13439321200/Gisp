@@ -39,6 +39,8 @@ import com.giiisp.giiisp.dto.FansBean;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowBean;
 import com.giiisp.giiisp.dto.FollowVO;
+import com.giiisp.giiisp.dto.MyAnswerBean;
+import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperLiteratureBean;
 import com.giiisp.giiisp.dto.PaperLiteratureVO;
@@ -1088,14 +1090,20 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 presenter.getMsgListData(map);
                 break;
             case "answer":
-                map.put("page", page);
-                map.put("uid", uid);
-                presenter.getListAnswerData(map);
+//                map.put("page", page);
+//                map.put("uid", uid);
+//                presenter.getListAnswerData(map);
+                hMap.put("pageno", page);
+                hMap.put("uid", getUserID());
+                presenter.getDataAll("314", hMap);
                 break;
             case "questions":
-                map.put("uid", uid);
-                map.put("page", page);
-                presenter.getListQuizData(map);
+//                map.put("uid", uid);
+//                map.put("page", page);
+//                presenter.getListQuizData(map);
+                hMap.put("pageno", page);
+                hMap.put("uid", getUserID());
+                presenter.getDataAll("313", hMap);
                 break;
             case "search_hint":
                 map.put("uid", uid);
@@ -2898,6 +2906,33 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     dubbingAdapter.loadMoreEnd(false);
                 }
                 dubbingAdapter.expandAll();
+                break;
+            case "313"://我的提问
+            case "314"://我的回答
+
+                MyAnswerBean bean5 = (MyAnswerBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (bean5.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+
+                for (MyAnswerVO vo : bean5.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setMyAnswerVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+
+                if (bean5.getList().size() == pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                itemClickAdapter.expandAll();
                 break;
             case "318"://发布论文
                 ToastUtils.showShort("发布成功！");

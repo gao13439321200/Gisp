@@ -23,10 +23,9 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
+import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
-import com.giiisp.giiisp.entity.AnswerQUizXBean;
-import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
 import com.giiisp.giiisp.entity.DownloadController;
 import com.giiisp.giiisp.entity.HomeSearchEntity;
@@ -422,32 +421,29 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         ImageLoader.getInstance().displayCricleImage(activity, msgEntity.getAAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
                     }
                     break;
-                case R.layout.item_message_answers:
-                    AnswerQuizRowsBean answerQuizRowsBean = item.getAnswerQuizRowsBean();
-                    if (answerQuizRowsBean == null)
+                case R.layout.item_message_answers://我的回答
+                    MyAnswerVO myAnswerVO = item.getMyAnswerVO();
+                    if (myAnswerVO == null)
                         return;
-                    helper.setText(R.id.tv_answers_content, answerQuizRowsBean.getAnswer());
-                    helper.setText(R.id.tv_time, answerQuizRowsBean.getCreateTime());
-                    helper.setText(R.id.tv_problem_title, answerQuizRowsBean.getQuiz());
-                    helper.setText(R.id.tv_user_name, answerQuizRowsBean.getRealName());
-                    helper.setVisible(R.id.tv_answers_content, !TextUtils.isEmpty(answerQuizRowsBean.getAnswer()));
-                    helper.setVisible(R.id.tv_answers, !TextUtils.isEmpty(answerQuizRowsBean.getAnswer()));
-                    ImageLoader.getInstance().displayCricleImage(activity, answerQuizRowsBean.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
+                    helper.setText(R.id.tv_answers_content, myAnswerVO.getAnswer());
+                    helper.setText(R.id.tv_time, myAnswerVO.getCreatetime());
+                    helper.setText(R.id.tv_problem_title, myAnswerVO.getQuiz());
+                    helper.setText(R.id.tv_user_name, myAnswerVO.getUsername());
+                    helper.setVisible(R.id.tv_answers_content, !TextUtils.isEmpty(myAnswerVO.getAnswer()));
+                    helper.setVisible(R.id.tv_answers, !TextUtils.isEmpty(myAnswerVO.getAnswer()));
+                    ImageLoader.getInstance().displayCricleImage(activity, myAnswerVO.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
 
 
                     break;
-                case R.layout.item_message_questions:
-                    AnswerQUizXBean answerQUizXBean = item.getAnswerQUizXBean();
-                    if (answerQUizXBean == null)
-                        return;
-                    helper.setText(R.id.tv_time, answerQUizXBean.getCreateTime());
-                    helper.setText(R.id.tv_problem_title, answerQUizXBean.getContent());
-                    List<AnswerQuizRowsBean> rows = answerQUizXBean.getAnswer().getRows();
-                    if (rows != null && rows.size() > 0) {
+                case R.layout.item_message_questions://我的提问
+                    MyAnswerVO myQaVO = item.getMyAnswerVO();
+                    helper.setText(R.id.tv_time, myQaVO.getCreatetime());
+                    helper.setText(R.id.tv_problem_title, myQaVO.getQuiz());
+                    if ("1".equals(myQaVO.getHasanswer())) {
                         helper.setVisible(R.id.tv_answers_content, true);
                         helper.setVisible(R.id.tv_answers, true);
-                        helper.setText(R.id.tv_answers_content, rows.get(0).getAnswer());
-                        helper.setText(R.id.tv_answers, rows.get(0).getRealName() + " 答");
+                        helper.setText(R.id.tv_answers_content, myQaVO.getAnswer());
+                        helper.setText(R.id.tv_answers, myQaVO.getAusername() + " 答");
                     } else {
                         helper.setVisible(R.id.tv_answers_content, false);
                         helper.setVisible(R.id.tv_answers, false);
