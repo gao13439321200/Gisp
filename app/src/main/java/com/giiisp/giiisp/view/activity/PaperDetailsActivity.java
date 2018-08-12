@@ -811,7 +811,7 @@ public class PaperDetailsActivity extends
                     }
 
                 break;
-            case R.id.fl_collection:
+            case R.id.fl_collection://收藏
                 if (BaseActivity.uid.equals("15")) {
                     AlertDialog.Builder normalDialog = new AlertDialog.Builder(this);
                     normalDialog.setIcon(null);
@@ -830,7 +830,7 @@ public class PaperDetailsActivity extends
                     collection();
                 }
                 break;
-            case R.id.fl_paper_play:
+            case R.id.fl_paper_play://播放记录
                 FragmentActivity.actionActivity(this, "play");
                 break;
             case R.id.fl_download:

@@ -2721,7 +2721,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.loadMoreEnd(false);
                     return;
                 }
-                if (page == 1) {
+                if (page == 0) {
                     itemClickAdapter.setNewData(null);
                 }
                 ClickEntity entity = new ClickEntity();
