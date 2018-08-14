@@ -1032,17 +1032,23 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "download":
                 loadDownloadData();
                 break;
-            case "my_paper":
+            case "my_paper"://我的论文
                 hMap.put("uid", getUserID());
-                hMap.put("type", 1);
-                presenter.getDataAll("203", hMap);
+                hMap.put("pageno", page);
+                hMap.put("type", "1");
+                presenter.getDataAll("312", hMap);
                 break;
-            case "my_review":
-                map.put("uid", uid);
-                map.put("page", page);
+            case "my_review"://我的综述
+//                map.put("uid", uid);
+//                map.put("page", page);
+//
+//                map.put("isOneOrTwo", 2);
+//                presenter.getListNewPaperData(map);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+                hMap.put("type", "2");
+                presenter.getDataAll("312", hMap);
 
-                map.put("isOneOrTwo", 2);
-                presenter.getListNewPaperData(map);
                 break;
             case "collection_paper":
                 map.put("uid", uid);
@@ -2731,6 +2737,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 break;
             case "209"://首页的论文和综述
+            case "312"://我的论文和综述
                 PaperMainBean mainBean = (PaperMainBean) baseBean;
                 itemClickAdapter.loadMoreComplete();
                 if (itemClickAdapter == null || mainBean == null
