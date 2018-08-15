@@ -371,6 +371,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 mCbMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
                 break;
             case R.id.iv_btn://录音
+                imgId = getImageId();
                 toggleRecording(view);
                 break;
             case R.id.btn_full://全屏
@@ -657,10 +658,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         myType = type;
         HashMap<String, Object> map = new HashMap<>();
         map.put("pid", pid);
-        map.put("imgid", getImageId());
         map.put("language", language);
         map.put("type", type + "");// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
         map.put("time", recorderSecondsElapsed + "");
+        map.put("imgid", imgId);
+        map.put("timgid", type == 4 || type == 5 ? getImageId() : "");
         map.put("x", x);
         map.put("y", y);
         presenter.getDataAll("304", map);

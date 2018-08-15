@@ -1903,13 +1903,23 @@ public class PaperDetailsActivity extends
                     photoList = new ArrayList<>();
                 }
                 for (PaperInfoVO vo : bean.getImglist()) {
-                    itemClickAdapter.addData(new ClickEntity(vo.getUrl(), vo.getId()));
+                    ClickEntity entity = new ClickEntity();
+                    entity.setPaperInfoVO(vo);
+                    itemClickAdapter.addData(entity);
                     photoList.add(vo.getUrl());
                     imageId.add(vo.getId());
                 }
                 if (!TextUtils.isEmpty(bean.getDigest()))
                     title = bean.getDigest();
 
+                if (bean.getImglist() != null && bean.getImglist().size() != 0) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("iid", bean.getImglist().get(0).getId());
+                    presenter.getDataAll("205", map);
+                }
+
+                break;
+            case "205"://获取论文语音
 
 
 

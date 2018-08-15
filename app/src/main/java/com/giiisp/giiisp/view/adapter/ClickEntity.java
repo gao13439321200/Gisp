@@ -16,6 +16,7 @@ import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
+import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.dto.PaperLiteratureVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
@@ -373,6 +374,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private DubbingListVO mDubbingListVO;
     private DubbingVO mDubbingVO;
     private MyAnswerVO mMyAnswerVO;
+    private PaperInfoVO mPaperInfoVO;
+
+    public PaperInfoVO getPaperInfoVO() {
+        return mPaperInfoVO;
+    }
+
+    public void setPaperInfoVO(PaperInfoVO paperInfoVO) {
+        mPaperInfoVO = paperInfoVO;
+    }
 
     public MyAnswerVO getMyAnswerVO() {
         return mMyAnswerVO;

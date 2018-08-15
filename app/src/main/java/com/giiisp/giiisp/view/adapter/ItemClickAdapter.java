@@ -24,6 +24,7 @@ import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
+import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -721,7 +722,22 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_title, item.getString());
                     ImageLoader.getInstance().displayImage(activity, item.getUrl(), (ImageView) helper.getView(R.id.iv_icon));
                     break;
-                case R.layout.item_paper_pic:
+                case R.layout.item_paper_pic://论文详情
+                    PaperInfoVO infoVO = item.getPaperInfoVO();
+                    View bg = helper.getView(R.id.iv_bg);
+                    if (helper.getLayoutPosition() == selectedPosition) {
+                        Log.i("-->>", "convert: " + selectedPosition);
+                        bg.setVisibility(View.INVISIBLE);
+                    } else {
+                        bg.setVisibility(View.VISIBLE);
+                    }
+                    if ("mp4".equals(FileUtils.parseSuffix(infoVO.getUrl()))) { // 视频
+                        ImageView imageView1 = helper.getView(R.id.iv_pic);
+                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(infoVO.getUrl(), 1));
+                    } else {
+                        ImageLoader.getInstance().displayImage(activity, infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                    }
+                    break;
                 case R.layout.item_paperpull_pic: // TODO 图片+视频
                     DubbingVO vo = item.getDubbingVO();
                     View viewBg = helper.getView(R.id.iv_bg);
