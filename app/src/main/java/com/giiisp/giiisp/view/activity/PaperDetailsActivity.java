@@ -43,6 +43,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
@@ -51,6 +52,7 @@ import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.ImgInfoBean;
 import com.giiisp.giiisp.dto.PaperInfoBean;
 import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.entity.BaseEntity;
@@ -239,6 +241,9 @@ public class PaperDetailsActivity extends
     private String string = "";
     private List<Song> queueCN = new ArrayList<>();
     private List<Song> queueEN = new ArrayList<>();
+    private Song songCN;
+    private Song songEN;
+
     private String language = "";
     private String title = "";
     private String firstPic = "";
@@ -324,14 +329,7 @@ public class PaperDetailsActivity extends
         return R.layout.layout_fragment_paperdetails;
     }
 
-    public static void actionActivity(Context context, int id, String type) {
-        Intent sIntent = new Intent(context, PaperDetailsActivity.class);
-        sIntent.putExtra("id", id);
-        sIntent.putExtra("type", type);
-        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(sIntent);
-    }
-
+    //所有入口
     public static void actionActivity(Context context, String id, ArrayList<String> version, String type) {
         Intent sIntent = new Intent(context, PaperDetailsActivity.class);
         sIntent.putExtra("id", id);
@@ -341,6 +339,7 @@ public class PaperDetailsActivity extends
         context.startActivity(sIntent);
     }
 
+    //下载页
     public static void actionActivity(Context context, String id, ArrayList<String> recordOneRows, ArrayList<String> recordTwoRows, ArrayList<String> photoRows, String type, String title) {
         Intent sIntent = new Intent(context, PaperDetailsActivity.class);
         sIntent.putExtra("id", id);
@@ -349,12 +348,6 @@ public class PaperDetailsActivity extends
         sIntent.putStringArrayListExtra("recordTwoRows", recordTwoRows);
         sIntent.putStringArrayListExtra("photoRows", photoRows);
         sIntent.putExtra("title", title);
-        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(sIntent);
-    }
-
-    public static void actionActivity(Context context) {
-        Intent sIntent = new Intent(context, PaperDetailsActivity.class);
         sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(sIntent);
     }
@@ -512,7 +505,7 @@ public class PaperDetailsActivity extends
                 initNetwork();
 
                 break;
-            case "wait_dubbing":
+            case "wait_dubbing"://待配音
                 linerBottomComm.setVisibility(View.GONE);
                 ArrayMap<String, Object> dubbingMap = new ArrayMap<>();
 //                dubbingMap.put("token", token);
@@ -523,7 +516,7 @@ public class PaperDetailsActivity extends
                 presenter.getPaperBaseByIdData(dubbingMap);
                 llEmptyView.setVisibility(View.GONE);
                 break;
-            case "download_paper":
+            case "download_paper"://下载
                 linerBottomComm.setVisibility(View.GONE);
                 llEmptyView.setVisibility(View.GONE);
                 if (getPlayService() != null) {
@@ -569,7 +562,6 @@ public class PaperDetailsActivity extends
                                     song.setPhotoPath(photoList.get(i));
                                 song.setPath(recordOneList.get(i));
                                 song.setTitle(title);
-                                //                Log.i("--->>", "onSuccess: " + AudioPlayer.getDurationLocation(this, recordList.get(i)));
                                 song.setDuration((int) AudioPlayer.getDurationLocation(this, recordOneList.get(i)) / 1000);
                                 queueCN.add(song);
                             }
@@ -582,7 +574,6 @@ public class PaperDetailsActivity extends
                                 if (photoList != null && photoList.size() > i)
                                     song.setPhotoPath(photoList.get(i));
                                 song.setPath(recordTwoList.get(i));
-                                //                Log.i("--->>", "onSuccess: " + AudioPlayer.getDurationLocation(this, recordList.get(i)));
                                 song.setDuration((int) AudioPlayer.getDurationLocation(this, recordTwoList.get(i)) / 1000);
                                 queueEN.add(song);
                             }
@@ -715,39 +706,39 @@ public class PaperDetailsActivity extends
 
                 break;
             case R.id.tv_cn:
-                if (getPlayService() != null) {
-                    language = "CN";
-                    PlayService playService = getPlayService();
-                    playService.setmMusicList(queueCN);
-                    playService.play(0);
-                    tvCn.setEnabled(false);
-                    tvCn.setSelected(false);
-                    tvEn.setEnabled(true);
-                    tvEn.setSelected(true);
+                if (getPlayService() != null && songCN != null) {
+                    changeLanguage(true);
+                } else {
+                    ToastUtils.showShort("暂无中文版录音");
                 }
                 Log.i("--->>", "onViewClicked: tv_cn");
                 break;
             case R.id.tv_en:
                 Log.i("--->>", "onViewClicked: tv_en");
-                if (getPlayService() != null) {
-                    language = "EN";
-                    PlayService playService = getPlayService();
-                    playService.setmMusicList(queueEN);
-                    playService.play(0);
-                    tvCn.setEnabled(true);
-                    tvCn.setSelected(true);
-                    tvEn.setEnabled(false);
-                    tvEn.setSelected(false);
+                if (getPlayService() != null && songEN != null) {
+                    changeLanguage(false);
+                } else {
+                    ToastUtils.showShort("暂无英文版录音");
                 }
                 break;
             case R.id.iv_fast_forward://下一页
-                if (getPlayService() != null)
-                    getPlayService().next();
+                if (getPlayService() != null) {
+                    if (position < imageId.size() - 1) {
+                        getImageInfo(imageId.get(position + 1));
+                    } else {
+                        ToastUtils.showShort("已经是最后一张了");
+                    }
+                }
 
                 break;
             case R.id.iv_back_off://上一页
-                if (getPlayService() != null)
-                    getPlayService().prev();
+                if (getPlayService() != null) {
+                    if (position > 0) {
+                        getImageInfo(imageId.get(position - 1));
+                    } else {
+                        ToastUtils.showShort("已经是第一张了");
+                    }
+                }
 
                 break;
             case R.id.iv_play_stop://暂停
@@ -930,6 +921,16 @@ public class PaperDetailsActivity extends
                 }
                 break;
         }
+    }
+
+    //切换语言
+    private void changeLanguage(boolean isCN) {
+        language = isCN ? "CN" : "EN";
+        getPlayService().play(isCN ? songCN : songEN);
+        tvCn.setEnabled(isCN);
+        tvCn.setSelected(isCN);
+        tvEn.setEnabled(!isCN);
+        tvEn.setSelected(!isCN);
     }
 
     private void collection() {
@@ -1168,8 +1169,10 @@ public class PaperDetailsActivity extends
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
         if (this.position != position) {
-            if (getPlayService() != null)
-                getPlayService().play(position);
+            this.position = position;
+//            if (getPlayService() != null)
+//                getPlayService().play(position);
+            getImageInfo(imageId.get(position));
         }
 
 
@@ -1181,6 +1184,7 @@ public class PaperDetailsActivity extends
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onPageSelected(int position) {
         this.position = position;
@@ -1238,7 +1242,6 @@ public class PaperDetailsActivity extends
             return;
 
         if (entity instanceof PaperEntity) {
-            Log.i("--->>", "onSuccess: " + entity.getInfo());
         } else if (entity instanceof LiteratureEntity) {
 
         } else if (entity instanceof PaperDatailEntity) {
@@ -1506,20 +1509,31 @@ public class PaperDetailsActivity extends
         Log.i("--->>", "onDuration: " + duration);
     }
 
+    //播放完成
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if (onPlayerEventListener != null)
-            onPlayerEventListener.onCompletion(mp);
+//        if (onPlayerEventListener != null)
+//            onPlayerEventListener.onCompletion(mp);
 
-        List<Song> songs = AppCache.getPlayService().getmMusicList();
-        Log.i("--->>", "2onCompletion: " + songs.size() + "   " + position);
-        if (songs.size() == (position + 1)) {
-            Log.i("--->>", "1onCompletion: " + songs.size() + "   " + position);
-            note.setType("plays");
-            note.setId(storageId);
-            note.setPlayPosition(position);
-            note.setSongsSize(songs.size());
-            noteDao.insertOrReplace(note);
+//        List<Song> songs = AppCache.getPlayService().getmMusicList();
+//        Log.i("--->>", "2onCompletion: " + songs.size() + "   " + position);
+//        if (songs.size() == (position + 1)) {
+//            Log.i("--->>", "1onCompletion: " + songs.size() + "   " + position);
+//            note.setType("plays");
+//            note.setId(storageId);
+//            note.setPlayPosition(position);
+//            note.setSongsSize(songs.size());
+//            noteDao.insertOrReplace(note);
+//        }
+
+        if (getPlayService() != null) {
+            if (position < imageId.size() - 1) {
+                getImageInfo(imageId.get(position + 1));
+                position++;
+            } else {
+                getImageInfo(imageId.get(0));
+                position = 0;
+            }
         }
 
     }
@@ -1913,16 +1927,49 @@ public class PaperDetailsActivity extends
                     title = bean.getDigest();
 
                 if (bean.getImglist() != null && bean.getImglist().size() != 0) {
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("iid", bean.getImglist().get(0).getId());
-                    presenter.getDataAll("205", map);
+                    position = 0;
+                    getImageInfo(bean.getImglist().get(0).getId());
                 }
 
                 break;
             case "205"://获取论文语音
+                ImgInfoBean bean1 = (ImgInfoBean) baseBean;
+                if (bean1.getCnrecord() != null) {
+                    songCN = new Song();
+                    songCN.setPath(bean1.getCnrecord().getUrl());
+                    songCN.setDuration(Integer.parseInt(bean1.getCnrecord().getDuration()));
+                    songCN.setTitle(bean1.getCnrecord().getId() + "音频");
+                    songCN.setPhotoPath(photoList.get(position));
+                    songCN.setPosition(position);
+                } else {
+                    songCN = null;
+                }
 
-
-
+                if (bean1.getEnrecord() != null) {
+                    songEN = new Song();
+                    songEN.setPath(bean1.getEnrecord().getUrl());
+                    songEN.setDuration(Integer.parseInt(bean1.getEnrecord().getDuration()));
+                    songEN.setTitle(bean1.getEnrecord().getId() + "音频");
+                    songEN.setPhotoPath(photoList.get(position));
+                    songEN.setPosition(position);
+                } else {
+                    songEN = null;
+                }
+                if (songCN != null && songEN != null) {
+                    if ("CN".equals(language)) {
+                        getPlayService().play(songCN);
+                    } else if ("EN".equals(language)) {
+                        getPlayService().play(songEN);
+                    } else {
+                        getPlayService().play(songCN);
+                    }
+                } else if (songCN == null && songEN != null) {
+                    changeLanguage(false);
+                } else if (songEN == null && songCN != null) {
+                    changeLanguage(true);
+                } else {
+                    ToastUtils.showShort("音频获取失败");
+                }
                 break;
             default:
                 break;
@@ -1934,4 +1981,15 @@ public class PaperDetailsActivity extends
     public void onFailNew(String url, String msg) {
 
     }
+
+    //获取图片地址及事件
+    private void getImageInfo(String imgId) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("iid", imgId);
+        presenter.getDataAll("205", map);
+        map.put("pid", id);
+        map.put("language", language);
+        presenter.getDataAll("305", map);
+    }
+
 }

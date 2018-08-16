@@ -7,7 +7,6 @@ public class Song {
 
     private String path;
     private int duration;
-    private long durations;
     private int position;
     private String photoPath="";
     private String  title="";
@@ -36,14 +35,6 @@ public class Song {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public long getDurations() {
-        return durations;
-    }
-
-    public void setDurations(long durations) {
-        this.durations = durations;
     }
 
     public int getPosition() {
