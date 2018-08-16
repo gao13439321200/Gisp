@@ -1971,6 +1971,12 @@ public class PaperDetailsActivity extends
                     ToastUtils.showShort("音频获取失败");
                 }
                 break;
+            case "305":
+
+
+
+
+                break;
             default:
                 break;
         }
