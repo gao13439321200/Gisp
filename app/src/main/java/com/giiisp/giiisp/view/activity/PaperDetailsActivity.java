@@ -53,6 +53,8 @@ import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.ImgInfoBean;
+import com.giiisp.giiisp.dto.PaperEventBean;
+import com.giiisp.giiisp.dto.PaperEventVO;
 import com.giiisp.giiisp.dto.PaperInfoBean;
 import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.entity.BaseEntity;
@@ -77,6 +79,7 @@ import com.giiisp.giiisp.view.fragment.StatisticsFragment;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.FloatDragView;
 import com.giiisp.giiisp.widget.FullScreenPopupWindow;
+import com.giiisp.giiisp.widget.MyCustomView;
 import com.giiisp.giiisp.widget.ProgressPopupWindow;
 import com.giiisp.giiisp.widget.WrapVideoView;
 import com.giiisp.giiisp.widget.recording.AppCache;
@@ -210,6 +213,8 @@ public class PaperDetailsActivity extends
     ImageView ivEmpty;
     @BindView(R.id.rl_viewpager_full)
     RelativeLayout rl_viewpager_full;
+    @BindView(R.id.cv_mark)
+    MyCustomView mMyCustomView;
 
     private boolean isFulllScreen = false;
     private FullScreenPopupWindow fullScreenPopup;
@@ -276,6 +281,8 @@ public class PaperDetailsActivity extends
     static Map<Integer, Boolean> mIsVideo;
 
     private int progress = 0;//播放进度
+    private Map<String, PaperEventVO> mBeanMap;
+    private List<String> timeString;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1466,7 +1473,26 @@ public class PaperDetailsActivity extends
         Log.d("PaperDetailsActivity", "progress:" + progress);
         this.progress = progress;
         tvPlayTime.setText(Util.formatSeconds(progress / 1000));
-
+        if (timeString.contains(Util.formatSeconds(progress / 1000))) {
+            PaperEventVO vo = mBeanMap.get(Util.formatSeconds(progress / 1000));
+            switch (vo.getType()) {
+                case "1"://放大
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    isFulllScreen = true;
+                    break;
+                case "2"://缩小
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    isFulllScreen = false;
+                    break;
+                case "3"://标记
+                    mMyCustomView.addPoint(Float.valueOf(vo.getX()), Float.valueOf(vo.getY()));
+                    break;
+                case "4"://调用开始
+                    break;
+                case "5"://调用结束
+                    break;
+            }
+        }
     }
 
     @Override
@@ -1905,7 +1931,7 @@ public class PaperDetailsActivity extends
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
         switch (url) {
-            case "204":
+            case "204"://获取论文信息
                 PaperInfoBean bean = (PaperInfoBean) baseBean;
                 if (bean == null) {
                     return;
@@ -1972,10 +1998,13 @@ public class PaperDetailsActivity extends
                 }
                 break;
             case "305":
-
-
-
-
+                PaperEventBean bean2 = (PaperEventBean) baseBean;
+                mBeanMap = new HashMap<>();
+                timeString = new ArrayList<>();
+                for (PaperEventVO vo : bean2.getList()) {
+                    mBeanMap.put(vo.getTime(), vo);
+                    timeString.add(vo.getTime());
+                }
                 break;
             default:
                 break;
@@ -1990,6 +2019,7 @@ public class PaperDetailsActivity extends
 
     //获取图片地址及事件
     private void getImageInfo(String imgId) {
+        mMyCustomView.clearData();
         HashMap<String, Object> map = new HashMap<>();
         map.put("iid", imgId);
         presenter.getDataAll("205", map);

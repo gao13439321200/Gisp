@@ -39,6 +39,13 @@ public class MyCustomView extends View {
         initPaint();
     }
 
+    public void addPoint(float x, float y) {
+        Map<String, Float> map = new HashMap<>();
+        map.put("x", x);
+        map.put("y", y);
+        mPointList.add(map);
+    }
+
     public MyCustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
