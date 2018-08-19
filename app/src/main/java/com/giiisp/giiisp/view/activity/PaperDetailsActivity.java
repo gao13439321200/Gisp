@@ -43,6 +43,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
@@ -281,8 +282,9 @@ public class PaperDetailsActivity extends
     static Map<Integer, Boolean> mIsVideo;
 
     private int progress = 0;//播放进度
-    private Map<String, PaperEventVO> mBeanMap;
-    private List<String> timeString;
+    private Map<String, PaperEventVO> mBeanMap = new HashMap<>();
+    private List<String> timeString = new ArrayList<>();
+    private boolean isEvent = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -370,13 +372,13 @@ public class PaperDetailsActivity extends
             string = version.get(0);
             for (int i = 0; i < version.size(); i++) {
                 switch (version.get(i)) {
-                    case "0"://完整
+                    case "2"://完整
                         tvPaperComplete.setVisibility(View.VISIBLE);
                         break;
-                    case "1"://精华
+                    case "4"://精华
                         tvPaperMarrow.setVisibility(View.VISIBLE);
                         break;
-                    case "2"://摘要
+                    case "3"://摘要
                         tvPaperAbstract.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -794,16 +796,16 @@ public class PaperDetailsActivity extends
                     normalDialog.show();
                 } else
                     switch (BaseActivity.emailauthen) { //  按照 emailauthen 判断
-                        case "0":
+                        case "3":
                             Utils.showToast("      认证请联系：\n" +
                                     "+86 185 0101 0114 \n" +
                                     " service@giiisp.com");
                             break;
-                        case "1":
+                        case "2":
                             String pcid = photosBeanRows.get(position).getId();
                             ProblemActivity.actionActivity(this, "Problem", pcid, uid);
                             break;
-                        case "2":
+                        case "1":
                             Utils.showToast("等待认证完成");
                             break;
                     }
@@ -1194,47 +1196,51 @@ public class PaperDetailsActivity extends
     @SuppressLint("SetTextI18n")
     @Override
     public void onPageSelected(int position) {
-        this.position = position;
-        lastItem = currentViewPagerItem;
-        currentViewPagerItem = position;
-        tvTitle.setText("P" + (position + 1));
-        viewpagerPaper.setCurrentItem(position);
+        if (!isEvent) {
+            this.position = position;
+            lastItem = currentViewPagerItem;
+            currentViewPagerItem = position;
+            tvTitle.setText("P" + (position + 1));
+            viewpagerPaper.setCurrentItem(position);
 //        recyclerView.scrollToPosition(position);
 //        itemClickAdapter.setSelectedPosition(position);
 //        itemClickAdapter.notifyDataSetChanged();
-        if (mIsVideo.get(currentViewPagerItem)) { // 当前是视频
-            seekBarPaper.setVisibility(View.INVISIBLE);
-            mRelativeLayout.setVisibility(View.GONE);
-            mMediaControllerMap.get(currentViewPagerItem).setVisibility(View.VISIBLE);
-        } else {
-            seekBarPaper.setVisibility(View.VISIBLE);
-            if (!isFulllScreen) {
-                mRelativeLayout.setVisibility(View.VISIBLE);
+            if (mIsVideo.get(currentViewPagerItem)) { // 当前是视频
+                seekBarPaper.setVisibility(View.INVISIBLE);
+                mRelativeLayout.setVisibility(View.GONE);
+                mMediaControllerMap.get(currentViewPagerItem).setVisibility(View.VISIBLE);
+            } else {
+                seekBarPaper.setVisibility(View.VISIBLE);
+                if (!isFulllScreen) {
+                    mRelativeLayout.setVisibility(View.VISIBLE);
+                }
+                if (mIsVideo.get(lastItem)) { // 上一个为视频时
+                    if (mVideoViewMap.get(lastItem).isPlaying()) {
+                        mVideoViewMap.get(lastItem).pause();
+                    }
+                    if (mMediaControllerMap.get(lastItem).isShowing()) {
+                        mMediaControllerMap.get(lastItem).setVisibility(View.INVISIBLE);
+                    }
+                }
             }
-            if (mIsVideo.get(lastItem)) { // 上一个为视频时
-                if (mVideoViewMap.get(lastItem).isPlaying()) {
-                    mVideoViewMap.get(lastItem).pause();
-                }
-                if (mMediaControllerMap.get(lastItem).isShowing()) {
-                    mMediaControllerMap.get(lastItem).setVisibility(View.INVISIBLE);
-                }
-            }
-        }
-        switch (type) {
-            case "online_paper":
-            case "collection_paper":
-            case "collection_summary":
-            case "play":
-            case "plays":
-            case "home":
-            case "answer":
-            case "questions":
-                if (imageId.size() > position) {
-                    paperQA.setImageId(imageId.get(position));
-                    paperQA.initNetwork();
-                }
-                break;
+            switch (type) {
+                case "online_paper":
+                case "collection_paper":
+                case "collection_summary":
+                case "play":
+                case "plays":
+                case "home":
+                case "answer":
+                case "questions":
+                    if (imageId.size() > position) {
+                        paperQA.setImageId(imageId.get(position));
+                        paperQA.initNetwork();
+                    }
+                    break;
 
+            }
+        } else {//是事件的只是显示图片，不做其他处理
+            viewpagerPaper.setCurrentItem(position);
         }
     }
 
@@ -1488,8 +1494,17 @@ public class PaperDetailsActivity extends
                     mMyCustomView.addPoint(Float.valueOf(vo.getX()), Float.valueOf(vo.getY()));
                     break;
                 case "4"://调用开始
+                    if (imageId.contains(vo.getTimgid())) {
+                        isEvent = true;
+                        int timgPositon = imageId.indexOf(vo.getTimgid());
+                        viewpagerPaper.setCurrentItem(timgPositon);
+                    } else {
+                        LogUtils.v("图片事件信息异常，无调用id");
+                    }
                     break;
                 case "5"://调用结束
+                    viewpagerPaper.setCurrentItem(position);
+                    isEvent = false;
                     break;
             }
         }
@@ -1557,7 +1572,9 @@ public class PaperDetailsActivity extends
                 getImageInfo(imageId.get(position + 1));
                 position++;
             } else {
-                getImageInfo(imageId.get(0));
+                if (imageId.size() > 0) {
+                    getImageInfo(imageId.get(0));
+                }
                 position = 0;
             }
         }
@@ -2020,6 +2037,9 @@ public class PaperDetailsActivity extends
     //获取图片地址及事件
     private void getImageInfo(String imgId) {
         mMyCustomView.clearData();
+        mBeanMap = new HashMap<>();
+        timeString = new ArrayList<>();
+        isEvent = false;
         HashMap<String, Object> map = new HashMap<>();
         map.put("iid", imgId);
         presenter.getDataAll("205", map);

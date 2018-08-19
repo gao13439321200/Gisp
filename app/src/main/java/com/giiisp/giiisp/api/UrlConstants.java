@@ -8,6 +8,7 @@ public class UrlConstants {
         //public static final String BASE_URL = "http://app.gogobamboo.com/bamboo/";
 //        public static final String BASE_URL = "http://www.giiisp.cn/";
         public static final String BASE_URL = "http://mall.xdiandian.cn/jsp/";
+        public static final String BASE_IMG_URL = "http://mall.xdiandian.cn/jsp/";
 //        public static final String BASE_URL = "https://192.168.1.155/giiisp/";
 
         //public static final String BASE_URL = "https://47.93.23.62/giiisp/";

@@ -909,7 +909,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 if (response.isSuccessful()) {
                     // response.body() 返回 ResponseBody
                     BaseEntity entity = response.body();
-                    impl.onSuccess(entity);
+                    impl.onSuccessNew("sendData",new BaseBean());
                 }
             }
 
@@ -1472,6 +1472,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 baseEntity = new Gson().fromJson(cipher, PaperLiteratureBean.class);
                 break;
             case "209":
+            case "312":
                 baseEntity = new Gson().fromJson(cipher, PaperMainBean.class);
                 break;
             case "305":

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorBackground"
+                android:background="@color/colorBlack"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -140,6 +140,7 @@
                         android:layout_toLeftOf="@+id/tv_hint"
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp"
+                        android:visibility="invisible"
                         android:src="@mipmap/img_diaoyong"/>
 
                     <TextView
@@ -158,6 +159,7 @@
                     <CheckBox
                         android:id="@+id/img_mark"
                         android:layout_width="30dp"
+                        android:visibility="visible"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/tv_hint"
@@ -179,6 +181,7 @@
                         android:layout_toLeftOf="@+id/tv_time"
                         android:gravity="center_vertical"
                         android:text="调用"
+                        android:visibility="invisible"
                         android:textColor="@color/bg_white"/>
 
                     <TextView
@@ -199,6 +202,7 @@
                         android:layout_toRightOf="@+id/tv_time"
                         android:gravity="center_vertical"
                         android:text="标记"
+                        android:visibility="visible"
                         android:textColor="@color/bg_white"/>
                 </RelativeLayout>
 
@@ -216,7 +220,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     >
 
                     <TextView

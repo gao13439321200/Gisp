@@ -17,7 +17,6 @@ import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,6 +53,8 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
+
 /**
  * 配音的页面
  * Created by Thinkpad on 2017/6/5.
@@ -74,7 +75,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     @BindView(R.id.iv_btn)
     ImageView ivBtn;
     @BindView(R.id.linear_layout)
-    LinearLayout linearLayout;
+    RelativeLayout linearLayout;
     @BindView(R.id.recycler_view_dubbing)
     RecyclerView recyclerViewDubbing;
     @BindView(R.id.iv_dubbing)
@@ -87,6 +88,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     RelativeLayout mRlBig;
     @BindView(R.id.tv_use)
     TextView mTvUse;
+    @BindView(R.id.btn_use)
+    ImageView mBtnUse;
     @BindView(R.id.img_full)
     ImageView mImgFull;
     @BindView(R.id.btn_small)
@@ -351,9 +354,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 resolvePausePlayRecord();
                 //清空当前图片事件
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("imgid", "");
+                map.put("imgid", imgId);
                 map.put("language", language);
-                presenter.getDataAll("135", map);
+                presenter.getDataAll("315", map);
                 break;
             case R.id.tv_dubbing_audition://试听
                 togglePlaying(view);
@@ -363,12 +366,16 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 //设置是否显示标记按钮
                 mTvMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
                 mCbMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
+                mTvUse.setVisibility(viewPager.getCurrentItem() != position ? View.VISIBLE : View.GONE);
+                mBtnUse.setVisibility(viewPager.getCurrentItem() != position ? View.VISIBLE : View.GONE);
                 break;
             case R.id.iv_right_slide://下一张图片
                 viewPager.setCurrentItem(viewPager.getCurrentItem() < viewPager.getChildCount() ? viewPager.getCurrentItem() + 1 : 0);
                 //设置是否显示标记按钮
                 mTvMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
                 mCbMark.setVisibility(viewPager.getCurrentItem() == position ? View.VISIBLE : View.GONE);
+                mTvUse.setVisibility(viewPager.getCurrentItem() != position ? View.VISIBLE : View.GONE);
+                mBtnUse.setVisibility(viewPager.getCurrentItem() != position ? View.VISIBLE : View.GONE);
                 break;
             case R.id.iv_btn://录音
                 imgId = getImageId();
@@ -530,7 +537,15 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         if (typeActivity != null)
             switch (typeActivity) {
                 case "wait_dubbing":
-
+                    viewPager.setCurrentItem(position);
+                    itemClickAdapte.setSelectedPosition(position);
+                    itemClickAdapte.notifyDataSetChanged();
+                    canMark = false;
+                    mMyCustomView.setCanMark(false);
+                    mCbMark.setVisibility(this.position != position ? View.GONE : View.VISIBLE);
+                    mTvMark.setVisibility(this.position != position ? View.GONE : View.VISIBLE);
+                    mBtnUse.setVisibility(this.position != position ? View.VISIBLE : View.GONE);
+                    mTvUse.setVisibility(this.position != position ? View.VISIBLE : View.GONE);
                     break;
                 case "edit_dubbing":
                     this.position = position;
@@ -602,7 +617,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 ViewGroup parent = (ViewGroup) vp;
                 parent.removeView(imageView);
             }
-            ImageLoader.getInstance().displayImage(activity, path, imageView);
+            ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + path, imageView);
             //            view.setImageURI(Uri.parse(path));
             container.addView(imageView);
             //add listeners here if necessary
@@ -684,6 +699,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                         break;
                 }
                 break;
+            case "315":
+                mMyCustomView.clearData();
+                linearLayout.setVisibility(View.GONE);
+                mCbMark.setChecked(false);
+                canMark = false;
+                mMyCustomView.setCanMark(false);
+                break;
             case "317"://论文图片信息
                 DubbingBean bean = (DubbingBean) baseBean;
                 for (DubbingVO vo : bean.getList()) {
@@ -701,13 +723,50 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 viewPager.setAdapter(new ImageAdapter(this, bean.getList()));
                 viewPager.addOnPageChangeListener(this);
                 viewPager.setCurrentItem(position);
-                itemClickAdapte = new ItemClickAdapter(this, R.layout.item_paper_pic, dataList, "paper_pic");
+                itemClickAdapte = new ItemClickAdapter(this, R.layout.item_dubbing_pic, dataList, "paper_pic");
                 itemClickAdapte.setOnItemClickListener(this);
                 itemClickAdapte.setSelectedPosition(position);
                 itemClickAdapte.notifyDataSetChanged();
                 recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(itemClickAdapte);
                 recyclerView.scrollToPosition(position);
+                break;
+            case "sendData":
+                //重置标记状态
+                mCbMark.setChecked(false);
+                canMark = false;
+                mMyCustomView.clearData();
+                mMyCustomView.setCanMark(false);
+
+                Utils.showToast(R.string.uploaded_successfully);
+                tvHint.setText(R.string.click_start_voice);
+                recorderSecondsElapsed = 0;
+                type = 1;
+                progressPopupWindow.dismiss();
+                tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
+                linearLayout.setVisibility(View.GONE);
+                if (typeActivity != null)
+                    switch (typeActivity) {
+                        case "wait_dubbing":
+                            position++;
+//                        if (photoRows != null)
+//                            if (position == photoRows.size()) {
+//                                Utils.showToast(R.string.complete_dubbing);
+//                                setResult(3000);
+//                                finish();
+//                            }
+                            if (position < itemClickAdapte.getItemCount()) {
+                                itemClickAdapte.setSelectedPosition(position);
+                                itemClickAdapte.notifyDataSetChanged();
+                                recyclerView.scrollToPosition(position);
+                                viewPager.setCurrentItem(position);
+                            }
+
+                            break;
+                        case "edit_dubbing":
+
+                            break;
+                    }
                 break;
             default:
                 break;

@@ -92,8 +92,9 @@ public class MyCustomView extends View {
         Log.d("MyCustomView", "event.getEventTime():" + event.getEventTime());
         Log.d("MyCustomView", "时间差:" + TimeUtils.getTimeSpan(event.getDownTime(), event.getEventTime(), 1000));
         //可以画图 = 点击了开始标记+手指已经抬起+时间间隔大于等于2秒
-        if (canMark && time != event.getDownTime() &&
-                TimeUtils.getTimeSpan(event.getDownTime(), event.getEventTime(), 1000) >= 2) {
+//        if (canMark && time != event.getDownTime() &&
+//                TimeUtils.getTimeSpan(event.getDownTime(), event.getEventTime(), 1000) >= 2) {
+        if (canMark) {
             time = event.getDownTime();
             HashMap<String, Float> map = new HashMap<>();
             map.put("x", event.getX());

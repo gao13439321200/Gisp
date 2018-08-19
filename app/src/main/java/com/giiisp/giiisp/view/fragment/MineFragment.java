@@ -39,6 +39,7 @@ import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.emailauthen;
 import static com.giiisp.giiisp.base.BaseActivity.isVip;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
@@ -145,7 +146,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //        UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
         String avatar = infoBean.getAvatar();
         if (!avatar.equals(imageUrl))
-            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), avatar, ivUserIcon);
+            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL+avatar, ivUserIcon);
         imageUrl = avatar;
         tvUserName.setText(infoBean.getName());
         tvUserEmail.setText(infoBean.getEmail());
@@ -173,7 +174,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //            tvUserPhone.setText("未绑定手机号码");
 //        }
         tvUserEmail.setText(Utils.checkEmail(infoBean.getEmail()) ? infoBean.getEmail() : "未绑定邮箱");
-        if (TextUtils.isEmpty(infoBean.getEmailauthen())) {  //  Test TextUtils.isEmpty(userInfo.getIsVIP()) 修改字段 isvip 替换
+        if (TextUtils.isEmpty(infoBean.getIsvip())) {  //  Test TextUtils.isEmpty(userInfo.getIsVIP()) 修改字段 isvip 替换
             Log.d("Presenter", "initUser: isIVP: " + infoBean.getIsvip());
             emailauthen = "0";
             tvRecordinAuthentication.setText("去认证");
@@ -264,6 +265,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     public void initNetwork() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
+        map.put("language", getLanguage());
         presenter.getDataAll("306", map);
         super.initNetwork();
     }
@@ -324,7 +326,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.tv_recording_authentication:
                 //
                 switch (emailauthen) { //  开始录音是否Ok  test 1 BaseActivity.emailauthen
-                    case "0":
+                    case "3":
 
                        /* Utils.showToast("      认证请联系：\n" +
                                 "+86 185 0101 0114 \n" +
@@ -332,10 +334,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                         FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
 //                        VerifiedActivity.actionActivity(getContext());
                         break;
-                    case "1":
+                    case "2":
                         FragmentActivity.actionActivity(getContext(), "wait_dubbing"); //  认证完成开始录音
                         break;
-                    case "2":
+                    case "1":
                         Utils.showToast(R.string.in_authentication);
                         break;
                     default:
@@ -364,7 +366,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.fl_mine_download:
                 FragmentActivity.actionActivity(getContext(), "download_activity");
                 break;
-            case R.id.fl_mine_subscribe:
+            case R.id.fl_mine_subscribe://我的关注
                 AttentionActivity.actionActivity(getContext(), "mine");
                 break;
             case R.id.fl_mine_news:

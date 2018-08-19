@@ -11,6 +11,8 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -24,6 +26,8 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 
 /**
  * 设置页面
@@ -68,12 +72,10 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
 
     @Override
     public void initData() {
-       /* ArrayMap<String, Object> userMap = new ArrayMap<>();
-        //        userMap.put("token", "A760880003E7DDEDFEF56ACB3B09697F");
-        userMap.put("token", token);
-        //        userMap.put("oid", 1);
-        userMap.put("uid", uid);
-        presenter.getUserInfoData(userMap);*/
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("uid", getUserID());
+        map.put("language", getLanguage());
+        presenter.getDataAll("306", map);
         super.initData();
     }
 
@@ -163,6 +165,22 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
         }
     }
 
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
+        switch(url){
+            case "306":
+                MIneInfoBean bean = (MIneInfoBean) baseBean;
+                String nickName = bean.getName();
+                String avatar = bean.getAvatar();
+                ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL+avatar, imUserIcon);
+                if (!TextUtils.isEmpty(nickName))
+                    tvUserName.setText(nickName);
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     protected WholePresenter initPresenter() {

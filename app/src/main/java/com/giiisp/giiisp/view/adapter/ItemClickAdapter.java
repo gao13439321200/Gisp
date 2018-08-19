@@ -67,6 +67,7 @@ import static com.giiisp.giiisp.R.id.linear_layout_two;
 import static com.giiisp.giiisp.R.id.tv_answer_name;
 import static com.giiisp.giiisp.R.id.tv_answer_reply;
 import static com.giiisp.giiisp.R.id.tv_problem;
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
 import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.paperId;
 
@@ -735,11 +736,26 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
                         imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(infoVO.getUrl(), 1));
                     } else {
-                        ImageLoader.getInstance().displayImage(activity, infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL+infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                    }
+                    break;
+                case R.layout.item_dubbing_pic://配音图片详情
+                    DubbingVO dubbingVO = item.getDubbingVO();
+                    if (helper.getLayoutPosition() == selectedPosition) {
+                        Log.i("-->>", "convert: " + selectedPosition);
+                        helper.getView(R.id.iv_bg).setVisibility(View.INVISIBLE);
+                    } else {
+                        helper.getView(R.id.iv_bg).setVisibility(View.VISIBLE);
+                    }
+                    if ("mp4".equals(FileUtils.parseSuffix(dubbingVO.getUrl()))) { // 视频
+                        ImageView imageView1 = helper.getView(R.id.iv_pic);
+                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(dubbingVO.getUrl(), 1));
+                    } else {
+                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL+dubbingVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }
                     break;
                 case R.layout.item_paperpull_pic: // TODO 图片+视频
-                    DubbingVO vo = item.getDubbingVO();
+                DubbingVO vo = item.getDubbingVO();
                     View viewBg = helper.getView(R.id.iv_bg);
                     if (helper.getLayoutPosition() == selectedPosition) {
                         Log.i("-->>", "convert: " + selectedPosition);
@@ -751,7 +767,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
                         imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(vo.getUrl(), 1));
                     } else {
-                        ImageLoader.getInstance().displayImage(activity, vo.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL+vo.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }
                     break;
                 case R.layout.item_search:

@@ -178,6 +178,75 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                         holder.setText(R.id.tv_title, vo.getTitle());
                         holder.setText(R.id.tv_time, vo.getCreatetime());
 
+                        if (!TextUtils.isEmpty(vo.getVersion())) {
+                            switch (vo.getVersion()) {
+                                case "1":
+                                    holder.setText(R.id.tv_version, "论文主体");
+                                    holder.setText(R.id.tv_version_complete, "论文主体");
+                                    holder.setText(R.id.tv_version_EN, "论文主体");
+                                    holder.setText(R.id.tv_version_complete_EN, "论文主体");
+                                    break;
+                                case "2":
+                                    holder.setText(R.id.tv_version, "完整版");
+                                    holder.setText(R.id.tv_version_complete, "完整版");
+                                    holder.setText(R.id.tv_version_EN, "完整版");
+                                    holder.setText(R.id.tv_version_complete_EN, "完整版");
+                                    break;
+                                case "3":
+                                    holder.setText(R.id.tv_version, "摘要版");
+                                    holder.setText(R.id.tv_version_complete, "摘要版");
+                                    holder.setText(R.id.tv_version_EN, "摘要版");
+                                    holder.setText(R.id.tv_version_complete_EN, "摘要版");
+                                    break;
+                                case "4":
+                                    holder.setText(R.id.tv_version, "精华版");
+                                    holder.setText(R.id.tv_version_complete, "精华版");
+                                    holder.setText(R.id.tv_version_EN, "精华版");
+                                    holder.setText(R.id.tv_version_complete_EN, "精华版");
+                                    break;
+                            }
+                        }
+
+                        switch (vo.getCnfinish()) {
+                            case "1"://完成
+                                holder.setVisible(R.id.ll_dubbing_complete, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon));
+                                break;
+                            case "2"://未完成
+                                holder.setVisible(R.id.ll_waiting_dubbing, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_complete));
+                                ProgressBar progressBar = holder.getView(R.id.progressbar_dubbing);
+                                progressBar.setMax(100);
+                                progressBar.setProgress(Integer.parseInt(vo.getCnper()));
+                                holder.setText(R.id.tv_progress, vo.getCnper() + "%");
+                                break;
+                            default:
+                                break;
+                        }
+                        switch (vo.getEnfinish()) {
+                            case "1"://完成
+                                holder.setVisible(R.id.ll_dubbing_complete_EN, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_EN));
+                                break;
+                            case "2"://未完成
+                                holder.setVisible(R.id.ll_waiting_dubbing_EN, true);
+//                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_complete_EN));
+                                ProgressBar progressBar = holder.getView(R.id.progressbar_dubbing_EN);
+                                progressBar.setMax(100);
+                                progressBar.setProgress(Integer.parseInt(vo.getEnper()));
+                                holder.setText(R.id.tv_progress_EN, vo.getEnper() + "%");
+                                break;
+                            default:
+                                break;
+                        }
+                        holder.addOnClickListener(R.id.tv_preview_dubbing)
+                                .addOnClickListener(R.id.tv_edit_dubbing)
+                                .addOnClickListener(R.id.tv_release_dubbing)
+                                .addOnClickListener(R.id.tv_preview_dubbing_EN)
+                                .addOnClickListener(R.id.tv_edit_dubbing_EN)
+                                .addOnClickListener(R.id.tv_release_dubbing_EN)
+                                .addOnClickListener(R.id.ll_waiting_dubbing)
+                                .addOnClickListener(R.id.ll_waiting_dubbing_EN);
                         break;
                 }
             /*    final ProgressBar progressBar = ;
@@ -776,5 +845,8 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
     }
 */
 
-
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
 }

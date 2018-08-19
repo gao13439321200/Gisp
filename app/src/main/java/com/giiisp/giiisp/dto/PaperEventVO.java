@@ -5,6 +5,15 @@ public class PaperEventVO {
     private String time;
     private String x;
     private String y;
+    private String timgid;
+
+    public String getTimgid() {
+        return timgid;
+    }
+
+    public void setTimgid(String timgid) {
+        this.timgid = timgid;
+    }
 
     public String getType() {
         return type;

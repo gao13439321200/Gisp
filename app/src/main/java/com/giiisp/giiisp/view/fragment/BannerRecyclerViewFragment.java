@@ -745,27 +745,27 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 list.clear();
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
-                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
-                    @Override
-                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        PaperMainVO vo = itemClickAdapter.getData().get(position).getPaperMainVO();
-                        ArrayList<String> arrayVersion = new ArrayList<>();
-                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
-                            switch (bean.getVersion()) {
-                                case 2://完整
-                                    arrayVersion.add("0");
-                                    break;
-                                case 3://摘要
-                                    arrayVersion.add("2");
-                                    break;
-                                case 4://精华
-                                    arrayVersion.add("1");
-                                    break;
-                            }
-                        }
-                        PaperDetailsActivity.actionActivity(context, vo.getId(), arrayVersion, "home");
-                    }
-                });
+//                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+//                    @Override
+//                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                        PaperMainVO vo = itemClickAdapter.getData().get(position).getPaperMainVO();
+//                        ArrayList<String> arrayVersion = new ArrayList<>();
+//                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+//                            switch (bean.getVersion()) {
+//                                case 2://完整
+//                                    arrayVersion.add("2");
+//                                    break;
+//                                case 3://摘要
+//                                    arrayVersion.add("3");
+//                                    break;
+//                                case 4://精华
+//                                    arrayVersion.add("4");
+//                                    break;
+//                            }
+//                        }
+//                        PaperDetailsActivity.actionActivity(context, vo.getId(), arrayVersion, "home");
+//                    }
+//                });
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 List<String> txt1 = new ArrayList<>();
                 //一级菜单
@@ -848,12 +848,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 list.clear();
                 dubbingAdapter = new ExpandableItemAdapter((BaseActivity) getActivity(),
                         R.layout.item_title_dubbing, R.layout.item_waiting_dubbing, this.list, type);
-                recyclerView.setAdapter(dubbingAdapter);
                 dubbingAdapter.setOnItemChildClickListener(this);
                 dubbingAdapter.setOnItemClickListener(this);
                 dubbingAdapter.setOnLoadMoreListener(this, recyclerView);
                 dubbingAdapter.disableLoadMoreIfNotFullPage();
                 dubbingAdapter.setEmptyView(notDataView);
+                recyclerView.setAdapter(dubbingAdapter);
                 lineBanner.setVisibility(View.VISIBLE);
                 break;
             case "subscribe":
@@ -2050,33 +2050,33 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "popular":
                 //                PaperDetailsActivity.actionActivity(getContext());
                 break;
-            case "wait_dubbing"://配音列表点击事件
-                ClickEntity dubbing = dubbingAdapter.getItem(position);
-                if (dubbing != null) {
-                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX paperBan = dubbing.getPaperBan();
-                    if (paperBan != null) {
-                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX>) paperBan.getPhotos().getRows();
-                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordOneRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX>) paperBan.getRecordOne().getRows();
-                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordTwoRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX>) paperBan.getRecordTwo().getRows();
-                        switch (dubbing.getLanguage()) {
-                            case "CN":
-                                if (photoRows != null && recordOneRows != null && photoRows.size() > 0 && !TextUtils.isEmpty(paperBan.getId())) {
-                                    if (photoRows.size() != recordOneRows.size()) {
-                                        DubbingActivity.actionActivity(getActivity(), paperBan.getId(), photoRows, recordOneRows, 0, type);
-                                    }
-                                }
-                                break;
-                            case "EN":
-                                if (photoRows != null && recordTwoRows != null) {
-                                    if (photoRows.size() != recordTwoRows.size() && photoRows.size() > 0 && !TextUtils.isEmpty(paperBan.getId())) {
-                                        DubbingActivity.actionActivity(getActivity(), paperBan.getId(), photoRows, recordTwoRows, 1, type);
-                                    }
-                                }
-                                break;
-                        }
-
-                    }
-                }
+            case "wait_dubbing"://配音列表点击事件，这里应该在子布局的点击事件中处理
+//                ClickEntity dubbing = dubbingAdapter.getItem(position);
+//                if (dubbing != null) {
+//                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX paperBan = dubbing.getPaperBan();
+//                    if (paperBan != null) {
+//                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX>) paperBan.getPhotos().getRows();
+//                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordOneRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX>) paperBan.getRecordOne().getRows();
+//                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordTwoRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX>) paperBan.getRecordTwo().getRows();
+//                        switch (dubbing.getLanguage()) {
+//                            case "CN":
+//                                if (photoRows != null && recordOneRows != null && photoRows.size() > 0 && !TextUtils.isEmpty(paperBan.getId())) {
+//                                    if (photoRows.size() != recordOneRows.size()) {
+//                                        DubbingActivity.actionActivity(getActivity(), paperBan.getId(), photoRows, recordOneRows, 0, type);
+//                                    }
+//                                }
+//                                break;
+//                            case "EN":
+//                                if (photoRows != null && recordTwoRows != null) {
+//                                    if (photoRows.size() != recordTwoRows.size() && photoRows.size() > 0 && !TextUtils.isEmpty(paperBan.getId())) {
+//                                        DubbingActivity.actionActivity(getActivity(), paperBan.getId(), photoRows, recordTwoRows, 1, type);
+//                                    }
+//                                }
+//                                break;
+//                        }
+//
+//                    }
+//                }
 
                 break;
             case "collection":
@@ -2089,33 +2089,43 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "my_paper":
             case "collection_paper":
             case "collection_summary":
-                ClickEntity item = itemClickAdapter.getItem(position);
-                if (item != null && item.getSubscribeEntityRows() != null) {
-                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows = item.getSubscribeEntityRows();
-                    String id = subscribeEntityRows.getId();
-                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoOne = subscribeEntityRows.getPhotoOne();
-                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoTwo = subscribeEntityRows.getPhotoTwo();
-                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoThree = subscribeEntityRows.getPhotoThree();
-                    ArrayList<String> version = new ArrayList<>();
-
-                    if (photoOne != null && photoOne.getRows() != null && photoOne.getRows().size() > 0) {
-                        version.add("0");
+                PaperMainVO vo = itemClickAdapter.getItem(position).getPaperMainVO();
+                ArrayList<String> versionList = new ArrayList<>();
+                if (vo.getVlist() != null) {
+                    for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                        versionList.add(bean.getVersion() + "");
                     }
-                    if (photoTwo != null && photoTwo.getRows() != null && photoTwo.getRows().size() > 0) {
-                        version.add("1");
-                    }
-                    if (photoThree != null && photoThree.getRows() != null && photoThree.getRows().size() > 0) {
-                        version.add("2");
-                    }
-                    if (version.size() > 0 && !TextUtils.isEmpty(id)) {
-                        if (null != subscribeEntityRows.getIsEncrypt() && subscribeEntityRows.getIsEncrypt().equals("0")) { // TODO checkpwd
-                            PaperDetailsActivity.checkPwd(getContext(), id, version, "online_paper");
-                        } else {
-                            PaperDetailsActivity.actionActivity(getContext(), id, version, "online_paper");
-                        }
-                    }
-
                 }
+                PaperDetailsActivity.actionActivity(getContext(), vo.getId(), versionList, "online_paper");
+
+
+//                ClickEntity item = itemClickAdapter.getItem(position);
+//                if (item != null && item.getSubscribeEntityRows() != null) {
+//                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows = item.getSubscribeEntityRows();
+//                    String id = subscribeEntityRows.getId();
+//                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoOne = subscribeEntityRows.getPhotoOne();
+//                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoTwo = subscribeEntityRows.getPhotoTwo();
+//                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoThree = subscribeEntityRows.getPhotoThree();
+//                    ArrayList<String> version = new ArrayList<>();
+//
+//                    if (photoOne != null && photoOne.getRows() != null && photoOne.getRows().size() > 0) {
+//                        version.add("0");
+//                    }
+//                    if (photoTwo != null && photoTwo.getRows() != null && photoTwo.getRows().size() > 0) {
+//                        version.add("1");
+//                    }
+//                    if (photoThree != null && photoThree.getRows() != null && photoThree.getRows().size() > 0) {
+//                        version.add("2");
+//                    }
+//                    if (version.size() > 0 && !TextUtils.isEmpty(id)) {
+//                        if (null != subscribeEntityRows.getIsEncrypt() && subscribeEntityRows.getIsEncrypt().equals("0")) { // TODO checkpwd
+//                            PaperDetailsActivity.checkPwd(getContext(), id, version, "online_paper");
+//                        } else {
+//                            PaperDetailsActivity.actionActivity(getContext(), id, version, "online_paper");
+//                        }
+//                    }
+//
+//                }
                 break;
             case "newest":
                 //                PaperDetailsActivity.actionActivity(getContext());
@@ -2240,53 +2250,35 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
                 break;
             case R.id.tv_preview_dubbing: //  预览按钮
-                if (dubbingAdapter != null) {
-                    ClickEntity item = dubbingAdapter.getItem(position);
-                    if (item != null) {
-                        String paperId = item.getPaperId();
-                        if (!TextUtils.isEmpty(paperId)) {
-                            String id = paperId;
-                            String version = item.getVersion();
-                            ArrayList<String> list = new ArrayList<>();
-                            list.add(version);
-                            if (!TextUtils.isEmpty(id) && list.size() > 0)
-                                PaperDetailsActivity.actionActivity(getContext(), id, list, type);
-                        }
-
-                    }
-                }
+                DubbingListVO vo6 = dubbingAdapter.getItem(position).getDubbingListVO();
+                PaperDetailsActivity.actionActivity(getContext(), vo6.getId(), new ArrayList<>(), type);
+                break;
+            case R.id.tv_preview_dubbing_EN: //  预览按钮
+                DubbingListVO vo5 = dubbingAdapter.getItem(position).getDubbingListVO();
+                PaperDetailsActivity.actionActivity(getContext(), vo5.getId(), new ArrayList<>(), type);
+                break;
+            case R.id.tv_edit_dubbing_EN: //  编辑
+                DubbingListVO vo4 = dubbingAdapter.getItem(position).getDubbingListVO();
+                DubbingActivity.actionActivity(getActivity(), vo4.getId(), 2, "edit_dubbing");
                 break;
             case R.id.tv_edit_dubbing: //  编辑
-                if (dubbingAdapter == null)
-                    return;
-                ClickEntity dubbing = dubbingAdapter.getItem(position);
-                if (dubbing != null) {
-                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX paperBan = dubbing.getPaperBan();
-                    if (paperBan != null) {
-                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX>) paperBan.getPhotos().getRows();
-                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordOneRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX>) paperBan.getRecordOne().getRows();
-                        ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordTwoRows = (ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX>) paperBan.getRecordTwo().getRows();
-                        switch (dubbing.getLanguage()) {
-                            case "CN":
-                                if (photoRows != null && recordOneRows != null && photoRows.size() > 0) {
-                                    if (photoRows.size() == recordOneRows.size()) {
-                                        DubbingActivity.actionActivity(getActivity(), paperBan.getId(), photoRows, recordOneRows, 0, "edit_dubbing");
-                                    }
-                                }
-                                break;
-                            case "EN":
-                                if (photoRows != null && recordTwoRows != null && photoRows.size() > 0) {
-                                    if (photoRows.size() == recordTwoRows.size()) {
-                                        DubbingActivity.actionActivity(getActivity(), paperBan.getId(), photoRows, recordTwoRows, 1, "edit_dubbing");
-                                    }
-                                }
-                                break;
-                        }
-
-                    }
-                }
-                //                           itemClickAdapter.getItem()
+                DubbingListVO vo3 = dubbingAdapter.getItem(position).getDubbingListVO();
+                DubbingActivity.actionActivity(getActivity(), vo3.getId(), 1, "edit_dubbing");
                 break;
+            case R.id.ll_waiting_dubbing:
+                DubbingListVO vo2 = dubbingAdapter.getItem(position).getDubbingListVO();
+                DubbingActivity.actionActivity(getActivity(), vo2.getId(), 1, type);
+                break;
+//            case R.id.ll_dubbing_complete:
+//                break;
+            case R.id.ll_waiting_dubbing_EN:
+                DubbingListVO vo1 = dubbingAdapter.getItem(position).getDubbingListVO();
+                DubbingActivity.actionActivity(getActivity(), vo1.getId(), 2, type);
+                break;
+//            case R.id.ll_dubbing_complete_EN:
+//                break;
+
+
             case R.id.tv_empty:
                 ClickEntity item = itemClickAdapter.getItem(position);
 
