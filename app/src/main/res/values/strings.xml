@@ -228,7 +228,7 @@
     <string name="problem_hint">追问次数仅限一次,请简要您的问题。</string>
     <string name="record_hint">配音请于文本保持一致</string>
     <string name="complete_record_hint">点击开始朗读您的长文本解答</string>
-    <string name="click_start_recording">点击开始录制</string>
+    <string name="click_start_recording">点击开始配音</string>
     <string name="dubbing">配音</string>
     <string name="is_dubbing">正在配音</string>
     <string name="dubbing_pause">配音已暂停</string>

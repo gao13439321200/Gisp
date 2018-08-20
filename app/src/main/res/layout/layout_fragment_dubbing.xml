@@ -76,7 +76,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
-                    android:background="@mipmap/fullscreen_button"/>
+                    android:background="@mipmap/img_full"/>
 
 
             </RelativeLayout>

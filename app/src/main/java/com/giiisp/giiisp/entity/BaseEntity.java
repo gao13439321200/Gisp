@@ -12,7 +12,16 @@ public class BaseEntity {
     private int statusCode;
     private String info;
     private String uid;
+    private String rid;
     private String firstUser ;
+
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
 
     public String getMessage() {
         return message;

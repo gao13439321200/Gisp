@@ -403,7 +403,7 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
 
     @Override
     public void initData() {
-        presenter.getQNTokenData(uid);
+//        presenter.getQNTokenData(uid);
         super.initData();
     }
 

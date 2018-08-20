@@ -906,10 +906,14 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         ModelFactory.getBaseModel().getSaveRecordData(options, part, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
-                if (response.isSuccessful()) {
+                if (response != null && response.body() != null && response.body().getResult() == 1) {
                     // response.body() 返回 ResponseBody
                     BaseEntity entity = response.body();
-                    impl.onSuccessNew("sendData",new BaseBean());
+                    BaseBean baseBean = new BaseBean();
+                    baseBean.setRid(response.body().getRid());
+                    impl.onSuccessNew("sendData", baseBean);
+                } else {
+                    impl.onFailNew("sendData", "发送失败");
                 }
             }
 

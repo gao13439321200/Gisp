@@ -154,10 +154,10 @@ public class UrlConstants {
         public static final String SAVE_FOLLOW_TYPE = "api/cater/saveFollowType.do";
 
         //提问
-        public static final String SAVE_QUIZ = "api/post/saveQuiz.do";
+        public static final String SAVE_QUIZ = "api/common/saveQuiz.do";
 
         //回答
-        public static final String SAVE_ANSWER = "api/post/saveAnswer.do";
+        public static final String SAVE_ANSWER = "api/common/saveAnswer.do";
 
         //发表论文
         public static final String UPDATE_PAPER_BASE = "api/post/updatePaperBase.do";
@@ -217,7 +217,7 @@ public class UrlConstants {
         public static final String QUIZ_HINT_LIST = "api/common/quizHintList.do";
 
         //保存录音
-        public static final String SAVE_RECORD = "api/common/saveRecord.do";
+        public static final String SAVE_RECORD = "api/common/saveRecord";
 
         //更新APP
         public static final String APP_INFO = "api/post/getAppInfo.do";

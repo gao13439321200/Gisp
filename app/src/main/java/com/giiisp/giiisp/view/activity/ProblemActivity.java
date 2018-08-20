@@ -220,7 +220,7 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                         break;
                     case "examineMinutely":
                         map.put("pcid", pcid);
-                        map.put("firstQuiz", 0);
+                        map.put("firstQuiz", 2);
                         presenter.getSaveQuizData(map);
                         break;
                 }

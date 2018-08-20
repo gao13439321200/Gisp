@@ -9,7 +9,15 @@ public class BaseBean {
 
     private int statusCode;
     private String message;
+    private String rid;
 
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
 
     public int getStatusCode() {
         return statusCode;
