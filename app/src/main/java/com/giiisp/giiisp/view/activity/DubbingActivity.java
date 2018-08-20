@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -117,6 +118,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private String pid = "";//论文id
     private String imgId = "";//录音图片id
     private List<ClickEntity> dataList = new ArrayList<>();
+    private boolean isDubbing = false;
 
 
     public static void actionActivity(Context context) {
@@ -284,14 +286,16 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     protected void resolvePause() {
         if (!mIsRecord)
             return;
-        if (mRecorder.isPause()) {
+        if (mRecorder.isPause()) {//继续录音
+            isDubbing = true;
             tvHint.setText(R.string.is_dubbing);
             ivBtn.setImageResource(R.mipmap.in_recording);
             mRecorder.setPause(false);
             linearLayout.setVisibility(View.GONE);
             resolvePausePlayRecord();
             startTimer();
-        } else {
+        } else {//暂停录音
+            isDubbing = false;
             stopTimer();
             mRecorder.setPause(true);
             tvHint.setText(R.string.dubbing_pause);
@@ -393,12 +397,15 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
 //                mBtnUse.setVisibility(viewPager.getCurrentItem() != position ? View.VISIBLE : View.GONE);
                 break;
             case R.id.iv_btn://录音
-                if (ObjectUtils.isNotEmpty(dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRid())) {
+                if (!isDubbing && ObjectUtils.isNotEmpty(dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRid())) {
                     ToastUtils.showShort("该图片已有录音，请点击重录后再尝试");
                     break;
                 }
-                dubbingPosition = viewPager.getCurrentItem();
-                imgId = getImageId();
+                if (!isDubbing) {//开始录音
+                    dubbingPosition = viewPager.getCurrentItem();
+                    isDubbing = true;
+                    imgId = getImageId();
+                }
                 toggleRecording(view);
                 break;
             case R.id.btn_full://全屏
@@ -590,7 +597,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         canMark = false;
         mMyCustomView.setCanMark(false);
         mCbMark.setChecked(false);
-        if (mRecorder != null && !isPause) {//正在录音
+        LogUtils.v("ok-dubb:" + dubbingPosition);
+        LogUtils.v("ok-position:" + position);
+        if (isDubbing) {//正在录音
+            ivBtn.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
             mCbMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
             mTvMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
             mBtnUse.setVisibility(this.dubbingPosition != position ? View.VISIBLE : View.GONE);
@@ -609,6 +619,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             }
             mBtnUse.setVisibility(View.GONE);
             mTvUse.setVisibility(View.GONE);
+            if (dubbingPosition != position) {//暂停配音
+                resolveStopRecord();
+                mMyCustomView.clearData();
+                tvHint.setText(R.string.click_start_voice);
+                recorderSecondsElapsed = 0;
+                tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
+            }
         }
     }
 
@@ -754,6 +771,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             case "317"://论文图片信息
                 DubbingBean bean = (DubbingBean) baseBean;
                 for (DubbingVO vo : bean.getList()) {
+                    vo.setRid("");
                     ClickEntity clickEntity = new ClickEntity();
                     clickEntity.setDubbingVO(vo);
                     dataList.add(clickEntity);
@@ -766,6 +784,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                         break;
                     }
                 }
+                dubbingPosition = position;
                 viewPager.setAdapter(new ImageAdapter(this, bean.getList()));
                 viewPager.addOnPageChangeListener(this);
                 viewPager.setCurrentItem(position);
@@ -795,9 +814,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 if (typeActivity != null)
                     switch (typeActivity) {
                         case "wait_dubbing":
-                            if (dubbingPosition <= dataList.size() - 1) {
-                                setImageStatus(dubbingPosition + 1);
+                            if (dubbingPosition < dataList.size() - 1) {
+                                dubbingPosition++;
+                                setImageStatus(dubbingPosition);
                             } else {
+                                dubbingPosition = 0;
                                 setImageStatus(0);
                             }
 //                            position++;
