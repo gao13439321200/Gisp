@@ -131,6 +131,7 @@ public class PaperMainVO {
          */
 
         private String id;
+        private String pid;
         private String isfollow;
         private String isdownload;
         private String isaddplay;
@@ -142,6 +143,15 @@ public class PaperMainVO {
         private String cnsize;
         private String ensize;
         private boolean isEnglish;
+
+
+        public String getPid() {
+            return pid;
+        }
+
+        public void setPid(String pid) {
+            this.pid = pid;
+        }
 
         public boolean isEnglish() {
             return isEnglish;

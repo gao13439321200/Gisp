@@ -46,6 +46,7 @@ import com.giiisp.giiisp.view.activity.FragmentActivity;
 import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.giiisp.giiisp.view.activity.ProblemActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
+import com.giiisp.giiisp.view.fragment.ListItemClick;
 import com.giiisp.giiisp.widget.recording.Util;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -80,6 +81,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
     private RxDownload mRxDownload;
     private String type = "";
     private int selectedPosition = 0;
+    private ListItemClick mListItemClick;
 
     public int getSelectedPosition() {
         return selectedPosition;
@@ -103,12 +105,28 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
         this.activity = activity;
         mRxDownload = RxDownload.getInstance(activity);
     }
+    public ItemClickAdapter(BaseActivity activity, int layoutResId, List<ClickEntity> data,ListItemClick listItemClick) {
+        super(layoutResId, data);
+        this.layoutResId = layoutResId;
+        this.activity = activity;
+        this.mListItemClick = listItemClick;
+        mRxDownload = RxDownload.getInstance(activity);
+    }
 
     public ItemClickAdapter(BaseActivity activity, int layoutResId, List<ClickEntity> data, String type) {
         super(layoutResId, data);
         this.layoutResId = layoutResId;
         this.activity = activity;
         this.type = type;
+        mRxDownload = RxDownload.getInstance(activity);
+    }
+
+    public ItemClickAdapter(BaseActivity activity, int layoutResId, List<ClickEntity> data, String type, ListItemClick listItemClick) {
+        super(layoutResId, data);
+        this.layoutResId = layoutResId;
+        this.activity = activity;
+        this.type = type;
+        this.mListItemClick = listItemClick;
         mRxDownload = RxDownload.getInstance(activity);
     }
 
@@ -159,6 +177,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_time, qaVO.getTime());
                     helper.setText(R.id.tv_sound_time_answer, "？？：？？");
                     helper.setText(R.id.tv_sound_time_qa, "？？：？？");
+                    helper.setText(R.id.tv_answer_info_again, "这里是追答");
                     helper.setText(R.id.tv_qa_title, qaVO.getQuiz());
                     helper.setText(R.id.tv_answer_info, "A:" + qaVO.getAusername() + qaVO.getAnswer());
                     helper.setVisible(R.id.img_photo, ObjectUtils.isNotEmpty(qaVO.getImgurl()));
@@ -451,7 +470,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setVisible(R.id.tv_answers, false);
                     }
                     break;
-                case R.layout.item_collectionchild:
+                case R.layout.item_collectionchild://收藏论文、收藏综述
                     if (item.getSubscribeEntityRows() == null)
                         return;
                     SubscribeEntity.PageInfoBean.RowsBeanXXXXX collectionEntitys = item.getSubscribeEntityRows();
@@ -639,13 +658,14 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         if (vo.getVlist() != null && vo.getVlist().size() != 0) {
                             List<ClickEntity> list = new ArrayList<>();
                             for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                bean.setPid(vo.getId());
                                 ClickEntity entity = new ClickEntity();
                                 bean.setEnglish(false);
                                 entity.setBean(bean);
                                 list.add(entity);
                             }
 
-                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list);
+                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list,mListItemClick);
                             ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setLayoutManager(new LinearLayoutManager(activity));
                             ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setAdapter(adapter);
                             ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {
@@ -700,8 +720,30 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 break;
                         }
                         helper.setChecked(R.id.cb_collect, "1".equals(vlistBean.getIsfollow()));
+                        helper.getView(R.id.cb_collect).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (((CheckBox) helper.getView(R.id.cb_collect)).isChecked()) {
+                                    mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "");
+                                } else {
+                                    mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "");
+                                }
+                            }
+                        });
                         helper.setChecked(R.id.cb_download, "1".equals(vlistBean.getIsdownload()));
+                        helper.getView(R.id.cb_download).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mListItemClick.listClick("download", vlistBean.getPid(), vlistBean.getVersion() + "");
+                            }
+                        });
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
+                        helper.getView(R.id.cb_add).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "");
+                            }
+                        });
                         String btnString;
                         if (vlistBean.isEnglish()) {
                             btnString = "EN   ▷" + vlistBean.getEnduration() + "   " + vlistBean.getEnsize();
@@ -738,7 +780,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
                         imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(infoVO.getUrl(), 1));
                     } else {
-                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL+infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }
                     break;
                 case R.layout.item_dubbing_pic://配音图片详情
@@ -753,11 +795,11 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
                         imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(dubbingVO.getUrl(), 1));
                     } else {
-                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL+dubbingVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + dubbingVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }
                     break;
                 case R.layout.item_paperpull_pic: // TODO 图片+视频
-                DubbingVO vo = item.getDubbingVO();
+                    DubbingVO vo = item.getDubbingVO();
                     View viewBg = helper.getView(R.id.iv_bg);
                     if (helper.getLayoutPosition() == selectedPosition) {
                         Log.i("-->>", "convert: " + selectedPosition);
@@ -769,7 +811,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
                         imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(vo.getUrl(), 1));
                     } else {
-                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL+vo.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + vo.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }
                     break;
                 case R.layout.item_search:

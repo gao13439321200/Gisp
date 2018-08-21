@@ -1476,6 +1476,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 baseEntity = new Gson().fromJson(cipher, PaperLiteratureBean.class);
                 break;
             case "209":
+            case "212":
             case "312":
                 baseEntity = new Gson().fromJson(cipher, PaperMainBean.class);
                 break;

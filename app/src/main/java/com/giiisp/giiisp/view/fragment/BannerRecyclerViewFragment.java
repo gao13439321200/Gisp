@@ -117,7 +117,12 @@ import static com.giiisp.giiisp.base.BaseActivity.uid;
  * Created by Thinkpad on 2017/5/19.
  */
 
-public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements BaseImpl, BaseQuickAdapter.OnItemClickListener, BaseQuickAdapter.OnItemLongClickListener, BaseQuickAdapter.OnItemChildClickListener, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
+        implements BaseImpl, BaseQuickAdapter.OnItemClickListener,
+        BaseQuickAdapter.OnItemLongClickListener,
+        BaseQuickAdapter.OnItemChildClickListener,
+        SwipeRefreshLayout.OnRefreshListener,
+        BaseQuickAdapter.RequestLoadMoreListener, ListItemClick {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.tv_title)
@@ -809,7 +814,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "my_paper":
                 tvTitle.setText(R.string.my_paper_list);
                 lineBanner.setVisibility(View.VISIBLE);
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 break;
@@ -820,8 +825,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 break;
-            case "collection_paper":
-            case "collection_summary":
+            case "collection_paper"://首页收藏论文
+            case "collection_summary"://首页收藏综述
                 list.clear();
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_collectionchild, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
@@ -1051,18 +1056,27 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 break;
             case "collection_paper":
-                map.put("uid", uid);
-                map.put("page", page);
-                //                map.put("upTime", "asc");
-                map.put("isOneOrTwo", 1);
-                presenter.getListFollowedPaperData(map);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+                hMap.put("type", 1);
+                presenter.getDataAll("212", hMap);
+
+//                map.put("uid", uid);
+//                map.put("page", page);
+//                //                map.put("upTime", "asc");
+//                map.put("isOneOrTwo", 1);
+//                presenter.getListFollowedPaperData(map);
                 break;
             case "collection_summary":
-                map.put("uid", uid);
-                map.put("page", page);
-                //                map.put("upTime", "asc");
-                map.put("isOneOrTwo", 2);
-                presenter.getListFollowedPaperData(map);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+                hMap.put("type", 1);
+                presenter.getDataAll("212", hMap);
+//                map.put("uid", uid);
+//                map.put("page", page);
+//                //                map.put("upTime", "asc");
+//                map.put("isOneOrTwo", 2);
+//                presenter.getListFollowedPaperData(map);
                 break;
             case "popular":
                 break;
@@ -2732,6 +2746,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 break;
             case "209"://首页的论文和综述
+            case "212"://收藏的论文和综述
             case "312"://我的论文和综述
                 PaperMainBean mainBean = (PaperMainBean) baseBean;
                 itemClickAdapter.loadMoreComplete();
@@ -2932,7 +2947,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "318"://发布论文
                 ToastUtils.showShort("发布成功！");
                 page = 0;
-                HashMap<String,Object> map = new HashMap<>();
+                HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", getUserID());
                 map.put("pageno", page);
                 presenter.getDataAll("316", map);
@@ -2948,5 +2963,30 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             return;
         swipeRefreshLayout.setRefreshing(false);
         super.onFailNew(url, msg);
+    }
+
+    @Override
+    public void listClick(String type, String pid, String version) {
+        switch (type) {
+            case "collect":
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("uid", getUserID());
+                map.put("pid", pid);
+                map.put("version", version);
+                presenter.getDataAll("213", map);
+                break;
+            case "nocollect":
+                ToastUtils.showShort("测试-取消");
+
+                break;
+            case "download":
+                ToastUtils.showShort("测试-下载");
+                break;
+            case "add":
+                ToastUtils.showShort("测试-添加");
+                break;
+            default:
+                break;
+        }
     }
 }

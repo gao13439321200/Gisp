@@ -252,7 +252,7 @@ public class PaperDetailsActivity extends
     private BannerRecyclerViewFragment paperQA;
     Note note = new Note();
     private ArrayList<String> version = new ArrayList<>();
-    private String string = "";
+    private String myVersionNo = "";
     private List<Song> queueCN = new ArrayList<>();
     private List<Song> queueEN = new ArrayList<>();
     private Song songCN;
@@ -392,7 +392,7 @@ public class PaperDetailsActivity extends
         tvEn.setChecked(EN.equals(language));
         version = getIntent().getStringArrayListExtra("version");
         if (version != null && version.size() > 0) {
-            string = version.get(0);
+            myVersionNo = version.get(0);
             for (int i = 0; i < version.size(); i++) {
                 switch (version.get(i)) {
                     case "2"://完整
@@ -619,7 +619,7 @@ public class PaperDetailsActivity extends
                         playService.setImageList(photoList);
                         playService.play(position);
                     }
-                    downloadId = string;
+                    downloadId = myVersionNo;
                     paperId = "";
                 }
             }
@@ -694,7 +694,7 @@ public class PaperDetailsActivity extends
                 initNetwork();
                 break;
             case R.id.tv_back:
-                if (getPlayService() != null)
+                if (getPlayService() != null && getPlayService().isPlaying())
                     getPlayService().playPause();
                 finish();
                 break;
@@ -708,7 +708,7 @@ public class PaperDetailsActivity extends
                 for (String string : version) {
                     complete.add(string);
                 }
-                PaperDetailsActivity.actionActivity(this, id, complete, "online_paper");
+                PaperDetailsActivity.actionActivityNew(this, id, complete, "online_paper", language);
                 break;
             case R.id.tv_paper_marrow://精华
                 ArrayList<String> marrow = new ArrayList<>();
@@ -719,7 +719,7 @@ public class PaperDetailsActivity extends
                 for (String string : version) {
                     marrow.add(string);
                 }
-                PaperDetailsActivity.actionActivity(this, id, marrow, "online_paper");
+                PaperDetailsActivity.actionActivityNew(this, id, marrow, "online_paper", language);
 
                 break;
             case R.id.tv_paper_abstract://摘要
@@ -731,13 +731,15 @@ public class PaperDetailsActivity extends
                 for (String string : version) {
                     abstracts.add(string);
                 }
-                PaperDetailsActivity.actionActivity(this, id, abstracts, "online_paper");
+                PaperDetailsActivity.actionActivityNew(this, id, abstracts, "online_paper", language);
 
                 break;
             case R.id.tv_cn:
                 if (getPlayService() != null && songCN != null) {
                     changeLanguage(true);
                 } else {
+                    tvCn.setChecked(false);
+                    tvEn.setChecked(true);
                     ToastUtils.showShort("暂无中文版录音");
                 }
                 Log.i("--->>", "onViewClicked: tv_cn");
@@ -747,6 +749,8 @@ public class PaperDetailsActivity extends
                 if (getPlayService() != null && songEN != null) {
                     changeLanguage(false);
                 } else {
+                    tvCn.setChecked(true);
+                    tvEn.setChecked(false);
                     ToastUtils.showShort("暂无英文版录音");
                 }
                 break;
@@ -974,19 +978,28 @@ public class PaperDetailsActivity extends
         map.put("flag", 1);
         map.put("tabFlag", 1);
         map.put("uid", uid);
-        map.put("version", string);
+        map.put("version", myVersionNo);
+
+        HashMap<String, Object> hMap = new HashMap<>();
+        hMap.put("uid", uid);
+        hMap.put("pid", id);
+        hMap.put("version", myVersionNo);
+
+
         switch (isFollowed) {
             case "0":
                 isSave = 10;
-                presenter.getSaveFollowPaperPictureData(map);
+//                presenter.getSaveFollowPaperPictureData(map);
+                presenter.getDataAll("213", hMap);
+
                 break;
             case "1":
                 Utils.showDialog(this, "确定取消收藏", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         isSave = 20;
-                        presenter.getCancelFollowPaperPictureData(map);
-
+//                        presenter.getCancelFollowPaperPictureData(map);
+                        // TODO: 2018/8/21 高鹏 这里需要取消收藏
                     }
                 });
                 break;
@@ -1058,6 +1071,7 @@ public class PaperDetailsActivity extends
 
     }
 
+    @SuppressLint("CheckResult")
     private void start() {
         if (photosBeanRows == null || photosBeanRows.size() < position)
             return;
@@ -1082,7 +1096,7 @@ public class PaperDetailsActivity extends
                     .setTitle(title)
                     .setExtra5(path)
                     .setTime(rowsBean.getCreateTime())
-                    .setVersion(string + "")
+                    .setVersion(myVersionNo)
                     .build();
             list.add(downloadBean);
         }
@@ -1099,7 +1113,7 @@ public class PaperDetailsActivity extends
                         .setExtra5("CN")
                         .setTime(rowsBean.getCreateTime())
                         .setTitle(title)
-                        .setVersion(string + "")
+                        .setVersion(myVersionNo)
                         .build();
                 list.add(downloadBean);
             }
@@ -1116,7 +1130,7 @@ public class PaperDetailsActivity extends
                         .setTime(rowsBean.getCreateTime())
                         .setTitle(title)
                         .setExtra5("EN")
-                        .setVersion(string + "")
+                        .setVersion(myVersionNo)
                         .build();
                 list.add(downloadBean);
             }
@@ -1289,7 +1303,7 @@ public class PaperDetailsActivity extends
             if (!TextUtils.isEmpty(paperBase.getRealName()))
                 realName = paperBase.getRealName();
             PaperDatailEntity.PaperBaseBean.PhotoOneBean photo = null;
-            switch (string) {
+            switch (myVersionNo) {
                 case "0":
                     photo = paperBase.getPhotoOne();
                     break;
@@ -1392,7 +1406,7 @@ public class PaperDetailsActivity extends
                 note.setCreateTime(paperBase.getUpdateTime());
                 note.setReadNum(paperBase.getReadNum() + "");
                 note.setLikedNum(paperBase.getLikedNum() + "");
-                note.setVersions(string);
+                note.setVersions(myVersionNo);
 
                 if (getPlayService() != null) {
                     PlayService playService = getPlayService();
@@ -1441,7 +1455,7 @@ public class PaperDetailsActivity extends
                             }
                             break;
                     }
-                    paperId = string;
+                    paperId = myVersionNo;
                     downloadId = "";
                 }
             }
@@ -1485,17 +1499,21 @@ public class PaperDetailsActivity extends
             PaperEventVO vo = mBeanMap.get(Util.formatSeconds(progress / 1000));
             switch (vo.getType()) {
                 case "1"://放大
+                    Log.v("=====", "放大了");
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     isFulllScreen = true;
                     break;
                 case "2"://缩小
+                    Log.v("=====", "缩小了");
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     isFulllScreen = false;
                     break;
                 case "3"://标记
+                    Log.v("=====", "标记了");
                     mMyCustomView.addPoint(Float.valueOf(vo.getX()), Float.valueOf(vo.getY()));
                     break;
                 case "4"://调用开始
+                    Log.v("=====", "调用了");
                     if (imageId.contains(vo.getTimgid())) {
                         isEvent = true;
                         int timgPositon = imageId.indexOf(vo.getTimgid());
@@ -1505,6 +1523,7 @@ public class PaperDetailsActivity extends
                     }
                     break;
                 case "5"://调用结束
+                    Log.v("=====", "调用了");
                     viewpagerPaper.setCurrentItem(position);
                     isEvent = false;
                     break;
@@ -2049,6 +2068,9 @@ public class PaperDetailsActivity extends
                     ToastUtils.showShort("音频获取失败");
                 }
                 break;
+            case "213":
+                ToastUtils.showShort(isSave == 10 ? "收藏成功！" : "取消收藏成功！");
+                break;
             case "305":
                 PaperEventBean bean2 = (PaperEventBean) baseBean;
                 mBeanMap = new HashMap<>();
@@ -2057,6 +2079,39 @@ public class PaperDetailsActivity extends
                     mBeanMap.put(vo.getTime(), vo);
                     timeString.add(vo.getTime());
                 }
+//                PaperEventVO vo = new PaperEventVO();
+//                vo.setTime("00:00:02");
+//                vo.setX("30");
+//                vo.setY("30");
+//                vo.setType("3");
+//                mBeanMap.put(vo.getTime(), vo);
+//                timeString.add(vo.getTime());
+//
+//                vo = new PaperEventVO();
+//                vo.setTime("00:00:03");
+//                vo.setType("1");
+//                mBeanMap.put(vo.getTime(), vo);
+//                timeString.add(vo.getTime());
+//
+//                vo = new PaperEventVO();
+//                vo.setTime("00:00:05");
+//                vo.setType("2");
+//                mBeanMap.put(vo.getTime(), vo);
+//                timeString.add(vo.getTime());
+//
+//                vo = new PaperEventVO();
+//                vo.setTime("00:00:07");
+//                vo.setType("4");
+//                vo.setTimgid("ca953c03-7cd1-49aa-b534-f6c93854d189");
+//                mBeanMap.put(vo.getTime(), vo);
+//                timeString.add(vo.getTime());
+//
+//                vo = new PaperEventVO();
+//                vo.setTime("00:00:10");
+//                vo.setType("5");
+//                mBeanMap.put(vo.getTime(), vo);
+//                timeString.add(vo.getTime());
+
                 break;
             default:
                 break;
