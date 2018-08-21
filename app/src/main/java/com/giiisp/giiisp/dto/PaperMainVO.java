@@ -24,7 +24,16 @@ public class PaperMainVO {
     private String usernmae;
     private String type;
     private String code;
+    private String myLanguage = "1";//默认是中文
     private List<VlistBean> vlist;
+
+    public String getMyLanguage() {
+        return myLanguage;
+    }
+
+    public void setMyLanguage(String myLanguage) {
+        this.myLanguage = myLanguage;
+    }
 
     public String getUsername() {
         return usernmae;

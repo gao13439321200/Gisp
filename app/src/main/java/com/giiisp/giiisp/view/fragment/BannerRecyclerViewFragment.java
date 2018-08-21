@@ -1348,7 +1348,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         //                        itemClickAdapter.setNewData(null);
                         break;
                     case "wait_dubbing":
-                        page = 1;
+                        page = 0;
                         initNetwork();
                         break;
                 }
@@ -2096,7 +2096,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         versionList.add(bean.getVersion() + "");
                     }
                 }
-                PaperDetailsActivity.actionActivity(getContext(), vo.getId(), versionList, "online_paper");
+                PaperDetailsActivity.actionActivityNew(getContext(), vo.getId(),
+                        versionList, "online_paper", vo.getMyLanguage());
 
 
 //                ClickEntity item = itemClickAdapter.getItem(position);
@@ -2251,11 +2252,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case R.id.tv_preview_dubbing: //  预览按钮
                 DubbingListVO vo6 = dubbingAdapter.getItem(position).getDubbingListVO();
-                PaperDetailsActivity.actionActivity(getContext(), vo6.getId(), new ArrayList<>(), type);
+                PaperDetailsActivity.actionActivityNew(getContext(), vo6.getId(),
+                        new ArrayList<>(), type, "1");
                 break;
             case R.id.tv_preview_dubbing_EN: //  预览按钮
                 DubbingListVO vo5 = dubbingAdapter.getItem(position).getDubbingListVO();
-                PaperDetailsActivity.actionActivity(getContext(), vo5.getId(), new ArrayList<>(), type);
+                PaperDetailsActivity.actionActivityNew(getContext(), vo5.getId(),
+                        new ArrayList<>(), type, "2");
                 break;
             case R.id.tv_edit_dubbing_EN: //  编辑
                 DubbingListVO vo4 = dubbingAdapter.getItem(position).getDubbingListVO();
@@ -2803,13 +2806,6 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.addData(mainEntity);
                 }
 
-                if (bean1.getList().size() == 0) {
-                    if (page != 0)
-                        ToastUtils.showShort("数据已经全部加载了");
-                    else
-                        ToastUtils.showShort("暂无数据");
-                }
-
                 if (bean1.getList().size() >= pageSize) {
                     page++;
                 } else {
@@ -2935,6 +2931,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "318"://发布论文
                 ToastUtils.showShort("发布成功！");
+                page = 0;
+                HashMap<String,Object> map = new HashMap<>();
+                map.put("uid", getUserID());
+                map.put("pageno", page);
+                presenter.getDataAll("316", map);
                 break;
             default:
                 break;

@@ -65,7 +65,7 @@ public class MyCustomView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         for (Map<String, Float> map : mPointList) {
-            canvas.drawCircle(map.get("x"), map.get("y"), 100, mPaint);
+            canvas.drawCircle(map.get("x"), map.get("y"), 50, mPaint);
         }
         super.onDraw(canvas);
     }
@@ -75,7 +75,7 @@ public class MyCustomView extends View {
     private void initPaint() {
         mPaint = new Paint();
         //设置画笔颜色
-        mPaint.setColor(mContext.getResources().getColor(R.color.red));
+        mPaint.setColor(mContext.getResources().getColor(R.color.green));
         //STROKE                //描边
         //FILL                  //填充
         //FILL_AND_STROKE       //描边加填充

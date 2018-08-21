@@ -788,11 +788,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 dubbingPosition = position;
                 viewPager.setAdapter(new ImageAdapter(this, bean.getList()));
                 viewPager.addOnPageChangeListener(this);
-                viewPager.setCurrentItem(position);
+//                viewPager.setCurrentItem(position);
                 itemClickAdapte = new ItemClickAdapter(this, R.layout.item_dubbing_pic, dataList, "paper_pic");
                 itemClickAdapte.setOnItemClickListener(this);
-                itemClickAdapte.setSelectedPosition(position);
-                itemClickAdapte.notifyDataSetChanged();
+//                itemClickAdapte.setSelectedPosition(position);
+//                itemClickAdapte.notifyDataSetChanged();
                 recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(itemClickAdapte);
                 recyclerView.scrollToPosition(position);

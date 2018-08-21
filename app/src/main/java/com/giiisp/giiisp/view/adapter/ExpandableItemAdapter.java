@@ -210,10 +210,12 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                         switch (vo.getCnfinish()) {
                             case "1"://完成
                                 holder.setVisible(R.id.ll_dubbing_complete, true);
+                                holder.setVisible(R.id.ll_waiting_dubbing, false);
 //                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon));
                                 break;
                             case "2"://未完成
                                 holder.setVisible(R.id.ll_waiting_dubbing, true);
+                                holder.setVisible(R.id.ll_dubbing_complete, false);
 //                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_complete));
                                 ProgressBar progressBar = holder.getView(R.id.progressbar_dubbing);
                                 progressBar.setMax(100);
@@ -226,10 +228,12 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                         switch (vo.getEnfinish()) {
                             case "1"://完成
                                 holder.setVisible(R.id.ll_dubbing_complete_EN, true);
+                                holder.setVisible(R.id.ll_waiting_dubbing_EN, false);
 //                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_EN));
                                 break;
                             case "2"://未完成
                                 holder.setVisible(R.id.ll_waiting_dubbing_EN, true);
+                                holder.setVisible(R.id.ll_dubbing_complete_EN, false);
 //                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_complete_EN));
                                 ProgressBar progressBar = holder.getView(R.id.progressbar_dubbing_EN);
                                 progressBar.setMax(100);

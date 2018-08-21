@@ -33,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -44,6 +45,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
@@ -53,6 +55,8 @@ import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DubbingBean;
+import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.ImgInfoBean;
 import com.giiisp.giiisp.dto.PaperEventBean;
 import com.giiisp.giiisp.dto.PaperEventVO;
@@ -123,6 +127,7 @@ import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.widget.recording.AppCache.getPlayService;
 
 
@@ -205,9 +210,9 @@ public class PaperDetailsActivity extends
     @BindView(R.id.tv_paper_abstract)
     TextView tvPaperAbstract;
     @BindView(R.id.tv_cn)
-    TextView tvCn;
+    CheckBox tvCn;
     @BindView(R.id.tv_en)
-    TextView tvEn;
+    CheckBox tvEn;
     @BindView(R.id.progress_wheel)
     ProgressWheel progressWheel;
     @BindView(R.id.iv_empty)
@@ -216,6 +221,9 @@ public class PaperDetailsActivity extends
     RelativeLayout rl_viewpager_full;
     @BindView(R.id.cv_mark)
     MyCustomView mMyCustomView;
+
+    public static final String CN = "1";
+    public static final String EN = "2";
 
     private boolean isFulllScreen = false;
     private FullScreenPopupWindow fullScreenPopup;
@@ -250,7 +258,7 @@ public class PaperDetailsActivity extends
     private Song songCN;
     private Song songEN;
 
-    private String language = "";
+    private String language = CN;
     private String title = "";
     private String firstPic = "";
     private String realName = "";
@@ -348,6 +356,17 @@ public class PaperDetailsActivity extends
         context.startActivity(sIntent);
     }
 
+    //所有入口
+    public static void actionActivityNew(Context context, String id, ArrayList<String> version, String type, String language) {
+        Intent sIntent = new Intent(context, PaperDetailsActivity.class);
+        sIntent.putExtra("id", id);
+        sIntent.putExtra("type", type);
+        sIntent.putExtra("language", language);
+        sIntent.putStringArrayListExtra("version", version);
+        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(sIntent);
+    }
+
     //下载页
     public static void actionActivity(Context context, String id, ArrayList<String> recordOneRows, ArrayList<String> recordTwoRows, ArrayList<String> photoRows, String type, String title) {
         Intent sIntent = new Intent(context, PaperDetailsActivity.class);
@@ -367,6 +386,10 @@ public class PaperDetailsActivity extends
         //        downloadId = getIntent().getIntExtra("downloadId", -1);
         type = getIntent().getStringExtra("type");
         title = getIntent().getStringExtra("title");
+        if (ObjectUtils.isNotEmpty(getIntent().getStringExtra("language")))
+            language = getIntent().getStringExtra("language");
+        tvCn.setChecked(CN.equals(language));
+        tvEn.setChecked(EN.equals(language));
         version = getIntent().getStringArrayListExtra("version");
         if (version != null && version.size() > 0) {
             string = version.get(0);
@@ -403,11 +426,10 @@ public class PaperDetailsActivity extends
         List<Note> list = notesId.list();
         for (Note note1 : list) {
             if (note1.getId().equals(storageId)) {
-                language = note1.getLanguage() + "";
+                language = note1.getLanguage();
                 position = note1.getPlayPosition();
             }
         }
-
 
     }
 
@@ -455,20 +477,16 @@ public class PaperDetailsActivity extends
                     seekBarPaper.setMax(playService.getPlayingMusic().getDuration() * 1000);
                     tvDuration.setText("/ " + Util.formatSeconds(playService.getPlayingMusic().getDuration()));
                 }
-                switch (language) {
-                    case "CN":
-                        tvCn.setEnabled(false);
-                        tvCn.setSelected(false);
-                        tvEn.setEnabled(true);
-                        tvEn.setSelected(true);
-                        break;
-                    case "EN":
-                        tvCn.setEnabled(true);
-                        tvCn.setSelected(true);
-                        tvEn.setEnabled(false);
-                        tvEn.setSelected(false);
-                        break;
-                }
+//                switch (language) {
+//                    case CN:
+//                        tvCn.setChecked(false);
+//                        tvEn.setChecked(true);
+//                        break;
+//                    case EN:
+//                        tvCn.setChecked(true);
+//                        tvEn.setChecked(false);
+//                        break;
+//                }
 
                 seekBarPaper.setProgress(playService.getmPlayer().getCurrentPosition());
             }
@@ -516,16 +534,20 @@ public class PaperDetailsActivity extends
                 break;
             case "wait_dubbing"://待配音
                 linerBottomComm.setVisibility(View.GONE);
-                ArrayMap<String, Object> dubbingMap = new ArrayMap<>();
-//                dubbingMap.put("token", token);
-                dubbingMap.put("id", id);
-                dubbingMap.put("uid", uid);
-                if (!TextUtils.isEmpty(string))
-                    dubbingMap.put("version", string);
-                presenter.getPaperBaseByIdData(dubbingMap);
+//                ArrayMap<String, Object> dubbingMap = new ArrayMap<>();
+////                dubbingMap.put("token", token);
+//                dubbingMap.put("id", id);
+//                dubbingMap.put("uid", uid);
+//                if (!TextUtils.isEmpty(string))
+//                    dubbingMap.put("version", string);
+//                presenter.getPaperBaseByIdData(dubbingMap);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("pid", id);
+                map.put("language", language);
+                presenter.getDataAll("317", map);
                 llEmptyView.setVisibility(View.GONE);
                 break;
-            case "download_paper"://下载
+            case "download_paper": {//下载
                 linerBottomComm.setVisibility(View.GONE);
                 llEmptyView.setVisibility(View.GONE);
                 if (getPlayService() != null) {
@@ -590,10 +612,8 @@ public class PaperDetailsActivity extends
                         if (queueEN.size() > 0 && queueCN.size() > 0) {
                             tvCn.setVisibility(View.VISIBLE);
                             tvEn.setVisibility(View.VISIBLE);
-                            tvCn.setEnabled(false);
-                            tvCn.setSelected(false);
-                            tvEn.setEnabled(true);
-                            tvEn.setSelected(true);
+                            tvCn.setChecked(false);
+                            tvEn.setChecked(true);
                         }
                         playService.setmMusicList(queueCN);
                         playService.setImageList(photoList);
@@ -602,8 +622,8 @@ public class PaperDetailsActivity extends
                     downloadId = string;
                     paperId = "";
                 }
-
-                break;
+            }
+            break;
         }
 
         //添加可拖动悬浮按钮
@@ -934,12 +954,10 @@ public class PaperDetailsActivity extends
 
     //切换语言
     private void changeLanguage(boolean isCN) {
-        language = isCN ? "CN" : "EN";
+        language = isCN ? CN : EN;
         getPlayService().play(isCN ? songCN : songEN);
-        tvCn.setEnabled(isCN);
-        tvCn.setSelected(isCN);
-        tvEn.setEnabled(!isCN);
-        tvEn.setSelected(!isCN);
+        tvCn.setChecked(isCN);
+        tvEn.setChecked(!isCN);
     }
 
     private void collection() {
@@ -1380,32 +1398,24 @@ public class PaperDetailsActivity extends
                     PlayService playService = getPlayService();
                     if (storageId.equals(id)) {
                         switch (language) {
-                            case "CN":
-                                tvCn.setEnabled(false);
-                                tvCn.setSelected(false);
-                                tvEn.setEnabled(true);
-                                tvEn.setSelected(true);
+                            case CN:
+                                tvCn.setChecked(false);
+                                tvEn.setChecked(true);
                                 playService.setmMusicList(queueCN);
                                 break;
-                            case "EN":
-                                tvCn.setEnabled(true);
-                                tvCn.setSelected(true);
-                                tvEn.setEnabled(false);
-                                tvEn.setSelected(false);
+                            case EN:
+                                tvCn.setChecked(true);
+                                tvEn.setChecked(false);
                                 playService.setmMusicList(queueEN);
                                 break;
                             default:
                                 if (queueCN.size() > 0) {
-                                    tvCn.setEnabled(false);
-                                    tvCn.setSelected(false);
-                                    tvEn.setEnabled(true);
-                                    tvEn.setSelected(true);
+                                    tvCn.setChecked(false);
+                                    tvEn.setChecked(true);
                                     playService.setmMusicList(queueCN);
                                 } else if (queueEN.size() > 0) {
-                                    tvCn.setEnabled(true);
-                                    tvCn.setSelected(true);
-                                    tvEn.setEnabled(false);
-                                    tvEn.setSelected(false);
+                                    tvCn.setChecked(true);
+                                    tvEn.setChecked(false);
                                     playService.setmMusicList(queueEN);
                                 }
                                 break;
@@ -1413,29 +1423,21 @@ public class PaperDetailsActivity extends
                         playService.play(position);
                     }
                     switch (language) {
-                        case "CN":
-                            tvCn.setEnabled(false);
-                            tvCn.setSelected(false);
-                            tvEn.setEnabled(true);
-                            tvEn.setSelected(true);
+                        case CN:
+                            tvCn.setChecked(false);
+                            tvEn.setChecked(true);
                             break;
-                        case "EN":
-                            tvCn.setEnabled(true);
-                            tvCn.setSelected(true);
-                            tvEn.setEnabled(false);
-                            tvEn.setSelected(false);
+                        case EN:
+                            tvCn.setChecked(true);
+                            tvEn.setChecked(false);
                             break;
                         default:
                             if (queueCN.size() > 0) {
-                                tvCn.setEnabled(false);
-                                tvCn.setSelected(false);
-                                tvEn.setEnabled(true);
-                                tvEn.setSelected(true);
+                                tvCn.setChecked(false);
+                                tvEn.setChecked(true);
                             } else if (queueEN.size() > 0) {
-                                tvCn.setEnabled(true);
-                                tvCn.setSelected(true);
-                                tvEn.setEnabled(false);
-                                tvEn.setSelected(false);
+                                tvCn.setChecked(true);
+                                tvEn.setChecked(false);
                             }
                             break;
                     }
@@ -1963,23 +1965,56 @@ public class PaperDetailsActivity extends
                     ClickEntity entity = new ClickEntity();
                     entity.setPaperInfoVO(vo);
                     itemClickAdapter.addData(entity);
-                    photoList.add(vo.getUrl());
+                    photoList.add(BASE_IMG_URL + vo.getUrl());
                     imageId.add(vo.getId());
                 }
                 if (!TextUtils.isEmpty(bean.getDigest()))
                     title = bean.getDigest();
 
+                viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
                 if (bean.getImglist() != null && bean.getImglist().size() != 0) {
                     position = 0;
                     getImageInfo(bean.getImglist().get(0).getId());
+                    viewpagerPaper.setCurrentItem(0);
                 }
 
+                break;
+            case "317"://获取待配音预览论文信息
+                DubbingBean dubbingBean = (DubbingBean) baseBean;
+                if (dubbingBean == null) {
+                    return;
+                }
+                llEmptyView.setVisibility(View.GONE);
+                if (photoList != null) {
+                    photoList.clear();
+                } else {
+                    photoList = new ArrayList<>();
+                }
+                for (DubbingVO vo : dubbingBean.getList()) {
+                    PaperInfoVO infoVO = new PaperInfoVO();
+                    infoVO.setId(vo.getPcid());
+                    infoVO.setUrl(vo.getUrl());
+                    ClickEntity entity = new ClickEntity();
+                    entity.setPaperInfoVO(infoVO);
+                    itemClickAdapter.addData(entity);
+                    photoList.add(BASE_IMG_URL + vo.getUrl());
+                    imageId.add(vo.getPcid());
+                }
+//                if (!TextUtils.isEmpty(bean.getDigest()))
+//                    title = bean.getDigest();
+
+                viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
+                if (dubbingBean.getList() != null && dubbingBean.getList().size() != 0) {
+                    position = 0;
+                    getImageInfo(dubbingBean.getList().get(0).getPcid());
+                    viewpagerPaper.setCurrentItem(0);
+                }
                 break;
             case "205"://获取论文语音
                 ImgInfoBean bean1 = (ImgInfoBean) baseBean;
                 if (bean1.getCnrecord() != null) {
                     songCN = new Song();
-                    songCN.setPath(bean1.getCnrecord().getUrl());
+                    songCN.setPath(BASE_IMG_URL + bean1.getCnrecord().getUrl());
                     songCN.setDuration(Integer.parseInt(bean1.getCnrecord().getDuration()));
                     songCN.setTitle(bean1.getCnrecord().getId() + "音频");
                     songCN.setPhotoPath(photoList.get(position));
@@ -1990,7 +2025,7 @@ public class PaperDetailsActivity extends
 
                 if (bean1.getEnrecord() != null) {
                     songEN = new Song();
-                    songEN.setPath(bean1.getEnrecord().getUrl());
+                    songEN.setPath(BASE_IMG_URL + bean1.getEnrecord().getUrl());
                     songEN.setDuration(Integer.parseInt(bean1.getEnrecord().getDuration()));
                     songEN.setTitle(bean1.getEnrecord().getId() + "音频");
                     songEN.setPhotoPath(photoList.get(position));
@@ -1999,9 +2034,9 @@ public class PaperDetailsActivity extends
                     songEN = null;
                 }
                 if (songCN != null && songEN != null) {
-                    if ("CN".equals(language)) {
+                    if (CN.equals(language)) {
                         getPlayService().play(songCN);
-                    } else if ("EN".equals(language)) {
+                    } else if (EN.equals(language)) {
                         getPlayService().play(songEN);
                     } else {
                         getPlayService().play(songCN);

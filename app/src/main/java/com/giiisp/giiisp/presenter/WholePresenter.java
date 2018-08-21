@@ -1388,7 +1388,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
 
     // 普通回调，无特殊数据
     public void getDataAll(String por, HashMap<String, Object> options) {
-        LogUtils.v("okHttp---por:" + por + " 参数：" + options);
+        LogUtils.v("okHttp---por:" + por + " 回调参数：" + options);
         ApiStoreNew.getInstance().getApiService().getDataString(getHashMap(por, options))
                 .enqueue(new Callback<String>() {
                     @Override
@@ -1427,7 +1427,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     private BaseBean stringToBody(String url, String result) {
-        LogUtils.v("接口：" + url + ",okHttp回调未解密：" + result);
+//        LogUtils.v("接口：" + url + ",okHttp回调未解密：" + result);
         String cipher = DESedeUtils.getdeCrypt(result, getUUID());
         LogUtils.v("接口：" + url + ",okHttp回调解密：" + cipher);
         BaseBean baseEntity;

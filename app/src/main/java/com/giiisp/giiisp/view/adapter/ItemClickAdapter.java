@@ -653,6 +653,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             });
                             ((RadioButton) helper.getView(R.id.rb_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
                                 if (b) {
+                                    vo.setMyLanguage("1");//记录是中文
                                     list.clear();
                                     for (PaperMainVO.VlistBean bean : vo.getVlist()) {
                                         ClickEntity entity = new ClickEntity();
@@ -665,6 +666,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             });
                             ((RadioButton) helper.getView(R.id.rb_en)).setOnCheckedChangeListener((compoundButton, b) -> {
                                 if (b) {
+                                    vo.setMyLanguage("2");//记录是英文
                                     list.clear();
                                     for (PaperMainVO.VlistBean bean : vo.getVlist()) {
                                         ClickEntity entity = new ClickEntity();

@@ -255,7 +255,7 @@
                             android:textSize="10sp"
                             />
 
-                        <TextView
+                        <CheckBox
                             android:id="@+id/tv_cn"
                             style="@style/text_12sp_colorwhite"
                             android:layout_centerVertical="true"
@@ -263,9 +263,10 @@
                             android:layout_toLeftOf="@+id/tv_en"
                             android:background="@drawable/cn_en_selector"
                             android:gravity="center"
+                            android:button="@null"
                             android:text="@string/cn"/>
 
-                        <TextView
+                        <CheckBox
                             android:id="@+id/tv_en"
                             style="@style/text_12sp_colorwhite"
                             android:layout_alignParentRight="true"
@@ -274,6 +275,7 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/cn_en_selector"
                             android:gravity="center"
+                            android:button="@null"
                             android:text="@string/en"/>
                     </RelativeLayout>
 
