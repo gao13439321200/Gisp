@@ -3,6 +3,7 @@ package com.giiisp.giiisp.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -99,6 +100,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     Button mBtnSmall;
     @BindView(R.id.tv_mark)
     TextView mTvMark;
+    @BindView(R.id.rl_full)
+    RelativeLayout mRlFull;
 
 
     String typeActivity;
@@ -167,7 +170,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     @Override
     public void initView() {
         super.initView();
-        ScreenUtils.setPortrait(this);
         tvTime = findViewById(R.id.tv_time);
 //        List<String> list_url = new ArrayList<>();
 //        List<ClickEntity> list = new ArrayList<>();
@@ -354,7 +356,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
 
                 break;
             case R.id.tv_dubbing_re_record://重录
-                dataList.get(dubbingPosition).getDubbingVO().setRid("");
+                dataList.get(viewPager.getCurrentItem()).getDubbingVO().setRid("");
                 resolveStopRecord();
                 mMyCustomView.clearData();
                 tvHint.setText(R.string.click_start_voice);
@@ -410,11 +412,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 break;
             case R.id.btn_full://全屏
                 GlideApp.with(this)
-                        .load(dataList.get(viewPager.getCurrentItem()).getDubbingVO().getUrl())
+                        .load(BASE_IMG_URL + dataList.get(viewPager.getCurrentItem()).getDubbingVO().getUrl())
                         .into(mImgFull);
-                ScreenUtils.setLandscape(this);
-                mImgFull.setVisibility(View.VISIBLE);
-                mBtnSmall.setVisibility(View.VISIBLE);
+//                ScreenUtils.setLandscape(this);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                mRlFull.setVisibility(View.VISIBLE);
                 sendData304(0, 0, 1);
                 break;
             case R.id.iv_dubbing:
@@ -426,9 +428,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             case R.id.img_full://全屏时的图片
                 break;
             case R.id.btn_small://缩小全屏
-                ScreenUtils.setPortrait(this);
-                mImgFull.setVisibility(View.GONE);
-                mBtnSmall.setVisibility(View.GONE);
+//                ScreenUtils.setPortrait(this);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                mRlFull.setVisibility(View.GONE);
                 sendData304(0, 0, 2);
                 break;
             case R.id.tv_right:
@@ -771,7 +773,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             case "317"://论文图片信息
                 DubbingBean bean = (DubbingBean) baseBean;
                 for (DubbingVO vo : bean.getList()) {
-                    vo.setRid("");
                     ClickEntity clickEntity = new ClickEntity();
                     clickEntity.setDubbingVO(vo);
                     dataList.add(clickEntity);

@@ -130,7 +130,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity android:name=".view.activity.GiiispActivity" />
-        <activity android:name=".view.activity.DubbingActivity" />
+        <activity android:name=".view.activity.DubbingActivity"
+                  android:configChanges="orientation|keyboardHidden|screenSize"/>
         <activity android:name=".view.activity.LogInActivity" />
         <activity android:name=".view.activity.SettingActivity" />
         <activity android:name=".view.activity.EditUserInfoActivity" />
