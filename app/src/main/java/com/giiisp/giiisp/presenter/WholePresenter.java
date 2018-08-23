@@ -30,6 +30,7 @@ import com.giiisp.giiisp.dto.PaperLiteratureBean;
 import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperQaBean;
 import com.giiisp.giiisp.dto.PeopleBean;
+import com.giiisp.giiisp.dto.PlayNoteBean;
 import com.giiisp.giiisp.dto.SubjectBean;
 import com.giiisp.giiisp.dto.WordBean;
 import com.giiisp.giiisp.entity.AnswerEntity;
@@ -1480,6 +1481,9 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             case "312":
                 baseEntity = new Gson().fromJson(cipher, PaperMainBean.class);
                 break;
+            case "214":
+                baseEntity = new Gson().fromJson(cipher, PlayNoteBean.class);
+                break;
             case "305":
                 baseEntity = new Gson().fromJson(cipher, PaperEventBean.class);
                 break;
@@ -1502,7 +1506,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             case "317":
                 baseEntity = new Gson().fromJson(cipher, DubbingBean.class);
                 break;
-            default://101、105、111、304、318
+            default://101、105、111、304、318、215
                 baseEntity = new Gson().fromJson(cipher, BaseBean.class);
                 break;
         }

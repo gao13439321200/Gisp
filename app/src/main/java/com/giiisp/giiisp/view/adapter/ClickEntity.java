@@ -20,6 +20,7 @@ import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.dto.PaperLiteratureVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
+import com.giiisp.giiisp.dto.PlayNoteVo;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -375,6 +376,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private DubbingVO mDubbingVO;
     private MyAnswerVO mMyAnswerVO;
     private PaperInfoVO mPaperInfoVO;
+    private PlayNoteVo mPlayNoteVo;
+
+    public PlayNoteVo getPlayNoteVo() {
+        return mPlayNoteVo;
+    }
+
+    public void setPlayNoteVo(PlayNoteVo playNoteVo) {
+        mPlayNoteVo = playNoteVo;
+    }
 
     public PaperInfoVO getPaperInfoVO() {
         return mPaperInfoVO;

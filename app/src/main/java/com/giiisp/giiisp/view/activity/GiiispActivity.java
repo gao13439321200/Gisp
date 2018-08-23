@@ -245,11 +245,11 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
             if (!TextUtils.isEmpty(paperId)) {
                 ArrayList<String> map = new ArrayList<>();
                 map.add(PaperDetailsActivity.paperId);
-                PaperDetailsActivity.actionActivity(GiiispActivity.this, PaperDetailsActivity.id, map, "online_paper");
+                PaperDetailsActivity.actionActivity(GiiispActivity.this, PaperDetailsActivity.pid, map, "online_paper");
             } else if (!TextUtils.isEmpty(downloadId)) {
                 ArrayList<String> map = new ArrayList<>();
                 map.add(PaperDetailsActivity.downloadId);
-                PaperDetailsActivity.actionActivity(GiiispActivity.this, PaperDetailsActivity.id, map, "download_paper");
+                PaperDetailsActivity.actionActivity(GiiispActivity.this, PaperDetailsActivity.pid, map, "download_paper");
             }
 
         }

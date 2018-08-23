@@ -44,6 +44,7 @@ public class MyCustomView extends View {
         map.put("x", x);
         map.put("y", y);
         mPointList.add(map);
+        invalidate();
     }
 
     public MyCustomView(Context context, @Nullable AttributeSet attrs) {
@@ -57,9 +58,10 @@ public class MyCustomView extends View {
         this.mContext = context;
     }
 
+    //清空数据并且清空界面
     public void clearData() {
         mPointList.clear();
-        invalidate();//清空数据并且清空界面
+        invalidate();
     }
 
     @Override

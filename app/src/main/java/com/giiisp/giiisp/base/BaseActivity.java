@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.net.NetChangeObserver;
 import com.giiisp.giiisp.net.NetWorkUtil;
 import com.giiisp.giiisp.net.NetworkStateReceiver;
@@ -251,4 +253,9 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
     public void collection(int id, int integer, String type, String isFollowed, int parentPosition, int position) {
 
     }
+
+    public String getUserID() {
+        return SPUtils.getInstance().getString(UrlConstants.UID, "");
+    }
+
 }

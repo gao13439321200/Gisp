@@ -234,7 +234,7 @@ public class PaperDetailsActivity extends
     private NoteDao noteDao;
     private Query<Note> notesQuery;
     public static String paperId;
-    public static String id;
+    public static String pid;
     private String storageId;
     public static String downloadId = "";
     private ItemClickAdapter itemClickAdapter;
@@ -251,7 +251,7 @@ public class PaperDetailsActivity extends
     List<String> imageId = new ArrayList<>();
     private BannerRecyclerViewFragment paperQA;
     Note note = new Note();
-    private ArrayList<String> version = new ArrayList<>();
+    //    private ArrayList<String> version = new ArrayList<>();
     private String myVersionNo = "";
     private List<Song> queueCN = new ArrayList<>();
     private List<Song> queueEN = new ArrayList<>();
@@ -289,10 +289,15 @@ public class PaperDetailsActivity extends
     /*** 记录当前page页面是否为视频 ***/
     static Map<Integer, Boolean> mIsVideo;
 
-    private int progress = 0;//播放进度
+    private int nowProgress = 0;//播放进度
     private Map<String, PaperEventVO> mBeanMap = new HashMap<>();
     private List<String> timeString = new ArrayList<>();
     private boolean isEvent = false;
+    private Map<String, String> mPidMap = new HashMap<>();
+    private String twoId = "";
+    private String threeId = "";
+    private String fourId = "";
+    private String lastPlayId = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -323,6 +328,12 @@ public class PaperDetailsActivity extends
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        sendPlayNote();
+        super.onStop();
     }
 
     public OnPlayerEventListener getOnPlayerEventListener() {
@@ -357,12 +368,13 @@ public class PaperDetailsActivity extends
     }
 
     //所有入口
-    public static void actionActivityNew(Context context, String id, ArrayList<String> version, String type, String language) {
+    public static void actionActivityNew(Context context, String id, String version,
+                                         String type, String language) {
         Intent sIntent = new Intent(context, PaperDetailsActivity.class);
         sIntent.putExtra("id", id);
         sIntent.putExtra("type", type);
         sIntent.putExtra("language", language);
-        sIntent.putStringArrayListExtra("version", version);
+        sIntent.putExtra("version", version);
         sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(sIntent);
     }
@@ -382,7 +394,7 @@ public class PaperDetailsActivity extends
 
     @Override
     public void initData() {
-        id = getIntent().getStringExtra("id");
+        pid = getIntent().getStringExtra("id");
         //        downloadId = getIntent().getIntExtra("downloadId", -1);
         type = getIntent().getStringExtra("type");
         title = getIntent().getStringExtra("title");
@@ -390,25 +402,26 @@ public class PaperDetailsActivity extends
             language = getIntent().getStringExtra("language");
         tvCn.setChecked(CN.equals(language));
         tvEn.setChecked(EN.equals(language));
-        version = getIntent().getStringArrayListExtra("version");
-        if (version != null && version.size() > 0) {
-            myVersionNo = version.get(0);
-            for (int i = 0; i < version.size(); i++) {
-                switch (version.get(i)) {
-                    case "2"://完整
-                        tvPaperComplete.setVisibility(View.VISIBLE);
-                        break;
-                    case "4"://精华
-                        tvPaperMarrow.setVisibility(View.VISIBLE);
-                        break;
-                    case "3"://摘要
-                        tvPaperAbstract.setVisibility(View.VISIBLE);
-                        break;
-                }
-            }
-        }
+        myVersionNo = getIntent().getStringExtra("version");
+//        version = getIntent().getStringArrayListExtra("version");
+//        if (version != null && version.size() > 0) {
+//            myVersionNo = version.get(0);
+//            for (int i = 0; i < version.size(); i++) {
+//                switch (version.get(i)) {
+//                    case "2"://完整
+//                        tvPaperComplete.setVisibility(View.VISIBLE);
+//                        break;
+//                    case "4"://精华
+//                        tvPaperMarrow.setVisibility(View.VISIBLE);
+//                        break;
+//                    case "3"://摘要
+//                        tvPaperAbstract.setVisibility(View.VISIBLE);
+//                        break;
+//                }
+//            }
+//        }
 //        storageId = id + string;
-        storageId = id;
+        storageId = pid;
         photoList = getIntent().getStringArrayListExtra("photoRows");
         recordOneList = getIntent().getStringArrayListExtra("recordOneRows");
         recordTwoList = getIntent().getStringArrayListExtra("recordTwoRows");
@@ -439,10 +452,7 @@ public class PaperDetailsActivity extends
 
         progressPopupWindow = new ProgressPopupWindow(this);
 //                showDialog();
-
         loadDownloadNunber();
-
-
         if (photoList != null && photoList.size() > 0) {
             fullScreenPopup.setStringArrayList(photoList);
             fullScreenPopup.initDownload();
@@ -470,7 +480,7 @@ public class PaperDetailsActivity extends
         if (getPlayService() != null) {
             PlayService playService = getPlayService();
             playService.setOnPlayEventListener(this);
-            if (storageId.equals(id)) {
+            if (storageId.equals(pid)) {
                 ivPlayStop.setSelected(playService.isPlaying());
 
                 if (playService.getPlayingMusic() != null) {
@@ -504,9 +514,9 @@ public class PaperDetailsActivity extends
             case "questions":
                 List<BaseFragment> fragments = new ArrayList<>();
                 //问答、文献索引、统计
-                paperQA = BannerRecyclerViewFragment.newInstance("paper_qa", id + "");
+                paperQA = BannerRecyclerViewFragment.newInstance("paper_qa", pid);
                 fragments.add(paperQA);
-                fragments.add(BannerRecyclerViewFragment.newInstance("paper_literature", id + ""));
+                fragments.add(BannerRecyclerViewFragment.newInstance("paper_literature", pid));
                 fragments.add(StatisticsFragment.newInstance());
                 List<String> mTitles = new ArrayList<>();
                 mTitles.add("问答");
@@ -542,7 +552,7 @@ public class PaperDetailsActivity extends
 //                    dubbingMap.put("version", string);
 //                presenter.getPaperBaseByIdData(dubbingMap);
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("pid", id);
+                map.put("pid", pid);
                 map.put("language", language);
                 presenter.getDataAll("317", map);
                 llEmptyView.setVisibility(View.GONE);
@@ -668,7 +678,8 @@ public class PaperDetailsActivity extends
     protected void initNetwork() {
         HashMap<String, Object> map = new HashMap<>();
 //        map.put("token", token);
-        map.put("pid", id);
+        map.put("pid", pid);
+        map.put("version", myVersionNo);
         presenter.getDataAll("204", map);
 //        map.put("uid", uid);
 //        Log.i("--->>", "initNetwork: " + string);
@@ -699,43 +710,17 @@ public class PaperDetailsActivity extends
                 finish();
                 break;
             case R.id.tv_paper_complete://完整
-
-                ArrayList<String> complete = new ArrayList<>();
-                complete.add("0");
-                if (version.contains(0))
-                    version.remove((Integer) 0);
-                //                version.add(0,0);
-                for (String string : version) {
-                    complete.add(string);
-                }
-                PaperDetailsActivity.actionActivityNew(this, id, complete, "online_paper", language);
+                PaperDetailsActivity.actionActivityNew(this, twoId, "2", "online_paper", language);
                 break;
             case R.id.tv_paper_marrow://精华
-                ArrayList<String> marrow = new ArrayList<>();
-                marrow.add("1");
-                if (version.contains((Integer) 1))
-                    version.remove((Integer) 1);
-                //                version.add(0,0);
-                for (String string : version) {
-                    marrow.add(string);
-                }
-                PaperDetailsActivity.actionActivityNew(this, id, marrow, "online_paper", language);
-
+                PaperDetailsActivity.actionActivityNew(this, fourId, "4", "online_paper", language);
                 break;
             case R.id.tv_paper_abstract://摘要
-                ArrayList<String> abstracts = new ArrayList<>();
-                abstracts.add("2");
-                if (version.contains((Integer) 2))
-                    version.remove((Integer) 2);
-                //                version.add(0,0);
-                for (String string : version) {
-                    abstracts.add(string);
-                }
-                PaperDetailsActivity.actionActivityNew(this, id, abstracts, "online_paper", language);
-
+                PaperDetailsActivity.actionActivityNew(this, threeId, "3", "online_paper", language);
                 break;
             case R.id.tv_cn:
                 if (getPlayService() != null && songCN != null) {
+                    sendPlayNote();
                     changeLanguage(true);
                 } else {
                     tvCn.setChecked(false);
@@ -747,6 +732,7 @@ public class PaperDetailsActivity extends
             case R.id.tv_en:
                 Log.i("--->>", "onViewClicked: tv_en");
                 if (getPlayService() != null && songEN != null) {
+                    sendPlayNote();
                     changeLanguage(false);
                 } else {
                     tvCn.setChecked(true);
@@ -757,6 +743,7 @@ public class PaperDetailsActivity extends
             case R.id.iv_fast_forward://下一页
                 if (getPlayService() != null) {
                     if (position < imageId.size() - 1) {
+                        sendPlayNote();
                         getImageInfo(imageId.get(position + 1));
                     } else {
                         ToastUtils.showShort("已经是最后一张了");
@@ -767,6 +754,7 @@ public class PaperDetailsActivity extends
             case R.id.iv_back_off://上一页
                 if (getPlayService() != null) {
                     if (position > 0) {
+                        sendPlayNote();
                         getImageInfo(imageId.get(position - 1));
                     } else {
                         ToastUtils.showShort("已经是第一张了");
@@ -841,12 +829,7 @@ public class PaperDetailsActivity extends
                     normalDialog.setIcon(null);
                     normalDialog.setTitle("需要登录才能执行此操作");
                     normalDialog.setPositiveButton("登录",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    LogInActivity.actionActivity(PaperDetailsActivity.this);
-                                }
-                            });
+                            (dialogInterface, i) -> LogInActivity.actionActivity(PaperDetailsActivity.this));
                     normalDialog.setNegativeButton("取消", null);
                     // 显示
                     normalDialog.show();
@@ -920,7 +903,7 @@ public class PaperDetailsActivity extends
                             @Override
                             public void run() throws Exception {
 
-                                UMWeb web = new UMWeb("http://giiisp.com/paper_play.php?id=" + id);
+                                UMWeb web = new UMWeb("http://giiisp.com/paper_play.php?id=" + pid);
                                 UMImage thumb = new UMImage(PaperDetailsActivity.this, firstPic);
                                 web.setTitle(title);//标题
                                 web.setThumb(thumb);  //缩略图
@@ -933,22 +916,22 @@ public class PaperDetailsActivity extends
 
                 break;
             case R.id.tv_left://快退
-                if (progress < 15000) {
+                if (nowProgress < 15000) {
                     seekBarPaper.setProgress(0);//如果已经播放的时间少于15秒，则从头开始播放
                     getPlayService().seekTo(0);
                 } else {
-                    int time = progress - 15000;
+                    int time = nowProgress - 15000;
                     seekBarPaper.setProgress(time);
                     getPlayService().seekTo(time);
                 }
                 break;
             case R.id.tv_right://快进
                 Log.d("PaperDetailsActivity", "seekBarPaper.getMax():" + seekBarPaper.getMax());
-                if (seekBarPaper.getMax() - progress < 15000) {
+                if (seekBarPaper.getMax() - nowProgress < 15000) {
                     seekBarPaper.setProgress(seekBarPaper.getMax() - 1000);//如果未播放的时间少于15秒，则直接到最后一秒
                     getPlayService().seekTo(seekBarPaper.getMax() - 1000);
                 } else {
-                    int time = progress + 15000;
+                    int time = nowProgress + 15000;
                     seekBarPaper.setProgress(time);
                     getPlayService().seekTo(time);
                 }
@@ -973,16 +956,16 @@ public class PaperDetailsActivity extends
         map.put("version", integer);
         //pbid=1&flag=1&tabFlag=1
         presenter.getSaveFollowPaperPictureData(map);*/
-        final ArrayMap<String, Object> map = new ArrayMap<>();
-        map.put("pbid", id);
-        map.put("flag", 1);
-        map.put("tabFlag", 1);
-        map.put("uid", uid);
-        map.put("version", myVersionNo);
+//        final ArrayMap<String, Object> map = new ArrayMap<>();
+//        map.put("pbid", id);
+//        map.put("flag", 1);
+//        map.put("tabFlag", 1);
+//        map.put("uid", uid);
+//        map.put("version", myVersionNo);
 
         HashMap<String, Object> hMap = new HashMap<>();
         hMap.put("uid", uid);
-        hMap.put("pid", id);
+        hMap.put("pid", pid);
         hMap.put("version", myVersionNo);
 
 
@@ -1022,7 +1005,7 @@ public class PaperDetailsActivity extends
             //uId=1&pid=5&ptype=1&ttype=1
             ArrayMap<String, Object> map = new ArrayMap<>();
             map.put("uid", uid);
-            map.put("pid", id);
+            map.put("pid", pid);
             map.put("ttype", 1);
             map.put("ptype", 1);
             presenter.getSaveShareData(map);
@@ -1210,6 +1193,7 @@ public class PaperDetailsActivity extends
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
         if (this.position != position) {
+            sendPlayNote();
             this.position = position;
 //            if (getPlayService() != null)
 //                getPlayService().play(position);
@@ -1410,7 +1394,7 @@ public class PaperDetailsActivity extends
 
                 if (getPlayService() != null) {
                     PlayService playService = getPlayService();
-                    if (storageId.equals(id)) {
+                    if (storageId.equals(pid)) {
                         switch (language) {
                             case CN:
                                 tvCn.setChecked(false);
@@ -1493,27 +1477,23 @@ public class PaperDetailsActivity extends
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("PaperDetailsActivity", "progress:" + progress);
-        this.progress = progress;
+        this.nowProgress = progress;
         tvPlayTime.setText(Util.formatSeconds(progress / 1000));
         if (timeString.contains(Util.formatSeconds(progress / 1000))) {
             PaperEventVO vo = mBeanMap.get(Util.formatSeconds(progress / 1000));
             switch (vo.getType()) {
                 case "1"://放大
-                    Log.v("=====", "放大了");
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     isFulllScreen = true;
                     break;
                 case "2"://缩小
-                    Log.v("=====", "缩小了");
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     isFulllScreen = false;
                     break;
                 case "3"://标记
-                    Log.v("=====", "标记了");
                     mMyCustomView.addPoint(Float.valueOf(vo.getX()), Float.valueOf(vo.getY()));
                     break;
                 case "4"://调用开始
-                    Log.v("=====", "调用了");
                     if (imageId.contains(vo.getTimgid())) {
                         isEvent = true;
                         int timgPositon = imageId.indexOf(vo.getTimgid());
@@ -1523,7 +1503,6 @@ public class PaperDetailsActivity extends
                     }
                     break;
                 case "5"://调用结束
-                    Log.v("=====", "调用了");
                     viewpagerPaper.setCurrentItem(position);
                     isEvent = false;
                     break;
@@ -1587,6 +1566,7 @@ public class PaperDetailsActivity extends
 //            note.setSongsSize(songs.size());
 //            noteDao.insertOrReplace(note);
 //        }
+        sendPlayNote();
 
         if (getPlayService() != null) {
             if (position < imageId.size() - 1) {
@@ -1974,6 +1954,21 @@ public class PaperDetailsActivity extends
                 if (bean == null) {
                     return;
                 }
+                myVersionNo = bean.getVersion();
+                pid = bean.getId();
+                //完整
+                tvPaperComplete.setVisibility(!"2".equals(myVersionNo) && "1".equals(bean.getTwo())
+                        ? View.VISIBLE : View.GONE);
+                //摘要
+                tvPaperAbstract.setVisibility(!"3".equals(myVersionNo) && "1".equals(bean.getThree())
+                        ? View.VISIBLE : View.GONE);
+                //精华
+                tvPaperMarrow.setVisibility(!"4".equals(myVersionNo) && "1".equals(bean.getFour())
+                        ? View.VISIBLE : View.GONE);
+                twoId = bean.getTwoid();
+                threeId = bean.getThreeid();
+                fourId = bean.getFourid();
+
                 llEmptyView.setVisibility(View.GONE);
                 if (photoList != null) {
                     photoList.clear();
@@ -2052,6 +2047,7 @@ public class PaperDetailsActivity extends
                 } else {
                     songEN = null;
                 }
+                Log.d("====", "准备播放了");
                 if (songCN != null && songEN != null) {
                     if (CN.equals(language)) {
                         getPlayService().play(songCN);
@@ -2073,11 +2069,12 @@ public class PaperDetailsActivity extends
                 break;
             case "305":
                 PaperEventBean bean2 = (PaperEventBean) baseBean;
+                Log.v("====", "事件获取完成,个数" + bean2.getList().size());
                 mBeanMap = new HashMap<>();
                 timeString = new ArrayList<>();
                 for (PaperEventVO vo : bean2.getList()) {
-                    mBeanMap.put(vo.getTime(), vo);
-                    timeString.add(vo.getTime());
+                    mBeanMap.put(Util.formatSeconds(Integer.parseInt(vo.getTime())), vo);
+                    timeString.add(Util.formatSeconds(Integer.parseInt(vo.getTime())));
                 }
 //                PaperEventVO vo = new PaperEventVO();
 //                vo.setTime("00:00:02");
@@ -2131,11 +2128,31 @@ public class PaperDetailsActivity extends
         timeString = new ArrayList<>();
         isEvent = false;
         HashMap<String, Object> map = new HashMap<>();
-        map.put("iid", imgId);
-        presenter.getDataAll("205", map);
-        map.put("pid", id);
+        map.put("imgid", imgId);
+        map.put("pid", pid);
         map.put("language", language);
         presenter.getDataAll("305", map);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        map = new HashMap<>();
+        map.put("iid", imgId);
+        presenter.getDataAll("205", map);
+    }
+
+    //保存播放记录
+    private void sendPlayNote() {
+        if ((nowProgress / 1000) != 0) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid", getUserID());
+            map.put("pid", pid);
+            map.put("picid", imageId.get(position));
+            map.put("stoptime", (nowProgress / 1000) + 1);
+            map.put("duration", (nowProgress / 1000) + 1);
+            presenter.getDataAll("215", map);
+        }
     }
 
 }

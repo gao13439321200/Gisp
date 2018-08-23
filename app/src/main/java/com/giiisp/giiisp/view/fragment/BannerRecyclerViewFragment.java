@@ -1,5 +1,6 @@
 package com.giiisp.giiisp.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
@@ -48,6 +49,8 @@ import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaBean;
 import com.giiisp.giiisp.dto.PaperQaVO;
+import com.giiisp.giiisp.dto.PlayNoteBean;
+import com.giiisp.giiisp.dto.PlayNoteVo;
 import com.giiisp.giiisp.entity.AnswerBean;
 import com.giiisp.giiisp.entity.AnswerEntity;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
@@ -265,6 +268,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
     }
 
+    @SuppressLint("CheckResult")
     public void loadDownloadData() {
         ArrayList<ClickEntity> res0 = new ArrayList<>();
         ArrayList<ClickEntity> res1 = new ArrayList<>();
@@ -487,49 +491,46 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         return res0;
                     }
                 })
-                .subscribe(new Consumer<List<ClickEntity>>() {
-                    @Override
-                    public void accept(List<ClickEntity> downloadBeen) throws Exception {
-                        swipeRefreshLayout.setRefreshing(false);
-                        switch (type) {
-                            case "paper_download":
+                .subscribe(downloadBeen -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    switch (type) {
+                        case "paper_download":
 
-                            case "summary_download":
-                                mDragAdapter.setNewData(null);
-                                for (ClickEntity clickEntity : downloadBeen) {
-                                    List<ClickEntity> subItems = clickEntity.getSubItems();
-                                    if (subItems != null && subItems.size() > 0) {
-                                        mDragAdapter.addData(clickEntity);
+                        case "summary_download":
+                            mDragAdapter.setNewData(null);
+                            for (ClickEntity clickEntity : downloadBeen) {
+                                List<ClickEntity> subItems = clickEntity.getSubItems();
+                                if (subItems != null && subItems.size() > 0) {
+                                    mDragAdapter.addData(clickEntity);
+                                }
+                            }
+
+                            break;
+                        case "download":
+                            expandableItemAdapter.setNewData(null);
+                            for (ClickEntity clickEntity : downloadBeen) {
+                                List<ClickEntity> subItems = clickEntity.getSubItems();
+                                if (subItems != null && subItems.size() > 0) {
+                                    expandableItemAdapter.addData(clickEntity);
+                                }
+                            }
+                            expandableItemAdapter.expandAll();
+                    /*        List<ClickEntity> data = expandableItemAdapter.getData();
+                            for (ClickEntity clickEntity : data) {
+                                List<ClickEntity> subItems = clickEntity.getSubItems();
+                                for (ClickEntity subItem : subItems) {
+                                    List<ClickEntity> subItems1 = subItem.getSubItems();
+                                    for (ClickEntity entity : subItems1) {
+
                                     }
                                 }
-
-                                break;
-                            case "download":
-                                expandableItemAdapter.setNewData(null);
-                                for (ClickEntity clickEntity : downloadBeen) {
-                                    List<ClickEntity> subItems = clickEntity.getSubItems();
-                                    if (subItems != null && subItems.size() > 0) {
-                                        expandableItemAdapter.addData(clickEntity);
-                                    }
-                                }
-                                expandableItemAdapter.expandAll();
-                        /*        List<ClickEntity> data = expandableItemAdapter.getData();
-                                for (ClickEntity clickEntity : data) {
-                                    List<ClickEntity> subItems = clickEntity.getSubItems();
-                                    for (ClickEntity subItem : subItems) {
-                                        List<ClickEntity> subItems1 = subItem.getSubItems();
-                                        for (ClickEntity entity : subItems1) {
-
-                                        }
-                                    }
-                                }
+                            }
 */
-                                break;
+                            break;
 
-                            default:
-                                Log.i("--->>", "apply:2 " + Thread.currentThread().getName());
-                                break;
-                        }
+                        default:
+                            Log.i("--->>", "apply:2 " + Thread.currentThread().getName());
+                            break;
                     }
                 });
     }
@@ -973,29 +974,36 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("page", page);
                 presenter.getListScholarData(map);
                 break;
+//            case "plays":
+
+//                DaoSession daoSessions = BaseApp.app.getDaoSession();
+//                NoteDao noteDaos = daoSessions.getNoteDao();
+//                Query<Note> notesQuerys = noteDaos.queryBuilder().where(NoteDao.Properties.Type.eq("plays")).orderDesc(NoteDao.Properties.Time).build();
+//                list.clear();
+//                List<Note> listnotes = notesQuerys.list();
+//                for (int i = 0; i < listnotes.size(); i++) {
+//                    list.add(new ClickEntity(listnotes.get(i)));
+//                }
+//                itemClickAdapter.setNewData(list);
+//                swipeRefreshLayout.setRefreshing(false);
+//                break;
             case "plays":
-                DaoSession daoSessions = BaseApp.app.getDaoSession();
-                NoteDao noteDaos = daoSessions.getNoteDao();
-                Query<Note> notesQuerys = noteDaos.queryBuilder().where(NoteDao.Properties.Type.eq("plays")).orderDesc(NoteDao.Properties.Time).build();
-                list.clear();
-                List<Note> listnotes = notesQuerys.list();
-                for (int i = 0; i < listnotes.size(); i++) {
-                    list.add(new ClickEntity(listnotes.get(i)));
-                }
-                itemClickAdapter.setNewData(list);
-                swipeRefreshLayout.setRefreshing(false);
-                break;
             case "play":
-                DaoSession daoSession = BaseApp.app.getDaoSession();
-                NoteDao noteDao = daoSession.getNoteDao();
-                Query<Note> notesQuery = noteDao.queryBuilder().where(NoteDao.Properties.Type.eq("play")).orderDesc(NoteDao.Properties.Time).build();
-                List<Note> listnote = notesQuery.list();
-                list.clear();
-                for (int i = 0; i < listnote.size(); i++) {
-                    list.add(new ClickEntity(listnote.get(i)));
-                }
-                itemClickAdapter.setNewData(list);
-                swipeRefreshLayout.setRefreshing(false);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+//                hMap.put("version",version);
+                presenter.getDataAll("214", hMap);
+
+//                DaoSession daoSession = BaseApp.app.getDaoSession();
+//                NoteDao noteDao = daoSession.getNoteDao();
+//                Query<Note> notesQuery = noteDao.queryBuilder().where(NoteDao.Properties.Type.eq("play")).orderDesc(NoteDao.Properties.Time).build();
+//                List<Note> listnote = notesQuery.list();
+//                list.clear();
+//                for (int i = 0; i < listnote.size(); i++) {
+//                    list.add(new ClickEntity(listnote.get(i)));
+//                }
+//                itemClickAdapter.setNewData(list);
+//                swipeRefreshLayout.setRefreshing(false);
                 break;
             case "paper_qa"://论文详情评论问答
                 if (TextUtils.isEmpty(imageId))
@@ -2104,14 +2112,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "collection_paper":
             case "collection_summary":
                 PaperMainVO vo = itemClickAdapter.getItem(position).getPaperMainVO();
-                ArrayList<String> versionList = new ArrayList<>();
-                if (vo.getVlist() != null) {
-                    for (PaperMainVO.VlistBean bean : vo.getVlist()) {
-                        versionList.add(bean.getVersion() + "");
-                    }
-                }
                 PaperDetailsActivity.actionActivityNew(getContext(), vo.getId(),
-                        versionList, "online_paper", vo.getMyLanguage());
+                        "1", "online_paper", vo.getMyLanguage());
 
 
 //                ClickEntity item = itemClickAdapter.getItem(position);
@@ -2267,12 +2269,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case R.id.tv_preview_dubbing: //  预览按钮
                 DubbingListVO vo6 = dubbingAdapter.getItem(position).getDubbingListVO();
                 PaperDetailsActivity.actionActivityNew(getContext(), vo6.getId(),
-                        new ArrayList<>(), type, "1");
+                        vo6.getVersion(), type, "1");
                 break;
             case R.id.tv_preview_dubbing_EN: //  预览按钮
                 DubbingListVO vo5 = dubbingAdapter.getItem(position).getDubbingListVO();
                 PaperDetailsActivity.actionActivityNew(getContext(), vo5.getId(),
-                        new ArrayList<>(), type, "2");
+                        vo5.getVersion(), type, "2");
                 break;
             case R.id.tv_edit_dubbing_EN: //  编辑
                 DubbingListVO vo4 = dubbingAdapter.getItem(position).getDubbingListVO();
@@ -2675,6 +2677,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         }
     }
 
+    //收藏
     @Override
     public void collection(int id, int integer, final String type, String isFollowed, int parentPosition, int position) {
         changePosition = parentPosition;
@@ -2791,12 +2794,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     mainEntity.setPaperQaVO(vo);
                     itemClickAdapter.addData(mainEntity);
                 }
-                if (qaBean.getList().size() == 0) {
-                    if (page != 0)
-                        ToastUtils.showShort("数据已经全部加载了");
-                    else
-                        ToastUtils.showShort("暂无数据");
-                }
+//                if (qaBean.getList().size() == 0) {
+//                    if (page != 0)
+//                        ToastUtils.showShort("数据已经全部加载了");
+//                    else
+//                        ToastUtils.showShort("暂无数据");
+//                }
                 if (qaBean.getList().size() >= pageSize) {
                     page++;
                 } else {
@@ -2951,6 +2954,18 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("uid", getUserID());
                 map.put("pageno", page);
                 presenter.getDataAll("316", map);
+                break;
+            case "214":
+                PlayNoteBean bean6 = (PlayNoteBean) baseBean;
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+                for (PlayNoteVo vo : bean6.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setPlayNoteVo(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+                swipeRefreshLayout.setRefreshing(false);
                 break;
             default:
                 break;

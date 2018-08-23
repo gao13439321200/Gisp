@@ -737,7 +737,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         map.put("pid", pid);
         map.put("language", language);
         map.put("type", type + "");// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
-        map.put("time", recorderSecondsElapsed + "");
+        map.put("time", recorderSecondsElapsed);
         map.put("imgid", imgId);
         map.put("timgid", type == 4 || type == 5 ? getImageId() : "");
         map.put("x", x);

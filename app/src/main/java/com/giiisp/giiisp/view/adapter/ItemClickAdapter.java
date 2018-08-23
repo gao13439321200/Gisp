@@ -70,7 +70,6 @@ import static com.giiisp.giiisp.R.id.tv_answer_reply;
 import static com.giiisp.giiisp.R.id.tv_problem;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
-import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.paperId;
 
 /**
  * 重用的适配器
@@ -105,7 +104,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
         this.activity = activity;
         mRxDownload = RxDownload.getInstance(activity);
     }
-    public ItemClickAdapter(BaseActivity activity, int layoutResId, List<ClickEntity> data,ListItemClick listItemClick) {
+
+    public ItemClickAdapter(BaseActivity activity, int layoutResId, List<ClickEntity> data, ListItemClick listItemClick) {
         super(layoutResId, data);
         this.layoutResId = layoutResId;
         this.activity = activity;
@@ -489,8 +489,6 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_collection:
                     switch (type) {
                         case "popular":
-                        case "plays":
-                        case "play":
                             if (item.getNote() == null)
                                 return;
                             helper.setText(R.id.tv_title, item.getNote().getTitle() + "");
@@ -504,7 +502,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             helper.setVisible(R.id.tv_progress, true);
                             int playPosition = item.getNote().getPlayPosition();
                             int songsSize = item.getNote().getSongsSize();
-                            helper.getView(R.id.iv_frame).setSelected(item.getNote().getId() == paperId);
+//                            helper.getView(R.id.iv_frame).setSelected(item.getNote().getId() == paperId);
                             if (songsSize != 0) {
                                 double rint = Math.rint((playPosition + 1) / (float) songsSize * 100);
                                 helper.setText(R.id.tv_progress, rint + "%");
@@ -520,6 +518,43 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     helper.setText(R.id.tv_version, "精华版");
                                     break;
                                 case "2":
+                                    helper.setText(R.id.tv_version, "摘要版");
+                                    break;
+                            }
+
+                            break;
+                        case "plays":
+                        case "play":
+                            if (item.getPlayNoteVo() == null)
+                                return;
+                            helper.setText(R.id.tv_title, item.getPlayNoteVo().getTitle());
+                            helper.setText(R.id.tv_time, item.getPlayNoteVo().getCreateTime());
+                            helper.setText(R.id.tv_paper_browse, item.getPlayNoteVo().getReadnum());
+                            helper.setText(R.id.tv_paper_collected, item.getPlayNoteVo().getCollectnum());
+                            //                            helper.getView(R.id.tv_paper_collected).setSelected(true);
+                            helper.setText(R.id.tv_paper_download, item.getPlayNoteVo().getDownloadnum());
+                            helper.setText(R.id.tv_paper_problem, item.getPlayNoteVo().getQuiznum());
+                            helper.setText(R.id.tv_time, item.getPlayNoteVo().getCreateTime());
+//                            helper.setVisible(R.id.tv_progress, true);
+//                            int playPosition = item.getPlayNoteVo().getPlayPosition();
+//                            int songsSize = item.getPlayNoteVo().getSongsSize();
+//                            helper.getView(R.id.iv_frame).setSelected(item.getPlayNoteVo().getId() == paperId);
+//                            if (songsSize != 0) {
+//                                double rint = Math.rint((playPosition + 1) / (float) songsSize * 100);
+//                                helper.setText(R.id.tv_progress, rint + "%");
+//                            }
+
+//                            ImageLoader.getInstance().displayCricleImage(activity,
+//                                    item.getPlayNoteVo().getPath(), (ImageView) helper.getView(R.id.iv_icon));
+
+                            switch (item.getPlayNoteVo().getVersion()) {
+                                case "2":
+                                    helper.setText(R.id.tv_version, "完整版");
+                                    break;
+                                case "4":
+                                    helper.setText(R.id.tv_version, "精华版");
+                                    break;
+                                case "3":
                                     helper.setText(R.id.tv_version, "摘要版");
                                     break;
                             }
@@ -665,7 +700,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 list.add(entity);
                             }
 
-                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list,mListItemClick);
+                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list, mListItemClick);
                             ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setLayoutManager(new LinearLayoutManager(activity));
                             ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setAdapter(adapter);
                             ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {

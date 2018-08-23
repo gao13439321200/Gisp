@@ -49,13 +49,13 @@ public class ItemDragAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHolde
 
         if (!TextUtils.isEmpty(item.getVersion())) {
             switch (item.getVersion()) {
-                case "0":
+                case "2":
                     helper.setText(R.id.tv_version, "完整版");
                     break;
-                case "1":
+                case "4":
                     helper.setText(R.id.tv_version, "精华版");
                     break;
-                case "2":
+                case "3":
                     helper.setText(R.id.tv_version, "摘要版");
                     break;
             }
