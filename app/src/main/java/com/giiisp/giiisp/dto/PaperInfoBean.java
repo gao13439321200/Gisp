@@ -14,7 +14,25 @@ public class PaperInfoBean extends BaseBean {
     private String threeid;
     private String four;
     private String fourid;
+    private String isfollow;
+    private String downloadnum;
     private List<PaperInfoVO> imglist;
+
+    public String getIsfollow() {
+        return isfollow;
+    }
+
+    public void setIsfollow(String isfollow) {
+        this.isfollow = isfollow;
+    }
+
+    public String getDownloadnum() {
+        return downloadnum;
+    }
+
+    public void setDownloadnum(String downloadnum) {
+        this.downloadnum = downloadnum;
+    }
 
     public String getTwoid() {
         return twoid;

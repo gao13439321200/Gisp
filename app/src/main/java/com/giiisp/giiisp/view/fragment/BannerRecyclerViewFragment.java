@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -1956,17 +1957,15 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "plays":
             case "play":
-                ClickEntity playsItem = itemClickAdapter.getItem(position);
-                if (playsItem != null && playsItem.getNote() != null) {
-                    String id = playsItem.getNote().getId();
-
-                    String version = playsItem.getNote().getVersions();
-
-                    String paperId = id; // 取消 版本拼接 + version
-                    ArrayList<String> list = new ArrayList<>();
-                    list.add(version);
-                    if (list.size() > 0 && !TextUtils.isEmpty(paperId))
-                        PaperDetailsActivity.actionActivity(getContext(), paperId, list, type);
+                PlayNoteVo playNoteVo = itemClickAdapter.getItem(position).getPlayNoteVo();
+                if (playNoteVo != null) {
+                    String id = playNoteVo.getId();
+                    String version = playNoteVo.getVersion();
+                    if (ObjectUtils.isNotEmpty(id) && ObjectUtils.isNotEmpty(version)) {
+                        PaperDetailsActivity.actionActivityNew(getContext(), id,
+                                version, type, ObjectUtils.isNotEmpty(playNoteVo.getLanguage())
+                                        ? playNoteVo.getLanguage() : "1");
+                    }
                 }
                 break;
             case "paper_qa":
@@ -2830,6 +2829,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.loadMoreEnd(false);
                 }
                 break;
+            case "213":
+                ToastUtils.showShort("收藏成功！");
+                break;
+            case "217":
+                ToastUtils.showShort("取消收藏成功！");
+                break;
             case "307":
                 FansBean bean2 = (FansBean) baseBean;
                 itemClickAdapter.loadMoreComplete();
@@ -2982,17 +2987,19 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
     @Override
     public void listClick(String type, String pid, String version) {
+        HashMap<String, Object> map = new HashMap<>();
         switch (type) {
             case "collect":
-                HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", getUserID());
                 map.put("pid", pid);
                 map.put("version", version);
                 presenter.getDataAll("213", map);
                 break;
             case "nocollect":
-                ToastUtils.showShort("测试-取消");
-
+                map.put("uid", getUserID());
+                map.put("pid", pid);
+                map.put("version", version);
+                presenter.getDataAll("217", map);
                 break;
             case "download":
                 ToastUtils.showShort("测试-下载");

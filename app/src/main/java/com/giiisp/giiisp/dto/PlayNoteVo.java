@@ -21,6 +21,15 @@ public class PlayNoteVo {
     private String readnum;
     private String title;
     private String version;
+    private String language;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public String getCollectnum() {
         return collectnum;

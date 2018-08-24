@@ -263,7 +263,6 @@ public class PaperDetailsActivity extends
     private String firstPic = "";
     private String realName = "";
     private ProgressPopupWindow progressPopupWindow;
-    private int isSave;
     private boolean isMove = false;
     /*** viewpager的根视图数据集合 ***/
     List<View> mViewList;
@@ -814,8 +813,8 @@ public class PaperDetailsActivity extends
                                     " service@giiisp.com");
                             break;
                         case "2":
-                            String pcid = photosBeanRows.get(position).getId();
-                            ProblemActivity.actionActivity(this, "Problem", pcid, uid);
+                            ProblemActivity.actionActivity(this, "Problem",
+                                    imageId.get(position), uid);
                             break;
                         case "1":
                             Utils.showToast("等待认证完成");
@@ -970,19 +969,14 @@ public class PaperDetailsActivity extends
 
 
         switch (isFollowed) {
-            case "0":
-                isSave = 10;
-//                presenter.getSaveFollowPaperPictureData(map);
+            case "2":
                 presenter.getDataAll("213", hMap);
-
                 break;
             case "1":
                 Utils.showDialog(this, "确定取消收藏", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        isSave = 20;
-//                        presenter.getCancelFollowPaperPictureData(map);
-                        // TODO: 2018/8/21 高鹏 这里需要取消收藏
+                        presenter.getDataAll("217", hMap);
                     }
                 });
                 break;
@@ -1450,13 +1444,13 @@ public class PaperDetailsActivity extends
 
 
         } else {
-            Utils.showToast(entity.getInfo());
-            if (isSave == 10) {
-                isFollowed = "1";
-            } else if (isSave == 20) {
-                isFollowed = "0";
-            }
-            ivLikedIcon.setSelected("1".equals(isFollowed));
+//            Utils.showToast(entity.getInfo());
+//            if (isSave == 10) {
+//                isFollowed = "1";
+//            } else if (isSave == 20) {
+//                isFollowed = "0";
+//            }
+//            ivLikedIcon.setSelected("1".equals(isFollowed));
         }
     }
 
@@ -1991,7 +1985,14 @@ public class PaperDetailsActivity extends
                     getImageInfo(bean.getImglist().get(0).getId());
                     viewpagerPaper.setCurrentItem(0);
                 }
-
+                // TODO: 2018/8/24 高鹏 这里需要获取是否收藏论文和下载次数isFollowed
+                isFollowed = bean.getIsfollow();
+                ivLikedIcon.setSelected("1".equals(isFollowed));
+                if (ObjectUtils.isNotEmpty(bean.getDownloadnum())) {
+                    tvDownloadNumber.setText(bean.getDownloadnum());
+                } else {
+                    tvDownloadNumber.setText("0");
+                }
                 break;
             case "317"://获取待配音预览论文信息
                 DubbingBean dubbingBean = (DubbingBean) baseBean;
@@ -2065,7 +2066,12 @@ public class PaperDetailsActivity extends
                 }
                 break;
             case "213":
-                ToastUtils.showShort(isSave == 10 ? "收藏成功！" : "取消收藏成功！");
+                isFollowed = "1";
+                ToastUtils.showShort("收藏成功！");
+                break;
+            case "217":
+                isFollowed = "2";
+                ToastUtils.showShort("取消收藏成功！");
                 break;
             case "305":
                 PaperEventBean bean2 = (PaperEventBean) baseBean;
@@ -2076,40 +2082,6 @@ public class PaperDetailsActivity extends
                     mBeanMap.put(Util.formatSeconds(Integer.parseInt(vo.getTime())), vo);
                     timeString.add(Util.formatSeconds(Integer.parseInt(vo.getTime())));
                 }
-//                PaperEventVO vo = new PaperEventVO();
-//                vo.setTime("00:00:02");
-//                vo.setX("30");
-//                vo.setY("30");
-//                vo.setType("3");
-//                mBeanMap.put(vo.getTime(), vo);
-//                timeString.add(vo.getTime());
-//
-//                vo = new PaperEventVO();
-//                vo.setTime("00:00:03");
-//                vo.setType("1");
-//                mBeanMap.put(vo.getTime(), vo);
-//                timeString.add(vo.getTime());
-//
-//                vo = new PaperEventVO();
-//                vo.setTime("00:00:05");
-//                vo.setType("2");
-//                mBeanMap.put(vo.getTime(), vo);
-//                timeString.add(vo.getTime());
-//
-//                vo = new PaperEventVO();
-//                vo.setTime("00:00:07");
-//                vo.setType("4");
-//                vo.setTimgid("ca953c03-7cd1-49aa-b534-f6c93854d189");
-//                mBeanMap.put(vo.getTime(), vo);
-//                timeString.add(vo.getTime());
-//
-//                vo = new PaperEventVO();
-//                vo.setTime("00:00:10");
-//                vo.setType("5");
-//                mBeanMap.put(vo.getTime(), vo);
-//                timeString.add(vo.getTime());
-
-                break;
             default:
                 break;
         }
@@ -2144,11 +2116,12 @@ public class PaperDetailsActivity extends
 
     //保存播放记录
     private void sendPlayNote() {
-        if ((nowProgress / 1000) != 0) {
+        if ((nowProgress / 1000) != 0 && !"wait_dubbing".equals(type)) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid", getUserID());
             map.put("pid", pid);
             map.put("picid", imageId.get(position));
+            map.put("language", language);
             map.put("stoptime", (nowProgress / 1000) + 1);
             map.put("duration", (nowProgress / 1000) + 1);
             presenter.getDataAll("215", map);

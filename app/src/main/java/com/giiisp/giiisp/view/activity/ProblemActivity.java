@@ -23,16 +23,20 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.QuizHintEntity;
+import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 
 /**
  * 回答 提问 的 页面
@@ -98,6 +102,7 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                 ivAnswerLink.setVisibility(View.GONE);
                 ivAnswerAt.setVisibility(View.GONE);
                 tvConfirm.setText(R.string.complete);
+                GlideApp.with(this).load(BASE_IMG_URL + pcid).into(mImgBig);
                 break;
             case "examineMinutely":
                 tvPutQuestion.setText(R.string.examine_minutely);
@@ -195,8 +200,9 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
 
 
                 ArrayMap<String, Object> map = new ArrayMap<>();
+                HashMap<String, Object> hMap = new HashMap<>();
                 //                map.put("uid",uid);
-                map.put("uid", uid);
+                map.put("uid", getUserID());
                 String content = editTextAnswer.getText().toString();
                 if (TextUtils.isEmpty(content)) {
                     Utils.showToast(R.string.please_input_content);
@@ -213,12 +219,14 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                         presenter.getSaveAnswerData(map);
 
                         break;
-                    case "Problem":
-                        map.put("pcid", pcid);
-                        map.put("firstQuiz", 1);
-                        presenter.getSaveQuizData(map);
+                    case "Problem"://首问
+                        hMap.put("uid", getUserID());
+                        hMap.put("content", content);
+                        hMap.put("pcid", pcid);
+                        hMap.put("firstQuiz", 1);
+//                        presenter.getSaveQuizData(hMap);
                         break;
-                    case "examineMinutely":
+                    case "examineMinutely"://追问
                         map.put("pcid", pcid);
                         map.put("firstQuiz", 2);
                         presenter.getSaveQuizData(map);
