@@ -200,6 +200,7 @@
     <string name="remake">重录</string>
     <string name="audition">试听</string>
     <string name="timer">00:00:00</string>
+    <string name="next">下一步</string>
     <string name="next_choose_references">下一步：选择证明人</string>
     <string name="mandatory">必选</string>
     <string name="select_area_expertise">点击选择您关注的专业领域</string>

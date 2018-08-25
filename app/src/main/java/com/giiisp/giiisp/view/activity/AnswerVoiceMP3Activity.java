@@ -2,14 +2,11 @@ package com.giiisp.giiisp.view.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -28,6 +25,9 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * 语音回答页面
@@ -48,22 +48,27 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
     ImageView tvRecord;
 
     private Dialog dialog;
-    private String id;
-    private String qid;
+    private String questionid;
+    private String pid;
+    private String imgid;
     private String answer;
+    private String type;
 
     @Override
     public int getLayoutId() {
         return R.layout.layout_fragment_qarecording;
     }
 
-    public static void actionActivity(Activity context, String answer, String qid, String id) {
+    public static void actionActivity(Activity context, String type, String answer,
+                                      String pid, String questionid, String imgid) {
         Intent sIntent = new Intent(context, AnswerVoiceMP3Activity.class);
         sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         sIntent.putExtra("Answer", answer);
-        sIntent.putExtra("qid", qid);
-        sIntent.putExtra("id", id);
-        context.startActivityForResult(sIntent,2000);
+        sIntent.putExtra("type", type);
+        sIntent.putExtra("pid", pid);
+        sIntent.putExtra("imgid", imgid);
+        sIntent.putExtra("questionid", questionid);
+        context.startActivityForResult(sIntent, 2000);
     }
 
     @Override
@@ -71,8 +76,10 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
         super.initView();
         initDialog();
         answer = getIntent().getStringExtra("Answer");
-        qid = getIntent().getStringExtra("qid");
-        id = getIntent().getStringExtra("id");
+        pid = getIntent().getStringExtra("pid");
+        imgid = getIntent().getStringExtra("imgid");
+        questionid = getIntent().getStringExtra("questionid");
+        type = getIntent().getStringExtra("type");
         //        setupRecorder();
         tvAnswer.setText(answer);
         tvAnswer.setMovementMethod(new ScrollingMovementMethod());
@@ -192,12 +199,7 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
             // 设置显示位置
             dialog.onWindowAttributesChanged(wl);
         }
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                return true;
-            }
-        });
+        dialog.setOnKeyListener((dialog, keyCode, event) -> true);
         // 设置点击外围解散
         dialog.setCanceledOnTouchOutside(false);
     }
@@ -220,13 +222,47 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
                 break;
             case R.id.tv_audition:
                 break;
-            case R.id.tv_reset:
+            case R.id.tv_reset://重录
                 restartRecording(v);
                 isPause = false;
                 dialog.dismiss();
                 break;
-            case R.id.tv_publish:
-                postDubbing();
+            case R.id.tv_publish://发表
+//                postDubbing();
+
+                ArrayMap<String, Object> map = new ArrayMap<>();
+                map.put("uid", getUserID());
+                map.put("content", answer);
+                map.put("qid", questionid);
+//                map.put("record", UrlConstants.RequestUrl.MP3_URL + key);
+                File file = new File(filePath);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
+                MultipartBody.Part part = MultipartBody.Part.createFormData("record", file.getName(), requestBody);
+                map.put("timing", recorderSecondsElapsed);
+                switch (type) {
+                    case "answer":
+                        presenter.getSaveAnswerData(map);
+                        break;
+                    case "answer_again":
+                        presenter.getSaveAnswerData(map);
+                        break;
+                    case "Problem"://首问
+                        map.put("pid",pid );
+                        map.put("picid", imgid);
+                        map.put("firstquiz", 1);
+                        map.put("pqid", questionid);
+                        presenter.getSaveQuizData(map,part);
+                        break;
+                    case "examineMinutely"://追问
+                        map.put("pid", pid);
+                        map.put("picid", imgid);
+                        map.put("firstquiz", 2);
+                        map.put("pqid", questionid);
+                        presenter.getSaveQuizData(map,part);
+                        break;
+                }
+
+
                 break;
 
         }
@@ -254,13 +290,37 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
     protected void keyCompete(String key) {
         super.keyCompete(key);
         ArrayMap<String, Object> map = new ArrayMap<>();
-        map.put("qid", qid);
-        map.put("uid", id);
+        map.put("uid", getUserID());
         map.put("content", answer);
+        map.put("qid", questionid);
         map.put("record", UrlConstants.RequestUrl.MP3_URL + key);
-        map.put("isRecord", 1);
+        File file = new File(filePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("record", file.getName(), requestBody);
         map.put("timing", recorderSecondsElapsed);
-        presenter.getSaveAnswerData(map);
+        switch (type) {
+            case "answer":
+                presenter.getSaveAnswerData(map);
+                break;
+            case "answer_again":
+                presenter.getSaveAnswerData(map);
+                break;
+            case "Problem"://首问
+                map.put("pid",pid );
+                map.put("picid", imgid);
+                map.put("firstquiz", 1);
+                map.put("pqid", questionid);
+                presenter.getSaveQuizData(map,part);
+                break;
+            case "examineMinutely"://追问
+                map.put("pid", pid);
+                map.put("picid", imgid);
+                map.put("firstquiz", 2);
+                map.put("pqid", questionid);
+                presenter.getSaveQuizData(map,part);
+                break;
+        }
+
     }
 
     @Override

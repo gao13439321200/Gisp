@@ -154,10 +154,10 @@ public class UrlConstants {
         public static final String SAVE_FOLLOW_TYPE = "api/cater/saveFollowType.do";
 
         //提问
-        public static final String SAVE_QUIZ = "api/common/saveQuiz.do";
+        public static final String SAVE_QUIZ = "api/common/saveQuiz";
 
         //回答
-        public static final String SAVE_ANSWER = "api/common/saveAnswer.do";
+        public static final String SAVE_ANSWER = "api/common/saveAnswer";
 
         //发表论文
         public static final String UPDATE_PAPER_BASE = "api/post/updatePaperBase.do";

@@ -54,6 +54,7 @@ import com.giiisp.giiisp.entity.SearchHistoryEntity;
 import com.giiisp.giiisp.entity.SelectUser;
 import com.giiisp.giiisp.entity.SubscribeEntity;
 import com.giiisp.giiisp.entity.UpDateAppEntity;
+import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.entity.WaitRecordPaperEntity;
 import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.utils.DESedeUtils;
@@ -259,22 +260,22 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     public void getUserInfoData(ArrayMap<String, Object> map) {
-//        ModelFactory.getBaseModel().getUserInfoData(map, new Callback<UserInfoEntity>() {
-//            @Override
-//            public void onResponse(Call<UserInfoEntity> call, Response<UserInfoEntity> response) {
-//                if (response.isSuccessful()) {
-//                    UserInfoEntity entity = response.body();
-//                    if (entity != null /*&& entity.getResult() == 1*/) {
-//                        impl.onSuccess(entity);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<UserInfoEntity> call, Throwable t) {
-//                impl.onFailure(call + "", (Exception) t);
-//            }
-//        });
+        ModelFactory.getBaseModel().getUserInfoData(map, new Callback<UserInfoEntity>() {
+            @Override
+            public void onResponse(Call<UserInfoEntity> call, Response<UserInfoEntity> response) {
+                if (response.isSuccessful()) {
+                    UserInfoEntity entity = response.body();
+                    if (entity != null /*&& entity.getResult() == 1*/) {
+                        impl.onSuccess(entity);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfoEntity> call, Throwable t) {
+                impl.onFailure(call + "", (Exception) t);
+            }
+        });
     }
 
     public void getUpdateUserInfoData(ArrayMap<String, Object> mobile) {
@@ -665,8 +666,8 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         });
     }
 
-    public void getSaveQuizData(ArrayMap<String, Object> options) {
-        ModelFactory.getBaseModel().getSaveQuizData(options, new Callback<BaseEntity>() {
+    public void getSaveQuizData(ArrayMap<String, Object> options, MultipartBody.Part filePrta) {
+        ModelFactory.getBaseModel().getSaveQuizData(options, filePrta, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
                 if (response.isSuccessful()) {
@@ -1391,6 +1392,33 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     public void getDataAll(String por, HashMap<String, Object> options) {
         LogUtils.v("okHttp---por:" + por + " 回调参数：" + options);
         ApiStoreNew.getInstance().getApiService().getDataString(getHashMap(por, options))
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.body() != null) {
+                            BaseBean entity = stringToBody(por, response.body());
+                            if (1 == entity.getStatusCode() || 0 == entity.getStatusCode()) {
+                                impl.onSuccessNew(por, entity);
+                            } else {
+                                impl.onFailNew(por, entity.getMessage());
+                            }
+                        } else {
+                            impl.onFailNew(por, "信息获取失败");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        LogUtils.v("okHttp异常信息：" + t);
+                        impl.onFailNew(por, "信息获取失败");
+                    }
+                });
+    }
+
+    // 普通回调，无特殊数据
+    public void getDataAll(String por, HashMap<String, Object> options, MultipartBody.Part part) {
+        LogUtils.v("okHttp---por:" + por + " 回调参数：" + options);
+        ApiStoreNew.getInstance().getApiService().getDataStringFile(getHashMap(por, options), part)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

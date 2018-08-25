@@ -159,8 +159,8 @@ public class BaseModel {
         ApiStore.getInstance().getApiService().getCancelFollowPaperPictureInfo(options).enqueue(callback);
     }
 
-    public void getSaveQuizData(ArrayMap<String, Object> options, Callback<BaseEntity> callback) {
-        ApiStore.getInstance().getApiService().getSaveQuizInfo(options).enqueue(callback);
+    public void getSaveQuizData(ArrayMap<String, Object> options, MultipartBody.Part filePrta, Callback<BaseEntity> callback) {
+        ApiStore.getInstance().getApiService().getSaveQuizInfo(options,filePrta).enqueue(callback);
     }
 
     public void getSaveAnswerData(ArrayMap<String, Object> options, Callback<BaseEntity> callback) {

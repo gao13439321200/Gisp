@@ -48,6 +48,15 @@ public class MIneInfoBean extends BaseBean {
     private String follownum;
     private String major;
     private String school;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getId() {
         return id;

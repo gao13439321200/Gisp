@@ -203,10 +203,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     tvVerified.setText("身份认证");
                     break;
                 case "1":
-                    tvVerified.setVisibility(View.GONE);
+                    tvVerified.setVisibility(View.VISIBLE);
                     break;
                 case "2":
-                    tvVerified.setVisibility(View.GONE);
+                    tvVerified.setVisibility(View.VISIBLE);
                     break;
                 case "3":
                     tvVerified.setVisibility(View.VISIBLE);
@@ -395,8 +395,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                         VerifiedActivity.actionActivity(context);
                         break;
                     case "1":
+                        VerifiedActivity.actionActivity(context);
                         break;
                     case "2":
+                        VerifiedActivity.actionActivity(context);
                         break;
                     case "3":
                         Utils.showToast(R.string.in_authentication);
@@ -446,6 +448,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         super.onSuccessNew(url, baseBean);
         switch (url) {
             case "306":
+                swipeRefreshLayout.setRefreshing(false);
                 MIneInfoBean bean = (MIneInfoBean) baseBean;
                 initUser(bean);
                 break;

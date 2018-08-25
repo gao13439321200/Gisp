@@ -1009,7 +1009,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "paper_qa"://论文详情评论问答
                 if (TextUtils.isEmpty(imageId))
                     return;
-                hMap.put("pid", imageId);
+                hMap.put("pid", string);
+                hMap.put("imgid", imageId);
                 hMap.put("pageno", page);
                 presenter.getDataAll("206", hMap);
 
@@ -2765,12 +2766,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     mainEntity.setPaperMainVO(vo);
                     itemClickAdapter.addData(mainEntity);
                 }
-                if (mainBean.getList().size() == 0) {
-                    if (page != 0)
-                        ToastUtils.showShort("数据已经全部加载了");
-                    else
-                        ToastUtils.showShort("暂无数据");
-                }
+//                if (mainBean.getList().size() == 0) {
+//                    if (page != 0)
+//                        ToastUtils.showShort("数据已经全部加载了");
+//                    else
+//                        ToastUtils.showShort("暂无数据");
+//                }
                 if (mainBean.getList().size() >= pageSize) {
                     page++;
                 } else {
@@ -2780,6 +2781,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "206"://论文详情问答列表
                 PaperQaBean qaBean = (PaperQaBean) baseBean;
                 itemClickAdapter.loadMoreComplete();
+                itemClickAdapter.setPid(string);
+                itemClickAdapter.setImgId(imageId);
                 if (itemClickAdapter == null || qaBean == null
                         || qaBean.getList() == null) {
                     itemClickAdapter.loadMoreEnd(false);
@@ -2853,12 +2856,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.addData(mainEntity);
                 }
 
-                if (bean2.getList().size() == 0) {
-                    if (page != 0)
-                        ToastUtils.showShort("数据已经全部加载了");
-                    else
-                        ToastUtils.showShort("暂无数据");
-                }
+//                if (bean2.getList().size() == 0) {
+//                    if (page != 0)
+//                        ToastUtils.showShort("数据已经全部加载了");
+//                    else
+//                        ToastUtils.showShort("暂无数据");
+//                }
 
                 if (bean2.getList().size() >= pageSize) {
                     page++;
@@ -2884,12 +2887,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.addData(mainEntity);
                 }
 
-                if (bean3.getList().size() == 0) {
-                    if (page != 0)
-                        ToastUtils.showShort("数据已经全部加载了");
-                    else
-                        ToastUtils.showShort("暂无数据");
-                }
+//                if (bean3.getList().size() == 0) {
+//                    if (page != 0)
+//                        ToastUtils.showShort("数据已经全部加载了");
+//                    else
+//                        ToastUtils.showShort("暂无数据");
+//                }
 
                 if (bean3.getList().size() >= pageSize) {
                     page++;

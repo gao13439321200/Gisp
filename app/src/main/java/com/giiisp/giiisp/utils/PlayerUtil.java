@@ -20,7 +20,7 @@ public class PlayerUtil {
     }
 
     public static PlayerUtil getInstance() {
-        if (sPlayerUtil != null) {
+        if (sPlayerUtil == null) {
             sPlayerUtil = new PlayerUtil();
         }
         return sPlayerUtil;
@@ -44,6 +44,11 @@ public class PlayerUtil {
             try {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(url); // 设置数据源
+                try {
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 mediaPlayer.start();
                 this.url = url;
             } catch (IOException e) {

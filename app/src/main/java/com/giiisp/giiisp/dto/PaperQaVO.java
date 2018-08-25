@@ -1,5 +1,7 @@
 package com.giiisp.giiisp.dto;
 
+import java.util.List;
+
 public class PaperQaVO {
     /**
      * username : 提问者名字
@@ -17,15 +19,42 @@ public class PaperQaVO {
 
     private String username;
     private String avatar;
-    private String time;
+    private String createtime;
     private String qid;
     private String quiz;
+    private String qtime;
     private String qrecord;
     private String hasanswer;
     private String ausername;
     private String answer;
     private String arecord;
+    private String atime;
     private String imgurl;
+    private List<PaperQaVO> nextQuiz;
+
+    public List<PaperQaVO> getNextQuiz() {
+        return nextQuiz;
+    }
+
+    public void setNextQuiz(List<PaperQaVO> nextQuiz) {
+        this.nextQuiz = nextQuiz;
+    }
+
+    public String getQtime() {
+        return qtime;
+    }
+
+    public void setQtime(String qtime) {
+        this.qtime = qtime;
+    }
+
+    public String getAtime() {
+        return atime;
+    }
+
+    public void setAtime(String atime) {
+        this.atime = atime;
+    }
 
     public String getUsername() {
         return username;
@@ -43,12 +72,13 @@ public class PaperQaVO {
         this.avatar = avatar;
     }
 
-    public String getTime() {
-        return time;
+
+    public String getCreatetime() {
+        return createtime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setCreatetime(String createtime) {
+        this.createtime = createtime;
     }
 
     public String getQid() {

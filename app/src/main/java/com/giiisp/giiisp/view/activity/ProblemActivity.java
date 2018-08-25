@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.v4.util.ArrayMap;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,6 @@ import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -71,8 +69,32 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     @BindView(R.id.rl_img_big)
     RelativeLayout mRlImgBIg;
     private String type;
-    private String pcid;
+    private String imgId;
     private String uid;
+    private String pid;
+    private String questionid;
+    private String imgUrl;
+
+    public static void actionActivity(Activity context, String type, String imgId, String uid) {
+        Intent sIntent = new Intent(context, ProblemActivity.class);
+        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        sIntent.putExtra("type", type);
+        sIntent.putExtra("imgId", imgId);
+        sIntent.putExtra("uid", uid);
+        context.startActivityForResult(sIntent, 1000);
+    }
+
+    public static void actionActivity(Activity context, String type, String imgId, String pid, String questionid, String imgUrl) {
+        Intent sIntent = new Intent(context, ProblemActivity.class);
+        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        sIntent.putExtra("type", type);
+        sIntent.putExtra("imgId", imgId);
+        sIntent.putExtra("pid", pid);
+        sIntent.putExtra("questionid", questionid);
+        sIntent.putExtra("imgUrl", imgUrl);
+        context.startActivityForResult(sIntent, 1000);
+    }
+
 
     @Override
     public int getLayoutId() {
@@ -83,8 +105,10 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     public void initView() {
         addStatusBarView();
         type = getIntent().getStringExtra("type");
-        pcid = getIntent().getStringExtra("pcid");
-        uid = getIntent().getStringExtra("uid");
+        imgId = getIntent().getStringExtra("imgId");
+        pid = getIntent().getStringExtra("pid");
+        questionid = getIntent().getStringExtra("questionid");
+        imgUrl = getIntent().getStringExtra("imgUrl");
 
 
         InputFilter[] filters = {new InputFilter.LengthFilter(100)};
@@ -95,14 +119,19 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                 editTextAnswer.setHint(R.string.please_input_answered);
                 tvTextNumber.setVisibility(View.GONE);
                 break;
+            case "answer_again":
+                tvPutQuestion.setText(R.string.answer);
+                editTextAnswer.setHint(R.string.please_input_answered);
+                tvTextNumber.setVisibility(View.GONE);
+                break;
             case "Problem":
                 tvPutQuestion.setText(R.string.put_question);
                 editTextAnswer.setMaxLines(100);
                 editTextAnswer.setFilters(filters);
                 ivAnswerLink.setVisibility(View.GONE);
                 ivAnswerAt.setVisibility(View.GONE);
-                tvConfirm.setText(R.string.complete);
-                GlideApp.with(this).load(BASE_IMG_URL + pcid).into(mImgBig);
+                tvConfirm.setText(R.string.next);
+                GlideApp.with(this).load(imgUrl.contains(BASE_IMG_URL) ? imgUrl : BASE_IMG_URL + imgUrl).into(mImgBig);
                 break;
             case "examineMinutely":
                 tvPutQuestion.setText(R.string.examine_minutely);
@@ -112,7 +141,7 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                 editTextAnswer.setFilters(filters);
                 ivAnswerLink.setVisibility(View.GONE);
                 ivAnswerAt.setVisibility(View.GONE);
-                tvConfirm.setText(R.string.complete);
+                tvConfirm.setText(R.string.next);
                 break;
         }
         editTextAnswer.addTextChangedListener(new TextWatcher() {
@@ -150,7 +179,7 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                         if (s.length() >= 4) {
                             ArrayMap<String, Object> map = new ArrayMap<>();
                             map.put("content", editTextAnswer.getText().toString());
-                            map.put("pcid", pcid);
+                            map.put("imgId", imgId);
                             presenter.getQuizHintListData(map);
 
                         }
@@ -162,15 +191,6 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
             }
         });
 
-    }
-
-    public static void actionActivity(Activity context, String type, String pcid, String uid) {
-        Intent sIntent = new Intent(context, ProblemActivity.class);
-        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        sIntent.putExtra("type", type);
-        sIntent.putExtra("pcid", pcid);
-        sIntent.putExtra("uid", uid);
-        context.startActivityForResult(sIntent, 1000);
     }
 
     private void addStatusBarView() {
@@ -197,41 +217,44 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                 finish();
                 break;
             case R.id.tv_publish:
-
-
-                ArrayMap<String, Object> map = new ArrayMap<>();
-                HashMap<String, Object> hMap = new HashMap<>();
-                //                map.put("uid",uid);
-                map.put("uid", getUserID());
-                String content = editTextAnswer.getText().toString();
-                if (TextUtils.isEmpty(content)) {
-                    Utils.showToast(R.string.please_input_content);
-                    return;
-                }
-                map.put("content", content);
-
-                switch (type) {
-                    case "answer":
-                        map.put("qid", pcid);
-                        map.put("record", "");
-                        map.put("isRecord", "");
-                        map.put("timing", "");
-                        presenter.getSaveAnswerData(map);
-
-                        break;
-                    case "Problem"://首问
-                        hMap.put("uid", getUserID());
-                        hMap.put("content", content);
-                        hMap.put("pcid", pcid);
-                        hMap.put("firstQuiz", 1);
-//                        presenter.getSaveQuizData(hMap);
-                        break;
-                    case "examineMinutely"://追问
-                        map.put("pcid", pcid);
-                        map.put("firstQuiz", 2);
-                        presenter.getSaveQuizData(map);
-                        break;
-                }
+//                ArrayMap<String, Object> map = new ArrayMap<>();
+//                String content = editTextAnswer.getText().toString();
+//                if (TextUtils.isEmpty(content)) {
+//                    Utils.showToast(R.string.please_input_content);
+//                    return;
+//                }
+//                switch (type) {
+//                    case "answer":
+//                        map.put("uid", getUserID());
+//                        map.put("qid", questionid);
+//                        map.put("content", content);
+//                        map.put("record", "");
+//                        map.put("timing", "");
+//                        presenter.getSaveAnswerData(map);
+//                        break;
+//                    case "Problem"://首问
+//                        map.put("uid", getUserID());
+//                        map.put("pid", pid);
+//                        map.put("picid", imgId);
+//                        map.put("content", content);
+//                        map.put("firstquiz", 1);
+//                        map.put("timing", "");
+//                        map.put("questionid", questionid);
+//                        map.put("record", "");
+//                        presenter.getSaveQuizData(map);
+//                        break;
+//                    case "examineMinutely"://追问
+//                        map.put("uid", getUserID());
+//                        map.put("pid", pid);
+//                        map.put("picid", imgId);
+//                        map.put("content", content);
+//                        map.put("firstquiz", 2);
+//                        map.put("timing", "");
+//                        map.put("questionid", questionid);
+//                        map.put("record", "");
+//                        presenter.getSaveQuizData(map);
+//                        break;
+//                }
 
                 KeyBoardUtils.closeKeybord(editTextAnswer, this);
 
@@ -250,17 +273,24 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                 break;
             case R.id.tv_confirm:
                 KeyBoardUtils.closeKeybord(editTextAnswer, this);
-                switch (type) {
-                    case "answer":
-                        AnswerVoiceMP3Activity.actionActivity(this, editTextAnswer.getText().toString(), pcid, uid);
-                        break;
-                    case "Problem":
+                AnswerVoiceMP3Activity.actionActivity(this,
+                        type,
+                        editTextAnswer.getText().toString(),
+                        pid,
+                        questionid,
+                        imgId);
 
-                        break;
-                    case "examineMinutely":
-
-                        break;
-                }
+//                switch (type) {
+//                    case "answer":
+//                        AnswerVoiceMP3Activity.actionActivity(this, editTextAnswer.getText().toString(), imgId, uid);
+//                        break;
+//                    case "Problem":
+//
+//                        break;
+//                    case "examineMinutely":
+//
+//                        break;
+//                }
 
                 break;
             case R.id.img_photo:

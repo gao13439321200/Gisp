@@ -680,13 +680,6 @@ public class PaperDetailsActivity extends
         map.put("pid", pid);
         map.put("version", myVersionNo);
         presenter.getDataAll("204", map);
-//        map.put("uid", uid);
-//        Log.i("--->>", "initNetwork: " + string);
-//        if (!TextUtils.isEmpty(string)) {
-//            map.put("version", string);
-        // TODO: 2018/8/2 高鹏 这里需要获取论文详情 暂时不写了，先写录音那块
-//            presenter.getPaperBaseByIdData(map);
-//        }
         super.initNetwork();
     }
 
@@ -788,9 +781,9 @@ public class PaperDetailsActivity extends
                 isFulllScreen = !isFulllScreen;
                 break;
             case R.id.et_comm_post://提问
-                if (photosBeanRows == null || photosBeanRows.size() <= position)
-                    return;
-                if (BaseActivity.uid.equals("15")) {
+//                if (photosBeanRows == null || photosBeanRows.size() <= position)
+//                    return;
+                if (ObjectUtils.isEmpty(getUserID())) {
                     AlertDialog.Builder normalDialog =
                             new AlertDialog.Builder(this);
                     normalDialog.setIcon(null);
@@ -813,8 +806,8 @@ public class PaperDetailsActivity extends
                                     " service@giiisp.com");
                             break;
                         case "2":
-                            ProblemActivity.actionActivity(this, "Problem",
-                                    imageId.get(position), uid);
+                            ProblemActivity.actionActivity(this, "Problem",imageId.get(position),
+                                    pid,"",photoList.get(position));
                             break;
                         case "1":
                             Utils.showToast("等待认证完成");
@@ -1268,7 +1261,6 @@ public class PaperDetailsActivity extends
         } else if (entity instanceof LiteratureEntity) {
 
         } else if (entity instanceof PaperDatailEntity) {
-            // TODO: 2018/8/4 高鹏 论文详情
             if (baseImpl != null)
                 baseImpl.onSuccess(entity);
             //            progressPopupWindow.dismiss();
@@ -1984,8 +1976,9 @@ public class PaperDetailsActivity extends
                     position = 0;
                     getImageInfo(bean.getImglist().get(0).getId());
                     viewpagerPaper.setCurrentItem(0);
+                    paperQA.setImageId(imageId.get(position));
+                    paperQA.initNetwork();
                 }
-                // TODO: 2018/8/24 高鹏 这里需要获取是否收藏论文和下载次数isFollowed
                 isFollowed = bean.getIsfollow();
                 ivLikedIcon.setSelected("1".equals(isFollowed));
                 if (ObjectUtils.isNotEmpty(bean.getDownloadnum())) {

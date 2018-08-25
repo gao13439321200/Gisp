@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -29,9 +31,8 @@ import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -151,18 +152,13 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
 
     @Override
     public void initNetwork() {
-        ArrayMap<String, Object> userMap = new ArrayMap<>();
-        //        userMap.put("token", "A760880003E7DDEDFEF56ACB3B09697F");
-//        userMap.put("token", token);
-        //        userMap.put("oid", 1);
-        userMap.put("uid", uid);
+        HashMap<String, Object> userMap = new HashMap<>();
+        userMap.put("uid", getUserID());
+        userMap.put("language", getLanguage());
         if (presenter != null) {
             swipeRefreshLayout.setRefreshing(true);
-            presenter.getUserInfoData(userMap);
+            presenter.getDataAll("306",userMap);
         }
-        //        presenter.getUserNumsData(uid+"", token);
-        Log.i("--->>", "initNetwork: " + "EditInfo");
-
         super.initNetwork();
     }
 
@@ -171,28 +167,42 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
-        if (entity instanceof UserInfoEntity) {
-            UserInfoEntity userInfoEntity = (UserInfoEntity) entity;
-            if (userInfoEntity.getUserInfo() != null) {
-                initUser(userInfoEntity);
-            }
+//        if (entity instanceof UserInfoEntity) {
+//            UserInfoEntity userInfoEntity = (UserInfoEntity) entity;
+//            if (userInfoEntity.getUserInfo() != null) {
+//                initUser(userInfoEntity);
+//            }
+//        }
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
+        switch(url){
+            case "306":
+                swipeRefreshLayout.setRefreshing(false);
+                MIneInfoBean bean = (MIneInfoBean) baseBean;
+                initUser(bean);
+                break;
+            default:
+                break;
         }
     }
 
-    private void initUser(UserInfoEntity userInfoEntity) {
+    private void initUser(MIneInfoBean userInfo) {
         if (context == null)
             return;
         timeout = false;
-        EventBus.getDefault().post(userInfoEntity);
-        UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
-        String nickName = userInfo.getRealName();
+//        EventBus.getDefault().post(userInfoEntity);
+//        UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
+        String nickName = userInfo.getName();
         String avatar = userInfo.getAvatar();
-        int sex = userInfo.getSex();
-        String web = userInfo.getWeb();
-        if (sex == 1) {
+        String sex = userInfo.getSex();
+        String web = userInfo.getUserweb();
+        if ("1".equals(sex)) {
             ivSex.setImageResource(R.mipmap.ic_sex_male);
         }
-        if (sex == 2) {
+        if ("2".equals(sex)) {
             ivSex.setImageResource(R.mipmap.ic_sex_female);
         }
         if (TextUtils.isEmpty(web)) {
@@ -208,11 +218,11 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         ArrayMap<String, Object> map = new ArrayMap<>();
         map.put("uid", uid);
 //        map.put("token", token);
-        map.put("mobile", userInfo.getMobile() + "");
+        map.put("mobile", userInfo.getPhone());
         map.put("loginType", 2);
 //        presenter.saveClientTypeData(map);
-        if (Utils.checkMobileNumber(userInfo.getMobile())) {
-            tvUserPhone.setText(userInfo.getMobile());
+        if (Utils.checkMobileNumber(userInfo.getPhone())) {
+            tvUserPhone.setText(userInfo.getPhone());
         } else {
             tvUserPhone.setText(getString(R.string.not_binding_mobile));
         }
@@ -221,26 +231,27 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         } else {
             tvUserEmail.setText(getString(R.string.not_binding_email));
         }
-        tvPrompt.setText(userInfo.getSchool() + " " + userInfo.getDegree());
-        if (!TextUtils.isEmpty(userInfo.getDomain()) && TextUtils.isEmpty(userInfo.getPosition())) {
-            tvUserPosition.setText(userInfo.getDomain() + " " + userInfo.getPosition());
+        tvPrompt.setText(userInfo.getSchool());
+        if (!TextUtils.isEmpty(userInfo.getOrganization()) && TextUtils.isEmpty(userInfo.getPosition())) {
+            tvUserPosition.setText(userInfo.getOrganization() + " " + userInfo.getPosition());
         } else {
             tvUserPosition.setVisibility(View.GONE);
         }
 
-        List<UserInfoEntity.IntroductionBean> introduction = userInfoEntity.getIntroduction();
-        if (null != introduction && introduction.size() > 0) {
-            recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            List<ClickEntity> list = new ArrayList<>();
-            for (UserInfoEntity.IntroductionBean introductionBean : introduction) {
-                list.add(new ClickEntity(introductionBean));
-            }
-            itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_scholar_education, list, type);
-            recyclerView.setAdapter(itemClickAdapter);
-        }else{
-            recyclerView.setVisibility(View.GONE);
-        }
+        // TODO: 2018/8/25 高鹏 没有教育经历这一项
+//        List<UserInfoEntity.IntroductionBean> introduction = userInfoEntity.getIntroduction();
+//        if (null != introduction && introduction.size() > 0) {
+//            recyclerView.setVisibility(View.VISIBLE);
+//            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//            List<ClickEntity> list = new ArrayList<>();
+//            for (UserInfoEntity.IntroductionBean introductionBean : introduction) {
+//                list.add(new ClickEntity(introductionBean));
+//            }
+//            itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_scholar_education, list, type);
+//            recyclerView.setAdapter(itemClickAdapter);
+//        }else{
+//            recyclerView.setVisibility(View.GONE);
+//        }
     }
 
     @Override

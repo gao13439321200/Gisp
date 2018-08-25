@@ -203,9 +203,9 @@ public interface ApiService {
     Call<BaseEntity> getCancelFollowPaperPictureInfo(@FieldMap ArrayMap<String, Object> options);
 
     //提问
-    @FormUrlEncoded
+    @Multipart
     @POST(UrlConstants.RequestUrl.SAVE_QUIZ)
-    Call<BaseEntity> getSaveQuizInfo(@FieldMap ArrayMap<String, Object> options);
+    Call<BaseEntity> getSaveQuizInfo(@QueryMap ArrayMap<String, Object> options,@Part MultipartBody.Part filePrta);
 
     //回答
     @FormUrlEncoded
@@ -367,5 +367,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("outinterface")
     Call<String> getDataString(@Field("data") String data);
+
+    //普通请求，无特殊数据
+    @FormUrlEncoded
+    @POST("outinterface")
+    Call<String> getDataStringFile(@Field("data") String data, @Part MultipartBody.Part filePrta);
 
 }
