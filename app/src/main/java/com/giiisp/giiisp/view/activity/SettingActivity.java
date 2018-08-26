@@ -2,13 +2,14 @@ package com.giiisp.giiisp.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -26,6 +27,7 @@ import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.MViewPager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,7 +37,7 @@ import butterknife.BindView;
  * Created by Thinkpad on 2017/5/4.
  */
 
-public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> implements BaseImpl ,ViewPager.OnPageChangeListener {
+public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> implements BaseImpl, ViewPager.OnPageChangeListener {
 
 
     @BindView(R.id.vp_login)
@@ -81,18 +83,16 @@ public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     @Override
     public void initView() {
 
-        ArrayMap<String, Object> userMap = new ArrayMap<>();
-        //        userMap.put("token", "A760880003E7DDEDFEF56ACB3B09697F");
-//        userMap.put("token", token);
-        //        userMap.put("oid", 1);
-        userMap.put("uid", uid);
-        presenter.getUserInfoData(userMap);
+        HashMap<String, Object> userMap = new HashMap<>();
+        userMap.put("uid", getUserID());
+        userMap.put("language", getLanguage());
+        presenter.getDataAll("306", userMap);
     }
 
     @Override
     public void initData() {
         fragments.add(new SettingFragment());
-        fragments.add(UserInfoFragment.newInstance("setting_edit_info",""));
+        fragments.add(UserInfoFragment.newInstance("setting_edit_info", ""));
         fragments.add(new AccountSecurityFragment());
         fragments.add(new ModifyPasswordFragment());
         fragments.add(new ModifyPhoneFragment());
@@ -144,7 +144,7 @@ public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     public void onSuccess(BaseEntity entity) {
         for (BaseFragment fragment : fragments) {
             if (fragment instanceof UserInfoFragment) {
-                ((UserInfoFragment) fragment).onMessageUserInfo((UserInfoEntity) entity);
+//                ((UserInfoFragment) fragment).onMessageUserInfo((UserInfoEntity) entity);
             }
             if (fragment instanceof SettingFragment) {
                 ((SettingFragment) fragment).onSuccess(entity);
@@ -152,6 +152,22 @@ public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
             if (fragment instanceof AccountSecurityFragment) {
                 ((AccountSecurityFragment) fragment).onMessageUserInfo((UserInfoEntity) entity);
             }
+        }
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseEntity) {
+        super.onSuccessNew(url, baseEntity);
+        switch (url) {
+            case "306":
+                for (BaseFragment fragment : fragments) {
+                    if (fragment instanceof UserInfoFragment) {
+                        ((UserInfoFragment) fragment).onMessageUserInfo((MIneInfoBean) baseEntity);
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -172,7 +188,7 @@ public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
 
     @Override
     public void onPageSelected(int position) {
-        switch (position){
+        switch (position) {
             case 0:
             case 1:
             case 2:

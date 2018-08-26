@@ -14,6 +14,7 @@ import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperInfoVO;
@@ -377,6 +378,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private MyAnswerVO mMyAnswerVO;
     private PaperInfoVO mPaperInfoVO;
     private PlayNoteVo mPlayNoteVo;
+    private MIneInfoBean mMIneInfoBean;
+
+    public MIneInfoBean getMIneInfoBean() {
+        return mMIneInfoBean;
+    }
+
+    public void setMIneInfoBean(MIneInfoBean MIneInfoBean) {
+        mMIneInfoBean = MIneInfoBean;
+    }
 
     public PlayNoteVo getPlayNoteVo() {
         return mPlayNoteVo;

@@ -258,4 +258,8 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
         return SPUtils.getInstance().getString(UrlConstants.UID, "");
     }
 
+    public String getLanguage() {
+        return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1");
+    }
+
 }

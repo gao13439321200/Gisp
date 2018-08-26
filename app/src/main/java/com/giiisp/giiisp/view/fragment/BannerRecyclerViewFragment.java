@@ -41,6 +41,7 @@ import com.giiisp.giiisp.dto.FansBean;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowBean;
 import com.giiisp.giiisp.dto.FollowVO;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.dto.MyAnswerBean;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
@@ -964,12 +965,10 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //        map.put("token", token);
         switch (type) {
             case "he":
-                ArrayMap<String, Object> userMap = new ArrayMap<>();
-                //        userMap.put("token", "A760880003E7DDEDFEF56ACB3B09697F");
-//                userMap.put("token", token);
-                userMap.put("oid", string);
-                userMap.put("uid", uid);
-                presenter.getUserInfoData(userMap);
+                hMap.put("uid", uid);
+                hMap.put("language", getLanguage());
+                presenter.getDataAll("306", hMap);
+                // TODO: 2018/8/26 高鹏 这里需要获取作者论文和综述
                 break;
             case "scholar_list":
                 map.put("page", page);
@@ -2837,6 +2836,14 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "217":
                 ToastUtils.showShort("取消收藏成功！");
+                break;
+            case "306":
+                MIneInfoBean mIneInfoBean = (MIneInfoBean) baseBean;
+                ClickEntity clickEntity = new ClickEntity(R.layout.item_user_info, "head");
+                clickEntity.setMIneInfoBean(mIneInfoBean);
+                clickEntity.setPaperId(string);
+                multipleItemQuickAdapter.addData(clickEntity);
+                // TODO: 2018/8/27 高鹏 这里还需要设置发布的论文和综述
                 break;
             case "307":
                 FansBean bean2 = (FansBean) baseBean;

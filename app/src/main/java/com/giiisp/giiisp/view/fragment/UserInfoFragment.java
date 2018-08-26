@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -29,8 +28,9 @@ import android.widget.TextView;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
-import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.Utils;
@@ -49,6 +49,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -60,6 +61,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 /**
@@ -155,16 +157,30 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                     ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), file.getAbsoluteFile(), ivUserIcon);
                     break;
                 case 3:
-                    if (entity instanceof UserInfoEntity) {
-                        UserInfoEntity userInfoEntity = (UserInfoEntity) entity;
-                        if (userInfoEntity.getUserInfo() != null) {
-                            onMessageUserInfo(userInfoEntity);
-                        }
-                    }
+//                    if (entity instanceof UserInfoEntity) {
+//                        UserInfoEntity userInfoEntity = (UserInfoEntity) entity;
+//                        if (userInfoEntity.getUserInfo() != null) {
+//                            onMessageUserInfo(userInfoEntity);
+//                        }
+//                    }
                     break;
             }
         } else {
             Utils.showToast(entity.getInfo());
+        }
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
+        switch (url) {
+            case "306":
+                MIneInfoBean bean = (MIneInfoBean) baseBean;
+                onMessageUserInfo(bean);
+
+                break;
+            default:
+                break;
         }
     }
 
@@ -198,10 +214,11 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         switch (PageType) {
             case "verified_edit_info":
                 type = 3;
-                ArrayMap<String, Object> userMap = new ArrayMap<>();
-                userMap.put("uid", uid);
+                HashMap<String, Object> userMap = new HashMap<>();
+                userMap.put("uid", getUserID());
+                userMap.put("language", getLanguage());
                 if (presenter != null)
-                    presenter.getUserInfoData(userMap);
+                    presenter.getDataAll("306", userMap);
                 break;
             case "setting_edit_info":
                 break;
@@ -217,7 +234,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     }
 
 
-    @OnClick({R.id.tv_back, R.id.fl_user_icon, R.id.tv_right, R.id.fl_user_professional, R.id.fl_user_name, R.id.fl_user_email, R.id.fl_user_phone, R.id.fl_user_sex, R.id.fl_user_mechanism, R.id.fl_user_position, R.id.fl_user_resume,R.id.fl_user_web})
+    @OnClick({R.id.tv_back, R.id.fl_user_icon, R.id.tv_right, R.id.fl_user_professional, R.id.fl_user_name, R.id.fl_user_email, R.id.fl_user_phone, R.id.fl_user_sex, R.id.fl_user_mechanism, R.id.fl_user_position, R.id.fl_user_resume, R.id.fl_user_web})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_back:
@@ -239,12 +256,12 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 changeName = tvUserName.getText() + "";
                 changeSex = tvUserSex.getText() + "";
 
-                ArrayMap<String, Object> map = new ArrayMap<>();
+                HashMap<String, Object> map = new HashMap<>();
                 if (!changeSex.equals(sex)) {
                     map.put("sex", changeSex.equals(getString(R.string.man)) ? 1 : 2);
                 }
                 if (!changeName.equals(name)) {
-                    map.put("realName", changeName);
+                    map.put("name", changeName);
                 }
 
                 String phone = tvUserPhone.getText().toString();
@@ -252,32 +269,32 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 String organization = tvUserMechanism.getText().toString();
                 String position = tvUserPosition.getText().toString();
                 String department = tvUserResume.getText().toString();
-                String web =tvUserWeb.getText().toString();
+                String web = tvUserWeb.getText().toString();
                 if (!TextUtils.isEmpty(phone)) {
                     map.put("phone", phone);
-                }else{
+                } else {
                     Utils.showToast(R.string.phone_verified);
                     return;
                 }
                 if (!TextUtils.isEmpty(email)) {
                     map.put("email", email);
                 }
-                if(!TextUtils.isEmpty(organization)){
+                if (!TextUtils.isEmpty(organization)) {
                     map.put("organization", organization);
                 }
-                if(!TextUtils.isEmpty(position)){
+                if (!TextUtils.isEmpty(position)) {
                     map.put("position", position);
                 }
-                if(!TextUtils.isEmpty(department)){
+                if (!TextUtils.isEmpty(department)) {
                     map.put("department", department);
                 }
-                if(!TextUtils.isEmpty(web)){
+                if (!TextUtils.isEmpty(web)) {
                     map.put("web", web);
                 }
                 if (map.size() > 0) {
-                    map.put("id", uid);
+                    map.put("id", getUserID());
                     progressPopupWindow.showPopupWindow();
-                    presenter.getUpdateUserInfoData(map);
+                    presenter.getDataAll("320", map);
                 }
 
                 break;
@@ -313,40 +330,46 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageUserInfo(UserInfoEntity userInfoEntity) {
+    public void onMessageUserInfo(MIneInfoBean userInfoEntity) {
         if (tvUserName == null && userInfoEntity == null)
             return;
-        if (userInfoEntity.getUserInfo() == null) {
-            return;
-        }
         Log.i("--->>", "onMessageUserInfo: " + userInfoEntity);
-        String avatar = userInfoEntity.getUserInfo().getAvatar();
+        String avatar = userInfoEntity.getAvatar();
         if (!imagUrl.equals(avatar))
-            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), avatar, ivUserIcon);
+            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL + avatar, ivUserIcon);
         imagUrl = avatar + "";
-        tvUserName.setText(userInfoEntity.getUserInfo().getRealName());
-        tvUserSex.setText(userInfoEntity.getUserInfo().getSex()==1 ? getString(R.string.man) : userInfoEntity.getUserInfo().getSex()==2 ? getString(R.string.gril) : getString(R.string.unknown));
-        if (Utils.checkMobileNumber(userInfoEntity.getUserInfo().getMobile())) {
-            tvUserPhone.setText(userInfoEntity.getUserInfo().getMobile());
+        tvUserName.setText(userInfoEntity.getName());
+        switch (userInfoEntity.getSex()) {
+            case "1":
+                tvUserSex.setText(getString(R.string.man));
+                break;
+            case "2":
+                tvUserSex.setText(getString(R.string.gril));
+                break;
+            default:
+                tvUserSex.setText(getString(R.string.unknown));
+                break;
         }
-        if (Utils.checkEmail(userInfoEntity.getUserInfo().getEmail())) {
-            tvUserEmail.setText(userInfoEntity.getUserInfo().getEmail().trim());
+        if (Utils.checkMobileNumber(userInfoEntity.getPhone())) {
+            tvUserPhone.setText(userInfoEntity.getPhone());
         }
-        if (userInfoEntity.getAuthen()== null) {
+        if (Utils.checkEmail(userInfoEntity.getEmail())) {
+            tvUserEmail.setText(userInfoEntity.getEmail().trim());
+        }
+        if (userInfoEntity.getEmailauthen() == null) {
             return;
         }
-        if(TextUtils.isEmpty(userInfoEntity.getAuthen().getOrganization())){
-            tvUserMechanism.setText(userInfoEntity.getAuthen().getOrganization());
+        if (TextUtils.isEmpty(userInfoEntity.getOrganization())) {
+            tvUserMechanism.setText(userInfoEntity.getOrganization());
         }
-        if(TextUtils.isEmpty(userInfoEntity.getAuthen().getOrganization())){
-            tvUserPosition.setText(userInfoEntity.getAuthen().getPosition());
+        if (TextUtils.isEmpty(userInfoEntity.getPosition())) {
+            tvUserPosition.setText(userInfoEntity.getPosition());
         }
-
-        if(TextUtils.isEmpty(userInfoEntity.getAuthen().getOrganization())){
-            tvUserResume.setText(userInfoEntity.getAuthen().getDepartment());
+        if (TextUtils.isEmpty(userInfoEntity.getDepartment())) {
+            tvUserResume.setText(userInfoEntity.getDepartment());
         }
-        if(TextUtils.isEmpty(userInfoEntity.getAuthen().getOrganization())){
-            tvUserWeb.setText(userInfoEntity.getUserInfo().getWeb());
+        if (TextUtils.isEmpty(userInfoEntity.getUserweb())) {
+            tvUserWeb.setText(userInfoEntity.getUserweb());
         }
     }
 
@@ -657,6 +680,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 break;
         }
     }
+
     @Override
     public void onFailure(String msg, Exception ex) {
         super.onFailure(msg, ex);

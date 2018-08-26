@@ -22,6 +22,7 @@ import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HeadImgVO;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.HotImgVO;
+import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.Utils;
@@ -61,31 +62,29 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
         String title = "";
         switch (helper.getItemViewType()) {
             case R.layout.item_user_info:
-                if (item.getUserInfoEntity() != null) {
-                    UserInfoEntity userInfoEntity = item.getUserInfoEntity();
-                    UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
-                    UserInfoEntity.NumBean num = userInfoEntity.getNum();
-                    helper.setText(R.id.tv_user_name, userInfo.getRealName());
-                    helper.setText(R.id.tv_paper_number, num.getPaperNum() + "");
-                    helper.setText(R.id.tv_review_number, num.getSummarizeNum() + "");
-                    helper.setText(R.id.tv_fans_number, num.getFollowedNum() + "");
-                    helper.setText(R.id.tv_follow_number, num.getFollowNum() + "");
-                    if (!TextUtils.isEmpty(userInfoEntity.getIsFollowed())) {
-                        helper.getView(R.id.iv_attention).setSelected(userInfoEntity.getIsFollowed().equals("0"));
-                    }
-                    if (userInfo.getSex() == 1) {
+                if (item.getMIneInfoBean() != null) {
+                    MIneInfoBean userInfo = item.getMIneInfoBean();
+                    helper.setText(R.id.tv_user_name, userInfo.getName());
+                    helper.setText(R.id.tv_paper_number, "?");
+                    helper.setText(R.id.tv_review_number, "?");
+                    helper.setText(R.id.tv_fans_number, "?");
+                    helper.setText(R.id.tv_follow_number, "?");
+//                    if (!TextUtils.isEmpty(userInfo.get())) {//是否关注
+//                        helper.getView(R.id.iv_attention).setSelected(userInfoEntity.getIsFollowed().equals("0"));
+//                    }
+                    if ("1".equals(userInfo.getSex())) {
                         ImageLoader.getInstance().displayImage(context, R.mipmap.ic_sex_male, helper.getView(R.id.iv_sex));
                     }
-                    if (userInfo.getSex() == 2) {
+                    if ("2".equals(userInfo.getSex())) {
                         ImageLoader.getInstance().displayImage(context, R.mipmap.ic_sex_female, helper.getView(R.id.iv_sex));
                     }
-                    if (TextUtils.isEmpty(userInfo.getWeb())) {
+                    if (TextUtils.isEmpty(userInfo.getUserweb())) {
                         helper.setText(R.id.tv_user_web, "未添加个人网址");
                     } else {
-                        helper.setText(R.id.tv_user_web, userInfo.getWeb());
+                        helper.setText(R.id.tv_user_web, userInfo.getUserweb());
                     }
-                    if (Utils.checkMobileNumber(userInfo.getMobile())) {
-                        helper.setText(R.id.tv_user_phone, userInfo.getMobile());
+                    if (Utils.checkMobileNumber(userInfo.getPhone())) {
+                        helper.setText(R.id.tv_user_phone, userInfo.getPhone());
                     } else {
                         helper.setText(R.id.tv_user_phone, "未绑定手机号码");
                     }
@@ -96,11 +95,11 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                     }
                     helper.setVisible(R.id.iv_attention, !Objects.equals(item.getPaperId(), uid + ""));
                     helper.setVisible(R.id.tv_user_phone, Objects.equals(item.getPaperId(), uid + ""));
-                    helper.getView(R.id.iv_attention).setSelected(Objects.equals("0", userInfoEntity.getIsFollowed())); // todo getIsFollowed
+//                    helper.getView(R.id.iv_attention).setSelected(Objects.equals("0", userInfoEntity.getIsFollowed())); // todo getIsFollowed
                     ImageLoader.getInstance().displayCricleImage(context, userInfo.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
-                    helper.setText(R.id.tv_prompt, userInfo.getSchool() + " " + userInfo.getDegree());
-                    helper.setVisible(R.id.tv_user_position, !TextUtils.isEmpty(userInfo.getDomain()) || !TextUtils.isEmpty(userInfo.getPosition()));
-                    helper.setText(R.id.tv_user_position, userInfo.getDomain() + "  " + userInfo.getPosition());
+                    helper.setText(R.id.tv_prompt, userInfo.getSchool());
+                    helper.setVisible(R.id.tv_user_position, !TextUtils.isEmpty(userInfo.getDepartment()) || !TextUtils.isEmpty(userInfo.getPosition()));
+                    helper.setText(R.id.tv_user_position, userInfo.getDepartment() + "  " + userInfo.getPosition());
                 }
 
                 helper.addOnClickListener(R.id.iv_attention)
