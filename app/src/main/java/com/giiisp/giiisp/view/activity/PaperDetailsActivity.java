@@ -828,7 +828,7 @@ public class PaperDetailsActivity extends
             case R.id.fl_paper_play://播放记录
                 FragmentActivity.actionActivity(this, "play");
                 break;
-            case R.id.fl_download:
+            case R.id.fl_download://下载
                 if (BaseActivity.uid.equals("15")) {
                     AlertDialog.Builder normalDialog =
                             new AlertDialog.Builder(this);
