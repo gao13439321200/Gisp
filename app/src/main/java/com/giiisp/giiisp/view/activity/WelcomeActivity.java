@@ -37,6 +37,7 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        hideImg();
 //        ivWelcomeImg.setImageResource(R.mipmap.welcome_bg);
      /*   ivWelcomeImg.postDelayed(new Runnable() {
             @Override

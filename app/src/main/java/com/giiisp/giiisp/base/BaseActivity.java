@@ -8,11 +8,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.net.NetChangeObserver;
 import com.giiisp.giiisp.net.NetWorkUtil;
@@ -20,6 +26,7 @@ import com.giiisp.giiisp.net.NetworkStateReceiver;
 import com.giiisp.giiisp.utils.AppManager;
 import com.giiisp.giiisp.utils.SharedPreferencesHelper;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -27,6 +34,7 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportActivity;
 
@@ -42,6 +50,7 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
     public static String isVip = "";  // 用作身份认证按钮 的判断
     public Unbinder unbinder;
     public int downloadNunber;
+    private ImageView baseImg;
 
     public void changeAppLanguage() {
         String sta = SharedPreferencesHelper.getInstance(this).getStringValue("VoiceSelection");//这是SharedPreferences工具类，用于保存设置，代码很简单，自己实现吧
@@ -94,7 +103,15 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
         getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
                 WindowManager.LayoutParams. FLAG_FULLSCREEN);
 */
-        setContentView(getLayoutId());
+        setContentView(R.layout.activity_base_layout);
+        RelativeLayout mBaseRl = findViewById(R.id.base_rl);
+        baseImg = findViewById(R.id.iv_play_now);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(getLayoutId(), null);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        if (view != null)
+            mBaseRl.addView(view, layoutParams);
         unbinder = ButterKnife.bind(this);
         AppManager.getAppManager().addActivity(this);
         init();
@@ -262,4 +279,23 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
         return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1");
     }
 
+    @OnClick(R.id.iv_play_now)
+    public void onViewClicked() {
+        if (ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PID))
+                && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERVERSION))
+                && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERTYPE))) {
+            PaperDetailsActivity.actionActivityNew(this
+                    , SPUtils.getInstance().getString(UrlConstants.PID)
+                    , SPUtils.getInstance().getString(UrlConstants.PAPERVERSION)
+                    , SPUtils.getInstance().getString(UrlConstants.PAPERTYPE)
+                    , SPUtils.getInstance().getString(UrlConstants.LANGUAGE)
+            );
+        } else {
+            ToastUtils.showShort("暂无播放信息");
+        }
+    }
+
+    public void hideImg() {
+        baseImg.setVisibility(View.GONE);
+    }
 }

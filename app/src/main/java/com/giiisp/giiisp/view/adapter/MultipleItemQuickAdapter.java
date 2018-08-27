@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 
-import com.blankj.utilcode.util.ObjectUtils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -34,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.giiisp.giiisp.R.layout.item_user_info;
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 
@@ -246,10 +246,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                             case "综述专栏":
                                 for (HotImgVO vo : hotImgBean.getList()) {
                                     if ("2".equals(vo.getType())) {
-                                        ClickEntity clickEntity = new ClickEntity(vo.getTitle(), vo.getImg());
+                                        ClickEntity clickEntity = new ClickEntity(vo.getTitle(), BASE_IMG_URL + vo.getImg());
                                         clickEntity.setPaperId(vo.getId() + "");
-                                        // TODO: 2018/7/26 高鹏 暂时不知道干啥用的
-//                                        clickEntity.setVersion(vo.getVersion());
 //                                        clickEntity.setIsEncrypt(vo.getIsEncrypt());
                                         list.add(clickEntity);
                                     }
@@ -258,10 +256,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                             case "热门推荐":
                                 for (HotImgVO vo : hotImgBean.getList()) {
                                     if ("1".equals(vo.getType())) {
-                                        ClickEntity clickEntity = new ClickEntity(vo.getTitle(), vo.getImg());
+                                        ClickEntity clickEntity = new ClickEntity(vo.getTitle(), BASE_IMG_URL + vo.getImg());
                                         clickEntity.setPaperId(vo.getId() + "");
-                                        // TODO: 2018/7/26 高鹏 暂时不知道干啥用的
-//                                        clickEntity.setVersion(vo.getVersion());
 //                                        clickEntity.setIsEncrypt(vo.getIsEncrypt());
                                         list.add(clickEntity);
                                     }
@@ -280,20 +276,10 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                     ClickEntity clickEntity = (ClickEntity) adapter.getItem(position);
                     if (clickEntity != null) {
                         String paperId = clickEntity.getPaperId();
-                        String version = clickEntity.getVersion();
-                        ArrayList<String> arrayVersion = new ArrayList<>();
-                        if (ObjectUtils.isNotEmpty(version))
-                            arrayVersion.add(version);
-
                         switch (item.getString()) {
                             case "综述专栏":
                             case "热门推荐":
-                                // TODO: 2018/8/2 高鹏 这里需要判断一下有没有密码、
-//                                if (clickEntity.getIsEncrypt().equals("0")) {
-//                                    PaperDetailsActivity.checkPwd(context, paperId, arrayVersion, "home");
-//                                } else {
-                                PaperDetailsActivity.actionActivity(context, paperId, arrayVersion, "home");
-//                                }
+                                PaperDetailsActivity.actionActivityNew(context, paperId, "1", "home", "1");
                                 break;
                             default:
                                 break;

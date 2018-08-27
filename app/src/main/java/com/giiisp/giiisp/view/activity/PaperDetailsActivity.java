@@ -46,6 +46,7 @@ import android.widget.VideoView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
@@ -326,6 +327,7 @@ public class PaperDetailsActivity extends
 
     @Override
     protected void onDestroy() {
+        getPlayService().setPlayType(PlayService.BACK);
         super.onDestroy();
     }
 
@@ -402,35 +404,24 @@ public class PaperDetailsActivity extends
         tvCn.setChecked(CN.equals(language));
         tvEn.setChecked(EN.equals(language));
         myVersionNo = getIntent().getStringExtra("version");
-//        version = getIntent().getStringArrayListExtra("version");
-//        if (version != null && version.size() > 0) {
-//            myVersionNo = version.get(0);
-//            for (int i = 0; i < version.size(); i++) {
-//                switch (version.get(i)) {
-//                    case "2"://完整
-//                        tvPaperComplete.setVisibility(View.VISIBLE);
-//                        break;
-//                    case "4"://精华
-//                        tvPaperMarrow.setVisibility(View.VISIBLE);
-//                        break;
-//                    case "3"://摘要
-//                        tvPaperAbstract.setVisibility(View.VISIBLE);
-//                        break;
-//                }
-//            }
-//        }
-//        storageId = id + string;
+
+        SPUtils.getInstance().put(UrlConstants.PID, pid);
+        SPUtils.getInstance().put(UrlConstants.PAPERTYPE, type);
+        SPUtils.getInstance().put(UrlConstants.LANGUAGE, language);
+        SPUtils.getInstance().put(UrlConstants.PAPERVERSION, myVersionNo);
+
+        hideImg();
         storageId = pid;
-        photoList = getIntent().getStringArrayListExtra("photoRows");
+//        photoList = getIntent().getStringArrayListExtra("photoRows");
         recordOneList = getIntent().getStringArrayListExtra("recordOneRows");
         recordTwoList = getIntent().getStringArrayListExtra("recordTwoRows");
 
         if (type == null)
             type = "";
 
-        if (photoList == null) {
-            photoList = new ArrayList<>();
-        }
+//        if (photoList == null) {
+        photoList = new ArrayList<>();
+//        }
 
         DaoSession daoSession = BaseApp.app.getDaoSession();
         noteDao = daoSession.getNoteDao();
@@ -452,10 +443,10 @@ public class PaperDetailsActivity extends
         progressPopupWindow = new ProgressPopupWindow(this);
 //                showDialog();
         loadDownloadNunber();
-        if (photoList != null && photoList.size() > 0) {
-            fullScreenPopup.setStringArrayList(photoList);
-            fullScreenPopup.initDownload();
-        }
+//        if (photoList != null && photoList.size() > 0) {
+//            fullScreenPopup.setStringArrayList(photoList);
+//            fullScreenPopup.initDownload();
+//        }
 
         tvTitle.setText("P1");
         viewpagerPaper.addOnPageChangeListener(this);
@@ -511,6 +502,7 @@ public class PaperDetailsActivity extends
             case "home":
             case "answer":
             case "questions":
+                getPlayService().setPlayType(PlayService.ONLINE);
                 List<BaseFragment> fragments = new ArrayList<>();
                 //问答、文献索引、统计
                 paperQA = BannerRecyclerViewFragment.newInstance("paper_qa", pid);
@@ -542,6 +534,7 @@ public class PaperDetailsActivity extends
 
                 break;
             case "wait_dubbing"://待配音
+                getPlayService().setPlayType(PlayService.ONLINE);
                 linerBottomComm.setVisibility(View.GONE);
 //                ArrayMap<String, Object> dubbingMap = new ArrayMap<>();
 ////                dubbingMap.put("token", token);
@@ -557,6 +550,7 @@ public class PaperDetailsActivity extends
                 llEmptyView.setVisibility(View.GONE);
                 break;
             case "download_paper": {//下载
+                getPlayService().setPlayType(PlayService.DOWN);
                 linerBottomComm.setVisibility(View.GONE);
                 llEmptyView.setVisibility(View.GONE);
                 if (getPlayService() != null) {
@@ -697,8 +691,8 @@ public class PaperDetailsActivity extends
                 initNetwork();
                 break;
             case R.id.tv_back:
-                if (getPlayService() != null && getPlayService().isPlaying())
-                    getPlayService().playPause();
+//                if (getPlayService() != null && getPlayService().isPlaying())
+//                    getPlayService().playPause();
                 finish();
                 break;
             case R.id.tv_paper_complete://完整
@@ -736,7 +730,8 @@ public class PaperDetailsActivity extends
                 if (getPlayService() != null) {
                     if (position < imageId.size() - 1) {
                         sendPlayNote();
-                        getImageInfo(imageId.get(position + 1));
+                        position++;
+                        getImageInfo();
                     } else {
                         ToastUtils.showShort("已经是最后一张了");
                     }
@@ -747,7 +742,8 @@ public class PaperDetailsActivity extends
                 if (getPlayService() != null) {
                     if (position > 0) {
                         sendPlayNote();
-                        getImageInfo(imageId.get(position - 1));
+                        position--;
+                        getImageInfo();
                     } else {
                         ToastUtils.showShort("已经是第一张了");
                     }
@@ -806,8 +802,8 @@ public class PaperDetailsActivity extends
                                     " service@giiisp.com");
                             break;
                         case "2":
-                            ProblemActivity.actionActivity(this, "Problem",imageId.get(position),
-                                    pid,"",photoList.get(position));
+                            ProblemActivity.actionActivity(this, "Problem", imageId.get(position),
+                                    pid, "", photoList.get(position));
                             break;
                         case "1":
                             Utils.showToast("等待认证完成");
@@ -934,7 +930,9 @@ public class PaperDetailsActivity extends
     //切换语言
     private void changeLanguage(boolean isCN) {
         language = isCN ? CN : EN;
+        getPlayService().setLanguage(language);
         getPlayService().play(isCN ? songCN : songEN);
+        SPUtils.getInstance().put(UrlConstants.LANGUAGE, language);
         tvCn.setChecked(isCN);
         tvEn.setChecked(!isCN);
     }
@@ -1184,7 +1182,7 @@ public class PaperDetailsActivity extends
             this.position = position;
 //            if (getPlayService() != null)
 //                getPlayService().play(position);
-            getImageInfo(imageId.get(position));
+            getImageInfo();
         }
 
 
@@ -1556,13 +1554,13 @@ public class PaperDetailsActivity extends
 
         if (getPlayService() != null) {
             if (position < imageId.size() - 1) {
-                getImageInfo(imageId.get(position + 1));
                 position++;
+                getImageInfo();
             } else {
                 if (imageId.size() > 0) {
-                    getImageInfo(imageId.get(0));
+                    position = 0;
+                    getImageInfo();
                 }
-                position = 0;
             }
         }
 
@@ -1796,8 +1794,8 @@ public class PaperDetailsActivity extends
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.i("--->>", "onKeyDown: " + keyCode);
-        if (getPlayService() != null)
-            getPlayService().playPause();
+//        if (getPlayService() != null)
+//            getPlayService().playPause();
         return super.onKeyDown(keyCode, event);
 
     }
@@ -1968,13 +1966,16 @@ public class PaperDetailsActivity extends
                     photoList.add(BASE_IMG_URL + vo.getUrl());
                     imageId.add(vo.getId());
                 }
+
+                getPlayService().setImageList(photoList);
+
                 if (!TextUtils.isEmpty(bean.getDigest()))
                     title = bean.getDigest();
 
                 viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
                 if (bean.getImglist() != null && bean.getImglist().size() != 0) {
                     position = 0;
-                    getImageInfo(bean.getImglist().get(0).getId());
+                    getImageInfo();
                     viewpagerPaper.setCurrentItem(0);
                     paperQA.setImageId(imageId.get(position));
                     paperQA.initNetwork();
@@ -2014,7 +2015,7 @@ public class PaperDetailsActivity extends
                 viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
                 if (dubbingBean.getList() != null && dubbingBean.getList().size() != 0) {
                     position = 0;
-                    getImageInfo(dubbingBean.getList().get(0).getPcid());
+                    getImageInfo();
                     viewpagerPaper.setCurrentItem(0);
                 }
                 break;
@@ -2087,13 +2088,14 @@ public class PaperDetailsActivity extends
     }
 
     //获取图片地址及事件
-    private void getImageInfo(String imgId) {
+    private void getImageInfo() {
         mMyCustomView.clearData();
         mBeanMap = new HashMap<>();
         timeString = new ArrayList<>();
         isEvent = false;
+        getPlayService().setPlayPosition(position);
         HashMap<String, Object> map = new HashMap<>();
-        map.put("imgid", imgId);
+        map.put("imgid", imageId.get(position));
         map.put("pid", pid);
         map.put("language", language);
         presenter.getDataAll("305", map);
@@ -2103,7 +2105,7 @@ public class PaperDetailsActivity extends
             e.printStackTrace();
         }
         map = new HashMap<>();
-        map.put("iid", imgId);
+        map.put("iid", imageId.get(position));
         presenter.getDataAll("205", map);
     }
 

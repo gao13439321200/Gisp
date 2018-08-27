@@ -13,14 +13,19 @@ import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.giiisp.giiisp.entity.PaperDatailEntity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.ImgInfoBean;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.Song;
+import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.FileUtils;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
-import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
+import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +33,7 @@ import java.util.Random;
  * 音乐播放后台服务
  * Created by wcy on 2015/11/27.
  */
-public class PlayService extends Service implements MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
+public class PlayService extends Service implements BaseImpl, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
     private static final String TAG = "Service";
     private static final long TIME_UPDATE = 100L;
     private static final int STATE_IDLE = 0;
@@ -51,6 +56,25 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private long quitTimerRemain;
     private int playState = STATE_IDLE;
     private List<String> imageList = new ArrayList<>();
+    private WholePresenter presenter = new WholePresenter(this);
+    private int playPosition = 0;
+    private String language;
+    private int playType = ONLINE;//1在线播放 2后台播放 3本地播放
+    public static final int ONLINE = 1;
+    public static final int BACK = 2;
+    public static final int DOWN = 3;
+
+    public void setPlayType(int playType) {
+        this.playType = playType;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setPlayPosition(int playPosition) {
+        this.playPosition = playPosition;
+    }
 
     @Override
     public void onCreate() {
@@ -150,6 +174,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mListener = listener;
     }
 
+    //下载专用播放
     public void play(int position) {
         if (mMusicList.isEmpty()) {
             return;
@@ -185,9 +210,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
     }
 
+    //播放
     public void play(Song music) {
         mPlayingMusic = music;
-        if("mp4".equals(FileUtils.parseSuffix(mPlayingMusic.getPath()))) {
+        if ("mp4".equals(FileUtils.parseSuffix(mPlayingMusic.getPath()))) {
             return;
         }
         try {
@@ -209,7 +235,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
         @Override
         public void onPrepared(MediaPlayer mp) {
-            if (mListener!=null){
+            if (mListener != null) {
                 mListener.onPrepared(mp);
             }
             start();
@@ -280,6 +306,24 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
     public void next() {
+        switch (playType) {
+            case ONLINE://在线播放什么都不做
+                return;
+            case BACK://后台播放获取数据
+                if (playPosition < imageList.size() - 1) {
+                    playPosition++;
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("iid", imageList.get(playPosition));
+                    presenter.getDataAll("205", map);
+                } else {
+                    pause();
+                }
+                return;
+            case DOWN:
+                //走后边的代码
+                break;
+        }
+
         if (mMusicList.isEmpty()) {
             return;
         }
@@ -454,6 +498,44 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         //        Notifier.cancelAll();
         AppCache.setPlayService(null);
         stopSelf();
+    }
+
+    @Override
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onFailure(String msg, Exception ex) {
+
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        switch (url) {
+            case "205":
+                ImgInfoBean bean = (ImgInfoBean) baseBean;
+                Song song = new Song();
+                switch (language) {
+                    case "1":
+                        song.setPhotoPath(ToolString.getUrl(bean.getCnrecord().getUrl()));
+                        break;
+                    case "2":
+                        song.setPhotoPath(ToolString.getUrl(bean.getEnrecord().getUrl()));
+                        break;
+                    default:
+                        break;
+                }
+                play(song);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onFailNew(String url, String msg) {
+
     }
 
     public class PlayBinder extends Binder {

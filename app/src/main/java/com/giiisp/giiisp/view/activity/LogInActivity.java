@@ -23,7 +23,6 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- *
  * 登录界面
  * Created by Thinkpad on 2017/4/28.
  */
@@ -70,13 +69,14 @@ public class LogInActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        hideImg();
         List<BaseFragment> fragments = new ArrayList<>();
         fragments.add(new LoginHintFragment());
         fragments.add(new LoginFragment());
         fragments.add(new RegisterFragment());
         fragments.add(new RetrievePwdFragment());
-        fragments.add(AgreementFragment.newInstance("login_webView",""));
-        vpLogin.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),fragments,null));
+        fragments.add(AgreementFragment.newInstance("login_webView", ""));
+        vpLogin.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments, null));
 
     }
 
@@ -103,6 +103,7 @@ public class LogInActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

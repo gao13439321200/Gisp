@@ -47,6 +47,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static com.chad.library.adapter.base.listener.SimpleClickListener.TAG;
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 
 
 /**
@@ -856,5 +857,8 @@ public class ToolString {
         return str_json;
     }
 
+    public static String getUrl(String url) {
+        return BASE_IMG_URL + url;
+    }
 
 }

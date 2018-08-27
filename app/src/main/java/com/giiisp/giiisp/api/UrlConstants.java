@@ -257,6 +257,9 @@ public class UrlConstants {
     public static final String EMAILAUTHEN = "emailauthen";
     public static final String UNAME = "uname";
     public static final String LANGUAGE = "language";
+    public static final String PID = "pid";
+    public static final String PAPERTYPE = "papertype";
+    public static final String PAPERVERSION = "paperversion";
 
 
 }
