@@ -53,6 +53,8 @@ import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaBean;
 import com.giiisp.giiisp.dto.PaperQaVO;
+import com.giiisp.giiisp.dto.PeopleBean;
+import com.giiisp.giiisp.dto.PeopleVO;
 import com.giiisp.giiisp.dto.PlayNoteBean;
 import com.giiisp.giiisp.dto.PlayNoteVo;
 import com.giiisp.giiisp.entity.AnswerBean;
@@ -555,7 +557,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 multipleItemQuickAdapter.setEmptyView(notDataView);
                 recyclerView.setAdapter(multipleItemQuickAdapter);
                 break;
-            case "scholar_list":
+            case "scholar_list"://学者
                 tvTitle.setText(R.string.scholars);
                 lineBanner.setVisibility(View.VISIBLE);
                 GridLayoutManager grid = new GridLayoutManager(getContext(), 3);
@@ -611,7 +613,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "summary_list"://综述
                 tvTitleRt.setVisibility(View.VISIBLE);
                 rlBanner.setVisibility(View.VISIBLE);
-                mLLSpinnerAll.setVisibility(View.VISIBLE);
+//                mLLSpinnerAll.setVisibility(View.VISIBLE);
                 lineBanner.setVisibility(View.GONE);
                 tvTitleRt.setText(R.string.review_list);
                 tvBackRt.setVisibility(View.VISIBLE);
@@ -659,7 +661,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 tvTitleRt.setVisibility(View.VISIBLE);
                 tvBackRt.setVisibility(View.VISIBLE);
                 tvTitleRt.setText(R.string.paper_list);
-                mLLSpinnerAll.setVisibility(View.VISIBLE);
+//                mLLSpinnerAll.setVisibility(View.VISIBLE);
                 rlBanner.setVisibility(View.VISIBLE);
                 lineBanner.setVisibility(View.GONE);
                 list.clear();
@@ -859,7 +861,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_indexes, this.list, type);
                 break;
             default:
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type,this);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
 
         }
         if (itemClickAdapter != null) {
@@ -892,8 +894,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 // TODO: 2018/8/26 高鹏 这里需要获取作者论文和综述
                 break;
             case "scholar_list":
-                map.put("page", page);
-                presenter.getListScholarData(map);
+                hMap.put("pageno", page);
+                presenter.getDataAll("218", hMap);
                 break;
 //            case "plays":
 
@@ -1068,14 +1070,16 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                map.put("page", page);
 //                map.put("uid", string);
 //                presenter.getListUserFollowedData(map);
-                hMap.put("uid", uid);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
                 presenter.getDataAll("307", hMap);
                 break;
             case "mine_follow":
 //                map.put("page", page);
 //                map.put("uid", string);
 //                presenter.getListUserFollowData(map);
-                hMap.put("uid", uid);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
                 presenter.getDataAll("308", hMap);
                 break;
             case "search_paper":
@@ -2893,6 +2897,31 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
                 itemClickAdapter.expandAll();
                 break;
+            case "218"://学者
+                PeopleBean bean6 = (PeopleBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (bean6.getUlist() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+
+                for (PeopleVO vo : bean6.getUlist()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setPeopleVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+
+                if (bean6.getUlist().size() == pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                itemClickAdapter.expandAll();
+                break;
             case "318"://发布论文
                 ToastUtils.showShort("发布成功！");
                 page = 0;
@@ -2902,15 +2931,21 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 presenter.getDataAll("316", map);
                 break;
             case "214":
-                PlayNoteBean bean6 = (PlayNoteBean) baseBean;
+                PlayNoteBean bean7 = (PlayNoteBean) baseBean;
                 if (page == 0) {
                     itemClickAdapter.setNewData(null);
                 }
-                for (PlayNoteVo vo : bean6.getList()) {
+                for (PlayNoteVo vo : bean7.getList()) {
                     ClickEntity mainEntity = new ClickEntity();
                     mainEntity.setPlayNoteVo(vo);
                     itemClickAdapter.addData(mainEntity);
                 }
+                if (bean7.getList().size() == pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                itemClickAdapter.expandAll();
                 swipeRefreshLayout.setRefreshing(false);
                 break;
             default:

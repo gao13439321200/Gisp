@@ -27,8 +27,6 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
-
 /**
  * 设置页面
  * Created by Thinkpad on 2017/5/4.
@@ -134,8 +132,8 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
         normalDialog.setPositiveButton(R.string.confirm,
                 (dialog, which) -> {
                     String uid = SPUtils.getInstance().getString(UrlConstants.UID);
-                    SPUtils.getInstance().put(UrlConstants.UID,"");
-                    SPUtils.getInstance().put(UrlConstants.UNAME,"");
+                    SPUtils.getInstance().put(UrlConstants.UID, "");
+                    SPUtils.getInstance().put(UrlConstants.UNAME, "");
                     LogInActivity.actionActivity(getContext());
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("id", uid);
@@ -168,12 +166,12 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
     @Override
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
-        switch(url){
+        switch (url) {
             case "306":
                 MIneInfoBean bean = (MIneInfoBean) baseBean;
                 String nickName = bean.getName();
                 String avatar = bean.getAvatar();
-                ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL+avatar, imUserIcon);
+                ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), avatar, imUserIcon);
                 if (!TextUtils.isEmpty(nickName))
                     tvUserName.setText(nickName);
                 break;

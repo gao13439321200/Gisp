@@ -1009,8 +1009,8 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         });
     }
 
-    public void getAuthenUserlData(String email, String uid, MultipartBody.Part part) {
-        ModelFactory.getBaseModel().getAuthenUserlData(email, uid, part, new Callback<BaseEntity>() {
+    public void getAuthenUserlData(String email, String uid) {
+        ModelFactory.getBaseModel().getAuthenUserlData(email, uid, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
                 if (response.isSuccessful()) {
@@ -1515,6 +1515,9 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 break;
             case "216":
                 baseEntity = new Gson().fromJson(cipher, DownloadInfoBean.class);
+                break;
+            case "218":
+                baseEntity = new Gson().fromJson(cipher, PeopleBean.class);
                 break;
             case "305":
                 baseEntity = new Gson().fromJson(cipher, PaperEventBean.class);

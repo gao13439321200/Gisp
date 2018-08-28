@@ -39,7 +39,6 @@ import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
-import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.emailauthen;
 import static com.giiisp.giiisp.base.BaseActivity.isVip;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
@@ -146,7 +145,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //        UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
         String avatar = infoBean.getAvatar();
         if (!avatar.equals(imageUrl))
-            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL + avatar, ivUserIcon);
+            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), avatar, ivUserIcon);
         imageUrl = avatar;
         tvUserName.setText(infoBean.getName());
         tvUserEmail.setText(infoBean.getEmail());
@@ -197,22 +196,22 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     tvRecordinAuthentication.setText("未认证");
                     break;
             }
-            switch (isVip) {
-                case "0":
-                    tvVerified.setVisibility(View.VISIBLE);
-                    tvVerified.setText("身份认证");
-                    break;
-                case "1":
-                    tvVerified.setVisibility(View.VISIBLE);
-                    break;
-                case "2":
-                    tvVerified.setVisibility(View.VISIBLE);
-                    break;
-                case "3":
-                    tvVerified.setVisibility(View.VISIBLE);
-                    tvVerified.setText("认证中");
-                    break;
-            }
+//            switch (isVip) {
+//                case "0":
+//                    tvVerified.setVisibility(View.VISIBLE);
+//                    tvVerified.setText("身份认证");
+//                    break;
+//                case "1":
+//                    tvVerified.setVisibility(View.VISIBLE);
+//                    break;
+//                case "2":
+//                    tvVerified.setVisibility(View.VISIBLE);
+//                    break;
+//                case "3":
+//                    tvVerified.setVisibility(View.VISIBLE);
+//                    tvVerified.setText("认证中");
+//                    break;
+//            }
         }
         tvPrompt.setText(infoBean.getSchool());
         if (!TextUtils.isEmpty(infoBean.getDepartment()) && TextUtils.isEmpty(infoBean.getPosition())) {
@@ -304,9 +303,9 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 
     @OnClick({R.id.tv_verified, R.id.ll_summary, R.id.ll_paper, R.id.iv_empty,
             R.id.tv_empty, R.id.fl_mine_history, R.id.tv_follow_number, R.id.tv_follow,
-            R.id.rl_user_info, R.id.tv_recording_authentication, R.id.tv_fans_number,
+            R.id.rl_user_info, R.id.ll_dubbing, R.id.tv_fans_number,
             R.id.tv_fans, R.id.fl_mine_qa, R.id.fl_mine_download, R.id.fl_mine_subscribe,
-            R.id.ll_meeting, R.id.ll_collection, R.id.iv_menu,
+            R.id.ll_meeting, R.id.ll_collection, R.id.iv_menu, R.id.ll_email, R.id.fl_auth,
             R.id.fl_mine_news, R.id.fl_mine_contacts, R.id.fl_mine_collection, R.id.fl_mine_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -314,16 +313,17 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.tv_empty:
                 initNetwork();
                 break;
+            case R.id.rl_user_info:
             case R.id.iv_menu://设置
                 SettingActivity.actionActivity(getContext());
                 break;
-            case R.id.rl_user_info:
-                FragmentActivity.actionActivity(getContext(), "he", uid + "");
-                break;
+//            case R.id.rl_user_info:
+//                FragmentActivity.actionActivity(getContext(), "he", uid + "");
+//                break;
             case R.id.fl_mine_history:
                 FragmentActivity.actionActivity(getContext(), "plays");
                 break;
-            case R.id.tv_recording_authentication:
+            case R.id.ll_dubbing:
                 //
                 switch (emailauthen) { //  开始录音是否Ok  test 1 BaseActivity.emailauthen
                     case "3":
@@ -369,7 +369,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.fl_mine_subscribe://我的关注
                 AttentionActivity.actionActivity(getContext(), "mine");
                 break;
-            case R.id.fl_mine_news:
+            case R.id.fl_mine_news://我的消息
                 FragmentActivity.actionActivity(getContext(), "news");
                 break;
             case R.id.fl_mine_contacts:
@@ -389,7 +389,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.fl_mine_setting:
 //                SettingActivity.actionActivity(getContext());
                 break;
-            case R.id.tv_verified:
+            case R.id.tv_verified://身份认证
                 switch (isVip) {
                     case "0":
                         VerifiedActivity.actionActivity(context);
@@ -405,7 +405,27 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                         break;
                 }
                 break;
+            case R.id.ll_email://邮箱认证
+                FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
+                break;
+            case R.id.fl_auth://资料认证
+                switch (emailauthen) {
+                    case "3":
+                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
+                        break;
+                    case "2":
+                        Utils.showToast(R.string.auth_pass);
+                        break;
+                    case "1":
+                        Utils.showToast(R.string.in_authentication);
+                        break;
+                    default:
+                        //FragmentActivity.actionActivity(getContext(), "wait_dubbing");
+                        break;
+                }
+                break;
         }
+
     }
 
     public void loadDownloadNunber() {

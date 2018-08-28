@@ -251,8 +251,8 @@ public class BaseModel {
         ApiStore.getInstance().getApiService().getMsgDelInfo(options).enqueue(callback);
     }
 
-    public void getAuthenUserlData(String email, String uid, MultipartBody.Part part, Callback<BaseEntity> callback) {
-        ApiStore.getInstance().getApiService().getAuthenUserInfo(email, uid, part).enqueue(callback);
+    public void getAuthenUserlData(String email, String uid, Callback<BaseEntity> callback) {
+        ApiStore.getInstance().getApiService().getAuthenUserInfo(email, uid).enqueue(callback);
     }
 
     public void getUserLogOutData(Callback<BaseEntity> callback) {

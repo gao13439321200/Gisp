@@ -28,6 +28,7 @@ import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
+import com.giiisp.giiisp.dto.PeopleVO;
 import com.giiisp.giiisp.entity.CollectionEntity;
 import com.giiisp.giiisp.entity.DownloadController;
 import com.giiisp.giiisp.entity.HomeSearchEntity;
@@ -712,12 +713,12 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             });
                     break;
                 case R.layout.item_scholar:
-                    if (item.getMyScholarBean() == null)
+                    if (item.getPeopleVO() == null)
                         return;
-                    MyScholarBean scholarBean = item.getMyScholarBean();
-                    ImageLoader.getInstance().displayImage(activity, scholarBean.getAvatar(), (ImageView) helper.getView(R.id.iv_scholar_icon), false);
-                    helper.setText(R.id.tv_scholar_name, scholarBean.getRealName());
-                    helper.setText(R.id.tv_user_position, scholarBean.getRealName());
+                    PeopleVO peopleVO = item.getPeopleVO();
+                    ImageLoader.getInstance().displayImage(activity, peopleVO.getAvatar(), (ImageView) helper.getView(R.id.iv_scholar_icon), false);
+                    helper.setText(R.id.tv_scholar_name, peopleVO.getName());
+                    helper.setText(R.id.tv_user_position, peopleVO.getName());
                     break;
                 case R.layout.item_attention_text:
                     switch (type) {

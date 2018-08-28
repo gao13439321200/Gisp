@@ -18,6 +18,15 @@ public class DownloadBean {
     private String version;
     private String title;
     private String time;
+    private int photoNum;
+
+    public int getPhotoNum() {
+        return photoNum;
+    }
+
+    public void setPhotoNum(int photoNum) {
+        this.photoNum = photoNum;
+    }
 
     public DownloadBean() {
     }
@@ -122,6 +131,7 @@ public class DownloadBean {
         private String version;
         private String title;
         private String time;
+        private int photoNum;
 
         public Builder(String url) {
             this.url = url;
@@ -165,6 +175,11 @@ public class DownloadBean {
 
         public Builder setVersion(String version) {
             this.version = version;
+            return this;
+        }
+
+        public Builder setPhotoNum(int photoNum) {
+            this.photoNum = photoNum;
             return this;
         }
 

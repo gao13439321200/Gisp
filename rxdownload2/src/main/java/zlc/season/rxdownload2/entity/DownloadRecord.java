@@ -26,6 +26,15 @@ public class DownloadRecord {
 
     private long date; //格林威治时间,毫秒
     private String missionId;
+    private int photoNum;
+
+    public int getPhotoNum() {
+        return photoNum;
+    }
+
+    public void setPhotoNum(int photoNum) {
+        this.photoNum = photoNum;
+    }
 
     public DownloadRecord() {
     }

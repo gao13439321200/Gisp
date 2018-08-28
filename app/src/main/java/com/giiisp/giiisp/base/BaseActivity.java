@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,6 +28,7 @@ import com.giiisp.giiisp.utils.AppManager;
 import com.giiisp.giiisp.utils.SharedPreferencesHelper;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
+import com.giiisp.giiisp.widget.FloatDragView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -34,7 +36,6 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportActivity;
 
@@ -105,13 +106,45 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
 */
         setContentView(R.layout.activity_base_layout);
         RelativeLayout mBaseRl = findViewById(R.id.base_rl);
-        baseImg = findViewById(R.id.iv_play_now);
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(getLayoutId(), null);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
         if (view != null)
             mBaseRl.addView(view, layoutParams);
+
+        //添加可拖动悬浮按钮
+        baseImg = FloatDragView.addFloatDragView(this, mBaseRl, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PID))
+                        && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERVERSION))
+                        && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERTYPE))) {
+                    PaperDetailsActivity.actionActivityNew(BaseActivity.this
+                            , SPUtils.getInstance().getString(UrlConstants.PID)
+                            , SPUtils.getInstance().getString(UrlConstants.PAPERVERSION)
+                            , SPUtils.getInstance().getString(UrlConstants.PAPERTYPE)
+                            , SPUtils.getInstance().getString(UrlConstants.LANGUAGE)
+                    );
+                } else {
+                    ToastUtils.showShort("暂无播放信息");
+                }
+            }
+        }, action -> {
+            //在播放的时候，拖动按钮有问题，暂时这样：在拖动的时候暂停，结束在播放
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+//                        toolbarLayout.requestDisallowInterceptTouchEvent(true);
+                    break;
+                case MotionEvent.ACTION_MOVE:
+//                        toolbarLayout.requestDisallowInterceptTouchEvent(true);
+                    break;
+                case MotionEvent.ACTION_UP:
+//                        toolbarLayout.requestDisallowInterceptTouchEvent(false);
+                    break;
+            }
+        });
+
         unbinder = ButterKnife.bind(this);
         AppManager.getAppManager().addActivity(this);
         init();
@@ -279,21 +312,6 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
         return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1");
     }
 
-    @OnClick(R.id.iv_play_now)
-    public void onViewClicked() {
-        if (ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PID))
-                && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERVERSION))
-                && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERTYPE))) {
-            PaperDetailsActivity.actionActivityNew(this
-                    , SPUtils.getInstance().getString(UrlConstants.PID)
-                    , SPUtils.getInstance().getString(UrlConstants.PAPERVERSION)
-                    , SPUtils.getInstance().getString(UrlConstants.PAPERTYPE)
-                    , SPUtils.getInstance().getString(UrlConstants.LANGUAGE)
-            );
-        } else {
-            ToastUtils.showShort("暂无播放信息");
-        }
-    }
 
     public void hideImg() {
         baseImg.setVisibility(View.GONE);

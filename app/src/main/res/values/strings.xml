@@ -223,6 +223,7 @@
     <string name="all_the_people">所有人</string>
     <string name="only_friends">仅好友</string>
     <string name="only_yourself">仅自己</string>
+    <string name="information_auth">资料认证</string>
     <string name="see_my_information">谁可以看我的资料</string>
     <string name="see_my_email">谁可以看我的邮箱</string>
     <string name="see_my_phone">谁可以看我的电话号码</string>
@@ -301,6 +302,7 @@
     <string name="hot_recommended">热门推荐</string>
     <string name="login_failed">登录失败</string>
     <string name="in_authentication">认证中…</string>
+    <string name="auth_pass">认证已通过</string>
     <string name="log_in_again">修改成功！请重新登录</string>
     <string name="look_profile">谁可以看我的资料</string>
     <string name="privacy_settings">隐私设置</string>
@@ -340,6 +342,10 @@
 
     <string name="title_checkpwd">此文档需要输入密码</string>
     <string name="time">学时</string>
+    <string name="et_email">请输入工作邮箱</string>
+    <string name="submit_email_auth">提交认证申请</string>
+    <string name="back_main">返回首页</string>
+    <string name="email_result">恭喜您！ 您认证邮箱已成功提交！请到您的邮箱点击链接，完成认证</string>
     <item name="tag_app_size" type="id"/>
 
 </resources>

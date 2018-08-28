@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorBackground"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
+
+    <include layout="@layout/layout_fragment_banner"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/bg_white"
+        android:gravity="center"
+        android:text="@string/email_result"
+        android:textColor="@drawable/bg_black"/>
+
+
+    <TextView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:drawablePadding="20dp"
+        android:drawableTop="@mipmap/finish_icon"
+        android:gravity="center_horizontal"
+        android:text="@string/back_main"
+        android:textColor="@color/colorAuxiliary"/>
+
+</LinearLayout>

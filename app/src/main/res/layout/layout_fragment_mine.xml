@@ -40,6 +40,7 @@
                     android:paddingEnd="70dp"
                     android:paddingStart="70dp"
                     android:text="@string/unauthorized"
+                    android:visibility="gone"
                     android:textColor="@color/colorWhite"
                     android:textSize="16sp"/>
 
@@ -52,6 +53,7 @@
                     android:background="@drawable/item_blue_bg"
                     android:gravity="center"
                     android:text="@string/position_verified"
+                    android:visibility="gone"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/text_size"/>
 
@@ -78,11 +80,8 @@
                             android:src="@mipmap/img_summary"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/summary"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -101,11 +100,8 @@
                             android:src="@mipmap/img_paper"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/paper"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -124,11 +120,8 @@
                             android:src="@mipmap/mine_qa"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/question_and_answer"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -138,8 +131,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
                     android:background="@color/colorWhite"
                     android:orientation="horizontal">
 
@@ -163,11 +154,8 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
                                 android:text="@string/download"
-                                android:textSize="18sp"/>
+                                style="@style/mine_tv_btn"/>
 
                             <TextView
                                 android:id="@+id/tv_mine_download"
@@ -196,11 +184,8 @@
                             android:src="@mipmap/mine_subscribe"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/follow"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -219,11 +204,8 @@
                             android:src="@mipmap/img_history"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/play_the_history"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -233,8 +215,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
                     android:background="@color/colorWhite"
                     android:orientation="horizontal">
 
@@ -253,11 +233,8 @@
                             android:src="@mipmap/img_meet"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/meeting"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -276,11 +253,8 @@
                             android:src="@mipmap/img_news"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/news"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -299,11 +273,8 @@
                             android:src="@mipmap/mine_collection"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:text="@string/collection"
-                            android:textSize="18sp"/>
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -314,13 +285,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:background="@color/colorWhite"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/ll_dubbing"
+                        android:id="@+id/ll_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -331,14 +301,11 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/img_meet"/>
+                            android:src="@mipmap/mine_collection"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/dubbing"
-                            android:textSize="18sp"/>
+                            android:text="@string/mailbox_authentication"
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
@@ -354,23 +321,21 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/img_news"/>
+                            android:src="@mipmap/mine_collection"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/news"
-                            android:textSize="18sp"/>
+                            android:text="@string/information_auth"
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_dubbing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:visibility="invisible"
+                        android:visibility="visible"
                         android:orientation="vertical"
                         android:padding="20dp">
 
@@ -380,11 +345,8 @@
                             android:src="@mipmap/mine_collection"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/collection"
-                            android:textSize="18sp"/>
+                            android:text="@string/dubbing"
+                            style="@style/mine_tv_btn"/>
 
                     </LinearLayout>
 

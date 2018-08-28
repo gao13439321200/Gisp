@@ -21,6 +21,7 @@ import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.dto.PaperLiteratureVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
+import com.giiisp.giiisp.dto.PeopleVO;
 import com.giiisp.giiisp.dto.PlayNoteVo;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
@@ -389,6 +390,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private PlayNoteVo mPlayNoteVo;
     private MIneInfoBean mMIneInfoBean;
     private PaperMainVO.VlistBean mVlistBean;
+    private PeopleVO mPeopleVO;
+
+    public PeopleVO getPeopleVO() {
+        return mPeopleVO;
+    }
+
+    public void setPeopleVO(PeopleVO peopleVO) {
+        mPeopleVO = peopleVO;
+    }
 
     public PaperMainVO.VlistBean getVlistBean() {
         return mVlistBean;

@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
@@ -31,7 +29,6 @@ import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.PicUtils;
 import com.giiisp.giiisp.utils.Utils;
-import com.giiisp.giiisp.view.activity.VerifiedActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.ProgressPopupWindow;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -46,14 +43,9 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import static android.app.Activity.RESULT_OK;
-import static com.giiisp.giiisp.base.BaseActivity.emailauthen;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
-
-import static com.giiisp.giiisp.base.BaseActivity.isVip;
 
 
 /**
@@ -101,13 +93,13 @@ public class MailboxAuthenticationFragment extends BaseMvpFragment<BaseImpl, Who
                 String trim = email.trim();
                 if (!Utils.checkEmail(trim)) {
                     Utils.showToast(R.string.email_not_correct);
-                } else if (part == null) {
+                } /*else if (part == null) {
                     Utils.showToast(R.string.email_not_tu);
-                } else {
+                } */ else {
                     ArrayMap<String, Object> map = new ArrayMap<>();
                     map.put("email", trim);
                     map.put("uid", uid);
-                    presenter.getAuthenUserlData(trim, uid, part);
+                    presenter.getAuthenUserlData(trim, uid);
                     progressPopupWindow.showPopupWindow();
                 }
                 break;
@@ -151,14 +143,7 @@ public class MailboxAuthenticationFragment extends BaseMvpFragment<BaseImpl, Who
             progressPopupWindow.dismiss();
         }
         if (entity.getResult() == 1) {
-            initDialog(entity.getInfo(), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (getActivity() != null)
-                        getActivity().finish();
-                }
-            });
-
+            startWithPop(MailboxAuthResultFragment.newInstance());
         } else {
             //            Utils.showToast(entity.getInfo(),false);
             initDialog(entity.getInfo(), null);

@@ -323,10 +323,9 @@ public interface ApiService {
     Call<UpDateAppEntity> getAppInfo(@FieldMap ArrayMap<String, Object> options);
 
     //用邮箱认证
-    @Multipart
     @POST(UrlConstants.RequestUrl.AUTHEN_USER)
     @Headers("Connection:close")
-    Call<BaseEntity> getAuthenUserInfo(@Query("email") String email, @Query("uid") String uid, @Part MultipartBody.Part part);
+    Call<BaseEntity> getAuthenUserInfo(@Query("email") String email, @Query("uid") String uid);
 
     //添加教育经历
     @FormUrlEncoded
