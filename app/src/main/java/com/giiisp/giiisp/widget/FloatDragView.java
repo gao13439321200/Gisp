@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.utils.Utils;
@@ -40,9 +38,10 @@ public class FloatDragView {
      * @param clickListener  可拖动按钮的点击事件
      */
     public static ImageView addFloatDragView(Activity context, RelativeLayout mViewContainer,
-                                             View.OnClickListener clickListener,OnMyListening onMyListening) {
+                                             View.OnClickListener clickListener, OnMyListening onMyListening) {
         FloatDragView floatDragView = new FloatDragView(context);
-        ImageView imageView = floatDragView.getFloatDragView(clickListener,onMyListening);
+        ImageView imageView = floatDragView.getFloatDragView(clickListener, onMyListening);
+        imageView.setY(200);
         mViewContainer.addView(imageView);
         return imageView;
     }
@@ -55,7 +54,7 @@ public class FloatDragView {
     }
 
     // 获取可拖动按钮的实例
-    private ImageView getFloatDragView(View.OnClickListener clickListener,OnMyListening onMyListening) {
+    private ImageView getFloatDragView(View.OnClickListener clickListener, OnMyListening onMyListening) {
         if (mImageView != null) {
             return mImageView;
         } else {
@@ -168,14 +167,16 @@ public class FloatDragView {
         });
     }
 
-    public interface OnMyListening{
+    public interface OnMyListening {
         void myListening(int action);
     }
 
-    OnMyListening onMyListening=null;
-    public void setOnMyListening(OnMyListening e){
-        onMyListening=e;
+    OnMyListening onMyListening = null;
+
+    public void setOnMyListening(OnMyListening e) {
+        onMyListening = e;
     }
+
     // 将拖动按钮移动到边沿
     private void setImageViewNearEdge(final View v) {
 

@@ -197,8 +197,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                     List<String> pathUrl = new ArrayList<>();
                     if (homeEntity.getBlist() != null && homeEntity.getBlist().size() > 0) {
                         for (HeadImgVO row : homeEntity.getBlist()) {
-                            imageUrl.add(row.getImg());
-                            pathUrl.add(row.getUrl());
+                            imageUrl.add(BASE_IMG_URL + row.getImg());
+                            pathUrl.add(BASE_IMG_URL + row.getUrl());
                         }
                         viewPager.setAdapter(new ImageAdapter(context, imageUrl, pathUrl));
                     }
@@ -307,7 +307,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                         String id = paper.getId();
                         String version = paper.getVersion();
                         if (!TextUtils.isEmpty(id))
-                            PaperDetailsActivity.actionActivityNew(context, id, version, "online_paper",CN);
+                            PaperDetailsActivity.actionActivityNew(context, id, version, "online_paper", CN);
                     }
                 }
             }

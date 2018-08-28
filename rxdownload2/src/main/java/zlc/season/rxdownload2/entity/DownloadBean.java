@@ -1,5 +1,8 @@
 package zlc.season.rxdownload2.entity;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 /**
  * Author: Season(ssseasonnn@gmail.com)
  * Date: 2017/2/17
@@ -9,7 +12,7 @@ package zlc.season.rxdownload2.entity;
 public class DownloadBean {
     private String url;
     private String saveName;
-    private String savePath;
+    private String savePath = getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getPath();
     private String extra1;
     private String extra2;
     private String extra3;

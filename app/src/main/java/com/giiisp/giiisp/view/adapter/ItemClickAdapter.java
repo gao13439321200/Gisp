@@ -875,11 +875,18 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     } else {
                         bg.setVisibility(View.VISIBLE);
                     }
-                    if ("mp4".equals(FileUtils.parseSuffix(infoVO.getUrl()))) { // 视频
-                        ImageView imageView1 = helper.getView(R.id.iv_pic);
-                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(infoVO.getUrl(), 1));
-                    } else {
-                        ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                    if (infoVO != null && ObjectUtils.isNotEmpty(infoVO.getUrl())) {
+                        if ("mp4".equals(FileUtils.parseSuffix(infoVO.getUrl()))) { // 视频
+                            ImageView imageView1 = helper.getView(R.id.iv_pic);
+                            imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(infoVO.getUrl(), 1));
+                        } else {
+                            if (!infoVO.getUrl().contains("storage")) {
+                                ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                            } else {
+                                GlideApp.with(mContext).load(infoVO.getUrl()).into((ImageView) helper.getView(R.id.iv_pic));
+//                                ImageLoader.getInstance().displayImage(activity, infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
+                            }
+                        }
                     }
                     break;
                 case R.layout.item_dubbing_pic://配音图片详情

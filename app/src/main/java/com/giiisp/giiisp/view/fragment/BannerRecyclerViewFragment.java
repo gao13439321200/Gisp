@@ -447,6 +447,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         lv0.setPhotoRecord(each.getExtra4());
         lv0.setVersion(each.getVersion());
         lv0.setPhotoNumber(each.getPhotoNum());
+        lv0.record = each;
         return lv0;
     }
 
@@ -1935,8 +1936,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         }
 
                     }
-                    if (paperDownloadItem.getPaperId() != null && photoRows.size() > 0 && (recordOneRows.size() > 0 || recordTwoRows.size() > 0)) {
-                        PaperDetailsActivity.actionActivity(getContext(), paperDownloadItem.getPaperId(), recordOneRows, recordTwoRows, photoRows, "download_paper", title);
+                    if (paperDownloadItem.getPaperId() != null && photoRows.size() > 0 && (recordOneRows.size() > 0 || recordTwoRows.size() > 0 || subItems.size() > 0)) {
+                        PaperDetailsActivity.actionActivity(getContext(), paperDownloadItem.getPaperId(), recordOneRows, recordTwoRows, photoRows, "download_paper", title, subItems.get(0).getVersion());
                     }
                 }
 

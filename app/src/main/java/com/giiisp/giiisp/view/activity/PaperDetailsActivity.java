@@ -68,11 +68,9 @@ import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.DaoSession;
 import com.giiisp.giiisp.entity.DownloadController;
-import com.giiisp.giiisp.entity.LiteratureEntity;
 import com.giiisp.giiisp.entity.Note;
 import com.giiisp.giiisp.entity.NoteDao;
 import com.giiisp.giiisp.entity.PaperDatailEntity;
-import com.giiisp.giiisp.entity.PaperEntity;
 import com.giiisp.giiisp.entity.Song;
 import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -382,7 +380,14 @@ public class PaperDetailsActivity extends
     }
 
     //下载页
-    public static void actionActivity(Context context, String id, ArrayList<String> recordOneRows, ArrayList<String> recordTwoRows, ArrayList<String> photoRows, String type, String title) {
+    public static void actionActivity(Context context,
+                                      String id,
+                                      ArrayList<String> recordOneRows,
+                                      ArrayList<String> recordTwoRows,
+                                      ArrayList<String> photoRows,
+                                      String type,
+                                      String title,
+                                      String version) {
         Intent sIntent = new Intent(context, PaperDetailsActivity.class);
         sIntent.putExtra("id", id);
         sIntent.putExtra("type", type);
@@ -390,6 +395,7 @@ public class PaperDetailsActivity extends
         sIntent.putStringArrayListExtra("recordTwoRows", recordTwoRows);
         sIntent.putStringArrayListExtra("photoRows", photoRows);
         sIntent.putExtra("title", title);
+        sIntent.putExtra("version", version);
         sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(sIntent);
     }
@@ -580,6 +586,14 @@ public class PaperDetailsActivity extends
                                 itemClickAdapter.addData(new ClickEntity(photo));
                             }
                             viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
+                            viewpagerPaper.setCurrentItem(0);
+                            for (String url : photoList) {
+                                ClickEntity entity = new ClickEntity();
+                                PaperInfoVO vo = new PaperInfoVO();
+                                vo.setUrl(url);
+                                entity.setPaperInfoVO(vo);
+                                itemClickAdapter.addData(entity);
+                            }
                         }
 
                         if (recordOneList != null) {
@@ -1195,196 +1209,196 @@ public class PaperDetailsActivity extends
 
     @Override
     public void onSuccess(BaseEntity entity) {
-        if (viewpagerPaper == null)
-            return;
-
-        if (entity instanceof PaperEntity) {
-        } else if (entity instanceof LiteratureEntity) {
-
-        } else if (entity instanceof PaperDatailEntity) {
-            if (baseImpl != null)
-                baseImpl.onSuccess(entity);
-            //            progressPopupWindow.dismiss();
-            llEmptyView.setVisibility(View.GONE);
-            PaperDatailEntity.PaperBaseBean paperBase = ((PaperDatailEntity) entity).getPaperBase();
-            if (paperBase == null)
-                return;
-            if (!TextUtils.isEmpty(paperBase.getTitle()))
-                title = paperBase.getTitle();
-            if (!TextUtils.isEmpty(paperBase.getRealName()))
-                realName = paperBase.getRealName();
-            PaperDatailEntity.PaperBaseBean.PhotoOneBean photo = null;
-            switch (myVersionNo) {
-                case "0":
-                    photo = paperBase.getPhotoOne();
-                    break;
-                case "1":
-                    photo = paperBase.getPhotoTwo();
-                    break;
-                case "2":
-                    photo = paperBase.getPhotoThree();
-                    break;
-            }
-
-            if (photo != null && photo.getRows() != null && photo.getRows().size() > 0) {
-                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX rowsBeanXX = photo.getRows().get(0);
-                firstPic = rowsBeanXX.getFirstPic();
-                isFollowed = rowsBeanXX.getIsFollowed();
-                ivLikedIcon.setSelected("1".equals(isFollowed));
-                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean photos = rowsBeanXX.getPhotos();//  add type 1,png ,2 mp4, 3 gif
-                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean recordOne = rowsBeanXX.getRecordOne();
-                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean recordTwo = rowsBeanXX.getRecordTwo();
-                if (photos != null && photos.getRows() != null && photos.getRows().size() > 0) {
-                    photosBeanRows = photos.getRows();
-                    List<String> images = new ArrayList<>();
-                    if (photoList != null) {
-                        photoList.clear();
-                    } else {
-                        photoList = new ArrayList<>();
-                    }
-                    for (PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean.RowsBean photosBeanRow : photosBeanRows) {
-                        itemClickAdapter.addData(new ClickEntity(photosBeanRow.getPath(), photosBeanRow.getId()));
-                        photoList.add(photosBeanRow.getPath());
-                        imageId.add(photosBeanRow.getId());
-                    }
-                    if (imageId.size() > position && paperQA != null) {
-                        paperQA.setImageId(imageId.get(position));
-                        paperQA.initNetwork();
-
-                    }
-                    note.setPath(photos.getRows().get(0).getPath());
-//                    long time3 = System.currentTimeMillis(); //  time test 3
-                    viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
-                    viewpagerPaper.setCurrentItem(position);
-                    recyclerView.scrollToPosition(position);
-                    itemClickAdapter.setSelectedPosition(position);
-                    itemClickAdapter.notifyDataSetChanged();
-//                    long result3 = (System.currentTimeMillis()-time3);
-//                    Log.e("time","result3= "+result3);
-                }
-
-                if (recordOne != null && recordOne.getRows() != null && recordOne.getRows().size() > 0) {
-                    recordsBeanOneRows = recordOne.getRows();
-                    for (int i = 0; i < recordsBeanOneRows.size(); i++) {
-                        Song song = new Song();
-                        song.setPosition(i);
-                        song.setTitle(paperBase.getTitle());
-                        if (photosBeanRows != null && photosBeanRows.size() > i) {
-                            song.setPhotoPath(photosBeanRows.get(i).getPath());
-                        }
-                        song.setPath(recordsBeanOneRows.get(i).getPath());
-                        song.setType(recordsBeanOneRows.get(i).getType());
-                        song.setDuration(Integer.parseInt(recordsBeanOneRows.get(i).getDuration()));
-                        queueCN.add(song);
-                    }
-                }
-                if (recordTwo != null && recordTwo.getRows() != null && recordTwo.getRows().size() > 0) {
-                    recordsBeanTwoRows = recordTwo.getRows();
-                    for (int i = 0; i < recordsBeanTwoRows.size(); i++) {
-                        Song song = new Song();
-                        song.setPosition(i);
-                        song.setTitle(paperBase.getTitle());
-                        if (photosBeanRows != null && photosBeanRows.size() > i) {
-                            song.setPhotoPath(photosBeanRows.get(i).getPath());
-                        }
-                        song.setPath(recordsBeanTwoRows.get(i).getPath());
-                        song.setType(recordsBeanOneRows.get(i).getType());
-                        song.setDuration(Integer.parseInt(recordsBeanTwoRows.get(i).getDuration()));
-                        queueEN.add(song);
-                    }
-                }
-                if (queueEN.size() > 0 && queueCN.size() > 0) {
-                    tvCn.setVisibility(View.VISIBLE);
-                    tvEn.setVisibility(View.VISIBLE);
-                }
-
-            /*    if (recordTwo != null && recordTwo.getRows() != null && recordTwo.getRows().size() > 0) {
-                    recordsBeanTwoRows = recordTwo.getRows();
-                    for (int i = 0; i < recordsBeanTwoRows.size(); i++) {
-                        Song song = new Song();
-                        song.setPosition(i);
-                        song.setPath(recordsBeanTwoRows.get(i).getPath());
-                        song.setDuration(recordsBeanTwoRows.get(i).getDuration());
-                        queueEN.add(song);
-                    }
-                }*/
-                note.setTitle(paperBase.getTitle());
-
-                note.setType("play");
-                note.setId(storageId);
-                note.setCommentNum(paperBase.getCommentNum() + "");
-                note.setFollowedNum(paperBase.getFollowedNum() + "");
-                note.setCreateTime(paperBase.getUpdateTime());
-                note.setReadNum(paperBase.getReadNum() + "");
-                note.setLikedNum(paperBase.getLikedNum() + "");
-                note.setVersions(myVersionNo);
-
-                if (getPlayService() != null) {
-                    PlayService playService = getPlayService();
-                    if (storageId.equals(pid)) {
-                        switch (language) {
-                            case CN:
-                                tvCn.setChecked(false);
-                                tvEn.setChecked(true);
-                                playService.setmMusicList(queueCN);
-                                break;
-                            case EN:
-                                tvCn.setChecked(true);
-                                tvEn.setChecked(false);
-                                playService.setmMusicList(queueEN);
-                                break;
-                            default:
-                                if (queueCN.size() > 0) {
-                                    tvCn.setChecked(false);
-                                    tvEn.setChecked(true);
-                                    playService.setmMusicList(queueCN);
-                                } else if (queueEN.size() > 0) {
-                                    tvCn.setChecked(true);
-                                    tvEn.setChecked(false);
-                                    playService.setmMusicList(queueEN);
-                                }
-                                break;
-                        }
-                        playService.play(position);
-                    }
-                    switch (language) {
-                        case CN:
-                            tvCn.setChecked(false);
-                            tvEn.setChecked(true);
-                            break;
-                        case EN:
-                            tvCn.setChecked(true);
-                            tvEn.setChecked(false);
-                            break;
-                        default:
-                            if (queueCN.size() > 0) {
-                                tvCn.setChecked(false);
-                                tvEn.setChecked(true);
-                            } else if (queueEN.size() > 0) {
-                                tvCn.setChecked(true);
-                                tvEn.setChecked(false);
-                            }
-                            break;
-                    }
-                    paperId = myVersionNo;
-                    downloadId = "";
-                }
-            }
-            //            isFollowed = ((PaperDatailEntity) entity).getIsFollowed();
-
-            tvShareNumber.setText(String.valueOf(paperBase.getShareNum()));
-            tvLikedNumber.setText(String.valueOf(paperBase.getLikedNum()));
-
-
-        } else {
-//            Utils.showToast(entity.getInfo());
-//            if (isSave == 10) {
-//                isFollowed = "1";
-//            } else if (isSave == 20) {
-//                isFollowed = "0";
+//        if (viewpagerPaper == null)
+//            return;
+//
+//        if (entity instanceof PaperEntity) {
+//        } else if (entity instanceof LiteratureEntity) {
+//
+//        } else if (entity instanceof PaperDatailEntity) {
+//            if (baseImpl != null)
+//                baseImpl.onSuccess(entity);
+//            //            progressPopupWindow.dismiss();
+//            llEmptyView.setVisibility(View.GONE);
+//            PaperDatailEntity.PaperBaseBean paperBase = ((PaperDatailEntity) entity).getPaperBase();
+//            if (paperBase == null)
+//                return;
+//            if (!TextUtils.isEmpty(paperBase.getTitle()))
+//                title = paperBase.getTitle();
+//            if (!TextUtils.isEmpty(paperBase.getRealName()))
+//                realName = paperBase.getRealName();
+//            PaperDatailEntity.PaperBaseBean.PhotoOneBean photo = null;
+//            switch (myVersionNo) {
+//                case "0":
+//                    photo = paperBase.getPhotoOne();
+//                    break;
+//                case "1":
+//                    photo = paperBase.getPhotoTwo();
+//                    break;
+//                case "2":
+//                    photo = paperBase.getPhotoThree();
+//                    break;
 //            }
-//            ivLikedIcon.setSelected("1".equals(isFollowed));
-        }
+//
+//            if (photo != null && photo.getRows() != null && photo.getRows().size() > 0) {
+//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX rowsBeanXX = photo.getRows().get(0);
+//                firstPic = rowsBeanXX.getFirstPic();
+//                isFollowed = rowsBeanXX.getIsFollowed();
+//                ivLikedIcon.setSelected("1".equals(isFollowed));
+//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean photos = rowsBeanXX.getPhotos();//  add type 1,png ,2 mp4, 3 gif
+//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean recordOne = rowsBeanXX.getRecordOne();
+//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean recordTwo = rowsBeanXX.getRecordTwo();
+//                if (photos != null && photos.getRows() != null && photos.getRows().size() > 0) {
+//                    photosBeanRows = photos.getRows();
+//                    List<String> images = new ArrayList<>();
+//                    if (photoList != null) {
+//                        photoList.clear();
+//                    } else {
+//                        photoList = new ArrayList<>();
+//                    }
+//                    for (PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean.RowsBean photosBeanRow : photosBeanRows) {
+//                        itemClickAdapter.addData(new ClickEntity(photosBeanRow.getPath(), photosBeanRow.getId()));
+//                        photoList.add(photosBeanRow.getPath());
+//                        imageId.add(photosBeanRow.getId());
+//                    }
+//                    if (imageId.size() > position && paperQA != null) {
+//                        paperQA.setImageId(imageId.get(position));
+//                        paperQA.initNetwork();
+//
+//                    }
+//                    note.setPath(photos.getRows().get(0).getPath());
+////                    long time3 = System.currentTimeMillis(); //  time test 3
+//                    viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
+//                    viewpagerPaper.setCurrentItem(position);
+//                    recyclerView.scrollToPosition(position);
+//                    itemClickAdapter.setSelectedPosition(position);
+//                    itemClickAdapter.notifyDataSetChanged();
+////                    long result3 = (System.currentTimeMillis()-time3);
+////                    Log.e("time","result3= "+result3);
+//                }
+//
+//                if (recordOne != null && recordOne.getRows() != null && recordOne.getRows().size() > 0) {
+//                    recordsBeanOneRows = recordOne.getRows();
+//                    for (int i = 0; i < recordsBeanOneRows.size(); i++) {
+//                        Song song = new Song();
+//                        song.setPosition(i);
+//                        song.setTitle(paperBase.getTitle());
+//                        if (photosBeanRows != null && photosBeanRows.size() > i) {
+//                            song.setPhotoPath(photosBeanRows.get(i).getPath());
+//                        }
+//                        song.setPath(recordsBeanOneRows.get(i).getPath());
+//                        song.setType(recordsBeanOneRows.get(i).getType());
+//                        song.setDuration(Integer.parseInt(recordsBeanOneRows.get(i).getDuration()));
+//                        queueCN.add(song);
+//                    }
+//                }
+//                if (recordTwo != null && recordTwo.getRows() != null && recordTwo.getRows().size() > 0) {
+//                    recordsBeanTwoRows = recordTwo.getRows();
+//                    for (int i = 0; i < recordsBeanTwoRows.size(); i++) {
+//                        Song song = new Song();
+//                        song.setPosition(i);
+//                        song.setTitle(paperBase.getTitle());
+//                        if (photosBeanRows != null && photosBeanRows.size() > i) {
+//                            song.setPhotoPath(photosBeanRows.get(i).getPath());
+//                        }
+//                        song.setPath(recordsBeanTwoRows.get(i).getPath());
+//                        song.setType(recordsBeanOneRows.get(i).getType());
+//                        song.setDuration(Integer.parseInt(recordsBeanTwoRows.get(i).getDuration()));
+//                        queueEN.add(song);
+//                    }
+//                }
+//                if (queueEN.size() > 0 && queueCN.size() > 0) {
+//                    tvCn.setVisibility(View.VISIBLE);
+//                    tvEn.setVisibility(View.VISIBLE);
+//                }
+//
+//            /*    if (recordTwo != null && recordTwo.getRows() != null && recordTwo.getRows().size() > 0) {
+//                    recordsBeanTwoRows = recordTwo.getRows();
+//                    for (int i = 0; i < recordsBeanTwoRows.size(); i++) {
+//                        Song song = new Song();
+//                        song.setPosition(i);
+//                        song.setPath(recordsBeanTwoRows.get(i).getPath());
+//                        song.setDuration(recordsBeanTwoRows.get(i).getDuration());
+//                        queueEN.add(song);
+//                    }
+//                }*/
+//                note.setTitle(paperBase.getTitle());
+//
+//                note.setType("play");
+//                note.setId(storageId);
+//                note.setCommentNum(paperBase.getCommentNum() + "");
+//                note.setFollowedNum(paperBase.getFollowedNum() + "");
+//                note.setCreateTime(paperBase.getUpdateTime());
+//                note.setReadNum(paperBase.getReadNum() + "");
+//                note.setLikedNum(paperBase.getLikedNum() + "");
+//                note.setVersions(myVersionNo);
+//
+//                if (getPlayService() != null) {
+//                    PlayService playService = getPlayService();
+//                    if (storageId.equals(pid)) {
+//                        switch (language) {
+//                            case CN:
+//                                tvCn.setChecked(false);
+//                                tvEn.setChecked(true);
+//                                playService.setmMusicList(queueCN);
+//                                break;
+//                            case EN:
+//                                tvCn.setChecked(true);
+//                                tvEn.setChecked(false);
+//                                playService.setmMusicList(queueEN);
+//                                break;
+//                            default:
+//                                if (queueCN.size() > 0) {
+//                                    tvCn.setChecked(false);
+//                                    tvEn.setChecked(true);
+//                                    playService.setmMusicList(queueCN);
+//                                } else if (queueEN.size() > 0) {
+//                                    tvCn.setChecked(true);
+//                                    tvEn.setChecked(false);
+//                                    playService.setmMusicList(queueEN);
+//                                }
+//                                break;
+//                        }
+//                        playService.play(position);
+//                    }
+//                    switch (language) {
+//                        case CN:
+//                            tvCn.setChecked(false);
+//                            tvEn.setChecked(true);
+//                            break;
+//                        case EN:
+//                            tvCn.setChecked(true);
+//                            tvEn.setChecked(false);
+//                            break;
+//                        default:
+//                            if (queueCN.size() > 0) {
+//                                tvCn.setChecked(false);
+//                                tvEn.setChecked(true);
+//                            } else if (queueEN.size() > 0) {
+//                                tvCn.setChecked(true);
+//                                tvEn.setChecked(false);
+//                            }
+//                            break;
+//                    }
+//                    paperId = myVersionNo;
+//                    downloadId = "";
+//                }
+//            }
+//            //            isFollowed = ((PaperDatailEntity) entity).getIsFollowed();
+//
+//            tvShareNumber.setText(String.valueOf(paperBase.getShareNum()));
+//            tvLikedNumber.setText(String.valueOf(paperBase.getLikedNum()));
+//
+//
+//        } else {
+////            Utils.showToast(entity.getInfo());
+////            if (isSave == 10) {
+////                isFollowed = "1";
+////            } else if (isSave == 20) {
+////                isFollowed = "0";
+////            }
+////            ivLikedIcon.setSelected("1".equals(isFollowed));
+//        }
     }
 
     @Override
@@ -2081,7 +2095,7 @@ public class PaperDetailsActivity extends
 
     //保存播放记录
     private void sendPlayNote() {
-        if ((nowProgress / 1000) != 0 && !"wait_dubbing".equals(type)) {
+        if ((nowProgress / 1000) != 0 && !"wait_dubbing".equals(type) && !"download_paper".equals(type)) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid", getUserID());
             map.put("pid", pid);
