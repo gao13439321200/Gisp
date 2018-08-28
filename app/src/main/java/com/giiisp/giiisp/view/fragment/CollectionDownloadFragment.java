@@ -72,6 +72,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
     FrameLayout lineBanner;
     private int downloadNunber;
     List<BaseFragment> fragments = new ArrayList<>();
+    private String string;
 
     @Override
     public void onStart() {
@@ -162,7 +163,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
             throw new NullPointerException("Arguments is null!!!");
         }
         type = getArguments().getString("1005");
-        String string = getArguments().getString("1006");
+        string = getArguments().getString("1006");
 
     }
 
@@ -177,7 +178,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
                 ivMenu.setVisibility(View.VISIBLE);
                 ivMenu.setImageResource(R.mipmap.download_collection_icon);
                 fragments.add(BannerRecyclerViewFragment.newInstance("paper_download", "0"));
-                //                fragments.add(BannerRecyclerViewFragment.newInstance("summary_download", "1"));
+                fragments.add(BannerRecyclerViewFragment.newInstance("summary_download", "1"));
                 fragments.add(BannerRecyclerViewFragment.newInstance("download", "2"));
                 viewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), fragments, mTitles));
 
@@ -190,9 +191,10 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
                 //                map.put("isOneOrTwo", 2);
                 //                presenter.getListFollowedPaperData(map);
                 tvTitleRt.setText(R.string.collection);
-                tvBack.setVisibility(View.GONE);
+//                tvBack.setVisibility("5".equals(string) ? View.VISIBLE : View.GONE);
                 ivMenu.setImageResource(R.mipmap.collection_download);
                 ivMenu.setVisibility(View.VISIBLE);
+
                 tabLayout.setupWithViewPager(viewPager);
                 fragments.add(BannerRecyclerViewFragment.newInstance("collection_paper", "0"));
                 fragments.add(BannerRecyclerViewFragment.newInstance("collection_summary", "1"));
@@ -236,7 +238,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
         //        }
 
         // 2. 最实用
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
 
             // 更新Badge前,先remove原来的customView,否则Badge无法更新
@@ -263,9 +265,10 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
 
 
     public View getTabItemView(int position) {
-        String[] tabTitle = new String[2];
-        tabTitle[0] = getString(R.string.download_completes);
-        tabTitle[1] = getString(R.string.downloading);
+        String[] tabTitle = new String[3];
+        tabTitle[0] = getString(R.string.paper);
+        tabTitle[1] = getString(R.string.summary);
+        tabTitle[2] = getString(R.string.downloading);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_tab_download, tabLayout, false);
         TextView textView = (TextView) view.findViewById(R.id.textview);
         TextView spot = (TextView) view.findViewById(R.id.tv_download_spot);

@@ -234,6 +234,7 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
                 map.put("uid", getUserID());
                 map.put("content", answer);
                 map.put("qid", questionid);
+                map.put("pid", pid);
 //                map.put("record", UrlConstants.RequestUrl.MP3_URL + key);
                 File file = new File(filePath);
                 RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);

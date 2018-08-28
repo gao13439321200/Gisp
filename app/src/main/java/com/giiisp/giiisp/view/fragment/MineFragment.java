@@ -146,7 +146,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //        UserInfoEntity.UserInfoBean userInfo = userInfoEntity.getUserInfo();
         String avatar = infoBean.getAvatar();
         if (!avatar.equals(imageUrl))
-            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL+avatar, ivUserIcon);
+            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL + avatar, ivUserIcon);
         imageUrl = avatar;
         tvUserName.setText(infoBean.getName());
         tvUserEmail.setText(infoBean.getEmail());
@@ -384,7 +384,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 ToastUtils.showShort("这里是会议");
                 break;
             case R.id.ll_collection://收藏
-                ToastUtils.showShort("这里是收藏");
+                FragmentActivity.actionActivity(getContext(), "collection_fragment");
                 break;
             case R.id.fl_mine_setting:
 //                SettingActivity.actionActivity(getContext());

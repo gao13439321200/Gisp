@@ -35,6 +35,8 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DownloadImgInfoVO;
+import com.giiisp.giiisp.dto.DownloadInfoBean;
 import com.giiisp.giiisp.dto.DubbingListBean;
 import com.giiisp.giiisp.dto.DubbingListVO;
 import com.giiisp.giiisp.dto.FansBean;
@@ -75,7 +77,6 @@ import com.giiisp.giiisp.entity.ScholarEntity;
 import com.giiisp.giiisp.entity.SearchHistoryEntity;
 import com.giiisp.giiisp.entity.SubscribeEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
-import com.giiisp.giiisp.entity.WaitRecordPaperEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.Log;
 import com.giiisp.giiisp.utils.PackageUtil;
@@ -110,12 +111,17 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import zlc.season.rxdownload2.RxDownload;
+import zlc.season.rxdownload2.db.DataBaseHelper;
+import zlc.season.rxdownload2.entity.DownloadBean;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.ContentValues.TAG;
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
+import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
+import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.EN;
 
 /**
  * 众多Fragment的基类
@@ -231,6 +237,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         return fragment;
     }
 
+    @SuppressLint("CheckResult")
     public void loadDownloadNunber() {
         RxDownload.getInstance(getContext()).getTotalDownloadRecords()
                 .map(new Function<List<DownloadRecord>, List<String>>() {
@@ -272,241 +279,139 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
     @SuppressLint("CheckResult")
     public void loadDownloadData() {
-        ArrayList<ClickEntity> res0 = new ArrayList<>();
-        ArrayList<ClickEntity> res1 = new ArrayList<>();
-        ArrayList<ClickEntity> res2 = new ArrayList<>();
-        List<String> missionIdAll = RxDownload.getInstance(getContext()).getMissionIdAll(getContext());
-/*
-        for (String s : missionIdAll) {
-            ClickEntity lv0 = new ClickEntity(0);
-            lv0.setUrl(s);
-            lv0.setPaperId(s);
-            lv0.setItemType(0);
-            List<DownloadRecord> missionIdDownloadRecords = RxDownload.getInstance(getContext()).getMissionIdDownloadRecords(getContext(), s);
+//        ArrayList<ClickEntity> res0 = new ArrayList<>();
+//        ArrayList<ClickEntity> res1 = new ArrayList<>();
+//        ArrayList<ClickEntity> res2 = new ArrayList<>();
+//        List<String> missionIdAll = RxDownload.getInstance(getContext()).getMissionIdAll(getContext());
 
-            for (DownloadRecord missionIdDownloadRecord : missionIdDownloadRecords) {
-                ClickEntity lv1 = new ClickEntity(1);
-                lv1.setString(missionIdDownloadRecord.getExtra2());
-                lv1.setUrl(missionIdDownloadRecord.getExtra1());
-                lv1.setPaperId(missionIdDownloadRecord.getExtra1());
-                lv1.setItemType(1);
-                if (missionIdDownloadRecord.getExtra4().equals("photo"))
-                    lv0.addSubItem(lv1);
-            }
-            for (DownloadRecord missionIdDownloadRecord : missionIdDownloadRecords) {
-                for (ClickEntity clickEntity : lv0.getSubItems()) {
-                    if (clickEntity.getString().equals(missionIdDownloadRecord.getExtra2())) {
-                        ClickEntity lv2 = new ClickEntity(2);
-                        lv2.setString(missionIdDownloadRecord.getExtra2());
-                        lv2.setUrl(missionIdDownloadRecord.getExtra1());
-                        lv2.record = missionIdDownloadRecord;
-                        lv2.setPhotoRecord(missionIdDownloadRecord.getExtra4());
-                        lv2.setPhotoOrder(missionIdDownloadRecord.getExtra3());
-                        lv2.setPaperId(missionIdDownloadRecord.getExtra1());
-                        lv2.setItemType(2);
-                        clickEntity.addSubItem(lv2);
-                    }
-                }
-            }
-            res0.add(lv0);
-        }
-*/
-
-
+        //读取所有的记录，然后分类
         RxDownload.getInstance(getContext()).getTotalDownloadRecords()
-                .map(new Function<List<DownloadRecord>, List<ClickEntity>>() {
-                    @Override
-                    public List<ClickEntity> apply(List<DownloadRecord> downloadRecords) throws Exception {
-                        List<String> missionIds = new ArrayList<>();
-                        List<String> missionIdDownloads = new ArrayList<>();
-                        List<String> paperIds = new ArrayList<>();
-                        ArrayList<ClickEntity> res0 = new ArrayList<>();
-                        ArrayList<ClickEntity> res1 = new ArrayList<>();
-                        ArrayList<ClickEntity> res2 = new ArrayList<>();
-                        ArrayList<ClickEntity> res11 = new ArrayList<>();
-                        ArrayList<ClickEntity> downloads = new ArrayList<>();
-                        ArrayList<ClickEntity> downloadCompleted = new ArrayList<>();
+                .map((Function<List<DownloadRecord>, List<ClickEntity>>) downloadRecords -> {
+                    List<String> missionIds = new ArrayList<>();//任务id
+                    List<String> missionIdDownloads = new ArrayList<>();//正在下载的任务id
+                    List<String> paperIds = new ArrayList<>();//录音id
+                    ArrayList<ClickEntity> res_missionIds = new ArrayList<>();
+                    ArrayList<ClickEntity> res_paperIds = new ArrayList<>();
+                    ArrayList<ClickEntity> res_all = new ArrayList<>();
+                    ArrayList<ClickEntity> downloads = new ArrayList<>();
 
-                        for (DownloadRecord each : downloadRecords) {
+                    for (DownloadRecord each : downloadRecords) {
 
-                            if (each.getExtra1() != null && !missionIds.contains(each.getExtra1())) {
-                                missionIds.add(each.getExtra1());
-                                ClickEntity lv0 = new ClickEntity(0);
-                                lv0.setString(each.getExtra2());
-                                lv0.setUrl(each.getUrl());
-                                lv0.setPaperId(each.getExtra1());
-                                lv0.setItemType(0);
-                                lv0.setString(each.getExtra5());
-                                lv0.setTime(each.getTime());
-                                lv0.setTitle(each.getTitle());
-                                lv0.setPhotoRecord(each.getExtra4());
-                                lv0.setVersion(each.getVersion());
-                                res0.add(lv0);
-                            }
-                            if (each.getExtra1() != null && !missionIdDownloads.contains(each.getExtra1())) {
-                                missionIdDownloads.add(each.getExtra1());
-                                ClickEntity lv0 = new ClickEntity(0);
-                                lv0.setString(each.getExtra2());
-                                lv0.setUrl(each.getUrl());
-                                lv0.setPaperId(each.getExtra1());
-                                lv0.setItemType(0);
-                                lv0.setString(each.getExtra5());
-                                lv0.setTime(each.getTime());
-                                lv0.setTitle(each.getTitle());
-                                lv0.setVersion(each.getVersion());
-                                lv0.setPhotoRecord(each.getExtra4());
-                                downloads.add(lv0);
-                            }
-
-
-                            if (each.getExtra2() != null && !paperIds.contains(each.getExtra2())) {
-                                paperIds.add(each.getExtra2());
-                                ClickEntity lv1 = new ClickEntity(1);
-                                lv1.setString(each.getExtra2());
-                                lv1.setUrl(each.getExtra1());
-                                lv1.setPhotoRecord(each.getExtra4());
-                                lv1.setPaperId(each.getExtra1());
-                                lv1.setItemType(1);
-                                lv1.setPhotoNumber(Integer.valueOf(each.getExtra3()));
-                                res1.add(lv1);
-                            }
-                            ClickEntity lv2 = new ClickEntity(2);
-                            lv2.setString(each.getExtra2());
-                            lv2.setUrl(each.getExtra1());
-                            lv2.record = each;
-                            lv2.setPhotoRecord(each.getExtra4());
-                            lv2.setPhotoOrder(each.getExtra3());
-                            lv2.setPaperId(each.getExtra1());
-                            lv2.setItemType(2);
-                            lv2.setLanguage(each.getExtra5());
-                            lv2.setVersion(each.getVersion());
-                            lv2.setAdapter(expandableItemAdapter);
-                            lv2.setTitle(each.getTitle());
-                            //                            lv2.setActivity((BaseActivity) getActivity());
-                            res2.add(lv2);
-
+                        if (each.getExtra1() != null && !missionIds.contains(each.getExtra1())) {
+                            missionIds.add(each.getExtra1());
+                            res_missionIds.add(setNewClickEntity(each, 0));
+                        }
+                        if (each.getExtra1() != null && !missionIdDownloads.contains(each.getExtra1())) {
+                            missionIdDownloads.add(each.getExtra1());
+                            downloads.add(setNewClickEntity(each, 0));
                         }
 
-
-                   /*     for (ClickEntity clickEntity : res0) {
-                            for (DownloadRecord downloadRecord : downloadRecords) {
-                                if (Objects.equals(clickEntity.getPaperId(), downloadRecord.getExtra1()) && downloadRecord.getFlag() != DownloadFlag.COMPLETED && !downloads.contains(clickEntity)) {
-                                    downloads.add(clickEntity);
-                                }
-                            }
+                        if (each.getExtra2() != null && !paperIds.contains(each.getExtra2())) {
+                            paperIds.add(each.getExtra2());
+                            res_paperIds.add(setNewClickEntity(each, 1));
                         }
-                        downloadCompleted = res0;
-                        for (ClickEntity download : downloads) {
-                            downloadCompleted.remove(download);
-                        }*/
-                        for (ClickEntity clickEntity : res2) {
-                            for (ClickEntity entity : res1) {
-                                if (Objects.equals(entity.getString(), clickEntity.getString())) {
-                                    entity.addSubItem(clickEntity);
-                                    clickEntity.setClickEntity(entity);
+                        ClickEntity lv2 = new ClickEntity(2);
+                        lv2.setString(each.getExtra2());
+                        lv2.setUrl(each.getExtra1());
+                        lv2.record = each;
+                        lv2.setPhotoRecord(each.getExtra4());
+                        lv2.setPhotoOrder(each.getExtra3());
+                        lv2.setPaperId(each.getExtra1());
+                        lv2.setItemType(2);
+                        lv2.setLanguage(each.getExtra5());
+                        lv2.setVersion(each.getVersion());
+                        lv2.setAdapter(expandableItemAdapter);
+                        lv2.setTitle(each.getTitle());
+                        //                            lv2.setActivity((BaseActivity) getActivity());
+                        res_all.add(lv2);
 
-                                }
-                            }
-                        }
-                        for (ClickEntity entity : res1) {
-                            for (ClickEntity clickEntitys : res0) {
-                                if (Objects.equals(clickEntitys.getPaperId(), entity.getPaperId())) {
-                                    if (entity.getSubItems() != null) {
-                                        List<ClickEntity> subItems = entity.getSubItems();
-                                        boolean isDownload = true;
-                                        for (ClickEntity subItem : subItems) {
-                                            if (subItem.record.getFlag() != DownloadFlag.COMPLETED) {
-                                                isDownload = false;
-                                                break;
-                                            }
-                                        }
-
-                                        if (isDownload) {
-                                            clickEntitys.addSubItem(entity);
-                                        }
-                                      /*  if (subItems.size()==2){
-                                            if (subItems.get(0).getRecordFlag() == DownloadFlag.COMPLETED && subItems.get(1).getPhotoFlag() == DownloadFlag.COMPLETED)
-                                                clickEntitys.addSubItem(entity);
-                                        }else if(subItems.size()==3){
-                                            if (subItems.get(0).getRecordFlag() == DownloadFlag.COMPLETED && subItems.get(1).getPhotoFlag() == DownloadFlag.COMPLETED)
-                                                clickEntitys.addSubItem(entity);
-                                        }else{
-                                            if (entity.getRecordFlag() == DownloadFlag.COMPLETED && entity.getPhotoFlag() == DownloadFlag.COMPLETED)
-                                                clickEntitys.addSubItem(entity);
-                                        }*/
-
-                                    }
-
-                                }
-                            }
-                            for (ClickEntity clickEntitys : downloads) {
-                                if (Objects.equals(clickEntitys.getPaperId(), entity.getPaperId())) {
-                                    if (entity.getSubItems() != null) {
-                                        List<ClickEntity> subItems = entity.getSubItems();
-                                        boolean isDownload = true;
-                                        for (ClickEntity subItem : subItems) {
-                                            if (subItem.record.getFlag() != DownloadFlag.COMPLETED) {
-                                                isDownload = false;
-                                                break;
-                                            }
-                                        }
-
-                                        if (!isDownload) {
-                                            clickEntitys.addSubItem(entity);
-                                        }
-                                    }
-                                }
-                            }
-                       /* for (ClickEntity entity : res1) {
-                            for (ClickEntity clickEntitys : downloads) {
-                                if (Objects.equals(clickEntitys.getPaperId(), entity.getPaperId())) {
-                                    if (entity.getRecordFlag() != DownloadFlag.COMPLETED || entity.getPhotoFlag() != DownloadFlag.COMPLETED)
-                                        clickEntitys.addSubItem(entity);
-                                    entity.setClickEntity(clickEntitys);
-                                }
-                            }
-                        }*/
-            /*            for (ClickEntity clickEntity : res0) {
-                            List<ClickEntity> subItems = clickEntity.getSubItems();
-                            if (subItems == null || subItems.size() <= 0) {
-                                res0.remove(clickEntity);
-                            }
-                        }
-                        for (ClickEntity clickEntity : downloads) {
-                            List<ClickEntity> subItems = clickEntity.getSubItems();
-                            if (subItems == null || subItems.size() <= 0) {
-                                downloads.remove(clickEntity);
-                            }*/
-                        }
-                        Log.i("--->>", "apply:1 " + Thread.currentThread().getName() + tvDownloadNumber.getText() + type);
-
-                        switch (type) {
-                            case "paper_download":
-                            case "summary_download":
-                                return res0;
-                            case "download":
-                            case "summary_list":
-
-                                return downloads;
-                        }
-                        Log.i("--->", "apply: " + res0.size());
-                        return res0;
                     }
+
+                    for (ClickEntity clickEntity : res_all) {
+                        for (ClickEntity entity : res_paperIds) {
+                            if (Objects.equals(entity.getString(), clickEntity.getString())) {
+                                entity.addSubItem(clickEntity);
+                                clickEntity.setClickEntity(entity);
+
+                            }
+                        }
+                    }
+                    for (ClickEntity entity : res_paperIds) {
+                        for (ClickEntity clickEntitys : res_missionIds) {
+                            if (Objects.equals(clickEntitys.getPaperId(), entity.getPaperId())) {
+                                if (entity.getSubItems() != null) {
+                                    List<ClickEntity> subItems = entity.getSubItems();
+                                    boolean isDownload = true;
+                                    for (ClickEntity subItem : subItems) {
+                                        if (subItem.record.getFlag() != DownloadFlag.COMPLETED) {
+                                            isDownload = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if (isDownload) {
+                                        clickEntitys.addSubItem(entity);
+                                    }
+                                }
+                            }
+                        }
+                        for (ClickEntity clickEntitys : downloads) {
+                            if (Objects.equals(clickEntitys.getPaperId(), entity.getPaperId())) {
+                                if (entity.getSubItems() != null) {
+                                    List<ClickEntity> subItems = entity.getSubItems();
+                                    boolean isDownload = true;
+                                    for (ClickEntity subItem : subItems) {
+                                        if (subItem.record.getFlag() != DownloadFlag.COMPLETED) {
+                                            isDownload = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!isDownload) {
+                                        clickEntitys.addSubItem(entity);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Log.i("--->>", "apply:1 " + Thread.currentThread().getName() + tvDownloadNumber.getText() + type);
+
+                    switch (type) {
+                        case "paper_download":
+                        case "summary_download":
+                            return res_missionIds;
+                        case "download":
+                        case "summary_list":
+
+                            return downloads;
+                    }
+                    Log.i("--->", "apply: " + res_missionIds.size());
+                    return res_missionIds;
                 })
                 .subscribe(downloadBeen -> {
                     swipeRefreshLayout.setRefreshing(false);
                     switch (type) {
                         case "paper_download":
-
-                        case "summary_download":
                             mDragAdapter.setNewData(null);
+                            List<ClickEntity> entities = new ArrayList<>();
                             for (ClickEntity clickEntity : downloadBeen) {
                                 List<ClickEntity> subItems = clickEntity.getSubItems();
-                                if (subItems != null && subItems.size() > 0) {
-                                    mDragAdapter.addData(clickEntity);
+                                if (subItems != null && subItems.size() > 0 && "1".equals(subItems.get(0).getPaperType())) {
+                                    entities.add(clickEntity);
                                 }
                             }
-
+                            mDragAdapter.addData(entities);
+                            break;
+                        case "summary_download":
+                            mDragAdapter.setNewData(null);
+                            List<ClickEntity> entities2 = new ArrayList<>();
+                            for (ClickEntity clickEntity : downloadBeen) {
+                                List<ClickEntity> subItems = clickEntity.getSubItems();
+                                if (subItems != null && subItems.size() > 0 && "2".equals(subItems.get(0).getPaperType())) {
+                                    entities2.add(clickEntity);
+                                }
+                            }
+                            mDragAdapter.addData(entities2);
                             break;
                         case "download":
                             expandableItemAdapter.setNewData(null);
@@ -517,17 +422,6 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                                 }
                             }
                             expandableItemAdapter.expandAll();
-                    /*        List<ClickEntity> data = expandableItemAdapter.getData();
-                            for (ClickEntity clickEntity : data) {
-                                List<ClickEntity> subItems = clickEntity.getSubItems();
-                                for (ClickEntity subItem : subItems) {
-                                    List<ClickEntity> subItems1 = subItem.getSubItems();
-                                    for (ClickEntity entity : subItems1) {
-
-                                    }
-                                }
-                            }
-*/
                             break;
 
                         default:
@@ -535,6 +429,23 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                             break;
                     }
                 });
+    }
+
+    @android.support.annotation.NonNull
+    private ClickEntity setNewClickEntity(DownloadRecord each, int type) {
+        ClickEntity lv0 = new ClickEntity(type);
+        lv0.setString(each.getExtra2());
+        lv0.setUrl(each.getUrl());
+        lv0.setPaperId(each.getExtra1());
+        lv0.setItemType(type);
+        lv0.setPaperType(each.getExtra3());
+        lv0.setLanguage(each.getExtra5());
+        lv0.setTime(each.getTime());
+        lv0.setTitle(each.getTitle());
+        lv0.setPhotoRecord(each.getExtra4());
+        lv0.setVersion(each.getVersion());
+        lv0.setPhotoNumber(each.getPhotoNum());
+        return lv0;
     }
 
     OnItemDragListener listener = new OnItemDragListener() {
@@ -705,7 +616,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 tvTitleRt.setText(R.string.review_list);
                 tvBackRt.setVisibility(View.VISIBLE);
                 list.clear();
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 recyclerView.addOnItemTouchListener(new OnItemClickListener() {
@@ -716,17 +627,18 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         for (PaperMainVO.VlistBean bean : vo.getVlist()) {
                             switch (bean.getVersion()) {
                                 case 2://完整
-                                    arrayVersion.add("0");
-                                    break;
-                                case 3://摘要
                                     arrayVersion.add("2");
                                     break;
+                                case 3://摘要
+                                    arrayVersion.add("3");
+                                    break;
                                 case 4://精华
-                                    arrayVersion.add("1");
+                                    arrayVersion.add("4");
                                     break;
                             }
                         }
-                        PaperDetailsActivity.actionActivity(context, vo.getId(), arrayVersion, "home");
+                        String version = arrayVersion.size() > 0 ? arrayVersion.get(0) : "1";
+                        PaperDetailsActivity.actionActivityNew(context, vo.getId(), version, "home", getLanguage());
                     }
                 });
                 List<String> txt = new ArrayList<>();
@@ -751,7 +663,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 rlBanner.setVisibility(View.VISIBLE);
                 lineBanner.setVisibility(View.GONE);
                 list.clear();
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
 //                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
 //                    @Override
@@ -789,8 +701,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 });
                 mLLSpinner2.addView(mSpinnerSubject2);
                 break;
-            case "paper_download":
-            case "summary_download":
+            case "paper_download"://论文下载
+            case "summary_download"://综述下载
                 list.clear();
                 mDragAdapter = new ItemDragAdapter((BaseActivity) getActivity(), list);
                 //                ItemDragAndSwipeCallback mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mDragAdapter);
@@ -807,8 +719,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 mDragAdapter.setEmptyView(notDataView);
                 recyclerView.setAdapter(mDragAdapter);
                 break;
-            case "download":
-                expandableItemAdapter = new ExpandableItemAdapter((BaseActivity) getActivity(), this, R.layout.item_download_finished, R.layout.item_paper_page, R.layout.item_download_progress, list, type);
+            case "download"://下载中
+                expandableItemAdapter = new ExpandableItemAdapter((BaseActivity) getActivity(),
+                        this,
+                        R.layout.item_download_finished,
+                        R.layout.item_paper_page,
+                        R.layout.item_download_progress,
+                        list, type);
                 recyclerView.setAdapter(expandableItemAdapter);
                 expandableItemAdapter.setOnItemClickListener(this);
                 expandableItemAdapter.setEmptyView(notDataView);
@@ -824,16 +741,20 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "my_review":
                 tvTitle.setText(R.string.my_review_list);
                 lineBanner.setVisibility(View.VISIBLE);
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 break;
             case "collection_paper"://首页收藏论文
             case "collection_summary"://首页收藏综述
                 list.clear();
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_collectionchild, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
-                itemClickAdapter.setOnItemChildClickListener(this);
+                itemClickAdapter.disableLoadMoreIfNotFullPage();
+
+//                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_collectionchild, this.list, type);
+//                itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
+//                itemClickAdapter.setOnItemChildClickListener(this);
                 break;
             case "popular":
                 tvTitle.setText(R.string.play);
@@ -870,7 +791,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 tvTitleRt.setText(R.string.subscribe);
                 rlBanner.setVisibility(View.VISIBLE);
                 lineBanner.setVisibility(View.GONE);
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 break;
@@ -938,7 +859,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper_indexes, this.list, type);
                 break;
             default:
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type,this);
 
         }
         if (itemClickAdapter != null) {
@@ -1165,6 +1086,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
     }
 
+    @SuppressLint("CheckResult")
     private void start(String url) {
         new RxPermissions(getActivity())
                 .request(WRITE_EXTERNAL_STORAGE)
@@ -1554,58 +1476,58 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "popular":
                 break;
             case "wait_dubbing":
-                if (entity instanceof WaitRecordPaperEntity) {
-                    dubbingAdapter.loadMoreComplete();
-                    if (dubbingAdapter == null || ((WaitRecordPaperEntity) entity).getWaitRecordPaper() == null || ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getRows() == null) {
-                        dubbingAdapter.loadMoreEnd(false);
-                        return;
-                    }
-                    if (page == 1) {
-                        dubbingAdapter.setNewData(null);
-                    }
-
-                    List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getRows();
-                    if (rows != null && rows.size() > 0) {
-                        for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows : rows) {
-                            ClickEntity clickEntity0 = new ClickEntity(subscribeEntityRows);
-                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoOne = subscribeEntityRows.getPhotoOne();
-                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoTwo = subscribeEntityRows.getPhotoTwo();
-                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoThree = subscribeEntityRows.getPhotoThree();
-                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoThreeRows = photoThree.getRows();
-                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoTwoRows = photoTwo.getRows();
-                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoOneRows = photoOne.getRows();
-                            if (photoThreeRows != null && photoThreeRows.size() == 1) {
-                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoThreeRows.get(0);
-                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
-                                    initEntity(subscribeEntityRows, clickEntity0, photoThreeRows, rowsBeanXXXX, "2");
-
-                            }
-                            if (photoTwoRows != null && photoTwoRows.size() == 1) {
-                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoTwoRows.get(0);
-                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
-                                    initEntity(subscribeEntityRows, clickEntity0, photoTwoRows, rowsBeanXXXX, "1");
-                            }
-                            if (photoOneRows != null && photoOneRows.size() == 1) {
-                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoOneRows.get(0);
-                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
-                                    initEntity(subscribeEntityRows, clickEntity0, photoOneRows, rowsBeanXXXX, "0");
-                            }
-                            clickEntity0.setItemType(0);
-                            clickEntity0.setLevel(0);
-                            dubbingAdapter.addData(clickEntity0);
-                        }
-                        if (dubbingAdapter.getItemCount() < ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getTotal()) {
-                            page++;
-                        } else {
-                            dubbingAdapter.loadMoreEnd(false);
-                        }
-                        dubbingAdapter.expandAll();
-                    } else {
-                        dubbingAdapter.loadMoreEnd(false);
-                    }
-                } else {
-                    onRefresh();
-                }
+//                if (entity instanceof WaitRecordPaperEntity) {
+//                    dubbingAdapter.loadMoreComplete();
+//                    if (dubbingAdapter == null || ((WaitRecordPaperEntity) entity).getWaitRecordPaper() == null || ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getRows() == null) {
+//                        dubbingAdapter.loadMoreEnd(false);
+//                        return;
+//                    }
+//                    if (page == 1) {
+//                        dubbingAdapter.setNewData(null);
+//                    }
+//
+//                    List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getRows();
+//                    if (rows != null && rows.size() > 0) {
+//                        for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows : rows) {
+//                            ClickEntity clickEntity0 = new ClickEntity(subscribeEntityRows);
+//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoOne = subscribeEntityRows.getPhotoOne();
+//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoTwo = subscribeEntityRows.getPhotoTwo();
+//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoThree = subscribeEntityRows.getPhotoThree();
+//                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoThreeRows = photoThree.getRows();
+//                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoTwoRows = photoTwo.getRows();
+//                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoOneRows = photoOne.getRows();
+//                            if (photoThreeRows != null && photoThreeRows.size() == 1) {
+//                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoThreeRows.get(0);
+//                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
+//                                    initEntity(subscribeEntityRows, clickEntity0, photoThreeRows, rowsBeanXXXX, "2");
+//
+//                            }
+//                            if (photoTwoRows != null && photoTwoRows.size() == 1) {
+//                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoTwoRows.get(0);
+//                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
+//                                    initEntity(subscribeEntityRows, clickEntity0, photoTwoRows, rowsBeanXXXX, "1");
+//                            }
+//                            if (photoOneRows != null && photoOneRows.size() == 1) {
+//                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoOneRows.get(0);
+//                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
+//                                    initEntity(subscribeEntityRows, clickEntity0, photoOneRows, rowsBeanXXXX, "0");
+//                            }
+//                            clickEntity0.setItemType(0);
+//                            clickEntity0.setLevel(0);
+//                            dubbingAdapter.addData(clickEntity0);
+//                        }
+//                        if (dubbingAdapter.getItemCount() < ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getTotal()) {
+//                            page++;
+//                        } else {
+//                            dubbingAdapter.loadMoreEnd(false);
+//                        }
+//                        dubbingAdapter.expandAll();
+//                    } else {
+//                        dubbingAdapter.loadMoreEnd(false);
+//                    }
+//                } else {
+//                    onRefresh();
+//                }
                 break;
             case "collection":
                 break;
@@ -1614,74 +1536,74 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "my_review":
             case "my_paper":
             case "summary_list":
-                if (entity instanceof SubscribeEntity) {
-                    itemClickAdapter.loadMoreComplete();
-                    if (itemClickAdapter == null || ((SubscribeEntity) entity).getPageInfo() == null || ((SubscribeEntity) entity).getPageInfo().getRows() == null) {
-                        itemClickAdapter.loadMoreEnd(false);
-                        return;
-                    }
-                    if (page == 1) {
-                        itemClickAdapter.setNewData(null);
-                    }// 2018/7/28 高鹏  
-                    SubscribeEntity.PageInfoBean pageInfo = ((SubscribeEntity) entity).getPageInfo();
-                    if (pageInfo != null) {
-                        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = pageInfo.getRows();
-                        if (rows != null && rows.size() > 0) {
-                            for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX row : rows) {
-                                itemClickAdapter.addData(new ClickEntity(row));
-                            }
-                            if (itemClickAdapter.getItemCount() < pageInfo.getTotal()) {
-                                page++;
-                            } else {
-                                itemClickAdapter.loadMoreEnd(false);
-                            }
-                        } else {
-                            itemClickAdapter.loadMoreEnd(false);
-                        }
-
-                    }
-                } else if (entity.getResult() == 1) {
-                    if (itemClickAdapter.getItemCount() > changePosition) {
-                        ClickEntity item = itemClickAdapter.getItem(changePosition);
-                        if (item != null && item.getSubscribeEntityRows() != null) {
-                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows = item.getSubscribeEntityRows();
-                            String isFollowed = "";
-                            int followedNum = 0;
-                            if (isSave == 10) {
-                                isFollowed = "1";
-                                followedNum = 1;
-                            } else if (isSave == 20) {
-                                isFollowed = "0";
-                                followedNum = -1;
-                            }
-                            switch (version) {
-                                case 0:
-                                    if (subscribeEntityRows.getPhotoOne() != null && subscribeEntityRows.getPhotoOne().getRows() != null && subscribeEntityRows.getPhotoOne().getRows().size() == 1 && subscribeEntityRows.getPhotoOne().getRows().get(0) != null) {
-                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoOne().getRows().get(0);
-                                        rowsBeanXXXX.setIsFollowed(isFollowed);
-                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
-                                    }
-                                    break;
-                                case 1:
-                                    if (subscribeEntityRows.getPhotoTwo() != null && subscribeEntityRows.getPhotoTwo().getRows() != null && subscribeEntityRows.getPhotoTwo().getRows().size() == 1 && subscribeEntityRows.getPhotoTwo().getRows().get(0) != null) {
-                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoTwo().getRows().get(0);
-                                        rowsBeanXXXX.setIsFollowed(isFollowed);
-                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
-                                    }
-                                    break;
-                                case 2:
-                                    if (subscribeEntityRows.getPhotoThree() != null && subscribeEntityRows.getPhotoThree().getRows() != null && subscribeEntityRows.getPhotoThree().getRows().size() == 1 && subscribeEntityRows.getPhotoThree().getRows().get(0) != null) {
-                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoThree().getRows().get(0);
-                                        rowsBeanXXXX.setIsFollowed(isFollowed);
-                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
-                                    }
-                                    break;
-                            }
-                            itemClickAdapter.notifyItemChanged(changePosition);
-                        }
-                    }
-                    //                    onRefresh();
-                }
+//                if (entity instanceof SubscribeEntity) {
+//                    itemClickAdapter.loadMoreComplete();
+//                    if (itemClickAdapter == null || ((SubscribeEntity) entity).getPageInfo() == null || ((SubscribeEntity) entity).getPageInfo().getRows() == null) {
+//                        itemClickAdapter.loadMoreEnd(false);
+//                        return;
+//                    }
+//                    if (page == 1) {
+//                        itemClickAdapter.setNewData(null);
+//                    }// 2018/7/28 高鹏
+//                    SubscribeEntity.PageInfoBean pageInfo = ((SubscribeEntity) entity).getPageInfo();
+//                    if (pageInfo != null) {
+//                        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = pageInfo.getRows();
+//                        if (rows != null && rows.size() > 0) {
+//                            for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX row : rows) {
+//                                itemClickAdapter.addData(new ClickEntity(row));
+//                            }
+//                            if (itemClickAdapter.getItemCount() < pageInfo.getTotal()) {
+//                                page++;
+//                            } else {
+//                                itemClickAdapter.loadMoreEnd(false);
+//                            }
+//                        } else {
+//                            itemClickAdapter.loadMoreEnd(false);
+//                        }
+//
+//                    }
+//                } else if (entity.getResult() == 1) {
+//                    if (itemClickAdapter.getItemCount() > changePosition) {
+//                        ClickEntity item = itemClickAdapter.getItem(changePosition);
+//                        if (item != null && item.getSubscribeEntityRows() != null) {
+//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows = item.getSubscribeEntityRows();
+//                            String isFollowed = "";
+//                            int followedNum = 0;
+//                            if (isSave == 10) {
+//                                isFollowed = "1";
+//                                followedNum = 1;
+//                            } else if (isSave == 20) {
+//                                isFollowed = "0";
+//                                followedNum = -1;
+//                            }
+//                            switch (version) {
+//                                case 0:
+//                                    if (subscribeEntityRows.getPhotoOne() != null && subscribeEntityRows.getPhotoOne().getRows() != null && subscribeEntityRows.getPhotoOne().getRows().size() == 1 && subscribeEntityRows.getPhotoOne().getRows().get(0) != null) {
+//                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoOne().getRows().get(0);
+//                                        rowsBeanXXXX.setIsFollowed(isFollowed);
+//                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
+//                                    }
+//                                    break;
+//                                case 1:
+//                                    if (subscribeEntityRows.getPhotoTwo() != null && subscribeEntityRows.getPhotoTwo().getRows() != null && subscribeEntityRows.getPhotoTwo().getRows().size() == 1 && subscribeEntityRows.getPhotoTwo().getRows().get(0) != null) {
+//                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoTwo().getRows().get(0);
+//                                        rowsBeanXXXX.setIsFollowed(isFollowed);
+//                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
+//                                    }
+//                                    break;
+//                                case 2:
+//                                    if (subscribeEntityRows.getPhotoThree() != null && subscribeEntityRows.getPhotoThree().getRows() != null && subscribeEntityRows.getPhotoThree().getRows().size() == 1 && subscribeEntityRows.getPhotoThree().getRows().get(0) != null) {
+//                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoThree().getRows().get(0);
+//                                        rowsBeanXXXX.setIsFollowed(isFollowed);
+//                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
+//                                    }
+//                                    break;
+//                            }
+//                            itemClickAdapter.notifyItemChanged(changePosition);
+//                        }
+//                    }
+//                    //                    onRefresh();
+//                }
                 break;
             case "newest":
                 break;
@@ -1997,12 +1919,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         for (ClickEntity clickEntity : subItems1) {
                             if (clickEntity.getPhotoRecord().equals("appInfo")) {
                                 PackageUtil.installApkNormal(getActivity(), clickEntity.record.getSavePath() + "/" + clickEntity.record.getSaveName());
-                            } else if (clickEntity.getPhotoRecord().equals("photo")) {
+                            } else if (clickEntity.getPhotoRecord().equals("img")) {
                                 photoRows.add(clickEntity.record.getSavePath() + "/" + clickEntity.record.getSaveName());
                             } else {
-                                if (clickEntity.record.getExtra5().equals("CN")) {
+                                if (clickEntity.record.getExtra5().equals(CN)) {
                                     recordOneRows.add(clickEntity.record.getSavePath() + "/" + clickEntity.record.getSaveName());
-                                } else if ((clickEntity.record.getExtra5().equals("EN"))) {
+                                } else if ((clickEntity.record.getExtra5().equals(EN))) {
                                     recordTwoRows.add(clickEntity.record.getSavePath() + "/" + clickEntity.record.getSaveName());
                                 }
                             }
@@ -2154,30 +2076,15 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 break;
             case "answer":
-                ClickEntity itemAnswer = itemClickAdapter.getItem(position);
-                if (itemAnswer != null) {
-                    AnswerQuizRowsBean answerQuizRowsBean = itemAnswer.getAnswerQuizRowsBean();
-                    String id = answerQuizRowsBean.getPbid();
-                    String version = answerQuizRowsBean.getVersion();
-                    ArrayList<String> list = new ArrayList<>();
-                    if (!TextUtils.isEmpty(version))
-                        list.add(version);
-                    if (list.size() > 0 && !TextUtils.isEmpty(id))
-                        PaperDetailsActivity.actionActivity(getContext(), id, list, type);
+                MyAnswerVO answerVO = itemClickAdapter.getItem(position).getMyAnswerVO();
+                if (answerVO != null) {
+                    PaperDetailsActivity.actionActivityNew(getContext(), answerVO.getQid(), "1", type, getLanguage());
                 }
                 break;
             case "questions":
-                ClickEntity itemQuestions = itemClickAdapter.getItem(position);
-                if (itemQuestions != null) {
-
-                    AnswerQUizXBean answerQUizXBean = itemQuestions.getAnswerQUizXBean();
-                    String id = answerQUizXBean.getPbid();
-                    String version = answerQUizXBean.getVersion();
-                    ArrayList<String> list = new ArrayList<>();
-                    if (!TextUtils.isEmpty(version))
-                        list.add(version);
-                    if (list.size() > 0 && !TextUtils.isEmpty(id))
-                        PaperDetailsActivity.actionActivity(getContext(), id, list, type);
+                MyAnswerVO answerVO1 = itemClickAdapter.getItem(position).getMyAnswerVO();
+                if (answerVO1 != null) {
+                    PaperDetailsActivity.actionActivityNew(getContext(), answerVO1.getQid(), "1", type, getLanguage());
                 }
                 break;
             case "search_hint":
@@ -2352,7 +2259,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case R.id.iv_attention: // TODO  iv_attention
                 ClickEntity item1 = multipleItemQuickAdapter.getItem(position);
-                if (BaseActivity.uid.equals("15")) {
+                if (ObjectUtils.isEmpty(BaseActivity.uid)) {
                     AlertDialog.Builder normalDialog =
                             new AlertDialog.Builder(getActivity());
                     normalDialog.setIcon(null);
@@ -2834,6 +2741,30 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "213":
                 ToastUtils.showShort("收藏成功！");
                 break;
+            case "216":
+                DownloadInfoBean infoBean = (DownloadInfoBean) baseBean;
+                if (infoBean == null) {
+                    ToastUtils.showShort("下载信息异常，请重试");
+                    break;
+                }
+                DownloadController mDownloadController = new DownloadController(new TextView(context), new ImageView(context));
+                mDownloadController.handleClick(new DownloadController.Callback() {
+                    @Override
+                    public void startDownload() {
+                        start(infoBean);
+                    }
+
+                    @Override
+                    public void pauseDownload() {
+                    }
+
+                    @Override
+                    public void install() {
+                        //                        installApk();
+                        Utils.showToast("下载完成");
+                    }
+                });
+                break;
             case "217":
                 ToastUtils.showShort("取消收藏成功！");
                 break;
@@ -2996,7 +2927,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     }
 
     @Override
-    public void listClick(String type, String pid, String version) {
+    public void listClick(String type, String pid, String version, String language) {
         HashMap<String, Object> map = new HashMap<>();
         switch (type) {
             case "collect":
@@ -3012,13 +2943,73 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 presenter.getDataAll("217", map);
                 break;
             case "download":
-                ToastUtils.showShort("测试-下载");
+                map.put("uid", getUserID());
+                map.put("pid", pid);
+                map.put("version", version);
+                map.put("language", language);
+                presenter.getDataAll("216", map);
                 break;
             case "add":
                 ToastUtils.showShort("测试-添加");
                 break;
             default:
                 break;
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    private void start(DownloadInfoBean infoBean) {
+        ArrayList<DownloadBean> list = new ArrayList<>();
+        for (DownloadImgInfoVO vo : infoBean.getPics()) {
+            String imgPath = BASE_IMG_URL + vo.getPicurl();
+            String mp3Path = BASE_IMG_URL + vo.getRurl();
+            if (DataBaseHelper.getSingleton(context).recordNotExists(imgPath)) {
+                DownloadBean downloadBean = new DownloadBean
+                        .Builder(imgPath)
+                        .setSaveName(Utils.fileName(imgPath))//文件名
+                        .setExtra1(infoBean.getId())//论文id
+                        .setExtra2(vo.getPicid())//录音id
+                        .setExtra3(infoBean.getType())//类型1论文2综述
+                        .setExtra4("img")//格式
+                        .setTitle(infoBean.getTitle())
+                        .setExtra5(infoBean.getLanguage())
+                        .setTime(infoBean.getDowntime())
+                        .setVersion(infoBean.getVersion())
+                        .setPhotoNum(infoBean.getPics().size())
+                        .build();
+                list.add(downloadBean);
+            }
+            if (DataBaseHelper.getSingleton(context).recordNotExists(mp3Path)) {
+                DownloadBean downloadBean = new DownloadBean
+                        .Builder(mp3Path)
+                        .setSaveName(Utils.fileName(mp3Path))//文件名
+                        .setExtra1(infoBean.getId())//论文id
+                        .setExtra2(vo.getRid())//录音id
+                        .setExtra3(infoBean.getType())//类型1论文2综述
+                        .setExtra4("mp3")//格式
+                        .setExtra5(infoBean.getLanguage())//语言
+                        .setTitle(infoBean.getTitle())
+                        .setTime(infoBean.getDowntime())
+                        .setVersion(infoBean.getVersion())
+                        .build();
+                list.add(downloadBean);
+            }
+        }
+        if (list.size() > 0) {
+            new RxPermissions(getActivity())
+                    .request(WRITE_EXTERNAL_STORAGE)
+                    .doOnNext(granted -> {
+                        if (!granted) {
+                            throw new RuntimeException("no permission");
+                        }
+                    })
+                    .compose(mRxDownload.transformMulti(list, infoBean.getId()))
+                    .subscribe(o -> Utils.showToast("下载开始"), throwable -> {
+                        android.util.Log.w("--->>", throwable);
+                        Utils.showToast("下载中");
+                    });
+        } else {
+            Utils.showToast("下载完成");
         }
     }
 }

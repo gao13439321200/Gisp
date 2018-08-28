@@ -35,6 +35,7 @@ import java.util.Objects;
 import static com.giiisp.giiisp.R.layout.item_user_info;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
+import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
 
 
 /**
@@ -305,11 +306,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                     if (paper != null) {
                         String id = paper.getId();
                         String version = paper.getVersion();
-                        ArrayList<String> list = new ArrayList<>();
-                        if (!TextUtils.isEmpty(version))
-                            list.add(version);
-                        if (list.size() > 0 && !TextUtils.isEmpty(id))
-                            PaperDetailsActivity.actionActivity(context, id, list, "online_paper");
+                        if (!TextUtils.isEmpty(id))
+                            PaperDetailsActivity.actionActivityNew(context, id, version, "online_paper",CN);
                     }
                 }
             }

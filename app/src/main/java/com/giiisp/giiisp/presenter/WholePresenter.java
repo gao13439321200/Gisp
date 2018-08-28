@@ -12,6 +12,7 @@ import com.giiisp.giiisp.api.ApiStoreNew;
 import com.giiisp.giiisp.base.BasePresenter;
 import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DownloadInfoBean;
 import com.giiisp.giiisp.dto.DubbingBean;
 import com.giiisp.giiisp.dto.DubbingListBean;
 import com.giiisp.giiisp.dto.FansBean;
@@ -1511,6 +1512,9 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 break;
             case "214":
                 baseEntity = new Gson().fromJson(cipher, PlayNoteBean.class);
+                break;
+            case "216":
+                baseEntity = new Gson().fromJson(cipher, DownloadInfoBean.class);
                 break;
             case "305":
                 baseEntity = new Gson().fromJson(cipher, PaperEventBean.class);

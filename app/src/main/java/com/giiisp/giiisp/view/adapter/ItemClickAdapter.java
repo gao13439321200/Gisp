@@ -34,7 +34,6 @@ import com.giiisp.giiisp.entity.HomeSearchEntity;
 import com.giiisp.giiisp.entity.MsgEntity;
 import com.giiisp.giiisp.entity.MyScholarBean;
 import com.giiisp.giiisp.entity.QAEntity;
-import com.giiisp.giiisp.entity.SubscribeEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.utils.FileUtils;
@@ -56,7 +55,6 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.functions.Consumer;
 import zlc.season.rxdownload2.RxDownload;
@@ -71,6 +69,7 @@ import static com.giiisp.giiisp.R.id.tv_answer_reply;
 import static com.giiisp.giiisp.R.id.tv_problem;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
+import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
 
 /**
  * 重用的适配器
@@ -546,18 +545,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_collectionchild://收藏论文、收藏综述
                     if (item.getSubscribeEntityRows() == null)
                         return;
-                    SubscribeEntity.PageInfoBean.RowsBeanXXXXX collectionEntitys = item.getSubscribeEntityRows();
-                    helper.setText(R.id.tv_title, collectionEntitys.getTitle());
-                    helper.setText(R.id.tv_time, collectionEntitys.getCreateTime());
-                    initReclerView(helper, collectionEntitys);
-                    //                            String firstPic = collectionEntity.getFirstPic();
-                  /*  helper.setText(R.id.tv_paper_browse, collectionEntity.getReadNum() + "");
-                    helper.setText(R.id.tv_paper_collected, collectionEntity.getFollowedNum() + "");
-                    helper.getView(R.id.tv_paper_collected).setSelected(true);
-                    helper.addOnClickListener(R.id.tv_paper_collected);
-                    helper.setText(R.id.tv_paper_download, collectionEntity.getDownloadNum() + "");
-                    helper.setText(R.id.tv_paper_problem, collectionEntity.getCommentNum() + "");
-                    helper.setText(R.id.tv_time, collectionEntity.getCreateTime() + "");*/
+                    PaperMainVO paperMainVO = item.getPaperMainVO();
+                    helper.setText(R.id.tv_title, paperMainVO.getTitle());
+                    initReclerView(helper, paperMainVO);
                     break;
                 case R.layout.item_collection:
                     switch (type) {
@@ -832,9 +822,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             @Override
                             public void onClick(View view) {
                                 if (((CheckBox) helper.getView(R.id.cb_collect)).isChecked()) {
-                                    mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "");
+                                    mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
                                 } else {
-                                    mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "");
+                                    mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
                                 }
                             }
                         });
@@ -842,14 +832,14 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.getView(R.id.cb_download).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                mListItemClick.listClick("download", vlistBean.getPid(), vlistBean.getVersion() + "");
+                                mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
                             }
                         });
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
                         helper.getView(R.id.cb_add).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "");
+                                mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
                             }
                         });
                         String btnString;
@@ -979,11 +969,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     HomeSearchEntity.PaperBean.RowsBeanX paperBean = item.getPaperBeanRows();
                                     String id = paperBean.getId();
                                     String version = paperBean.getVersion();
-                                    ArrayList<String> list = new ArrayList<>();
-                                    if (!TextUtils.isEmpty(version))
-                                        list.add(version);
-                                    if (list.size() > 0 && !TextUtils.isEmpty(id))
-                                        PaperDetailsActivity.actionActivity(activity, id, list, "online_paper");
+                                    PaperDetailsActivity.actionActivityNew(activity, id, version, "online_paper", CN);
                                 }
                             }
                         });
@@ -1211,74 +1197,20 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 
     }
 
-    private void initReclerView(BaseViewHolder helper, SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows) {
-        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoOne = subscribeEntityRows.getPhotoOne();
-        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoTwo = subscribeEntityRows.getPhotoTwo();
-        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoThree = subscribeEntityRows.getPhotoThree();
-        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoThreeRows = photoThree.getRows();
-        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoTwoRows = photoTwo.getRows();
-        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoOneRows = photoOne.getRows();
-        List<ClickEntity> total = new ArrayList<>();
-        List<ClickEntity> one = new ArrayList<>();
-        if (photoThreeRows != null && photoThreeRows.size() == 1 && photoThreeRows.get(0) != null && Objects.equals("1", photoThreeRows.get(0).getStatus())) {
-            ClickEntity clickEntity = new ClickEntity();
-            clickEntity.setPhotoRecord(subscribeEntityRows.getTitle());
-            clickEntity.setPhotoOrder(subscribeEntityRows.getCreateTime());
-            clickEntity.setTitle(subscribeEntityRows.getTitle());
-            clickEntity.setTime(photoThreeRows.get(0).getCreateTime());
-            clickEntity.setPaperId(subscribeEntityRows.getId() + "");
-            clickEntity.setVersion(String.valueOf(2));
-            clickEntity.setPaperBan(photoThreeRows.get(0));
-            clickEntity.setPosition(helper.getAdapterPosition());
-            total.add(clickEntity);
+    private void initReclerView(BaseViewHolder helper, PaperMainVO paperMainVO) {
+        List<ClickEntity> list = new ArrayList<>();
+        for (PaperMainVO.VlistBean bean : paperMainVO.getVlist()) {
+            ClickEntity entity = new ClickEntity();
+            entity.setVlistBean(bean);
+            list.add(entity);
         }
-        if (photoTwoRows != null && photoTwoRows.size() == 1 && photoTwoRows.get(0) != null && Objects.equals("1", photoTwoRows.get(0).getStatus())) {
-            ClickEntity clickEntity = new ClickEntity();
-            clickEntity.setPhotoRecord(subscribeEntityRows.getTitle());
-            clickEntity.setPhotoOrder(subscribeEntityRows.getCreateTime());
-            clickEntity.setTitle(subscribeEntityRows.getTitle());
-            clickEntity.setTime(photoTwoRows.get(0).getCreateTime());
-            clickEntity.setVersion(String.valueOf(1));
-            clickEntity.setPaperBan(photoTwoRows.get(0));
-            clickEntity.setPaperId(subscribeEntityRows.getId() + "");
-            clickEntity.setPosition(helper.getAdapterPosition());
-            total.add(clickEntity);
-        }
-        if (photoOneRows != null && photoOneRows.size() == 1 && photoOneRows.get(0) != null && Objects.equals("1", photoOneRows.get(0).getStatus())) {
-            ClickEntity clickEntity = new ClickEntity();
-            clickEntity.setPhotoRecord(subscribeEntityRows.getTitle());
-            clickEntity.setPhotoOrder(subscribeEntityRows.getCreateTime());
-            clickEntity.setTitle(subscribeEntityRows.getTitle());
-            clickEntity.setTime(photoOneRows.get(0).getCreateTime());
-            clickEntity.setVersion(String.valueOf(0));
-            clickEntity.setPaperBan(photoOneRows.get(0));
-            clickEntity.setPaperId(subscribeEntityRows.getId() + "");
-            clickEntity.setPosition(helper.getAdapterPosition());
-            total.add(clickEntity);
-        }
-        if (total.size() == 1) {
-            ClickEntity lv0 = total.get(0);
-            lv0.setItemType(0);
-            lv0.setLevel(0);
-            one.add(lv0);
-        } else if (total.size() > 1) {
-            ClickEntity lv0 = total.get(0);
-            lv0.setItemType(0);
-            lv0.setLevel(0);
-            for (int j = 1; j < total.size(); j++) {
-                ClickEntity lv1 = total.get(j);
-                lv1.setItemType(1);
-                lv1.setLevel(1);
-                lv1.setClickEntity(lv0);
-                lv0.addSubItem(lv1);
-            }
-            one.add(lv0);
-        }
-
-
         RecyclerView recyclerView = helper.getView(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        ExpandableItemAdapter expandableItemAdapter = new ExpandableItemAdapter((BaseActivity) activity, R.layout.item_paper_child, R.layout.item_paper_child, one, type);
+        ExpandableItemAdapter expandableItemAdapter =
+                new ExpandableItemAdapter(activity,
+                        R.layout.item_paper_child,
+                        R.layout.item_paper_child,
+                        list, type);
         recyclerView.setAdapter(expandableItemAdapter);
         switch (type) {
             case "collection_paper":
@@ -1290,13 +1222,14 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
         expandableItemAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ArrayList<String> list = new ArrayList<>();
                 ClickEntity clickEntity = (ClickEntity) adapter.getItem(position);
                 if (clickEntity != null) {
-                    if (clickEntity.getVersion() != null)
-                        list.add(clickEntity.getVersion());
-                    if (clickEntity.getPaperId() != null && list.size() > 0)
-                        PaperDetailsActivity.actionActivity(activity, clickEntity.getPaperId(), list, "online_paper");
+                    if (clickEntity.getPaperId() != null)
+                        PaperDetailsActivity.actionActivityNew(activity,
+                                clickEntity.getPaperId(),
+                                clickEntity.getVersion(),
+                                "online_paper",
+                                CN);
                 }
             }
         });

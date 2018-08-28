@@ -243,13 +243,9 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
             viewPagerGiiisp.setCurrentItem(2);
         } else {
             if (!TextUtils.isEmpty(paperId)) {
-                ArrayList<String> map = new ArrayList<>();
-                map.add(PaperDetailsActivity.paperId);
-                PaperDetailsActivity.actionActivity(GiiispActivity.this, PaperDetailsActivity.pid, map, "online_paper");
+                PaperDetailsActivity.actionActivityNew(this, PaperDetailsActivity.pid, PaperDetailsActivity.paperId, "online_paper", getLanguage());
             } else if (!TextUtils.isEmpty(downloadId)) {
-                ArrayList<String> map = new ArrayList<>();
-                map.add(PaperDetailsActivity.downloadId);
-                PaperDetailsActivity.actionActivity(GiiispActivity.this, PaperDetailsActivity.pid, map, "download_paper");
+                PaperDetailsActivity.actionActivityNew(this, PaperDetailsActivity.pid, PaperDetailsActivity.downloadId, "download_paper", getLanguage());
             }
 
         }

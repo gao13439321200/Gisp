@@ -8,11 +8,13 @@
     <TextView
         android:id="@+id/tv_time"
         style="@style/time_style"
+        android:text="这里是时间"
         android:layout_alignTop="@+id/tv_problem"/>
 
 
     <TextView
         android:id="@+id/tv_problem"
+        android:text="我请教的问题"
         style="@style/text_12sp_colorauxiliary"
         android:layout_marginStart="10dp"
         android:layout_marginTop="6.7dp"/>
@@ -23,6 +25,7 @@
         android:layout_below="@+id/tv_problem"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
+        android:text=""
         android:layout_marginBottom="10dp"/>
 
     <TextView

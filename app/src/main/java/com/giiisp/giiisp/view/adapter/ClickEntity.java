@@ -72,7 +72,16 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private String title;
     private String version;
     private int position;
+    private String paperType;
     BaseActivity activity;
+
+    public String getPaperType() {
+        return paperType;
+    }
+
+    public void setPaperType(String paperType) {
+        this.paperType = paperType;
+    }
 
     public BaseActivity getActivity() {
         return activity;
@@ -379,6 +388,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private PaperInfoVO mPaperInfoVO;
     private PlayNoteVo mPlayNoteVo;
     private MIneInfoBean mMIneInfoBean;
+    private PaperMainVO.VlistBean mVlistBean;
+
+    public PaperMainVO.VlistBean getVlistBean() {
+        return mVlistBean;
+    }
+
+    public void setVlistBean(PaperMainVO.VlistBean vlistBean) {
+        mVlistBean = vlistBean;
+    }
 
     public MIneInfoBean getMIneInfoBean() {
         return mMIneInfoBean;

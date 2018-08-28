@@ -10,7 +10,6 @@ import android.webkit.WebView;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseFragment;
-import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.view.fragment.AgreementFragment;
 import com.giiisp.giiisp.view.fragment.AtLinkFragment;
 import com.giiisp.giiisp.view.fragment.BannerRecyclerViewFragment;
@@ -93,6 +92,9 @@ public class FragmentActivity extends BaseActivity {
                     break;
                 case "download_activity":
                     fragment = CollectionDownloadFragment.newInstance(type, "");
+                    break;
+                case "collection_fragment":
+                    fragment = CollectionDownloadFragment.newInstance(type, "5");
                     break;
                 case "verified_edit_info":
                     fragment = UserInfoFragment.newInstance(type, "");

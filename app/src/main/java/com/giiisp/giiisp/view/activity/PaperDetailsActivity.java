@@ -56,6 +56,8 @@ import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.DownloadImgInfoVO;
+import com.giiisp.giiisp.dto.DownloadInfoBean;
 import com.giiisp.giiisp.dto.DubbingBean;
 import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.ImgInfoBean;
@@ -116,7 +118,6 @@ import butterknife.OnClick;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import razerdp.basepopup.BasePopupWindow;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -412,16 +413,16 @@ public class PaperDetailsActivity extends
 
         hideImg();
         storageId = pid;
-//        photoList = getIntent().getStringArrayListExtra("photoRows");
+        photoList = getIntent().getStringArrayListExtra("photoRows");
         recordOneList = getIntent().getStringArrayListExtra("recordOneRows");
         recordTwoList = getIntent().getStringArrayListExtra("recordTwoRows");
 
         if (type == null)
             type = "";
 
-//        if (photoList == null) {
-        photoList = new ArrayList<>();
-//        }
+        if (photoList == null) {
+            photoList = new ArrayList<>();
+        }
 
         DaoSession daoSession = BaseApp.app.getDaoSession();
         noteDao = daoSession.getNoteDao();
@@ -536,13 +537,6 @@ public class PaperDetailsActivity extends
             case "wait_dubbing"://待配音
                 getPlayService().setPlayType(PlayService.ONLINE);
                 linerBottomComm.setVisibility(View.GONE);
-//                ArrayMap<String, Object> dubbingMap = new ArrayMap<>();
-////                dubbingMap.put("token", token);
-//                dubbingMap.put("id", id);
-//                dubbingMap.put("uid", uid);
-//                if (!TextUtils.isEmpty(string))
-//                    dubbingMap.put("version", string);
-//                presenter.getPaperBaseByIdData(dubbingMap);
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("pid", pid);
                 map.put("language", language);
@@ -812,7 +806,7 @@ public class PaperDetailsActivity extends
 
                 break;
             case R.id.fl_collection://收藏
-                if (BaseActivity.uid.equals("15")) {
+                if (ObjectUtils.isEmpty(BaseActivity.uid)) {
                     AlertDialog.Builder normalDialog = new AlertDialog.Builder(this);
                     normalDialog.setIcon(null);
                     normalDialog.setTitle("需要登录才能执行此操作");
@@ -829,7 +823,7 @@ public class PaperDetailsActivity extends
                 FragmentActivity.actionActivity(this, "play");
                 break;
             case R.id.fl_download://下载
-                if (BaseActivity.uid.equals("15")) {
+                if (ObjectUtils.isEmpty(BaseActivity.uid)) {
                     AlertDialog.Builder normalDialog =
                             new AlertDialog.Builder(this);
                     normalDialog.setIcon(null);
@@ -845,25 +839,12 @@ public class PaperDetailsActivity extends
                     // 显示
                     normalDialog.show();
                 } else {
-                    mDownloadController.handleClick(new DownloadController.Callback() {
-                        @Override
-                        public void startDownload() {
-                            start();
-                        }
-
-                        @Override
-                        public void pauseDownload() {
-                            //                        pause();
-                            //                        Utils.showToast("下载暂停");
-                        }
-
-                        @Override
-                        public void install() {
-                            //                        installApk();
-                            Utils.showToast("下载完成");
-                        }
-                    });
-                    loadDownloadNunber();
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("uid", getUserID());
+                    map.put("pid", pid);
+                    map.put("version", myVersionNo);
+                    map.put("language", language);
+                    presenter.getDataAll("216", map);
                 }
                 //                presenter.downloadFileWithDynamicUrlSync();
                 break;
@@ -1040,65 +1021,39 @@ public class PaperDetailsActivity extends
     }
 
     @SuppressLint("CheckResult")
-    private void start() {
-        if (photosBeanRows == null || photosBeanRows.size() < position)
-            return;
-
-        PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean.RowsBean rowsBean = photosBeanRows.get(position);
-
-        if (rowsBean == null)
-            return;
+    private void start(DownloadInfoBean infoBean) {
         ArrayList<DownloadBean> list = new ArrayList<>();
-        String path = rowsBean.getPath();
-        if (path.contains(UrlConstants.RequestUrl.QN_ADDRESS)) {
-            path += "-watermark";
-        }
-        if (DataBaseHelper.getSingleton(this).recordNotExists(path)) {
-            DownloadBean downloadBean = new DownloadBean
-                    .Builder(path)
-                    .setSaveName(Utils.fileName(rowsBean.getPath()))
-                    .setExtra1(storageId + "")   //save extra info into database.
-                    .setExtra2(String.valueOf(rowsBean.getId()))   //save extra info into database.
-                    .setExtra3(String.valueOf(rowsBean.getOrder()))   //save extra info into database.
-                    .setExtra4("photo")   //save extra info into database.
-                    .setTitle(title)
-                    .setExtra5(path)
-                    .setTime(rowsBean.getCreateTime())
-                    .setVersion(myVersionNo)
-                    .build();
-            list.add(downloadBean);
-        }
-        if (recordsBeanOneRows != null && recordsBeanOneRows.size() > 0) {
-            PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean.RowsBeanX rowsBeanX = recordsBeanOneRows.get(position);
-            if (DataBaseHelper.getSingleton(this).recordNotExists(rowsBeanX.getPath())) {
+        for (DownloadImgInfoVO vo : infoBean.getPics()) {
+            String imgPath = BASE_IMG_URL + vo.getPicurl();
+            String mp3Path = BASE_IMG_URL + vo.getRurl();
+            if (DataBaseHelper.getSingleton(this).recordNotExists(imgPath)) {
                 DownloadBean downloadBean = new DownloadBean
-                        .Builder(rowsBeanX.getPath())
-                        .setExtra1(storageId + "")   //save extra info into database.
-                        .setExtra2(String.valueOf(rowsBeanX.getPcid()))   //save extra info into database.
-                        .setExtra3(String.valueOf(rowsBean.getOrder()))   //save extra info into database.
-                        .setExtra4("record")   //save extra info into database.
-
-                        .setExtra5("CN")
-                        .setTime(rowsBean.getCreateTime())
-                        .setTitle(title)
-                        .setVersion(myVersionNo)
+                        .Builder(imgPath)
+                        .setSaveName(Utils.fileName(imgPath))//文件名
+                        .setExtra1(infoBean.getId())//论文id
+                        .setExtra2(vo.getPicid())//录音id
+                        .setExtra3(infoBean.getType())//类型1论文2综述
+                        .setExtra4("img")//格式
+                        .setTitle(infoBean.getTitle())
+                        .setExtra5(infoBean.getLanguage())
+                        .setTime(infoBean.getDowntime())
+                        .setVersion(infoBean.getVersion())
+                        .setPhotoNum(infoBean.getPics().size())
                         .build();
                 list.add(downloadBean);
             }
-        }
-        if (recordsBeanTwoRows != null && recordsBeanTwoRows.size() > 0) {
-            PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean.RowsBeanX rowsBeanX = recordsBeanTwoRows.get(position);
-            if (DataBaseHelper.getSingleton(this).recordNotExists(rowsBeanX.getPath())) {
+            if (DataBaseHelper.getSingleton(this).recordNotExists(mp3Path)) {
                 DownloadBean downloadBean = new DownloadBean
-                        .Builder(rowsBeanX.getPath())
-                        .setExtra1(storageId + "")   //save extra info into database.
-                        .setExtra2(String.valueOf(rowsBeanX.getPcid()))   //save extra info into database.
-                        .setExtra3(String.valueOf(rowsBean.getOrder()))    //save extra info into database.
-                        .setExtra4("record")   //save extra info into database.
-                        .setTime(rowsBean.getCreateTime())
-                        .setTitle(title)
-                        .setExtra5("EN")
-                        .setVersion(myVersionNo)
+                        .Builder(mp3Path)
+                        .setSaveName(Utils.fileName(mp3Path))//文件名
+                        .setExtra1(infoBean.getId())//论文id
+                        .setExtra2(vo.getRid())//录音id
+                        .setExtra3(infoBean.getType())//类型1论文2综述
+                        .setExtra4("mp3")//格式
+                        .setExtra5(infoBean.getLanguage())//语言
+                        .setTitle(infoBean.getTitle())
+                        .setTime(infoBean.getDowntime())
+                        .setVersion(infoBean.getVersion())
                         .build();
                 list.add(downloadBean);
             }
@@ -1106,27 +1061,15 @@ public class PaperDetailsActivity extends
         if (list.size() > 0) {
             new RxPermissions(this)
                     .request(WRITE_EXTERNAL_STORAGE)
-                    .doOnNext(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(Boolean granted) throws Exception {
-                            if (!granted) {
-                                throw new RuntimeException("no permission");
-                            }
+                    .doOnNext(granted -> {
+                        if (!granted) {
+                            throw new RuntimeException("no permission");
                         }
                     })
-                    .compose(mRxDownload.<Boolean>transformMulti(list, rowsBean.getId() + ""))
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
-                            Utils.showToast("下载开始");
-
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@NonNull Throwable throwable) throws Exception {
-                            Log.w("--->>", throwable);
-                            Utils.showToast("下载中");
-                        }
+                    .compose(mRxDownload.transformMulti(list, pid))
+                    .subscribe(o -> Utils.showToast("下载开始"), throwable -> {
+                        Log.w("--->>", throwable);
+                        Utils.showToast("下载中");
                     });
         } else {
             Utils.showToast("下载完成");
@@ -1801,27 +1744,23 @@ public class PaperDetailsActivity extends
     }
 
 
+    @SuppressLint("CheckResult")
     public void loadDownloadNunber() {
         RxDownload.getInstance(this).getTotalDownloadRecords()
-                .map(new Function<List<DownloadRecord>, List<String>>() {
-                    @Override
-                    public List<String> apply(List<DownloadRecord> downloadRecords) throws Exception {
-                        List<String> missionIds = new ArrayList<>();
-                        for (DownloadRecord each : downloadRecords) {
-                            if (each.getFlag() != DownloadFlag.COMPLETED && each.getExtra1() != null && !missionIds.contains(each.getExtra1())) {
-                                missionIds.add(each.getExtra1());
-                            }
+                .map(downloadRecords -> {
+                    List<String> missionIds = new ArrayList<>();
+                    for (DownloadRecord each : downloadRecords) {
+                        if (each.getFlag() != DownloadFlag.COMPLETED
+                                && each.getExtra1() != null
+                                && !missionIds.contains(each.getExtra1())) {
+                            missionIds.add(each.getExtra1());
                         }
-                        return missionIds;
                     }
+                    return missionIds;
                 })
-                .subscribe(new Consumer<List<String>>() {
-                    @Override
-                    public void accept(List<String> downloadBeen) throws Exception {
-                        downloadNunber = downloadBeen.size();
-                        tvDownloadNumber.setText(downloadNunber + "");
-                    }
-
+                .subscribe(downloadBeen -> {
+                    downloadNunber = downloadBeen.size();
+                    tvDownloadNumber.setText(downloadNunber + "");
                 });
     }
   /*  public View getTabItemView(int position) {//                mTitles.add("问答");
@@ -1911,7 +1850,11 @@ public class PaperDetailsActivity extends
                                     // response.body() 返回 ResponseBody
                                     BaseEntity entity = response.body();
                                     if (entity.getResult() == 1) {
-                                        PaperDetailsActivity.actionActivity(context, pid, v, type);
+                                        String version = "1";
+                                        if (v != null && v.size() > 0) {
+                                            version = v.get(0);
+                                        }
+                                        PaperDetailsActivity.actionActivityNew(context, pid, version, type, CN);
                                     } else {
                                         Utils.showToast(entity.getInfo());
                                     }
@@ -1982,11 +1925,11 @@ public class PaperDetailsActivity extends
                 }
                 isFollowed = bean.getIsfollow();
                 ivLikedIcon.setSelected("1".equals(isFollowed));
-                if (ObjectUtils.isNotEmpty(bean.getDownloadnum())) {
-                    tvDownloadNumber.setText(bean.getDownloadnum());
-                } else {
-                    tvDownloadNumber.setText("0");
-                }
+//                if (ObjectUtils.isNotEmpty(bean.getDownloadnum())) {
+//                    tvDownloadNumber.setText(bean.getDownloadnum());
+//                } else {
+//                    tvDownloadNumber.setText("0");
+//                }
                 break;
             case "317"://获取待配音预览论文信息
                 DubbingBean dubbingBean = (DubbingBean) baseBean;
@@ -2062,10 +2005,37 @@ public class PaperDetailsActivity extends
             case "213":
                 isFollowed = "1";
                 ToastUtils.showShort("收藏成功！");
+                ivLikedIcon.setSelected(true);
+                break;
+            case "216":
+                DownloadInfoBean infoBean = (DownloadInfoBean) baseBean;
+                if (infoBean == null) {
+                    ToastUtils.showShort("下载信息异常，请重试");
+                    break;
+                }
+                mDownloadController.handleClick(new DownloadController.Callback() {
+                    @Override
+                    public void startDownload() {
+                        start(infoBean);
+                    }
+
+                    @Override
+                    public void pauseDownload() {
+                    }
+
+                    @Override
+                    public void install() {
+                        //                        installApk();
+                        Utils.showToast("下载完成");
+                    }
+                });
+                loadDownloadNunber();
+
                 break;
             case "217":
                 isFollowed = "2";
                 ToastUtils.showShort("取消收藏成功！");
+                ivLikedIcon.setSelected(false);
                 break;
             case "305":
                 PaperEventBean bean2 = (PaperEventBean) baseBean;

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
@@ -363,10 +364,10 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
             case TYPE_PERSON:
                 //                holder.setText(R.id.tv_title, item.record.getSaveName());
 
-                if (item.record.getExtra4().contains("photo")) {
+                if (item.record.getExtra4().contains("img")) {
                     holder.setText(R.id.tv_version, "图片" + item.getPhotoOrder());
-                } else if (item.record.getExtra4().contains("record")) {
-                    if (item.getLanguage().equals("EN")) {
+                } else if (item.record.getExtra4().contains("mp3")) {
+                    if (item.getLanguage().equals("2")) {
                         holder.setText(R.id.tv_version, "录音EN " + item.getPhotoOrder());
                     } else {
                         holder.setText(R.id.tv_version, "录音CN " + item.getPhotoOrder());
@@ -675,7 +676,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                     @Override
                     public void onClick(View view) {
                         Log.i("--->>", "onClick: " + view.isSelected());
-                        if (BaseActivity.uid.equals("15")) {
+                        if (ObjectUtils.isEmpty(BaseActivity.uid)) {
                             AlertDialog.Builder normalDialog =
                                     new AlertDialog.Builder(activity);
                             normalDialog.setIcon(null);
@@ -701,7 +702,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                 holder.getView(R.id.iv_paper_download).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        if (BaseActivity.uid.equals("15")) {
+                        if (ObjectUtils.isEmpty(BaseActivity.uid)) {
                             AlertDialog.Builder normalDialog =
                                     new AlertDialog.Builder(activity);
                             normalDialog.setIcon(null);
