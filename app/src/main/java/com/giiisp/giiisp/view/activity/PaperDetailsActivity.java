@@ -221,6 +221,8 @@ public class PaperDetailsActivity extends
     RelativeLayout rl_viewpager_full;
     @BindView(R.id.cv_mark)
     MyCustomView mMyCustomView;
+    @BindView(R.id.rl_all)
+    RelativeLayout mRlAll;
 
     public static final String CN = "1";
     public static final String EN = "2";
@@ -638,7 +640,7 @@ public class PaperDetailsActivity extends
         }
 
         //添加可拖动悬浮按钮
-        FloatDragView.addFloatDragView(this, relativeFull, new View.OnClickListener() {
+        FloatDragView.addFloatDragView(this, mRlAll, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewpagerPaper.setCurrentItem(getPlayService().getPlayingPosition());
@@ -952,6 +954,7 @@ public class PaperDetailsActivity extends
         hMap.put("uid", uid);
         hMap.put("pid", pid);
         hMap.put("version", myVersionNo);
+        hMap.put("ftype", 1);
 
 
         switch (isFollowed) {

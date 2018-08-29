@@ -1000,6 +1000,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 hMap.put("uid", getUserID());
                 hMap.put("pageno", page);
                 hMap.put("type", 1);
+                hMap.put("ftype", 1);
                 presenter.getDataAll("212", hMap);
 
 //                map.put("uid", uid);
@@ -1012,6 +1013,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 hMap.put("uid", getUserID());
                 hMap.put("pageno", page);
                 hMap.put("type", 2);
+                hMap.put("ftype", 1);
                 presenter.getDataAll("212", hMap);
 //                map.put("uid", uid);
 //                map.put("page", page);
@@ -1031,12 +1033,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "subscribe"://订阅
             case "newest":
-
-//                this.list.clear();
-//                map.put("uid", uid);
-//                map.put("page", page);
-//                map.put("upTime", "asc");
-//                presenter.getlistFollowPaperData(map);
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+                hMap.put("type", 2);
+                hMap.put("ftype", 2);
+                presenter.getDataAll("212", hMap);
                 break;
             case "notice":
                 map.put("uid", uid);
@@ -2981,12 +2982,14 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("uid", getUserID());
                 map.put("pid", pid);
                 map.put("version", version);
+                map.put("ftype", 1);
                 presenter.getDataAll("213", map);
                 break;
             case "nocollect":
                 map.put("uid", getUserID());
                 map.put("pid", pid);
                 map.put("version", version);
+                map.put("ftype", 1);
                 presenter.getDataAll("217", map);
                 break;
             case "download":

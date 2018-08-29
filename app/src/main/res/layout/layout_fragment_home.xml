@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:paddingTop="26dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingBottom="7dp"
-        android:paddingTop="26dp">
+        android:paddingBottom="7dp">
 
         <FrameLayout
             android:id="@+id/fl_news"
@@ -28,8 +28,8 @@
             <TextView
                 android:id="@+id/tv_home_news"
                 style="@style/text_12sp_colorblack"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="14dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="2dp"
                 android:drawablePadding="3dp"
                 android:drawableTop="@mipmap/home_news"
@@ -44,8 +44,8 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:background="@mipmap/inputfield"
-            android:drawableStart="@mipmap/magnifier_icon"
             android:drawablePadding="7dp"
+            android:drawableStart="@mipmap/magnifier_icon"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
@@ -60,8 +60,8 @@
             android:layout_marginStart="9dp"
             android:drawablePadding="3dp"
             android:drawableTop="@mipmap/home_history"
-            android:paddingStart="8dp"
             android:paddingEnd="9dp"
+            android:paddingStart="8dp"
             android:text="@string/history"
             android:textSize="7.7sp"
             android:visibility="gone"/>
@@ -69,12 +69,12 @@
         <TextView
             android:id="@+id/tv_home_download"
             style="@style/text_12sp_colorblack"
-            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             android:drawablePadding="3dp"
             android:drawableTop="@mipmap/home_download"
-            android:paddingStart="9dp"
             android:paddingEnd="7dp"
+            android:paddingStart="9dp"
             android:paddingTop="1dp"
             android:text="@string/download"
             android:textSize="7.7sp"/>

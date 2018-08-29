@@ -99,13 +99,14 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/btn_answer_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@drawable/bg_answer"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="提问"
+            android:text="回答"
             android:textColor="@color/colorAuxiliary"
             android:textSize="12sp"/>
 
@@ -134,7 +135,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/ll_answer"
@@ -165,13 +167,14 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/btn_ask_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_answer"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="回答"
+                android:text="追问"
                 android:textColor="@color/colorAuxiliary"
                 android:textSize="12sp"/>
 
@@ -187,7 +190,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="我要回答"/>
+            android:text=""
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/ll_ask_hint"
@@ -195,7 +199,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/ll_ask_2"
@@ -226,13 +231,14 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/btn_answer_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_answer"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="追问"
+                android:text="追答"
                 android:textColor="@color/colorAuxiliary"
                 android:textSize="12sp"/>
 
@@ -248,7 +254,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="这里是提问"/>
+            android:text=""
+            android:visibility="gone"/>
 
 
         <LinearLayout
@@ -257,7 +264,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/ll_answer_2"
@@ -287,17 +295,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/bg_answer"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="追答"
-                android:textColor="@color/colorAuxiliary"
-                android:textSize="12sp"/>
-
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
@@ -309,12 +306,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="这里是回答"/>
+            android:text=""
+            android:visibility="gone"/>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="10dp"
         android:background="@color/color_line"/>
 </LinearLayout>

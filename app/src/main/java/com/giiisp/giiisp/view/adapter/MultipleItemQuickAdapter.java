@@ -365,7 +365,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                 @Override
                 public void onClick(View v) {
                     Log.i("--->>", "onClick: " + link);
-                    FragmentActivity.actionActivity(activity, "webView_home", link);
+//                    FragmentActivity.actionActivity(activity, "webView_home", link);
                     //                    helper.savePicture(System.currentTimeMillis() + ".jpg", path);
                 }
             });

@@ -254,7 +254,7 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
                 Set<Integer> setSys = new HashSet<>();
                 if (mPeopleVOSystem != null && mPeopleVOSystem.size() != 0) {
                     for (int i = 0; i < mPeopleVOSystem.size(); i++) {
-                        for (int j = 0; j < mPeopleVOSystem.size(); j++) {
+                        for (int j = 0; j < mPeopleVOUser.size(); j++) {
                             if (mPeopleVOSystem.get(i).getId().equals(mPeopleVOUser.get(j).getId())) {
                                 setSys.add(i);
                             }

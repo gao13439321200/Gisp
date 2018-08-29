@@ -190,54 +190,60 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     break;
                 case R.layout.item_questions_answers_new://论文详情问答列表(新)
                     PaperQaVO qaVO = item.getPaperQaVO();
-                    GlideApp.with(mContext).load(BASE_IMG_URL + qaVO.getAvatar()).into((ImageView) helper.getView(R.id.img_head));
+                    GlideApp.with(mContext).load(qaVO.getAvatar()).into((ImageView) helper.getView(R.id.img_head));
                     helper.setText(R.id.tv_name, qaVO.getUsername());
                     helper.setText(R.id.tv_time, qaVO.getCreatetime());
                     helper.setVisible(R.id.img_photo, ObjectUtils.isNotEmpty(qaVO.getImgurl()));
                     helper.setText(R.id.tv_qa_title, "Q：" + qaVO.getQuiz());//首问问题
                     helper.setText(R.id.tv_ask_time_1, qaVO.getQtime());//首问时长
 
-                    if ("1".equals(qaVO.getHasanswer())) {
+                    if ("1".equals(qaVO.getHasanswer())) {//有首答
                         helper.setText(R.id.tv_answer_1, "A:" + qaVO.getAusername() + qaVO.getAnswer());//首答答案
                         helper.setVisible(R.id.ll_answer_1, true);
                         helper.setText(R.id.tv_answer_time_1, qaVO.getAtime());//首答时长
+                        helper.setVisible(R.id.btn_answer_1, false);
                     } else {
-                        helper.setText(R.id.tv_answer_1, "我要回答");
+                        helper.setText(R.id.tv_answer_1, "");
                         helper.setVisible(R.id.ll_answer_1, false);
+                        helper.setVisible(R.id.btn_answer_1, true);
                     }
 
                     if (qaVO.getNextQuiz() != null && qaVO.getNextQuiz().size() != 0 &&
-                            ObjectUtils.isNotEmpty(qaVO.getNextQuiz().get(0).getQuiz())) {//有追答
+                            ObjectUtils.isNotEmpty(qaVO.getNextQuiz().get(0).getQuiz())) {//有追问
+                        helper.setVisible(R.id.btn_ask_2, false);
                         helper.setText(R.id.tv_ask_2, qaVO.getNextQuiz().get(0).getQuiz());
                         helper.setVisible(R.id.ll_ask_hint, true);
                         helper.setText(R.id.tv_ask_time_2, qaVO.getNextQuiz().get(0).getQtime());
-                        if ("1".equals(qaVO.getNextQuiz().get(0).getHasanswer())) {
+                        if ("1".equals(qaVO.getNextQuiz().get(0).getHasanswer())) {//有追答
+                            helper.setVisible(R.id.btn_answer_2, false);
                             helper.setText(R.id.tv_answer_2, "A:" + qaVO.getNextQuiz().get(0).getAusername()
                                     + qaVO.getNextQuiz().get(0).getAnswer());
                             helper.setText(R.id.tv_answer_time_2, qaVO.getNextQuiz().get(0).getAtime());//追答时长
                             helper.setVisible(R.id.ll_answer_2_all, true);
-                        } else {
-                            helper.setText(R.id.tv_answer_2, "我要追答");
+                        } else {//无追答
+                            helper.setVisible(R.id.btn_answer_2, true);
+                            helper.setText(R.id.tv_answer_2, "");
                             helper.setVisible(R.id.ll_answer_2_all, false);
                         }
-                    } else {
-                        helper.setText(R.id.tv_ask_2, "我要追问");//追问问题
+                    } else {//无追问
+                        helper.setVisible(R.id.btn_ask_2, true);
+                        helper.setText(R.id.tv_ask_2, "");//追问问题
                         helper.setVisible(R.id.ll_ask_hint, false);
                         helper.setVisible(R.id.tv_answer_2, false);
                         helper.setVisible(R.id.ll_answer_2_all, false);
                     }
 
-                    helper.getView(R.id.tv_answer_1).setOnClickListener(view -> {
+                    helper.getView(R.id.btn_answer_1).setOnClickListener(view -> {
                         if ("2".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "answer", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }
                     });
-                    helper.getView(R.id.tv_answer_2).setOnClickListener(view -> {
+                    helper.getView(R.id.btn_answer_2).setOnClickListener(view -> {
                         if ("2".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "answer_again", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }
                     });
-                    helper.getView(R.id.tv_ask_2).setOnClickListener(view -> {
+                    helper.getView(R.id.btn_ask_2).setOnClickListener(view -> {
                         if ("2".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "examineMinutely", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }

@@ -4,8 +4,26 @@ public class DownloadImgInfoVO {
 
     private String  picid  = "";
     private String  picurl  = "";
+    private String  psize  = "";
     private String  rid  = "";
     private String  rurl  = "";
+    private String  rsize   = "";
+
+    public String getPsize() {
+        return psize;
+    }
+
+    public void setPsize(String psize) {
+        this.psize = psize;
+    }
+
+    public String getRsize() {
+        return rsize;
+    }
+
+    public void setRsize(String rsize) {
+        this.rsize = rsize;
+    }
 
     public String getPicid() {
         return picid;

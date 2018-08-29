@@ -209,7 +209,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
     }
 
     public void setUpTabBadge(String nunber) {
-        TabLayout.Tab tab = tabLayout.getTabAt(1);
+        TabLayout.Tab tab = tabLayout.getTabAt(2);
         View customView = null;
         if (tab != null) {
             customView = tab.getCustomView();
