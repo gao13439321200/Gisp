@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.dto.AppInfoBean;
+import com.giiisp.giiisp.dto.AppInfoVO;
 import com.giiisp.giiisp.utils.PackageUtil;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -39,22 +41,22 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class UpdatePopupWindow extends BasePopupWindow implements View.OnClickListener {
     private final RxDownload mRxDownload;
     private View popupView;
-    private AppInfoBean appInfo;
+    private AppInfoVO appInfo;
     private Activity context;
     private DownloadRecord record;
 
     public UpdatePopupWindow(Activity context, AppInfoBean appInfo) {
         super(context);
         bindEvent();
-        this.appInfo = appInfo;
+        this.appInfo = appInfo.getAppInfo();
         this.context = context;
         setDismissWhenTouchOuside(false);
         mRxDownload = RxDownload.getInstance(context);
-        ininView(appInfo);
+        ininView(appInfo.getAppInfo());
     }
 
     @SuppressLint("CheckResult")
-    private void ininView(AppInfoBean appInfo) {
+    private void ininView(AppInfoVO appInfo) {
         if (appInfo == null)
             return;
         TextView updateInfo = popupView.findViewById(R.id.update_info);
@@ -66,7 +68,7 @@ public class UpdatePopupWindow extends BasePopupWindow implements View.OnClickLi
         String detailDesc = appInfo.getDetailDesc();
         message.setText(detailDesc);
         updateInfo.setText("发现新版本:" + versionName + "/" + apkSize);
-        RxDownload.getInstance(context).getDownloadRecord(appInfo.getApkUrl()).subscribe(new Consumer<DownloadRecord>() {
+        RxDownload.getInstance(context).getDownloadRecord(ToolString.getUrl(appInfo.getApkUrl())).subscribe(new Consumer<DownloadRecord>() {
             @Override
             public void accept(@NonNull DownloadRecord downloadRecord) throws Exception {
                 record = downloadRecord;
@@ -83,7 +85,7 @@ public class UpdatePopupWindow extends BasePopupWindow implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_upgrade:
-                if (record!=null&&record.getFlag() == DownloadFlag.COMPLETED) {
+                if (record != null && record.getFlag() == DownloadFlag.COMPLETED) {
                     PackageUtil.installApkNormal(context, record.getSavePath() + "/" + record.getSaveName());
                 } else {
                     initDownload();
@@ -101,7 +103,7 @@ public class UpdatePopupWindow extends BasePopupWindow implements View.OnClickLi
     private void initDownload() {
         if (DataBaseHelper.getSingleton(context).recordNotExists(appInfo.getApkUrl())) {
             DownloadBean downloadBean = new DownloadBean
-                    .Builder(appInfo.getApkUrl())
+                    .Builder(ToolString.getUrl(appInfo.getApkUrl()))
                     .setExtra3("0")  //save extra info into database.
                     .setExtra5(appInfo.getPackageName())
                     .setTime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.getDefault()).format(new Date()) + "")

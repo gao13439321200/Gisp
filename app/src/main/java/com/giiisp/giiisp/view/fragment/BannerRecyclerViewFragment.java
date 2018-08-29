@@ -572,8 +572,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 lineBanner.setVisibility(View.VISIBLE);
                 tvBack.setVisibility(View.VISIBLE);
-                ivMenu.setVisibility(View.VISIBLE);
-                ivMenu.setImageResource(R.mipmap.record_play_empty);
+//                ivMenu.setVisibility(View.VISIBLE);
+//                ivMenu.setImageResource(R.mipmap.record_play_empty);
+//                ivMenu.setOnClickListener(v -> {
+//                    itemClickAdapter.setNewData(null);
+//                    ToastUtils.showShort("清除成功！");
+//                });
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_collection, this.list, type);
                 tvTitle.setText(R.string.plays);
                 itemClickAdapter.setOnItemLongClickListener(this);
@@ -582,8 +586,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 lineBanner.setVisibility(View.VISIBLE);
                 tvBack.setVisibility(View.VISIBLE);
-                ivMenu.setVisibility(View.VISIBLE);
-                ivMenu.setImageResource(R.mipmap.record_play_empty);
+//                ivMenu.setVisibility(View.VISIBLE);
+//                ivMenu.setImageResource(R.mipmap.record_play_empty);
+//                ivMenu.setOnClickListener(v -> {
+//                    itemClickAdapter.setNewData(null);
+//                    ToastUtils.showShort("清除成功！");
+//                });
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_collection, this.list, type);
                 itemClickAdapter.setOnItemLongClickListener(this);
                 if (Objects.equals("giiisp", string)) {
@@ -775,8 +783,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "wait_dubbing": // 待配音列表
                 tvTitle.setText(R.string.voice_file_list);
-                ivMenu.setImageResource(R.mipmap.dubbing_refresh);
-                ivMenu.setVisibility(View.VISIBLE);
+//                ivMenu.setImageResource(R.mipmap.dubbing_refresh);
+//                ivMenu.setVisibility(View.VISIBLE);
                 list.clear();
                 dubbingAdapter = new ExpandableItemAdapter((BaseActivity) getActivity(),
                         R.layout.item_title_dubbing, R.layout.item_waiting_dubbing, this.list, type);
@@ -892,7 +900,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 hMap.put("uid", uid);
                 hMap.put("language", getLanguage());
                 presenter.getDataAll("306", hMap);
-                // TODO: 2018/8/26 高鹏 这里需要获取作者论文和综述
+                //这里需要获取作者论文和综述，暂时不用了
                 break;
             case "scholar_list":
                 hMap.put("pageno", page);
@@ -1003,7 +1011,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "collection_summary":
                 hMap.put("uid", getUserID());
                 hMap.put("pageno", page);
-                hMap.put("type", 1);
+                hMap.put("type", 2);
                 presenter.getDataAll("212", hMap);
 //                map.put("uid", uid);
 //                map.put("page", page);
@@ -1549,7 +1557,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                    }
 //                    if (page == 1) {
 //                        itemClickAdapter.setNewData(null);
-//                    }// 2018/7/28 高鹏
+//                    }
 //                    SubscribeEntity.PageInfoBean pageInfo = ((SubscribeEntity) entity).getPageInfo();
 //                    if (pageInfo != null) {
 //                        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = pageInfo.getRows();
@@ -2035,11 +2043,15 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "summary_list":
             case "my_review":
             case "my_paper":
-            case "collection_paper":
-            case "collection_summary":
                 PaperMainVO vo = itemClickAdapter.getItem(position).getPaperMainVO();
                 PaperDetailsActivity.actionActivityNew(getContext(), vo.getId(),
                         "1", "online_paper", vo.getMyLanguage());
+                break;
+            case "collection_paper":
+            case "collection_summary":
+                PaperMainVO vo1 = itemClickAdapter.getItem(position).getPaperMainVO();
+                PaperDetailsActivity.actionActivityNew(getContext(), vo1.getId(),
+                        vo1.getVersion(), "online_paper", vo1.getMyLanguage());
 
 
 //                ClickEntity item = itemClickAdapter.getItem(position);
@@ -2641,7 +2653,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         if (swipeRefreshLayout == null)
             return;
         swipeRefreshLayout.setRefreshing(false);
-        switch (url) {// TODO: 2018/7/28 高鹏 没有我的论文和综述的界面
+        switch (url) {
             case "203":
                 PaperBean bean = (PaperBean) baseBean;
                 itemClickAdapter.loadMoreComplete();
@@ -2779,7 +2791,6 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 clickEntity.setMIneInfoBean(mIneInfoBean);
                 clickEntity.setPaperId(string);
                 multipleItemQuickAdapter.addData(clickEntity);
-                // TODO: 2018/8/27 高鹏 这里还需要设置发布的论文和综述
                 break;
             case "307":
                 FansBean bean2 = (FansBean) baseBean;

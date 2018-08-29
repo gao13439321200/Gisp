@@ -67,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:padding="10dp"
+            android:visibility="invisible"
             android:src="@mipmap/guide_user_icon"/>
 
 

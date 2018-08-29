@@ -126,7 +126,7 @@ public class OkhttpManager {
 //                .hostnameVerifier(new HostnameVerifier() {
 //                    @Override
 //                    public boolean verify(String hostname, SSLSession session) {
-//                        Log.d("OkhttpManager", "地址：" + hostname);// 2017/10/13 高鹏 这里判断地址是否正确
+//                        Log.d("OkhttpManager", "地址：" + hostname);
 //                        return MyUrl.HTML.contains(hostname) || MyUrl.WXHTML.contains(hostname);
 //                    }
 //                })

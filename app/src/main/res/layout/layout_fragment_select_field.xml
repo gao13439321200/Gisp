@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             >
 
@@ -38,6 +39,7 @@
                     android:id="@+id/et_subject"
                     android:layout_width="160dp"
                     android:layout_height="30dp"
+                    android:paddingLeft="5dp"
                     android:background="@drawable/tag_noselect"
                     android:orientation="horizontal"
                     />
@@ -54,13 +56,20 @@
             </LinearLayout>
 
 
-            <com.zhy.view.flowlayout.TagFlowLayout
-                android:id="@+id/tag_subject"
+            <ScrollView
                 android:layout_width="300dp"
                 android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                zhy:max_select="-1">
-            </com.zhy.view.flowlayout.TagFlowLayout>
+                android:scrollbars="none"
+                >
+
+                <com.zhy.view.flowlayout.TagFlowLayout
+                    android:id="@+id/tag_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    zhy:max_select="-1">
+                </com.zhy.view.flowlayout.TagFlowLayout>
+            </ScrollView>
 
             <View
                 android:layout_width="match_parent"
@@ -91,15 +100,21 @@
 
             </LinearLayout>
 
-            <com.zhy.view.flowlayout.TagFlowLayout
-                android:id="@+id/tag_major"
+            <ScrollView
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                zhy:max_select="-1">
-            </com.zhy.view.flowlayout.TagFlowLayout>
+                android:layout_height="120dp"
+                android:scrollbars="none"
+                >
 
+                <com.zhy.view.flowlayout.TagFlowLayout
+                    android:id="@+id/tag_major"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    zhy:max_select="-1">
+                </com.zhy.view.flowlayout.TagFlowLayout>
 
+            </ScrollView>
         </LinearLayout>
 
         <Button

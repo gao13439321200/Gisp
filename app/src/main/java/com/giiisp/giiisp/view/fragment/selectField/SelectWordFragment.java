@@ -21,7 +21,9 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -122,7 +124,6 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         map.put("language",
                 getLanguage());
         presenter.getDataAll("112", map);
-        presenter.getDataAll("113", map);
 
     }
 
@@ -140,23 +141,45 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
     @Override
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
+        HashMap<String, Object> map = new HashMap<>();
         switch (url) {
             case "112":
                 WordBean bean = (WordBean) baseBean;
                 wordSystemList.clear();
                 wordSystemList.addAll(bean.getAlist());
                 systemAdapter.notifyDataChanged();
+                map = new HashMap<>();
+                map.put("uid", getUserID());
+                map.put("language", getLanguage());
+                presenter.getDataAll("113", map);
                 break;
             case "113":
                 WordBean bean1 = (WordBean) baseBean;
                 wordUserList.clear();
                 wordUserList.addAll(bean1.getAlist());
                 userAdapter.notifyDataChanged();
+
+                Set<Integer> setSys = new HashSet<>();
+                if (wordSystemList != null && wordSystemList.size() != 0) {
+                    for (int i = 0; i < wordSystemList.size(); i++) {
+                        for (int j = 0; j < wordUserList.size(); j++) {
+                            if (wordSystemList.get(i).getId().equals(wordUserList.get(j).getId())) {
+                                setSys.add(i);
+                            }
+                        }
+                    }
+                }
+                systemAdapter.setSelectedList(setSys);
+                Set<Integer> setUser = new HashSet<>();
+                for (int i = 0; i < wordUserList.size(); i++) {
+                    setUser.add(i);
+                }
+                userAdapter.setSelectedList(setUser);
                 break;
             case "114":
-                HashMap<String, Object> map = new HashMap<>();
+                map = new HashMap<>();
                 map.put("uid", getUserID());
-                map.put("language",getLanguage());
+                map.put("language", getLanguage());
                 presenter.getDataAll("113", map);
                 break;
             default:

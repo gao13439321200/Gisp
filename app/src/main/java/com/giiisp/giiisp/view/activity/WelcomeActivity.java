@@ -53,7 +53,6 @@ public class WelcomeActivity extends BaseActivity {
         String uid = SPUtils.getInstance().getString(UrlConstants.UID, "");
         if (TextUtils.isEmpty(uid)) {
             LogInActivity.actionActivity(this);
-//            WelcomeSelectActivity.intentActivity(this);
         } else {
 //            BaseActivity.token = tokens;
             BaseActivity.uid = uid;

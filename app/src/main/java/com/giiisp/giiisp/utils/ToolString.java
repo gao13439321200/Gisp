@@ -817,7 +817,6 @@ public class ToolString {
         }
     }
 
-    // 2017/9/26 高鹏 拼接完整的街道地址
     public static String getAllAddress(String county, String town, String street, String address) {
         StringBuilder stringBuilder = new StringBuilder();
         if (isEmpty(county)) {

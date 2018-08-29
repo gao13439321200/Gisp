@@ -135,9 +135,9 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
                     SPUtils.getInstance().put(UrlConstants.UID, "");
                     SPUtils.getInstance().put(UrlConstants.UNAME, "");
                     LogInActivity.actionActivity(getContext());
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("id", uid);
-                    presenter.getDataAll("105", map);
+//                    HashMap<String, Object> map = new HashMap<>();
+//                    map.put("id", uid);
+//                    presenter.getDataAll("105", map);
                     getActivity().finish();
                 });
         normalDialog.setNegativeButton(R.string.cancel, null);

@@ -93,6 +93,7 @@ public class SelectFieldActivity extends BaseActivity {
                 });
         mRgTitle.setBackgroundResource(R.mipmap.guide_tab_left);
         setColor(FIELD);
+        hideImg();
     }
 
     private void setColor(int toFragment) {

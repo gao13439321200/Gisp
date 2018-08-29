@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
@@ -20,7 +21,6 @@ import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
-import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
 import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
@@ -102,6 +102,10 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         map.put("language", getLanguage());
         swipeRefreshLayout.setRefreshing(true);
         presenter.getDataAll("201", map);
+        map = new HashMap<>();
+        map.put("type", "1");
+        map.put("version", AppUtils.getAppVersionName());
+        presenter.getDataAll("119", map);
         if (multipleItemQuickAdapter != null)
             multipleItemQuickAdapter.setNewData(null);
     }
@@ -147,10 +151,10 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         if (swipeRefreshLayout != null)
             swipeRefreshLayout.setRefreshing(false);
         switch (url) {
-            case "108"://更新
+            case "119"://更新
                 AppInfoBean appInfo = (AppInfoBean) baseBean;
-                if (appInfo != null && ObjectUtils.isNotEmpty(appInfo.getVersionCode())) {
-                    if (Integer.parseInt(appInfo.getVersionCode()) > Utils.getAppVersionCode()) {
+                if (appInfo != null && appInfo.getAppInfo() != null && ObjectUtils.isNotEmpty(appInfo.getAppInfo().getVersionCode())) {
+                    if (!appInfo.getAppInfo().getVersionCode().equals(AppUtils.getAppVersionName())) {
                         UpdatePopupWindow updatePopupWindow = new UpdatePopupWindow(getActivity(), appInfo);
                         updatePopupWindow.showPopupWindow();
                     }
@@ -190,6 +194,18 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         if (swipeRefreshLayout != null)
             swipeRefreshLayout.setRefreshing(false);
         super.onFailure(msg, ex);
+    }
+
+    @Override
+    public void onFailNew(String url, String msg) {
+        switch (url) {
+            case "119":
+
+                break;
+            default:
+                super.onFailNew(url, msg);
+                break;
+        }
     }
 
     @Override

@@ -238,7 +238,7 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             tvUserPosition.setVisibility(View.GONE);
         }
 
-        // TODO: 2018/8/25 高鹏 没有教育经历这一项
+        //没有教育经历这一项
 //        List<UserInfoEntity.IntroductionBean> introduction = userInfoEntity.getIntroduction();
 //        if (null != introduction && introduction.size() > 0) {
 //            recyclerView.setVisibility(View.VISIBLE);

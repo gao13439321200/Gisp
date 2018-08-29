@@ -4,6 +4,7 @@
     xmlns:zhy="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:orientation="vertical"
     >
 
@@ -22,15 +23,20 @@
             android:text="推荐的关键字："
             android:textSize="18sp"/>
 
-
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/tag_word_system"
+        <ScrollView
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            zhy:max_select="-1">
-        </com.zhy.view.flowlayout.TagFlowLayout>
+            android:layout_height="120dp"
+            android:scrollbars="none"
+            android:layout_gravity="center_horizontal">
 
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/tag_word_system"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                zhy:max_select="-1">
+            </com.zhy.view.flowlayout.TagFlowLayout>
+        </ScrollView>
 
         <View
             android:layout_width="match_parent"
@@ -47,14 +53,21 @@
             android:text="关注的关键字："
             android:textSize="18sp"/>
 
-
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/tag_word_user"
+        <ScrollView
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            zhy:max_select="-1">
-        </com.zhy.view.flowlayout.TagFlowLayout>
+            android:layout_height="120dp"
+            android:scrollbars="none"
+            android:layout_gravity="center_horizontal">
+
+
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/tag_word_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                zhy:max_select="-1">
+            </com.zhy.view.flowlayout.TagFlowLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/btn_next"
@@ -63,6 +76,7 @@
             android:layout_marginEnd="50dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="50dp"
+            android:layout_gravity="bottom"
             android:background="@drawable/btn_selector_press"
             android:text="下一步：选择关注的学者"
             android:textColor="@drawable/text_selector_press"/>

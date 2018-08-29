@@ -755,6 +755,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 .load(vo.getUseravatar())
                                 .into((ImageView) helper.getView(R.id.iv_user_icon));
                         if (vo.getVlist() != null && vo.getVlist().size() != 0) {
+                            helper.setVisible(R.id.cb_menu, true);
                             List<ClickEntity> list = new ArrayList<>();
                             for (PaperMainVO.VlistBean bean : vo.getVlist()) {
                                 bean.setPid(vo.getId());
@@ -796,6 +797,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     adapter.notifyDataSetChanged();
                                 }
                             });
+                        } else {
+                            helper.setVisible(R.id.cb_menu, false);
                         }
                     }
                     break;
@@ -1068,7 +1071,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 FragmentActivity.actionActivity(activity, "he", id + "");
                             }
                         });
-                        if (id.equals(uid)) {
+                        if (uid.equals(id)) {
                             textViewAttention.setVisibility(View.GONE);
                         }
                         if (!TextUtils.isEmpty(isFollowed)) {

@@ -326,18 +326,13 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.ll_dubbing:
                 //
                 switch (emailauthen) { //  开始录音是否Ok  test 1 BaseActivity.emailauthen
-                    case "3":
-
-                       /* Utils.showToast("      认证请联系：\n" +
-                                "+86 185 0101 0114 \n" +
-                                " service@giiisp.com");*/
+                    case "3"://未认证
                         FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
-//                        VerifiedActivity.actionActivity(getContext());
                         break;
-                    case "2":
+                    case "2"://认证成功
                         FragmentActivity.actionActivity(getContext(), "wait_dubbing"); //  认证完成开始录音
                         break;
-                    case "1":
+                    case "1"://认证中
                         Utils.showToast(R.string.in_authentication);
                         break;
                     default:
@@ -414,7 +409,20 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                         FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
                         break;
                     case "2":
-                        Utils.showToast(R.string.auth_pass);
+                        switch (isVip) {
+                            case "0":
+                                VerifiedActivity.actionActivity(context);
+                                break;
+                            case "1":
+                                Utils.showToast(R.string.auth_pass);
+                                break;
+                            case "2":
+                                Utils.showToast(R.string.auth_pass);
+                                break;
+                            case "3":
+                                Utils.showToast(R.string.in_authentication);
+                                break;
+                        }
                         break;
                     case "1":
                         Utils.showToast(R.string.in_authentication);

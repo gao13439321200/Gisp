@@ -273,7 +273,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
         TextView textView = (TextView) view.findViewById(R.id.textview);
         TextView spot = (TextView) view.findViewById(R.id.tv_download_spot);
         textView.setText(tabTitle[position]);
-        if (position == 1) {
+        if (position == 2) {
             spot.setVisibility(View.VISIBLE);
         }
         return view;

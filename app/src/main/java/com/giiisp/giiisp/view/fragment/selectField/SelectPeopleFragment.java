@@ -26,7 +26,9 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -190,9 +192,6 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
         presenter.getDataAll("115", map);//获取关注的专业
-        map.put("language", getLanguage());
-        presenter.getDataAll("117", map);//获取专注的学者
-
     }
 
     @OnClick(R.id.btn_next)
@@ -209,6 +208,7 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
     @Override
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
+        HashMap<String, Object> map = new HashMap<>();
         switch (url) {
 //            case "109":
 //                SubjectBean bean3 = (SubjectBean) baseBean;
@@ -228,7 +228,6 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
                 mMajorVOS.addAll(bean.getMajors());
                 majorAdapter.notifyDataChanged();
                 if (bean.getMajors() != null && bean.getMajors().size() != 0) {
-                    HashMap<String, Object> map = new HashMap<>();
                     map.put("uid", getUserID());
                     map.put("mid", mMajorVOS.get(0).getId());
                     map.put("language", getLanguage());
@@ -241,15 +240,36 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
                 mPeopleVOSystem.clear();
                 mPeopleVOSystem.addAll(bean1.getUlist());
                 peopleSystemAdapter.notifyDataChanged();
+
+                map.put("uid", getUserID());
+                map.put("language", getLanguage());
+                presenter.getDataAll("117", map);//获取专注的学者
                 break;
             case "117"://关注的学者
                 PeopleBean bean2 = (PeopleBean) baseBean;
                 mPeopleVOUser.clear();
                 mPeopleVOUser.addAll(bean2.getUlist());
                 peopleUserAdapter.notifyDataChanged();
+
+                Set<Integer> setSys = new HashSet<>();
+                if (mPeopleVOSystem != null && mPeopleVOSystem.size() != 0) {
+                    for (int i = 0; i < mPeopleVOSystem.size(); i++) {
+                        for (int j = 0; j < mPeopleVOSystem.size(); j++) {
+                            if (mPeopleVOSystem.get(i).getId().equals(mPeopleVOUser.get(j).getId())) {
+                                setSys.add(i);
+                            }
+                        }
+                    }
+                }
+                peopleSystemAdapter.setSelectedList(setSys);
+                Set<Integer> setUser = new HashSet<>();
+                for (int i = 0; i < mPeopleVOUser.size(); i++) {
+                    setUser.add(i);
+                }
+                peopleUserAdapter.setSelectedList(setUser);
+
                 break;
             case "118":
-                HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", getUserID());
                 map.put("language", getLanguage());
                 presenter.getDataAll("117", map);//获取专注的学者

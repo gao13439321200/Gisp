@@ -61,7 +61,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 /**
@@ -336,7 +335,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         Log.i("--->>", "onMessageUserInfo: " + userInfoEntity);
         String avatar = userInfoEntity.getAvatar();
         if (!imagUrl.equals(avatar))
-            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), BASE_IMG_URL + avatar, ivUserIcon);
+            ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), avatar, ivUserIcon);
         imagUrl = avatar + "";
         tvUserName.setText(userInfoEntity.getName());
         switch (userInfoEntity.getSex()) {

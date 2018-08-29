@@ -28,7 +28,7 @@ public class WelcomeSelectActivity extends BaseActivity {
 
     @Override
     public void initView() {
-
+        hideImg();
     }
 
     @OnClick({R.id.tv_select, R.id.tv_to_main})
