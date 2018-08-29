@@ -210,6 +210,7 @@ public class DownloadBean {
             bean.version = this.version;
             bean.title = this.title;
             bean.time = this.time;
+            bean.photoNum = this.photoNum;
             return bean;
         }
     }
