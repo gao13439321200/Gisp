@@ -1,6 +1,8 @@
 package com.giiisp.giiisp.view.fragment.selectField;
 
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import com.giiisp.giiisp.dto.WordVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
+import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -21,9 +24,7 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -31,19 +32,29 @@ import butterknife.OnClick;
 /**
  * 选择关键字
  */
-public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
+public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements MyRecyclerAdapter.OnMyItemClick {
 
     public static final String TYPE = "type";
     @BindView(R.id.tag_word_system)
     TagFlowLayout mTagWordSystem;
     @BindView(R.id.tag_word_user)
     TagFlowLayout mTagWordUser;
+    @BindView(R.id.rv_word_user)
+    RecyclerView mRecyclerUser;
+    @BindView(R.id.rv_word_system)
+    RecyclerView mRecyclerSystem;
     @BindView(R.id.btn_next)
     Button mButton;
     private List<WordVO> wordSystemList = new ArrayList<>();
     private List<WordVO> wordUserList = new ArrayList<>();
     private TagAdapter systemAdapter;
     private TagAdapter userAdapter;
+    private List<ClickEntity> mEntitySystem = new ArrayList<>();
+    private List<ClickEntity> mEntityUser = new ArrayList<>();
+    private GridLayoutManager mManagerSystem;
+    private GridLayoutManager mManagerUser;
+    private MyRecyclerAdapter mAdapterSystem;
+    private MyRecyclerAdapter mAdapterUser;
 
     public static SelectWordFragment newInstance(int type) {
 
@@ -77,6 +88,21 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
                 mButton.setVisibility(View.GONE);
                 break;
         }
+
+        mAdapterSystem = new MyRecyclerAdapter(R.layout.tag_select_item_layout,
+                mEntitySystem, 3, this);
+        mManagerSystem = new GridLayoutManager(getActivity(), 2);
+        mManagerSystem.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRecyclerSystem.setLayoutManager(mManagerSystem);
+        mRecyclerSystem.setAdapter(mAdapterSystem);
+
+        mAdapterUser = new MyRecyclerAdapter(R.layout.tag_select_item_layout,
+                mEntityUser, 4, this);
+        mManagerUser = new GridLayoutManager(getActivity(), 2);
+        mManagerUser.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRecyclerUser.setLayoutManager(mManagerUser);
+        mRecyclerUser.setAdapter(mAdapterUser);
+
 
         systemAdapter = new TagAdapter<WordVO>(wordSystemList) {
             @Override
@@ -143,41 +169,54 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         super.onSuccessNew(url, baseBean);
         HashMap<String, Object> map = new HashMap<>();
         switch (url) {
-            case "112":
+            case "112"://推荐的关键字
                 WordBean bean = (WordBean) baseBean;
-                wordSystemList.clear();
-                wordSystemList.addAll(bean.getAlist());
-                systemAdapter.notifyDataChanged();
-                map = new HashMap<>();
+                mEntitySystem.clear();
+                for (WordVO vo : bean.getAlist()) {
+                    ClickEntity entity = new ClickEntity();
+                    entity.setWordVO(vo);
+                    mEntitySystem.add(entity);
+                }
+                if (mEntitySystem.size() < 7) {
+                    mManagerSystem.setOrientation(GridLayoutManager.VERTICAL);
+                    mManagerSystem.setSpanCount(3);
+                } else {
+                    mManagerSystem.setOrientation(GridLayoutManager.HORIZONTAL);
+                    mManagerSystem.setSpanCount(2);
+                }
+                mRecyclerSystem.setLayoutManager(mManagerSystem);
+                mAdapterSystem.notifyDataSetChanged();
+                mEntityUser.clear();
+                mAdapterUser.clearSelectIds();
+                mAdapterUser.notifyDataSetChanged();
                 map.put("uid", getUserID());
                 map.put("language", getLanguage());
                 presenter.getDataAll("113", map);
                 break;
-            case "113":
+            case "113"://关注的关键字
                 WordBean bean1 = (WordBean) baseBean;
-                wordUserList.clear();
-                wordUserList.addAll(bean1.getAlist());
-                userAdapter.notifyDataChanged();
-
-                Set<Integer> setSys = new HashSet<>();
-                if (wordSystemList != null && wordSystemList.size() != 0) {
-                    for (int i = 0; i < wordSystemList.size(); i++) {
-                        for (int j = 0; j < wordUserList.size(); j++) {
-                            if (wordSystemList.get(i).getId().equals(wordUserList.get(j).getId())) {
-                                setSys.add(i);
-                            }
-                        }
-                    }
+                mEntityUser.clear();
+                mAdapterUser.clearSelectIds();
+                mAdapterSystem.clearSelectIds();
+                for (WordVO vo : bean1.getAlist()) {
+                    ClickEntity entity1 = new ClickEntity();
+                    entity1.setWordVO(vo);
+                    mEntityUser.add(entity1);
+                    mAdapterSystem.setSelectIdsData(vo.getId());
+                    mAdapterUser.setSelectIdsData(vo.getId());
                 }
-                systemAdapter.setSelectedList(setSys);
-                Set<Integer> setUser = new HashSet<>();
-                for (int i = 0; i < wordUserList.size(); i++) {
-                    setUser.add(i);
+                if (mEntityUser.size() < 7) {
+                    mManagerUser.setOrientation(GridLayoutManager.VERTICAL);
+                    mManagerUser.setSpanCount(3);
+                } else {
+                    mManagerUser.setOrientation(GridLayoutManager.HORIZONTAL);
+                    mManagerUser.setSpanCount(2);
                 }
-                userAdapter.setSelectedList(setUser);
+                mRecyclerUser.setLayoutManager(mManagerUser);
+                mAdapterUser.notifyDataSetChanged();
+                mAdapterSystem.notifyDataSetChanged();
                 break;
             case "114":
-                map = new HashMap<>();
                 map.put("uid", getUserID());
                 map.put("language", getLanguage());
                 presenter.getDataAll("113", map);
@@ -187,4 +226,18 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         }
     }
 
+    @Override
+    public void myItemClick(int type, String id) {
+        switch (type) {
+            case 3:
+            case 4:
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("aid", id);
+                map.put("uid", getUserID());
+                presenter.getDataAll("114", map);
+                break;
+            default:
+                break;
+        }
+    }
 }

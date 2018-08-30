@@ -687,8 +687,8 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         });
     }
 
-    public void getSaveAnswerData(ArrayMap<String, Object> options) {
-        ModelFactory.getBaseModel().getSaveAnswerData(options, new Callback<BaseEntity>() {
+    public void getSaveAnswerData(ArrayMap<String, Object> options, MultipartBody.Part filePrta) {
+        ModelFactory.getBaseModel().getSaveAnswerData(options,filePrta, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
                 if (response.isSuccessful()) {

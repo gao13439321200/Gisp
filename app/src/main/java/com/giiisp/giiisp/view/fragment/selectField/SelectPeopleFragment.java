@@ -1,12 +1,10 @@
 package com.giiisp.giiisp.view.fragment.selectField;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
@@ -16,19 +14,14 @@ import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.PeopleVO;
 import com.giiisp.giiisp.entity.BaseEntity;
-import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
+import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
-import com.zhy.view.flowlayout.FlowLayout;
-import com.zhy.view.flowlayout.TagAdapter;
-import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -36,26 +29,26 @@ import butterknife.OnClick;
 /**
  * 选择学者
  */
-public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
+public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements MyRecyclerAdapter.OnMyItemClick {
 
     public static final String TYPE = "type";
-    //    @BindView(R.id.tag_subject)
-//    TagFlowLayout mTagSubject;
-    @BindView(R.id.tag_major)
-    TagFlowLayout mTagMajor;
-    @BindView(R.id.tag_people_system)
-    TagFlowLayout mTagPeopleSystem;
-    @BindView(R.id.tag_people_user)
-    TagFlowLayout mTagPeopleUser;
     @BindView(R.id.btn_next)
     Button mButton;
-    private List<MajorVO> mMajorVOS = new ArrayList<>();
-    //    private List<SubjectVO> mSubjectVOS = new ArrayList<>();
-    private List<PeopleVO> mPeopleVOSystem = new ArrayList<>();
-    private List<PeopleVO> mPeopleVOUser = new ArrayList<>();
-    private TagAdapter majorAdapter;
-    private TagAdapter peopleSystemAdapter;
-    private TagAdapter peopleUserAdapter;
+    @BindView(R.id.rv_user)
+    RecyclerView mRecyclerUser;
+    @BindView(R.id.rv_major)
+    RecyclerView mRecyclerMajor;
+    @BindView(R.id.rv_system)
+    RecyclerView mRecyclerSystem;
+
+    private List<ClickEntity> mEntitySystem = new ArrayList<>();
+    private List<ClickEntity> mEntityUser = new ArrayList<>();
+    private List<ClickEntity> mEntityMajor = new ArrayList<>();
+    private GridLayoutManager mManagerSystem;
+    private GridLayoutManager mManagerUser;
+    private MyRecyclerAdapter mAdapterSystem;
+    private MyRecyclerAdapter mAdapterUser;
+    private MyRecyclerAdapter mAdapterMajor;
 
 
     public static SelectPeopleFragment newInstance(int type) {
@@ -90,104 +83,29 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
                 break;
         }
 
-
-        //学科
-//        mTagSubject.setAdapter(new TagAdapter<SubjectVO>(mSubjectVOS) {
-//            @Override
-//            public View getView(FlowLayout parent, int position, SubjectVO o) {
-//                TextView tv = (TextView) LayoutInflater
-//                        .from(getActivity()).inflate(R.layout.tag_select_people_subject_layout,
-//                                mTagSubject, false);
-//                tv.setText(isChinese() ? o.getName() : o.getEnarea());
-//                return tv;
-//            }
-//        });
-
-
-//        mTagSubject.setOnTagClickListener((view, position, parent) -> {
-//            // 这里需不需要获取学科对应的专业？
-//            HashMap<String, Object> map = new HashMap<>();
-//            map.put("pid", mSubjectVOS.get(position).getId());
-//            map.put("uid", getUserID());
-//            map.put("language", getLanguage());
-//            map.put("sname", "");
-//            presenter.getDataAll("110", map);
-//            return true;
-//        });
-
-        majorAdapter = new TagAdapter<MajorVO>(mMajorVOS) {
-            @Override
-            public View getView(FlowLayout parent, int position, MajorVO o) {
-                TextView tv = (TextView) LayoutInflater
-                        .from(getActivity()).inflate(R.layout.tag_select_people_subject_layout,
-                                mTagMajor, false);
-                tv.setText(isChinese() ? o.getName() : o.getEnarea());
-                return tv;
-            }
-        };
         //专业
-        mTagMajor.setMaxSelectCount(1);
-        mTagMajor.setAdapter(majorAdapter);
-        mTagMajor.setOnTagClickListener((view, position, parent) -> {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("uid", getUserID());
-            map.put("mid", mMajorVOS.get(position).getId());
-            map.put("language", getLanguage());
-            presenter.getDataAll("116", map);
-            return true;
-        });
+        mAdapterMajor = new MyRecyclerAdapter(R.layout.tag_select_people_subject_layout,
+                mEntityMajor, 5, this);
+        GridLayoutManager mManagerMajor = new GridLayoutManager(getActivity(), 1);
+        mManagerMajor.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRecyclerMajor.setLayoutManager(mManagerMajor);
+        mRecyclerMajor.setAdapter(mAdapterMajor);
 
         //推荐的学者
-        peopleSystemAdapter = new TagAdapter<PeopleVO>(mPeopleVOSystem) {
-            @Override
-            public View getView(FlowLayout parent, int position, PeopleVO o) {
-                LinearLayout ll = (LinearLayout) LayoutInflater
-                        .from(getActivity()).inflate(R.layout.tag_select_people_layout,
-                                mTagPeopleSystem, false);
-                TextView tv = ll.findViewById(R.id.tv_name);
-                tv.setText(o.getName());
-                ImageView img = ll.findViewById(R.id.img_head);
-                GlideApp.with(getActivity())
-                        .load(o.getAvatar())
-                        .placeholder(R.mipmap.ic_launcher)
-                        .into(img);
-                return ll;
-            }
-        };
-        mTagPeopleSystem.setAdapter(peopleSystemAdapter);
-        mTagPeopleSystem.setOnTagClickListener((view, position, parent) -> {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("sid", mPeopleVOSystem.get(position).getId());
-            map.put("uid", getUserID());
-            presenter.getDataAll("118", map);
-            return true;
-        });
+        mAdapterSystem = new MyRecyclerAdapter(R.layout.tag_select_people_layout,
+                mEntitySystem, 6, this);
+        mManagerSystem = new GridLayoutManager(getActivity(), 2);
+        mManagerSystem.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRecyclerSystem.setLayoutManager(mManagerSystem);
+        mRecyclerSystem.setAdapter(mAdapterSystem);
 
         //关注的学者
-        peopleUserAdapter = new TagAdapter<PeopleVO>(mPeopleVOUser) {
-            @Override
-            public View getView(FlowLayout parent, int position, PeopleVO o) {
-                LinearLayout ll = (LinearLayout) LayoutInflater
-                        .from(getActivity()).inflate(R.layout.tag_select_people_layout,
-                                mTagPeopleUser, false);
-                TextView tv = ll.findViewById(R.id.tv_name);
-                tv.setText(o.getName());
-                ImageView img = ll.findViewById(R.id.img_head);
-                GlideApp.with(getActivity())
-                        .load(o.getAvatar())
-                        .placeholder(R.mipmap.ic_launcher)
-                        .into(img);
-                return ll;
-            }
-        };
-        mTagPeopleUser.setAdapter(peopleUserAdapter);
-        mTagPeopleUser.setOnTagClickListener((view, position, parent) -> {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("sid", mPeopleVOUser.get(position).getId());
-            map.put("uid", getUserID());
-            presenter.getDataAll("118", map);
-            return true;
-        });
+        mAdapterUser = new MyRecyclerAdapter(R.layout.tag_select_people_layout,
+                mEntityUser, 7, this);
+        mManagerUser = new GridLayoutManager(getActivity(), 2);
+        mManagerUser.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRecyclerUser.setLayoutManager(mManagerUser);
+        mRecyclerUser.setAdapter(mAdapterUser);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
@@ -210,69 +128,98 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
         super.onSuccessNew(url, baseBean);
         HashMap<String, Object> map = new HashMap<>();
         switch (url) {
-//            case "109":
-//                SubjectBean bean3 = (SubjectBean) baseBean;
-//                mSubjectVOS.clear();
-//                mSubjectVOS.addAll(bean3.getList());
-//                majorAdapter.notifyDataChanged();
-//                break;
-//            case "110":
-//                MajorBean bean4 = (MajorBean) baseBean;
-//                mMajorVOS.clear();
-//                mMajorVOS.addAll(bean4.getMajors());
-//                majorAdapter.notifyDataChanged();
-//                break;
             case "115"://关注的专业
-                MajorBean bean = (MajorBean) baseBean;
-                mMajorVOS.clear();
-                mMajorVOS.addAll(bean.getMajors());
-                majorAdapter.notifyDataChanged();
-                if (bean.getMajors() != null && bean.getMajors().size() != 0) {
+                MajorBean bean1 = (MajorBean) baseBean;
+                mEntityMajor.clear();
+                for (MajorVO vo : bean1.getMajors()) {
+                    ClickEntity entity1 = new ClickEntity();
+                    entity1.setMajorVO(vo);
+                    mEntityMajor.add(entity1);
+                }
+                mAdapterMajor.notifyDataSetChanged();
+
+                if (bean1.getMajors() != null && bean1.getMajors().size() != 0) {
                     map.put("uid", getUserID());
-                    map.put("mid", mMajorVOS.get(0).getId());
+                    map.put("mid", bean1.getMajors().get(0).getId());
                     map.put("language", getLanguage());
                     presenter.getDataAll("116", map);
-                    majorAdapter.setSelectedList(0);
+                    mAdapterMajor.setSelectIdsData(bean1.getMajors().get(0).getId());
+                    mAdapterMajor.notifyDataSetChanged();
                 }
                 break;
             case "116"://推荐的学者
-                PeopleBean bean1 = (PeopleBean) baseBean;
-                mPeopleVOSystem.clear();
-                mPeopleVOSystem.addAll(bean1.getUlist());
-                peopleSystemAdapter.notifyDataChanged();
+                PeopleBean peopleBean = (PeopleBean) baseBean;
+
+                mEntitySystem.clear();
+                for (PeopleVO vo : peopleBean.getUlist()) {
+                    ClickEntity entity1 = new ClickEntity();
+                    entity1.setPeopleVO(vo);
+                    mEntitySystem.add(entity1);
+                }
+
+                if (mEntitySystem.size() < 7) {
+                    mManagerSystem.setOrientation(GridLayoutManager.VERTICAL);
+                    mManagerSystem.setSpanCount(3);
+                } else {
+                    mManagerSystem.setOrientation(GridLayoutManager.HORIZONTAL);
+                    mManagerSystem.setSpanCount(2);
+                }
+                mRecyclerSystem.setLayoutManager(mManagerSystem);
+                mAdapterSystem.notifyDataSetChanged();
 
                 map.put("uid", getUserID());
                 map.put("language", getLanguage());
                 presenter.getDataAll("117", map);//获取专注的学者
                 break;
             case "117"://关注的学者
-                PeopleBean bean2 = (PeopleBean) baseBean;
-                mPeopleVOUser.clear();
-                mPeopleVOUser.addAll(bean2.getUlist());
-                peopleUserAdapter.notifyDataChanged();
-
-                Set<Integer> setSys = new HashSet<>();
-                if (mPeopleVOSystem != null && mPeopleVOSystem.size() != 0) {
-                    for (int i = 0; i < mPeopleVOSystem.size(); i++) {
-                        for (int j = 0; j < mPeopleVOUser.size(); j++) {
-                            if (mPeopleVOSystem.get(i).getId().equals(mPeopleVOUser.get(j).getId())) {
-                                setSys.add(i);
-                            }
-                        }
-                    }
+                PeopleBean peopleBean1 = (PeopleBean) baseBean;
+                mEntityUser.clear();
+                mAdapterUser.clearSelectIds();
+                mAdapterSystem.clearSelectIds();
+                for (PeopleVO vo : peopleBean1.getUlist()) {
+                    ClickEntity entity1 = new ClickEntity();
+                    entity1.setPeopleVO(vo);
+                    mEntityUser.add(entity1);
+                    mAdapterSystem.setSelectIdsData(vo.getId());
+                    mAdapterUser.setSelectIdsData(vo.getId());
                 }
-                peopleSystemAdapter.setSelectedList(setSys);
-                Set<Integer> setUser = new HashSet<>();
-                for (int i = 0; i < mPeopleVOUser.size(); i++) {
-                    setUser.add(i);
+                if (mEntityUser.size() < 7) {
+                    mManagerUser.setOrientation(GridLayoutManager.VERTICAL);
+                    mManagerUser.setSpanCount(3);
+                } else {
+                    mManagerUser.setOrientation(GridLayoutManager.HORIZONTAL);
+                    mManagerUser.setSpanCount(2);
                 }
-                peopleUserAdapter.setSelectedList(setUser);
+                mRecyclerUser.setLayoutManager(mManagerUser);
+                mAdapterUser.notifyDataSetChanged();
+                mAdapterSystem.notifyDataSetChanged();
 
                 break;
             case "118":
                 map.put("uid", getUserID());
                 map.put("language", getLanguage());
                 presenter.getDataAll("117", map);//获取专注的学者
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void myItemClick(int type, String id) {
+        HashMap<String, Object> map = new HashMap<>();
+        switch (type) {
+            case 5:
+                map.put("uid", getUserID());
+                map.put("mid", id);
+                map.put("language", getLanguage());
+                presenter.getDataAll("116", map);
+                break;
+            case 6:
+            case 7:
+                map.put("sid", id);
+                map.put("uid", getUserID());
+                presenter.getDataAll("118", map);
                 break;
             default:
                 break;

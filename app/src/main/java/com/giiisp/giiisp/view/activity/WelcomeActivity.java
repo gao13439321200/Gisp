@@ -56,8 +56,8 @@ public class WelcomeActivity extends BaseActivity {
         } else {
 //            BaseActivity.token = tokens;
             BaseActivity.uid = uid;
-            GiiispActivity.actionActivity(this, getIntent());
-//            SelectFieldActivity.intentActivity(this);
+//            GiiispActivity.actionActivity(this, getIntent());
+            SelectFieldActivity.intentActivity(this);
         }
         finish();
 

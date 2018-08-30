@@ -208,9 +208,9 @@ public interface ApiService {
     Call<BaseEntity> getSaveQuizInfo(@QueryMap ArrayMap<String, Object> options,@Part MultipartBody.Part filePrta);
 
     //回答
-    @FormUrlEncoded
+    @Multipart
     @POST(UrlConstants.RequestUrl.SAVE_ANSWER)
-    Call<BaseEntity> getSaveAnswerInfo(@FieldMap ArrayMap<String, Object> options);
+    Call<BaseEntity> getSaveAnswerInfo(@QueryMap ArrayMap<String, Object> options,@Part MultipartBody.Part filePrta);
 
     //学者列表
     @FormUrlEncoded

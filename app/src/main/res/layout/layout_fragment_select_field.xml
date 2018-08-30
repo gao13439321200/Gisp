@@ -39,9 +39,9 @@
                     android:id="@+id/et_subject"
                     android:layout_width="160dp"
                     android:layout_height="30dp"
-                    android:paddingLeft="5dp"
                     android:background="@drawable/tag_noselect"
                     android:orientation="horizontal"
+                    android:paddingLeft="5dp"
                     />
 
                 <Button
@@ -56,20 +56,11 @@
             </LinearLayout>
 
 
-            <ScrollView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_subject"
                 android:layout_width="300dp"
-                android:layout_height="120dp"
-                android:scrollbars="none"
-                >
-
-                <com.zhy.view.flowlayout.TagFlowLayout
-                    android:id="@+id/tag_subject"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    zhy:max_select="-1">
-                </com.zhy.view.flowlayout.TagFlowLayout>
-            </ScrollView>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
 
             <View
                 android:layout_width="match_parent"
@@ -100,21 +91,12 @@
 
             </LinearLayout>
 
-            <ScrollView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_major"
                 android:layout_width="300dp"
-                android:layout_height="120dp"
-                android:scrollbars="none"
-                >
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
 
-                <com.zhy.view.flowlayout.TagFlowLayout
-                    android:id="@+id/tag_major"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    zhy:max_select="-1">
-                </com.zhy.view.flowlayout.TagFlowLayout>
-
-            </ScrollView>
         </LinearLayout>
 
         <Button

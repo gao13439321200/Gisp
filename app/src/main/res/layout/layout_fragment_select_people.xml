@@ -50,13 +50,10 @@
                 android:text="专业："
                 android:textSize="18sp"/>
 
-            <com.zhy.view.flowlayout.TagFlowLayout
-                android:id="@+id/tag_major"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_major"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                zhy:max_select="-1">
-            </com.zhy.view.flowlayout.TagFlowLayout>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
@@ -68,14 +65,11 @@
             android:textSize="18sp"/>
 
 
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/tag_people_system"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_system"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            zhy:max_select="-1">
-        </com.zhy.view.flowlayout.TagFlowLayout>
-
+            android:layout_height="wrap_content"/>
 
         <View
             android:layout_width="match_parent"
@@ -93,13 +87,11 @@
             android:textSize="18sp"/>
 
 
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/tag_people_user"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_user"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            zhy:max_select="-1">
-        </com.zhy.view.flowlayout.TagFlowLayout>
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btn_next"

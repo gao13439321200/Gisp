@@ -242,10 +242,10 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
                 map.put("timing", recorderSecondsElapsed);
                 switch (type) {
                     case "answer":
-                        presenter.getSaveAnswerData(map);
+                        presenter.getSaveAnswerData(map,part);
                         break;
                     case "answer_again":
-                        presenter.getSaveAnswerData(map);
+                        presenter.getSaveAnswerData(map,part);
                         break;
                     case "Problem"://首问
                         map.put("pid",pid );
@@ -301,10 +301,10 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
         map.put("timing", recorderSecondsElapsed);
         switch (type) {
             case "answer":
-                presenter.getSaveAnswerData(map);
+                presenter.getSaveAnswerData(map,part);
                 break;
             case "answer_again":
-                presenter.getSaveAnswerData(map);
+                presenter.getSaveAnswerData(map,part);
                 break;
             case "Problem"://首问
                 map.put("pid",pid );

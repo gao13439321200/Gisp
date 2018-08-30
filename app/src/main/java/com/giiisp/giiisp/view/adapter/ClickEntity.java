@@ -15,6 +15,7 @@ import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.MIneInfoBean;
+import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperInfoVO;
@@ -23,6 +24,8 @@ import com.giiisp.giiisp.dto.PaperMainVO;
 import com.giiisp.giiisp.dto.PaperQaVO;
 import com.giiisp.giiisp.dto.PeopleVO;
 import com.giiisp.giiisp.dto.PlayNoteVo;
+import com.giiisp.giiisp.dto.SubjectVO;
+import com.giiisp.giiisp.dto.WordVO;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
 import com.giiisp.giiisp.entity.AnswerQuizRowsBean;
 import com.giiisp.giiisp.entity.CollectionEntity;
@@ -391,6 +394,33 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private MIneInfoBean mMIneInfoBean;
     private PaperMainVO.VlistBean mVlistBean;
     private PeopleVO mPeopleVO;
+    private SubjectVO mSubjectVO;
+    private MajorVO mMajorVO;
+    private WordVO mWordVO;
+
+    public WordVO getWordVO() {
+        return mWordVO;
+    }
+
+    public void setWordVO(WordVO wordVO) {
+        mWordVO = wordVO;
+    }
+
+    public SubjectVO getSubjectVO() {
+        return mSubjectVO;
+    }
+
+    public void setSubjectVO(SubjectVO subjectVO) {
+        mSubjectVO = subjectVO;
+    }
+
+    public MajorVO getMajorVO() {
+        return mMajorVO;
+    }
+
+    public void setMajorVO(MajorVO majorVO) {
+        mMajorVO = majorVO;
+    }
 
     public PeopleVO getPeopleVO() {
         return mPeopleVO;
