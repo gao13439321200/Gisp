@@ -688,7 +688,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     }
 
     public void getSaveAnswerData(ArrayMap<String, Object> options, MultipartBody.Part filePrta) {
-        ModelFactory.getBaseModel().getSaveAnswerData(options,filePrta, new Callback<BaseEntity>() {
+        ModelFactory.getBaseModel().getSaveAnswerData(options, filePrta, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
                 if (response.isSuccessful()) {
@@ -1404,14 +1404,15 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                                 impl.onFailNew(por, entity.getMessage());
                             }
                         } else {
-                            impl.onFailNew(por, "信息获取失败");
+                            LogUtils.v("接口：" + por + " 回调okHttp异常信息：回调为空");
+                            impl.onFailNew(por, "");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        LogUtils.v("okHttp异常信息：" + t);
-                        impl.onFailNew(por, "信息获取失败");
+                        LogUtils.v("接口：" + por + " 回调okHttp异常信息：" + t);
+                        impl.onFailNew(por, "");
                     }
                 });
     }
@@ -1431,13 +1432,14 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                                 impl.onFailNew(por, entity.getMessage());
                             }
                         } else {
-                            impl.onFailNew(por, "信息获取失败");
+                            LogUtils.v("接口：" + por + " 回调okHttp异常信息：回调为空");
+                            impl.onFailNew(por, "");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        LogUtils.v("okHttp异常信息：" + t);
+                        LogUtils.v("接口：" + por + " 回调okHttp异常信息：" + t);
                         impl.onFailNew(por, "信息获取失败");
                     }
                 });

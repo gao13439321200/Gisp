@@ -3,6 +3,7 @@ package com.giiisp.giiisp.base;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.dto.BaseBean;
@@ -59,7 +60,8 @@ public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFr
     public void onFailNew(String url, String msg) {
         timeout = true;
         Log.i("--->>", "onFailure: " + "P: " + presenter.getClass().getSimpleName() + " : " + msg + "" + msg);
-        Utils.showToast(msg);
+        if (ObjectUtils.isNotEmpty(msg))
+            Utils.showToast(msg);
     }
 
     public void onFailure(String msg, Exception ex) {

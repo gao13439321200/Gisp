@@ -100,7 +100,6 @@
         android:hint="@string/login_enter_password"
         android:imeOptions="actionNext"
         android:inputType="textPassword"
-        android:maxLength="8"
         android:textSize="16sp"/>
 
     <EditText
@@ -111,7 +110,6 @@
         android:hint="@string/login_second_password"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
-        android:maxLength="8"
         android:textSize="16sp"/>
 
     <TextView

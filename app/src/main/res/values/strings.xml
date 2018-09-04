@@ -40,7 +40,7 @@
     <string name="password_cannot_empty">密码不能为空</string>
     <string name="name_cannot_empty">姓名不能为空</string>
     <string name="passwords_match">密码不一致</string>
-    <string name="password_can_only">密码6~8位,只能包含数字字母下划线</string>
+    <string name="password_can_only">密码不能少于6位,且只能包含数字字母下划线</string>
     <string name="change_password">修改密码</string>
     <string name="select_type_feedback">请选择反馈类型!</string>
     <string name="input_feedback_content">请输入反馈内容!</string>

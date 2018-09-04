@@ -182,7 +182,7 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             Utils.showToast(R.string.passwords_match);
             return false;
         }
-        if (pwd.length() > 8 | pwd.length() < 6) {
+        if (pwd.length() < 6) {
             Utils.showToast(R.string.password_can_only);
             return false;
         }

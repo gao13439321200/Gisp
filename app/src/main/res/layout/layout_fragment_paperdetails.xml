@@ -66,7 +66,7 @@
                 style="@style/text_12sp_colorblack"
                 android:layout_marginEnd="10dp"
                 android:drawablePadding="4.3dp"
-                android:drawableTop="@mipmap/paper_complete"
+                android:drawableTop="@mipmap/img_wanzheng"
                 android:text="@string/integrity"
                 android:textSize="7.7dp"
                 android:visibility="gone"/>
@@ -76,7 +76,7 @@
                 style="@style/text_12sp_colorblack"
                 android:layout_marginEnd="10dp"
                 android:drawablePadding="4.3dp"
-                android:drawableTop="@mipmap/paper_marrow"
+                android:drawableTop="@mipmap/img_jinghua"
                 android:text="@string/essence"
                 android:textSize="7.7dp"
                 android:visibility="gone"/>
@@ -86,7 +86,7 @@
                 style="@style/text_12sp_colorblack"
                 android:layout_marginEnd="10dp"
                 android:drawablePadding="4.3dp"
-                android:drawableTop="@mipmap/paper_abstract"
+                android:drawableTop="@mipmap/img_zhaiyao"
                 android:text="@string/digest"
                 android:textSize="7.7dp"
                 android:visibility="gone"/>

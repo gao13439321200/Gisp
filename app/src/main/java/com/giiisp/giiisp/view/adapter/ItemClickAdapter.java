@@ -71,6 +71,7 @@ import static com.giiisp.giiisp.R.id.tv_problem;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
 import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
+import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.EN;
 
 /**
  * 重用的适配器
@@ -828,30 +829,17 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 break;
                         }
                         helper.setChecked(R.id.cb_collect, "1".equals(vlistBean.getIsfollow()));
-                        helper.getView(R.id.cb_collect).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (((CheckBox) helper.getView(R.id.cb_collect)).isChecked()) {
-                                    mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
-                                } else {
-                                    mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
-                                }
+                        helper.getView(R.id.cb_collect).setOnClickListener(view -> {
+                            if (((CheckBox) helper.getView(R.id.cb_collect)).isChecked()) {
+                                mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
+                            } else {
+                                mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
                             }
                         });
                         helper.setChecked(R.id.cb_download, "1".equals(vlistBean.getIsdownload()));
-                        helper.getView(R.id.cb_download).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
-                            }
-                        });
+                        helper.getView(R.id.cb_download).setOnClickListener(view -> mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1"));
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
-                        helper.getView(R.id.cb_add).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
-                            }
-                        });
+                        helper.getView(R.id.cb_add).setOnClickListener(view -> mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1"));
                         String btnString;
                         if (vlistBean.isEnglish()) {
                             btnString = "EN   ▷" + vlistBean.getEnduration() + "   " + vlistBean.getEnsize();
@@ -859,8 +847,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             btnString = "CN   ▷" + vlistBean.getCnduration() + "   " + vlistBean.getCnsize();
                         }
                         helper.setText(R.id.tv_play, btnString);
-//                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).setText(btnString);
-//                        ((AnimDownloadProgressButton) helper.getView(R.id.anim_btn)).set
+                        helper.getView(R.id.tv_play).setOnClickListener(v -> PaperDetailsActivity.actionActivityNew(mContext,
+                                vlistBean.getId(), vlistBean.getVersion() + "", type, vlistBean.isEnglish() ? EN : CN));
                     }
 
                     break;
