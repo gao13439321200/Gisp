@@ -351,6 +351,11 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     }
 
     @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
+    @Override
     protected WholePresenter initPresenter() {
         return new WholePresenter(this);
     }

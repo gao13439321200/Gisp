@@ -1,8 +1,9 @@
 package com.giiisp.giiisp.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PaperInfoBean extends BaseBean {
+public class PaperInfoBean extends BaseBean implements Serializable {
     private String digest;
     private String id;
     private String version;

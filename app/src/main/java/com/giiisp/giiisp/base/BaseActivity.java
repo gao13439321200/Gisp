@@ -120,11 +120,11 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
                 if (ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PID))
                         && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERVERSION))
                         && ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PAPERTYPE))) {
-                    PaperDetailsActivity.actionActivityNew(BaseActivity.this
+                    PaperDetailsActivity.actionActivityBase(BaseActivity.this
                             , SPUtils.getInstance().getString(UrlConstants.PID)
                             , SPUtils.getInstance().getString(UrlConstants.PAPERVERSION)
                             , SPUtils.getInstance().getString(UrlConstants.PAPERTYPE)
-                            , SPUtils.getInstance().getString(UrlConstants.LANGUAGE)
+                            , SPUtils.getInstance().getString(UrlConstants.LANGUAGE), getNowActivityName()
                     );
                 } else {
                     ToastUtils.showShort("暂无播放信息");
@@ -149,6 +149,9 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
         AppManager.getAppManager().addActivity(this);
         init();
     }
+
+
+    public abstract String getNowActivityName();
 
     public abstract int getLayoutId();
 

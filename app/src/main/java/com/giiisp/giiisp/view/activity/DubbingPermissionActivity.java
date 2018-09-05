@@ -175,6 +175,11 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
             }
         }));
     }
+
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
 /*
 
     @OnShowRationale({Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})

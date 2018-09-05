@@ -172,5 +172,10 @@ public class FragmentActivity extends BaseActivity {
 
     }
 
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
 
 }

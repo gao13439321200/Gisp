@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
@@ -22,7 +20,6 @@ import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.ProgressPopupWindow;
-import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -301,5 +298,10 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     @Override
     public void onFailure(String msg, Exception ex) {
 
+    }
+
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
     }
 }

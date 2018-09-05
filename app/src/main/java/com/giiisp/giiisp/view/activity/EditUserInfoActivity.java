@@ -80,4 +80,9 @@ public class EditUserInfoActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
 }

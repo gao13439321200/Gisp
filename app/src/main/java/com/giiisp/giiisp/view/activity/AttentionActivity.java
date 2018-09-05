@@ -45,6 +45,11 @@ public class AttentionActivity extends BaseMvpActivity<BaseImpl, WholePresenter>
     private ArrayList<BaseFragment> fragmentList;
 
     @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.layout_activity_attention;
     }

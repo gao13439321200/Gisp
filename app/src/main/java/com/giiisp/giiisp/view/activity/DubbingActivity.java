@@ -151,6 +151,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     }
 
     @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.layout_fragment_dubbing;
     }

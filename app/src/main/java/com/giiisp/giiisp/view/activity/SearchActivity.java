@@ -158,6 +158,11 @@ public class SearchActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
     }
 
     @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
+    @Override
     protected WholePresenter initPresenter() {
         return new WholePresenter(this);
     }

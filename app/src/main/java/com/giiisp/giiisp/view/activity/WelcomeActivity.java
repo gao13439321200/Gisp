@@ -135,4 +135,9 @@ public class WelcomeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
 }

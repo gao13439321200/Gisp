@@ -649,7 +649,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                             }
                         }
                         String version = arrayVersion.size() > 0 ? arrayVersion.get(0) : "1";
-                        PaperDetailsActivity.actionActivityNew(context, vo.getId(), version, "home", getLanguage());
+                        PaperDetailsActivity.actionActivityNew(context, vo.getId(), version,
+                                "home", getLanguage(), getActivity().getClass().getName());
                     }
                 });
                 List<String> txt = new ArrayList<>();
@@ -1900,7 +1901,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     if (ObjectUtils.isNotEmpty(id) && ObjectUtils.isNotEmpty(version)) {
                         PaperDetailsActivity.actionActivityNew(getContext(), id,
                                 version, type, ObjectUtils.isNotEmpty(playNoteVo.getLanguage())
-                                        ? playNoteVo.getLanguage() : "1");
+                                        ? playNoteVo.getLanguage() : "1", getActivity().getClass().getName());
                     }
                 }
                 break;
@@ -2046,13 +2047,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "my_paper":
                 PaperMainVO vo = itemClickAdapter.getItem(position).getPaperMainVO();
                 PaperDetailsActivity.actionActivityNew(getContext(), vo.getId(),
-                        "1", "online_paper", vo.getMyLanguage());
+                        "1", "online_paper", vo.getMyLanguage(), getActivity().getClass().getName());
                 break;
             case "collection_paper":
             case "collection_summary":
                 PaperMainVO vo1 = itemClickAdapter.getItem(position).getPaperMainVO();
                 PaperDetailsActivity.actionActivityNew(getContext(), vo1.getId(),
-                        vo1.getVersion(), "online_paper", vo1.getMyLanguage());
+                        vo1.getVersion(), "online_paper", vo1.getMyLanguage(), getActivity().getClass().getName());
 
 
 //                ClickEntity item = itemClickAdapter.getItem(position);
@@ -2096,13 +2097,15 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "answer":
                 MyAnswerVO answerVO = itemClickAdapter.getItem(position).getMyAnswerVO();
                 if (answerVO != null) {
-                    PaperDetailsActivity.actionActivityNew(getContext(), answerVO.getQid(), "1", type, getLanguage());
+                    PaperDetailsActivity.actionActivityNew(getContext(), answerVO.getQid(),
+                            "1", type, getLanguage(), getActivity().getClass().getName());
                 }
                 break;
             case "questions":
                 MyAnswerVO answerVO1 = itemClickAdapter.getItem(position).getMyAnswerVO();
                 if (answerVO1 != null) {
-                    PaperDetailsActivity.actionActivityNew(getContext(), answerVO1.getQid(), "1", type, getLanguage());
+                    PaperDetailsActivity.actionActivityNew(getContext(), answerVO1.getQid(),
+                            "1", type, getLanguage(), getActivity().getClass().getName());
                 }
                 break;
             case "search_hint":
@@ -2193,12 +2196,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case R.id.tv_preview_dubbing: //  预览按钮
                 DubbingListVO vo6 = dubbingAdapter.getItem(position).getDubbingListVO();
                 PaperDetailsActivity.actionActivityNew(getContext(), vo6.getId(),
-                        vo6.getVersion(), type, "1");
+                        vo6.getVersion(), type, "1", getActivity().getClass().getName());
                 break;
             case R.id.tv_preview_dubbing_EN: //  预览按钮
                 DubbingListVO vo5 = dubbingAdapter.getItem(position).getDubbingListVO();
                 PaperDetailsActivity.actionActivityNew(getContext(), vo5.getId(),
-                        vo5.getVersion(), type, "2");
+                        vo5.getVersion(), type, "2", getActivity().getClass().getName());
                 break;
             case R.id.tv_edit_dubbing_EN: //  编辑
                 DubbingListVO vo4 = dubbingAdapter.getItem(position).getDubbingListVO();

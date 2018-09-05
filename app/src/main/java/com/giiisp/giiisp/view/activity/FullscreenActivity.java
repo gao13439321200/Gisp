@@ -51,4 +51,9 @@ public class FullscreenActivity extends BaseActivity{
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);*/
     }
 
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
 }

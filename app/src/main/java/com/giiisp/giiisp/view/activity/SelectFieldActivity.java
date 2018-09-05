@@ -107,4 +107,9 @@ public class SelectFieldActivity extends BaseActivity {
         mLeft.setVisibility(toFragment == PEOPLE ? View.VISIBLE : View.GONE);
     }
 
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
 }

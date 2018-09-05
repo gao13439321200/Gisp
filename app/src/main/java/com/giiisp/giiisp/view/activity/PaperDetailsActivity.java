@@ -70,7 +70,6 @@ import com.giiisp.giiisp.entity.DaoSession;
 import com.giiisp.giiisp.entity.DownloadController;
 import com.giiisp.giiisp.entity.Note;
 import com.giiisp.giiisp.entity.NoteDao;
-import com.giiisp.giiisp.entity.PaperDatailEntity;
 import com.giiisp.giiisp.entity.Song;
 import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -245,9 +244,6 @@ public class PaperDetailsActivity extends
     private ArrayList<String> recordTwoList;
     BaseImpl baseImpl;
     OnPlayerEventListener onPlayerEventListener;
-    private List<PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean.RowsBean> photosBeanRows;
-    private List<PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean.RowsBeanX> recordsBeanOneRows;
-    private List<PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean.RowsBeanX> recordsBeanTwoRows;
     private int position;
     private int positionPic;
     List<String> imageId = new ArrayList<>();
@@ -299,6 +295,7 @@ public class PaperDetailsActivity extends
     private String threeId = "";
     private String fourId = "";
     private String lastPlayId = "";
+    private  String activityName = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -381,6 +378,33 @@ public class PaperDetailsActivity extends
         context.startActivity(sIntent);
     }
 
+    //所有入口
+    public static void actionActivityBase(Context context, String id, String version,
+                                         String type, String language,String activityName) {
+        Intent sIntent = new Intent(context, PaperDetailsActivity.class);
+        sIntent.putExtra("id", id);
+        sIntent.putExtra("type", type);
+        sIntent.putExtra("language", language);
+        sIntent.putExtra("version", version);
+        sIntent.putExtra("activityName", activityName);
+        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(sIntent);
+    }
+
+    //所有入口
+    public static void actionActivityNew(Context context, String id, String version,
+                                         String type, String language, String activityName) {
+        Intent sIntent = new Intent(context, PaperDetailsActivity.class);
+        sIntent.putExtra("id", id);
+        sIntent.putExtra("type", type);
+        sIntent.putExtra("language", language);
+        sIntent.putExtra("version", version);
+        sIntent.putExtra("activityName", activityName);
+        sIntent.addCategory(Math.random() + "");
+        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(sIntent);
+    }
+
     //下载页
     public static void actionActivity(Context context,
                                       String id,
@@ -413,6 +437,7 @@ public class PaperDetailsActivity extends
         tvCn.setChecked(CN.equals(language));
         tvEn.setChecked(EN.equals(language));
         myVersionNo = getIntent().getStringExtra("version");
+        activityName = getIntent().getStringExtra("activityName");
 
         SPUtils.getInstance().put(UrlConstants.PID, pid);
         SPUtils.getInstance().put(UrlConstants.PAPERTYPE, type);
@@ -703,7 +728,13 @@ public class PaperDetailsActivity extends
             case R.id.tv_back:
 //                if (getPlayService() != null && getPlayService().isPlaying())
 //                    getPlayService().playPause();
-                finish();
+//                finish();
+                try {
+                    startActivity(new Intent(this, Class.forName(activityName)));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
                 break;
             case R.id.tv_paper_complete://完整
                 PaperDetailsActivity.actionActivityNew(this, twoId, "2", "online_paper", language);
@@ -2104,6 +2135,11 @@ public class PaperDetailsActivity extends
             map.put("duration", (nowProgress / 1000) + 1);
             presenter.getDataAll("215", map);
         }
+    }
+
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
     }
 
 }

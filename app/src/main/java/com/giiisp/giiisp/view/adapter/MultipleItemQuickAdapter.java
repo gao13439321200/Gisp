@@ -280,7 +280,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                         switch (item.getString()) {
                             case "综述专栏":
                             case "热门推荐":
-                                PaperDetailsActivity.actionActivityNew(context, paperId, "1", "home", "1");
+                                PaperDetailsActivity.actionActivityNew(context, paperId, "1",
+                                        "home", "1", mContext.getClass().getName());
                                 break;
                             default:
                                 break;
@@ -307,7 +308,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                         String id = paper.getId();
                         String version = paper.getVersion();
                         if (!TextUtils.isEmpty(id))
-                            PaperDetailsActivity.actionActivityNew(context, id, version, "online_paper", CN);
+                            PaperDetailsActivity.actionActivityNew(context, id, version,
+                                    "online_paper", CN,mContext.getClass().getName());
                     }
                 }
             }

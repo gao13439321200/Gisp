@@ -201,4 +201,9 @@ public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
 }

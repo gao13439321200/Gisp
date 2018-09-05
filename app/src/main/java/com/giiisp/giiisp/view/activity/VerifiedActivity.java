@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseFragment;
-import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ViewPagerAdapter;
 import com.giiisp.giiisp.view.fragment.EditInfoFragment;
 import com.giiisp.giiisp.view.fragment.UserUploadFragment;
@@ -25,7 +23,6 @@ import com.giiisp.giiisp.widget.MViewPager;
 import com.giiisp.giiisp.widget.ScreenPopupWindow;
 import com.giiisp.giiisp.widget.StepsView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +30,6 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 /**
  * 认证页面
@@ -213,6 +209,11 @@ public class VerifiedActivity extends BaseActivity implements ScreenPopupWindow.
             map.put("uid", uid);
             witnessFragment.updateData(map);
         }
+    }
+
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
     }
 
 }

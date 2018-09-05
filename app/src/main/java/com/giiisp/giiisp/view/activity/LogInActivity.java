@@ -111,5 +111,10 @@ public class LogInActivity extends BaseActivity {
 
     }
 
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
 
 }

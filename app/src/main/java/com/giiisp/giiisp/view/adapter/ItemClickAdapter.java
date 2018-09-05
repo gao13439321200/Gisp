@@ -854,7 +854,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         }
                         helper.setText(R.id.tv_play, btnString);
                         helper.getView(R.id.tv_play).setOnClickListener(v -> PaperDetailsActivity.actionActivityNew(mContext,
-                                vlistBean.getId(), vlistBean.getVersion() + "", type, vlistBean.isEnglish() ? EN : CN));
+                                vlistBean.getId(), vlistBean.getVersion() + "", type, vlistBean.isEnglish() ? EN : CN, mContext.getClass().getName()));
                     }
 
                     break;
@@ -980,7 +980,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     HomeSearchEntity.PaperBean.RowsBeanX paperBean = item.getPaperBeanRows();
                                     String id = paperBean.getId();
                                     String version = paperBean.getVersion();
-                                    PaperDetailsActivity.actionActivityNew(activity, id, version, "online_paper", CN);
+                                    PaperDetailsActivity.actionActivityNew(activity, id,
+                                            version, "online_paper", CN, mContext.getClass().getName());
                                 }
                             }
                         });
@@ -1240,7 +1241,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 clickEntity.getPaperId(),
                                 clickEntity.getVersion(),
                                 "online_paper",
-                                CN);
+                                CN, mContext.getClass().getName());
                 }
             }
         });

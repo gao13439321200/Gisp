@@ -42,4 +42,9 @@ public class WelcomeSelectActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
 }

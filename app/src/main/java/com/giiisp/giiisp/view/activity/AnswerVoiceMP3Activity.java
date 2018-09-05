@@ -55,6 +55,11 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
     private String type;
 
     @Override
+    public String getNowActivityName() {
+        return this.getClass().getName();
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.layout_fragment_qarecording;
     }
@@ -242,24 +247,24 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
                 map.put("timing", recorderSecondsElapsed);
                 switch (type) {
                     case "answer":
-                        presenter.getSaveAnswerData(map,part);
+                        presenter.getSaveAnswerData(map, part);
                         break;
                     case "answer_again":
-                        presenter.getSaveAnswerData(map,part);
+                        presenter.getSaveAnswerData(map, part);
                         break;
                     case "Problem"://首问
-                        map.put("pid",pid );
+                        map.put("pid", pid);
                         map.put("picid", imgid);
                         map.put("firstquiz", 1);
                         map.put("pqid", questionid);
-                        presenter.getSaveQuizData(map,part);
+                        presenter.getSaveQuizData(map, part);
                         break;
                     case "examineMinutely"://追问
                         map.put("pid", pid);
                         map.put("picid", imgid);
                         map.put("firstquiz", 2);
                         map.put("pqid", questionid);
-                        presenter.getSaveQuizData(map,part);
+                        presenter.getSaveQuizData(map, part);
                         break;
                 }
 
@@ -301,24 +306,24 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
         map.put("timing", recorderSecondsElapsed);
         switch (type) {
             case "answer":
-                presenter.getSaveAnswerData(map,part);
+                presenter.getSaveAnswerData(map, part);
                 break;
             case "answer_again":
-                presenter.getSaveAnswerData(map,part);
+                presenter.getSaveAnswerData(map, part);
                 break;
             case "Problem"://首问
-                map.put("pid",pid );
+                map.put("pid", pid);
                 map.put("picid", imgid);
                 map.put("firstquiz", 1);
                 map.put("pqid", questionid);
-                presenter.getSaveQuizData(map,part);
+                presenter.getSaveQuizData(map, part);
                 break;
             case "examineMinutely"://追问
                 map.put("pid", pid);
                 map.put("picid", imgid);
                 map.put("firstquiz", 2);
                 map.put("pqid", questionid);
-                presenter.getSaveQuizData(map,part);
+                presenter.getSaveQuizData(map, part);
                 break;
         }
 
