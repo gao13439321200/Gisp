@@ -1620,6 +1620,7 @@ public class PaperDetailsActivity extends
             initImageView();
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         private void initImageView() {
             mViewList = new ArrayList<View>();
             mVideoViewMap = new HashMap<Integer, WrapVideoView>();
@@ -1675,12 +1676,9 @@ public class PaperDetailsActivity extends
                         parent.removeView(imageView);
                     }
                     mViewList.add(imageView);
-                    imageView.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View view, MotionEvent motionEvent) {
-                            mGestureDetector.onTouchEvent(motionEvent);
-                            return true;
-                        }
+                    imageView.setOnTouchListener((view, motionEvent) -> {
+                        mGestureDetector.onTouchEvent(motionEvent);
+                        return true;
                     });
                 }
             }
@@ -1898,6 +1896,9 @@ public class PaperDetailsActivity extends
                 if (bean == null) {
                     return;
                 }
+                if (getPlayService() != null)
+                    getPlayService().setPaperInfoBean(bean);
+                imageId.clear();
                 myVersionNo = bean.getVersion();
                 pid = bean.getId();
                 //完整
@@ -1942,11 +1943,6 @@ public class PaperDetailsActivity extends
                 }
                 isFollowed = bean.getIsfollow();
                 ivLikedIcon.setSelected("1".equals(isFollowed));
-//                if (ObjectUtils.isNotEmpty(bean.getDownloadnum())) {
-//                    tvDownloadNumber.setText(bean.getDownloadnum());
-//                } else {
-//                    tvDownloadNumber.setText("0");
-//                }
                 break;
             case "317"://获取待配音预览论文信息
                 DubbingBean dubbingBean = (DubbingBean) baseBean;

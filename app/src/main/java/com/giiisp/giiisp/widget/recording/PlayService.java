@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.ImgInfoBean;
+import com.giiisp.giiisp.dto.PaperInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.Song;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -63,6 +64,15 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
     public static final int ONLINE = 1;
     public static final int BACK = 2;
     public static final int DOWN = 3;
+    private PaperInfoBean mPaperInfoBean;
+
+    public PaperInfoBean getPaperInfoBean() {
+        return mPaperInfoBean;
+    }
+
+    public void setPaperInfoBean(PaperInfoBean paperInfoBean) {
+        mPaperInfoBean = paperInfoBean;
+    }
 
     public void setPlayType(int playType) {
         this.playType = playType;
