@@ -159,8 +159,7 @@
         <activity
             android:name=".view.activity.PaperDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleInstance"
-            android:taskAffinity="com.paper.task"/>
+            android:launchMode="singleInstance"/>
 
         <activity android:name=".view.activity.AnswerVoiceMP3Activity"
                   android:launchMode="singleTop"/>
@@ -175,6 +174,7 @@
                   android:launchMode="singleTop"/>
         <activity
             android:name=".view.activity.ProblemActivity"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".view.activity.WelcomeSelectActivity"
                   android:launchMode="singleTop"/>

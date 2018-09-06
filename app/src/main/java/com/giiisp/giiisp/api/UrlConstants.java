@@ -246,6 +246,7 @@ public class UrlConstants {
 
         public static final String URL = "http://mall.xdiandian.cn/jsp/app/";
 
+        public static String ACTIVITYNAME = "";
     }
 
     public static class RequestPrams {

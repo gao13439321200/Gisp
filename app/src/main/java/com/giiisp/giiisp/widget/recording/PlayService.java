@@ -303,6 +303,10 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
         }
     }
 
+    public int getDuration(){
+        return mPlayer.getDuration();
+    }
+
     private void resume() {
         if (!isPausing()) {
             return;

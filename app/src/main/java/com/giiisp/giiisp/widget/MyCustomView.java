@@ -67,7 +67,7 @@ public class MyCustomView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         for (Map<String, Float> map : mPointList) {
-            canvas.drawCircle(map.get("x"), map.get("y"), 50, mPaint);
+            canvas.drawCircle(map.get("x"), map.get("y"), 25, mPaint);
         }
         super.onDraw(canvas);
     }
@@ -84,7 +84,7 @@ public class MyCustomView extends View {
         //设置画笔模式
         mPaint.setStyle(Paint.Style.FILL);
         //设置画笔宽度为30px
-        mPaint.setStrokeWidth(30f);
+        mPaint.setStrokeWidth(15f);
         mPointList = new ArrayList<>();
     }
 

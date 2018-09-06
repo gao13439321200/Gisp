@@ -126,6 +126,7 @@ import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.ACTIVITYNAME;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.widget.recording.AppCache.getPlayService;
 
@@ -295,7 +296,6 @@ public class PaperDetailsActivity extends
     private String threeId = "";
     private String fourId = "";
     private String lastPlayId = "";
-    private  String activityName = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -380,7 +380,8 @@ public class PaperDetailsActivity extends
 
     //所有入口
     public static void actionActivityBase(Context context, String id, String version,
-                                         String type, String language,String activityName) {
+                                          String type, String language, String activityName) {
+        ACTIVITYNAME = activityName;
         Intent sIntent = new Intent(context, PaperDetailsActivity.class);
         sIntent.putExtra("id", id);
         sIntent.putExtra("type", type);
@@ -394,12 +395,12 @@ public class PaperDetailsActivity extends
     //所有入口
     public static void actionActivityNew(Context context, String id, String version,
                                          String type, String language, String activityName) {
+        ACTIVITYNAME = activityName;
         Intent sIntent = new Intent(context, PaperDetailsActivity.class);
         sIntent.putExtra("id", id);
         sIntent.putExtra("type", type);
         sIntent.putExtra("language", language);
         sIntent.putExtra("version", version);
-        sIntent.putExtra("activityName", activityName);
         sIntent.addCategory(Math.random() + "");
         sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(sIntent);
@@ -437,7 +438,6 @@ public class PaperDetailsActivity extends
         tvCn.setChecked(CN.equals(language));
         tvEn.setChecked(EN.equals(language));
         myVersionNo = getIntent().getStringExtra("version");
-        activityName = getIntent().getStringExtra("activityName");
 
         SPUtils.getInstance().put(UrlConstants.PID, pid);
         SPUtils.getInstance().put(UrlConstants.PAPERTYPE, type);
@@ -730,20 +730,23 @@ public class PaperDetailsActivity extends
 //                    getPlayService().playPause();
 //                finish();
                 try {
-                    startActivity(new Intent(this, Class.forName(activityName)));
+                    if (ObjectUtils.isNotEmpty(ACTIVITYNAME))
+                        startActivity(new Intent(this, Class.forName(ACTIVITYNAME)));
+                    else
+                        startActivity(new Intent(this, Class.forName("GiiispActivity")));
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
 
                 break;
             case R.id.tv_paper_complete://完整
-                PaperDetailsActivity.actionActivityNew(this, twoId, "2", "online_paper", language);
+                PaperDetailsActivity.actionActivityNew(this, twoId, "2", "online_paper", language, ACTIVITYNAME);
                 break;
             case R.id.tv_paper_marrow://精华
-                PaperDetailsActivity.actionActivityNew(this, fourId, "4", "online_paper", language);
+                PaperDetailsActivity.actionActivityNew(this, fourId, "4", "online_paper", language, ACTIVITYNAME);
                 break;
             case R.id.tv_paper_abstract://摘要
-                PaperDetailsActivity.actionActivityNew(this, threeId, "3", "online_paper", language);
+                PaperDetailsActivity.actionActivityNew(this, threeId, "3", "online_paper", language, ACTIVITYNAME);
                 break;
             case R.id.tv_cn:
                 if (getPlayService() != null && songCN != null) {
@@ -1783,8 +1786,17 @@ public class PaperDetailsActivity extends
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.i("--->>", "onKeyDown: " + keyCode);
-//        if (getPlayService() != null)
-//            getPlayService().playPause();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            try {
+                if (ObjectUtils.isNotEmpty(ACTIVITYNAME))
+                    startActivity(new Intent(this, Class.forName(ACTIVITYNAME)));
+                else
+                    startActivity(new Intent(this, Class.forName("GiiispActivity")));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
         return super.onKeyDown(keyCode, event);
 
     }
@@ -1900,7 +1912,7 @@ public class PaperDetailsActivity extends
                                         if (v != null && v.size() > 0) {
                                             version = v.get(0);
                                         }
-                                        PaperDetailsActivity.actionActivityNew(context, pid, version, type, CN);
+                                        PaperDetailsActivity.actionActivityNew(context, pid, version, type, CN,ACTIVITYNAME);
                                     } else {
                                         Utils.showToast(entity.getInfo());
                                     }

@@ -51,7 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:text="这里是问题这里是问题这里是问题"/>
+            android:maxWidth="300dp"
+            android:text=""/>
 
         <ImageView
             android:id="@+id/img_photo"
@@ -61,6 +62,7 @@
             android:paddingStart="5dp"
             android:src="@mipmap/img_photo_orange"
             />
+
     </LinearLayout>
 
     <LinearLayout
@@ -127,7 +129,8 @@
         android:id="@+id/ll_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_answer_1"
