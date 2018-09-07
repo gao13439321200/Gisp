@@ -299,11 +299,13 @@ public class PaperDetailsActivity extends
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.back_right_in, R.anim.push_left_out);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
+        overridePendingTransition(R.anim.back_right_in, R.anim.push_left_out);
         super.onResume();
         switch (type) {
             case "online_paper":
@@ -327,6 +329,12 @@ public class PaperDetailsActivity extends
     protected void onDestroy() {
         getPlayService().setPlayType(PlayService.BACK);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        overridePendingTransition(R.anim.push_left_in, R.anim.back_right_out);
+        super.onPause();
     }
 
     @Override
@@ -1912,7 +1920,7 @@ public class PaperDetailsActivity extends
                                         if (v != null && v.size() > 0) {
                                             version = v.get(0);
                                         }
-                                        PaperDetailsActivity.actionActivityNew(context, pid, version, type, CN,ACTIVITYNAME);
+                                        PaperDetailsActivity.actionActivityNew(context, pid, version, type, CN, ACTIVITYNAME);
                                     } else {
                                         Utils.showToast(entity.getInfo());
                                     }
