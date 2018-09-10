@@ -4,6 +4,15 @@ public class PeopleVO {
     private String id;
     private String name;
     private String avatar;
+    private String jobtitle;
+
+    public String getJobtitle() {
+        return jobtitle;
+    }
+
+    public void setJobtitle(String jobtitle) {
+        this.jobtitle = jobtitle;
+    }
 
     public String getId() {
         return id;

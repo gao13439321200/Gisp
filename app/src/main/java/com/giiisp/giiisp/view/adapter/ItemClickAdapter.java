@@ -746,9 +746,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     if (item.getPeopleVO() == null)
                         return;
                     PeopleVO peopleVO = item.getPeopleVO();
-                    ImageLoader.getInstance().displayImage(activity, peopleVO.getAvatar(), (ImageView) helper.getView(R.id.iv_scholar_icon), false);
+                    ImageLoader.getInstance().displayImage(activity, peopleVO.getAvatar(), helper.getView(R.id.iv_scholar_icon), false);
                     helper.setText(R.id.tv_scholar_name, peopleVO.getName());
-                    helper.setText(R.id.tv_user_position, peopleVO.getName());
+                    helper.setText(R.id.tv_user_position, peopleVO.getJobtitle());
                     break;
                 case R.layout.item_attention_text:
                     switch (type) {
