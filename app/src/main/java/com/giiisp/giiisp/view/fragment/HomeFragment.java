@@ -2,9 +2,12 @@ package com.giiisp.giiisp.view.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +22,7 @@ import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
+import com.giiisp.giiisp.dto.HotImgVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
@@ -29,9 +33,12 @@ import com.giiisp.giiisp.view.adapter.MultipleItemQuickAdapter;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.UpdatePopupWindow;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,6 +65,11 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     SwipeRefreshLayout swipeRefreshLayout;
     private MultipleItemQuickAdapter multipleItemQuickAdapter;
     private String string;
+    private static final int CHANGE_ITEM = 1;
+    private Timer timer;
+    private MyHandler myHandler;
+    private List<HotImgVO> list1 = new ArrayList<>();
+    private List<HotImgVO> list2 = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -145,6 +157,19 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         }
     }
 
+    private int cnt1 = -1; //表示当前最右边显示的item的position
+    private int cnt2 = -1; //表示当前最右边显示的item的position
+//    private boolean isSlidingByHand = false; //表示是否是手在滑动
+//    private boolean isSlidingAuto = true; //表示是否自动滑动
+
+    private RecyclerView getRecyclerView1() {
+        return multipleItemQuickAdapter.getRecyclerView1();
+    }
+
+    private RecyclerView getRecyclerView2() {
+        return multipleItemQuickAdapter.getRecyclerView2();
+    }
+
     @Override
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
@@ -172,12 +197,34 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 break;
             case "202"://热门和综述
                 HotImgBean bean1 = (HotImgBean) baseBean;
+                List<HotImgVO> list = bean1.getList();
+                bean1.getList().addAll(list);
+                bean1.getList().addAll(list);
                 ClickEntity clickEntityHot = new ClickEntity(R.layout.item_home_recycler, getString(R.string.in_a_column));
                 clickEntityHot.setHotImgBean(bean1);
                 multipleItemQuickAdapter.addData(clickEntityHot);
                 ClickEntity clickEntity = new ClickEntity(R.layout.item_home_recycler, getString(R.string.hot_recommended));
                 clickEntity.setHotImgBean(bean1);
                 multipleItemQuickAdapter.addData(clickEntity);
+                for (HotImgVO vo :
+                        bean1.getList()) {
+                    if ("1".equals(vo.getType())) {
+                        list1.add(vo);
+                    } else {
+                        list2.add(vo);
+                    }
+                }
+                timer = new Timer();
+                myHandler = new MyHandler(this);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+//                        if (isSlidingAuto) {
+                        myHandler.sendEmptyMessage(CHANGE_ITEM);
+//                        }
+                    }
+                }, 500, 3000);
+//                initListener();
                 break;
             default:
                 break;
@@ -217,5 +264,91 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     @Override
     public void onRefresh() {
         initNetwork();
+    }
+
+
+//    private void initListener() {
+//        getRecyclerView1().addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
+//                switch (newState) {
+//                    case SCROLL_STATE_IDLE:  //（静止没有滚动）
+//                        if (isSlidingByHand) {
+//                            Message msg = myHandler.obtainMessage();
+//                            msg.arg1 = firstVisibleItemPosition;
+//                            msg.what = CHANGE_ITEM;
+//                            myHandler.sendMessage(msg);
+//                        }
+//                        break;
+//                    case SCROLL_STATE_DRAGGING:  //（正在被外部拖拽,一般为用户正在用手指滚动）
+//                        isSlidingByHand = true;
+//                        isSlidingAuto = false;
+//                        break;
+//                    case SCROLL_STATE_SETTLING:  //（自动滚动）
+//                        if (isSlidingByHand) {
+//                            isSlidingAuto = false;
+//                        } else {
+//                            isSlidingAuto = true;
+//                        }
+//                        break;
+//                }
+//            }
+//        });
+//    }
+
+    private void stopTimer() {
+        if (null != timer) {
+            timer.cancel();
+            timer = null;
+        }
+        cnt1 = 0;
+        cnt2 = 0;
+    }
+
+    private static class MyHandler extends Handler {
+        WeakReference<HomeFragment> weakReference;
+
+        public MyHandler(HomeFragment mActivity) {
+            this.weakReference = new WeakReference<>(mActivity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final HomeFragment mActivity = weakReference.get();
+//            if (mActivity.isSlidingByHand) {
+//                mActivity.cnt = msg.arg1;
+//                mActivity.isSlidingByHand = false;
+//                mActivity.isSlidingAuto = true;
+//                mActivity.cnt += 3;
+//                mActivity.getRecyclerView1().smoothScrollToPosition(mActivity.cnt);
+//            } else {
+            Log.d("MyHandler", "mActivity.cnt1:" + mActivity.cnt1);
+            Log.d("MyHandler", "mActivity.cnt2:" + mActivity.cnt2);
+            mActivity.cnt1 = setData(mActivity.cnt1, mActivity.list1.size() - 1, mActivity.getRecyclerView1());
+            mActivity.cnt2 = setData(mActivity.cnt2, mActivity.list2.size() - 1, mActivity.getRecyclerView2());
+//            }
+        }
+
+        private int setData(int cnt, int count, RecyclerView view) {
+            cnt += 3;
+            if (cnt > count) {
+                cnt = 2;
+                view.smoothScrollToPosition(0);
+                return cnt;
+            } else if (cnt > count - 3) {
+                cnt = count;
+            }
+            Log.d("MyHandler", "mActivity.cnt:" + cnt);
+            view.smoothScrollToPosition(cnt);
+            return cnt;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopTimer();
     }
 }

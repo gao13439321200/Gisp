@@ -164,6 +164,23 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
     }
 
     @Override
+    public int getItemCount() {
+        if (layoutResId == R.layout.item_home_child) {
+            return Integer.MAX_VALUE;
+        }
+        return super.getItemCount();
+    }
+
+    @Override
+    public void onBindViewHolder(BaseViewHolder holder, int positions) {
+        if (layoutResId == R.layout.item_home_child && mData != null && mData.size() != 0) {
+            super.onBindViewHolder(holder, positions % mData.size());
+        } else {
+            super.onBindViewHolder(holder, positions);
+        }
+    }
+
+    @Override
     protected void convert(final BaseViewHolder helper, final ClickEntity item) {
         if (item != null) {
             switch (layoutResId) {

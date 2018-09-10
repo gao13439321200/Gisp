@@ -4,6 +4,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.common.ScrollSpeedLinearLayoutManger;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HeadImgVO;
 import com.giiisp.giiisp.dto.HotImgBean;
@@ -253,6 +255,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                                         list.add(clickEntity);
                                     }
                                 }
+                                mRecyclerView2 = view;
                                 break;
                             case "热门推荐":
                                 for (HotImgVO vo : hotImgBean.getList()) {
@@ -263,16 +266,22 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                                         list.add(clickEntity);
                                     }
                                 }
+                                mRecyclerView1 = view;
                                 break;
                         }
                     }
                 }
 
-
-                LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                view.setLayoutManager(mLayoutManager);
+//                LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+//                view.setLayoutManager(mLayoutManager);
+                ScrollSpeedLinearLayoutManger scrollSpeedLinearLayoutManger = new ScrollSpeedLinearLayoutManger(mContext, LinearLayoutManager.HORIZONTAL, false);
+                scrollSpeedLinearLayoutManger.setSpeedSlow();
+                view.setLayoutManager(scrollSpeedLinearLayoutManger);
                 ItemClickAdapter itemClickAdapterChild = new ItemClickAdapter(context, R.layout.item_home_child, list, "");
                 view.setAdapter(itemClickAdapterChild);
+                LinearSnapHelper mLinearSnapHelper = new LinearSnapHelper();
+                mLinearSnapHelper.attachToRecyclerView(view);
+
                 itemClickAdapterChild.setOnItemClickListener((adapter, view1, position) -> {
                     ClickEntity clickEntity = (ClickEntity) adapter.getItem(position);
                     if (clickEntity != null) {
@@ -295,6 +304,17 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
         }
     }
 
+    private RecyclerView mRecyclerView1;
+    private RecyclerView mRecyclerView2;
+
+    public RecyclerView getRecyclerView1() {
+        return mRecyclerView1;
+    }
+
+    public RecyclerView getRecyclerView2() {
+        return mRecyclerView2;
+    }
+
 
     private void initChildRecylerView(ClickEntity item, List<ClickEntity> arrayList, RecyclerView recyclerView) {
         ItemClickAdapter itemClickAdapter = new ItemClickAdapter(context, R.layout.item_paper_indexes, arrayList, item.getString());
@@ -309,7 +329,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                         String version = paper.getVersion();
                         if (!TextUtils.isEmpty(id))
                             PaperDetailsActivity.actionActivityNew(context, id, version,
-                                    "online_paper", CN,mContext.getClass().getName());
+                                    "online_paper", CN, mContext.getClass().getName());
                     }
                 }
             }
