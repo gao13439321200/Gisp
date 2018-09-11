@@ -35,6 +35,8 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.CourseBean;
+import com.giiisp.giiisp.dto.CourseVO;
 import com.giiisp.giiisp.dto.DownloadImgInfoVO;
 import com.giiisp.giiisp.dto.DownloadInfoBean;
 import com.giiisp.giiisp.dto.DubbingListBean;
@@ -623,6 +625,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
                 tvTitle.setText(R.string.play);
                 break;
+            case "course"://教程列表
+                lineBanner.setVisibility(View.VISIBLE);
+                tvBack.setVisibility(View.VISIBLE);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_course, this.list, type);
+                itemClickAdapter.setOnItemLongClickListener(this);
+                tvTitle.setText(R.string.course);
+                break;
             case "paper_qa"://论文详情评论问答列表
                 list.clear();
                 swipeRefreshLayout.setEnabled(false);
@@ -926,6 +935,10 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 hMap.put("language", getLanguage());
                 presenter.getDataAll("306", hMap);
                 //这里需要获取作者论文和综述，暂时不用了
+                break;
+            case "course":
+                hMap.put("pageno",page);
+                presenter.getDataAll("321",hMap);
                 break;
             case "scholar_list":
                 hMap.put("pageno", page);
@@ -1915,6 +1928,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "scholar":
                 FragmentActivity.actionActivity(getContext(), "he");
+                break;
+            case "course":
+                ToastUtils.showShort("点击了：" + itemClickAdapter.getItem(position).getCourseVO().getFileurl());
                 break;
             case "plays":
             case "play":
@@ -2982,6 +2998,24 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.addData(mainEntity);
                 }
                 if (bean7.getList().size() == pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+                itemClickAdapter.expandAll();
+                swipeRefreshLayout.setRefreshing(false);
+                break;
+            case "321":
+                CourseBean bean8 = (CourseBean) baseBean;
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+                for (CourseVO vo : bean8.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setCourseVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+                if (bean8.getList().size() == pageSize) {
                     page++;
                 } else {
                     itemClickAdapter.loadMoreEnd(false);

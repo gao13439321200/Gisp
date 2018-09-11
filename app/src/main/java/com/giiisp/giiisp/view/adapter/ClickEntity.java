@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.dto.CourseVO;
 import com.giiisp.giiisp.dto.DubbingListVO;
 import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.FansVO;
@@ -397,6 +398,15 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private SubjectVO mSubjectVO;
     private MajorVO mMajorVO;
     private WordVO mWordVO;
+    private CourseVO mCourseVO;
+
+    public CourseVO getCourseVO() {
+        return mCourseVO;
+    }
+
+    public void setCourseVO(CourseVO courseVO) {
+        mCourseVO = courseVO;
+    }
 
     public WordVO getWordVO() {
         return mWordVO;

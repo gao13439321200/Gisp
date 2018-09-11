@@ -268,6 +268,7 @@
     <string name="scholars_details_page">学者详情页</string>
     <string name="plays">播放历史</string>
     <string name="play">播放列表</string>
+    <string name="course">教程列表</string>
     <string name="technology_label">技术标签</string>
     <string name="mathematics_label">数学标签</string>
     <string name="data_labels">数据标签</string>

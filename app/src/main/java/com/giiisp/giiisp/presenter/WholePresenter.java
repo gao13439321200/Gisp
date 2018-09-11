@@ -12,6 +12,7 @@ import com.giiisp.giiisp.api.ApiStoreNew;
 import com.giiisp.giiisp.base.BasePresenter;
 import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.CourseBean;
 import com.giiisp.giiisp.dto.DownloadInfoBean;
 import com.giiisp.giiisp.dto.DubbingBean;
 import com.giiisp.giiisp.dto.DubbingListBean;
@@ -1542,6 +1543,9 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 break;
             case "317":
                 baseEntity = new Gson().fromJson(cipher, DubbingBean.class);
+                break;
+            case "321":
+                baseEntity = new Gson().fromJson(cipher, CourseBean.class);
                 break;
             default://101、105、111、304、318、215
                 baseEntity = new Gson().fromJson(cipher, BaseBean.class);

@@ -759,6 +759,13 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_scholar_name, peopleVO.getName());
                     helper.setText(R.id.tv_user_position, peopleVO.getJobtitle());
                     break;
+
+                case R.layout.item_course:
+                    if (item.getCourseVO() == null)
+                        return;
+                    helper.setText(R.id.tv_name,item.getCourseVO().getTitle());
+                    helper.setText(R.id.tv_no,item.getCourseVO().getOrdervalue());
+                    break;
                 case R.layout.item_attention_text:
                     switch (type) {
                         case "1":

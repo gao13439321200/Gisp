@@ -306,6 +306,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             R.id.rl_user_info, R.id.ll_dubbing, R.id.tv_fans_number,
             R.id.tv_fans, R.id.fl_mine_qa, R.id.fl_mine_download, R.id.fl_mine_subscribe,
             R.id.ll_meeting, R.id.ll_collection, R.id.iv_menu, R.id.ll_email, R.id.fl_auth,
+            R.id.ll_course,
             R.id.fl_mine_news, R.id.fl_mine_contacts, R.id.fl_mine_collection, R.id.fl_mine_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -380,6 +381,9 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 break;
             case R.id.ll_collection://收藏
                 FragmentActivity.actionActivity(getContext(), "collection_fragment");
+                break;
+            case R.id.ll_course://教程列表
+                FragmentActivity.actionActivity(getContext(), "course");
                 break;
             case R.id.fl_mine_setting:
 //                SettingActivity.actionActivity(getContext());

@@ -292,6 +292,63 @@
 
                 </LinearLayout>
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="visible"
+                    android:background="@color/colorWhite"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_course"
+                        style="@style/main_ll">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/mine_collection"/>
+
+                        <TextView
+                            android:text="@string/course"
+                            style="@style/mine_tv_btn"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/main_ll"
+                        android:visibility="invisible">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/mine_collection"/>
+
+                        <TextView
+                            android:text="@string/information_auth"
+                            style="@style/mine_tv_btn"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/main_ll"
+                        android:visibility="invisible">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/mine_collection"/>
+
+                        <TextView
+                            android:text="@string/dubbing"
+                            style="@style/mine_tv_btn"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
                 <FrameLayout
                     android:id="@+id/fl_mine_contacts"
                     style="@style/mine_frame"

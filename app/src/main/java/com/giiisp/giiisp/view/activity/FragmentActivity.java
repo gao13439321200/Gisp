@@ -84,6 +84,7 @@ public class FragmentActivity extends BaseActivity {
                 case "paper_list":
                 case "summary_list":
                 case "my_review":
+                case "course":
                     fragment = BannerRecyclerViewFragment.newInstance(type, oid);
                     break;
                 case "at":
