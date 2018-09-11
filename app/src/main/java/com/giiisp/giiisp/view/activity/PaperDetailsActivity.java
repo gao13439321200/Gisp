@@ -516,7 +516,7 @@ public class PaperDetailsActivity extends
                 ivPlayStop.setSelected(playService.isPlaying());
 
                 if (playService.getPlayingMusic() != null) {
-                    seekBarPaper.setMax(playService.getPlayingMusic().getDuration() * 1000);
+                    seekBarPaper.setMax((playService.getPlayingMusic().getDuration() - 1) * 1000);
                     tvDuration.setText("/ " + Util.formatSeconds(playService.getPlayingMusic().getDuration()));
                 }
 //                switch (language) {
@@ -609,7 +609,7 @@ public class PaperDetailsActivity extends
                         ivPlayStop.setSelected(playService.isPlaying());
 
                         if (playService.getPlayingMusic() != null) {
-                            seekBarPaper.setMax(playService.getPlayingMusic().getDuration() * 1000);
+                            seekBarPaper.setMax((playService.getPlayingMusic().getDuration() - 1) * 1000);
                             tvDuration.setText("/ " + Util.formatSeconds(playService.getPlayingMusic().getDuration()));
                         }
                         itemClickAdapter.setSelectedPosition(playService.getPlayingPosition());
@@ -1464,9 +1464,9 @@ public class PaperDetailsActivity extends
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("PaperDetailsActivity", "progress:" + progress);
         this.nowProgress = progress;
-        tvPlayTime.setText(Util.formatSeconds(progress / 1000));
-        if (timeString.contains(Util.formatSeconds(progress / 1000))) {
-            PaperEventVO vo = mBeanMap.get(Util.formatSeconds(progress / 1000));
+        tvPlayTime.setText(Util.formatSeconds((progress + 1000) / 1000));
+        if (timeString.contains(Util.formatSeconds((progress + 1000) / 1000))) {
+            PaperEventVO vo = mBeanMap.get(Util.formatSeconds((progress + 1000) / 1000));
             switch (vo.getType()) {
                 case "1"://放大
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -1477,6 +1477,7 @@ public class PaperDetailsActivity extends
                     isFulllScreen = false;
                     break;
                 case "3"://标记
+                    mMyCustomView.clearData();
                     mMyCustomView.addPoint(Float.valueOf(vo.getX()), Float.valueOf(vo.getY()));
                     break;
                 case "4"://调用开始
@@ -1524,7 +1525,7 @@ public class PaperDetailsActivity extends
     public void onPublish(int progress) {
         if (onPlayerEventListener != null)
             onPlayerEventListener.onPublish(progress);
-        tvPlayTime.setText(Util.formatSeconds(progress / 1000));
+        tvPlayTime.setText(Util.formatSeconds((progress + 1000) / 1000));
         seekBarPaper.setProgress(progress);
     }
 
@@ -1599,7 +1600,7 @@ public class PaperDetailsActivity extends
             recyclerView.scrollToPosition(position);
             itemClickAdapter.setSelectedPosition(position);
             itemClickAdapter.notifyDataSetChanged();
-            seekBarPaper.setMax(music.getDuration() * 1000);
+            seekBarPaper.setMax((music.getDuration()-1) * 1000);
             seekBarPaper.setProgress(0);
             List<Song> songs = AppCache.getPlayService().getmMusicList();
             note.setType("play");

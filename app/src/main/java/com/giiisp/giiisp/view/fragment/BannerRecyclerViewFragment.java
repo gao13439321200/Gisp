@@ -57,6 +57,7 @@ import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.PeopleVO;
 import com.giiisp.giiisp.dto.PlayNoteBean;
 import com.giiisp.giiisp.dto.PlayNoteVo;
+import com.giiisp.giiisp.entity.APPConstants;
 import com.giiisp.giiisp.entity.AnswerBean;
 import com.giiisp.giiisp.entity.AnswerEntity;
 import com.giiisp.giiisp.entity.AnswerQUizXBean;
@@ -82,6 +83,7 @@ import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.Log;
 import com.giiisp.giiisp.utils.PackageUtil;
+import com.giiisp.giiisp.utils.RxBus;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.DubbingActivity;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
@@ -105,6 +107,7 @@ import org.greenrobot.greendao.query.Query;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -238,6 +241,14 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         fragment.setArguments(args);
         return fragment;
     }
+
+    public static void newRxBus(String type) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(APPConstants.MyBus.TO, TAG);
+        map.put("type", type);
+        RxBus.getInstance().send(map);
+    }
+
 
     @SuppressLint("CheckResult")
     public void loadDownloadNunber() {
@@ -532,8 +543,21 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         }
     };
 
+    @SuppressLint("CheckResult")
     @Override
     public void initView() {
+        RxBus.getInstance().toObservable(Map.class).subscribe(map -> {
+            if (TAG.equals(map.get(APPConstants.MyBus.TO))) {
+                switch ((String) map.get("type")) {
+                    case "play":
+                        if (itemClickAdapter != null)
+                            itemClickAdapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAuxiliary);
         swipeRefreshLayout.setOnRefreshListener(this);
         //        swipeRefreshLayout.setRefreshing(true);
@@ -2606,7 +2630,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
     //收藏
     @Override
-    public void collection(int id, int integer, final String type, String isFollowed, int parentPosition, int position) {
+    public void collection(int id, int integer, final String type, String isFollowed,
+                           int parentPosition, int position) {
         changePosition = parentPosition;
         version = integer;
         final ArrayMap<String, Object> map = new ArrayMap<>();

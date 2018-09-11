@@ -22,6 +22,7 @@ import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.fragment.BannerRecyclerViewFragment;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import java.io.IOException;
@@ -189,6 +190,7 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
         if (mMusicList.isEmpty()) {
             return;
         }
+        BannerRecyclerViewFragment.newRxBus("play");
 
         if (position < 0) {
             position = mMusicList.size() - 1;
@@ -277,6 +279,7 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
 
     private boolean start() {
         mPlayer.start();
+        BannerRecyclerViewFragment.newRxBus("play");
         if (mPlayer.isPlaying()) {
             playState = STATE_PLAYING;
             mHandler.post(mPublishRunnable);
@@ -291,7 +294,7 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
         if (!isPlaying()) {
             return;
         }
-
+        BannerRecyclerViewFragment.newRxBus("play");
         mPlayer.pause();
         playState = STATE_PAUSE;
         mHandler.removeCallbacks(mPublishRunnable);
@@ -303,7 +306,7 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
         }
     }
 
-    public int getDuration(){
+    public int getDuration() {
         return mPlayer.getDuration();
     }
 

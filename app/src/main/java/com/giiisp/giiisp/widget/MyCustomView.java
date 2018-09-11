@@ -98,6 +98,7 @@ public class MyCustomView extends View {
 //                TimeUtils.getTimeSpan(event.getDownTime(), event.getEventTime(), 1000) >= 2) {
         if (canMark) {
             time = event.getDownTime();
+            mPointList.clear();//每次只显示一个点
             HashMap<String, Float> map = new HashMap<>();
             map.put("x", event.getX());
             map.put("y", event.getY());

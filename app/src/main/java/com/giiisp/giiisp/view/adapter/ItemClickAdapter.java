@@ -15,10 +15,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ObjectUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.common.MyDialog;
 import com.giiisp.giiisp.dto.DubbingVO;
@@ -48,6 +50,7 @@ import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.giiisp.giiisp.view.activity.ProblemActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
 import com.giiisp.giiisp.view.fragment.ListItemClick;
+import com.giiisp.giiisp.widget.recording.AppCache;
 import com.giiisp.giiisp.widget.recording.Util;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -618,9 +621,14 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 
                             break;
                         case "plays":
-                        case "play":
+                        case "play"://播放列表
                             if (item.getPlayNoteVo() == null)
                                 return;
+                            if (AppCache.getPlayService() != null && AppCache.getPlayService().isPlaying() &&
+                                    item.getPlayNoteVo().getId().equals(SPUtils.getInstance().getString(UrlConstants.PID)))
+                                GlideApp.with(mContext).load(R.mipmap.in_play).into((ImageView) helper.getView(R.id.tv_menu));
+                            else
+                                GlideApp.with(mContext).load(R.mipmap.download_stop).into((ImageView) helper.getView(R.id.tv_menu));
                             helper.setText(R.id.tv_title, item.getPlayNoteVo().getTitle());
                             helper.setText(R.id.tv_time, item.getPlayNoteVo().getCreateTime());
                             helper.setText(R.id.tv_paper_browse, item.getPlayNoteVo().getReadnum());
@@ -629,6 +637,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             helper.setText(R.id.tv_paper_download, item.getPlayNoteVo().getDownloadnum());
                             helper.setText(R.id.tv_paper_problem, item.getPlayNoteVo().getQuiznum());
                             helper.setText(R.id.tv_time, item.getPlayNoteVo().getCreateTime());
+
 //                            helper.setVisible(R.id.tv_progress, true);
 //                            int playPosition = item.getPlayNoteVo().getPlayPosition();
 //                            int songsSize = item.getPlayNoteVo().getSongsSize();
@@ -870,8 +879,13 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             btnString = "CN   ▷" + vlistBean.getCnduration() + "   " + vlistBean.getCnsize();
                         }
                         helper.setText(R.id.tv_play, btnString);
-                        helper.getView(R.id.tv_play).setOnClickListener(v -> PaperDetailsActivity.actionActivityNew(mContext,
-                                vlistBean.getId(), vlistBean.getVersion() + "", type, vlistBean.isEnglish() ? EN : CN, mContext.getClass().getName()));
+                        helper.getView(R.id.tv_play).setOnClickListener(v -> PaperDetailsActivity.actionActivityNew(
+                                mContext,
+                                vlistBean.getId(),
+                                vlistBean.getVersion() + "",
+                                "online_paper",
+                                vlistBean.isEnglish() ? EN : CN,
+                                mContext.getClass().getName()));
                     }
 
                     break;

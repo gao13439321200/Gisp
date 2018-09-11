@@ -38,6 +38,7 @@ import com.giiisp.giiisp.entity.SubscribeEntity;
 import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.SDFileHelper;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
@@ -331,21 +332,37 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 break;
             case R.id.tv_use://调用
             case R.id.btn_use:
-                showDiaoYong = !showDiaoYong;
-                mRlBig.setVisibility(showDiaoYong ? View.VISIBLE : View.GONE);
-                mTvUse.setText(showDiaoYong ? "调用" : "返回");
+                if (!showDiaoYong) {//没显示调用弹窗
+                    if ("调用".equals(ToolString.getString(mTvUse))) {
+                        showDiaoYong = true;
+                        mRlBig.setVisibility(View.VISIBLE);
+//                        mTvUse.setText(showDiaoYong ? "调用" : "返回");
+                    } else if ("返回".equals(ToolString.getString(mTvUse))) {
+                        sendData304(0, 0, 5);
+                        //TODO 这里需要跳到录音的图片页
+                        setImageStatus(dubbingPosition);
+//                        mTvUse.setText("调用");
+//                        mRlBig.setVisibility(View.GONE);
+//                        mBtnUse.setVisibility(View.GONE);
+//                        mTvUse.setVisibility(View.GONE);
+//                        mCbMark.setVisibility(View.VISIBLE);
+//                        mTvMark.setVisibility(View.VISIBLE);
+                    }
+                } else {//正在显示调用弹窗，不做操作
+
+                }
                 break;
             case R.id.btn_yes://调用-确定
                 sendData304(0, 0, 4);
-                showDiaoYong = !showDiaoYong;
-                mRlBig.setVisibility(showDiaoYong ? View.VISIBLE : View.GONE);
-                mTvUse.setText(showDiaoYong ? "调用" : "返回");
+                showDiaoYong = false;
+                mRlBig.setVisibility(View.GONE);
+                mTvUse.setText("返回");
                 break;
             case R.id.btn_no://调用-取消
-                sendData304(0, 0, 5);
-                showDiaoYong = !showDiaoYong;
-                mRlBig.setVisibility(showDiaoYong ? View.VISIBLE : View.GONE);
-                mTvUse.setText(showDiaoYong ? "调用" : "返回");
+//                sendData304(0, 0, 5);
+                showDiaoYong = false;
+                mRlBig.setVisibility(View.GONE);
+                mTvUse.setText("调用");
                 break;
             case R.id.tv_back:
                 back = true;
@@ -611,6 +628,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             mCbMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
             mTvMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
             mBtnUse.setVisibility(this.dubbingPosition != position ? View.VISIBLE : View.GONE);
+            mRlBig.setVisibility(this.dubbingPosition != position ? View.VISIBLE : View.GONE);
             mTvUse.setVisibility(this.dubbingPosition != position ? View.VISIBLE : View.GONE);
         } else {//未录音
             if (ObjectUtils.isNotEmpty(dataList.get(position).getDubbingVO().getRid())) {//已经录过音了
@@ -624,6 +642,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 mCbMark.setVisibility(View.VISIBLE);
                 mTvMark.setVisibility(View.VISIBLE);
             }
+            mRlBig.setVisibility(View.GONE);
             mBtnUse.setVisibility(View.GONE);
             mTvUse.setVisibility(View.GONE);
             if (dubbingPosition != position) {//暂停配音
