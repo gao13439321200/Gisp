@@ -51,6 +51,7 @@ public class SubscribeFragment extends BaseFragment implements TabLayout.OnTabSe
         vpMySubscription.setAdapter(new ViewPagerAdapter(getFragmentManager(), fragmentList, titleList));
         tlMySubscription.setupWithViewPager(vpMySubscription);
         vpMySubscription.setCurrentItem(0);
+        vpMySubscription.setScanScroll(true);
         vpMySubscription.setOffscreenPageLimit(2);
         tlMySubscription.addOnTabSelectedListener(this);
     }

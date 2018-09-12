@@ -82,8 +82,10 @@ public class AttentionActivity extends BaseMvpActivity<BaseImpl, WholePresenter>
         switch (type) {
             case "first":
                 linearLayoutGuide.setVisibility(View.VISIBLE);
+                vpMySubscription.setScanScroll(false);
                 break;
             case "mine":
+                vpMySubscription.setScanScroll(true);
                 break;
         }
         Log.i("--->>", "initData");
