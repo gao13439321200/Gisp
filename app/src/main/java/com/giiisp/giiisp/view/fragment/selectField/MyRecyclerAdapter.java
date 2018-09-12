@@ -34,7 +34,7 @@ public class MyRecyclerAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHol
     @Override
     protected void convert(BaseViewHolder helper, ClickEntity item) {
         switch (type) {
-            case 1:
+            case 1://学科
                 SubjectVO vo = item.getSubjectVO();
                 helper.setText(R.id.text, isChinese() ? vo.getName() : vo.getEnarea());
                 helper.setChecked(R.id.text, selectIds.contains(vo.getId()));
@@ -44,7 +44,7 @@ public class MyRecyclerAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHol
                     mOnMyItemClick.myItemClick(type, vo.getId());
                 });
                 break;
-            case 2:
+            case 2://专业
                 MajorVO majorVO = item.getMajorVO();
                 helper.setText(R.id.text, isChinese() ? majorVO.getName() : majorVO.getEnarea());
                 helper.setChecked(R.id.text, selectIds.contains(majorVO.getId()));
@@ -54,8 +54,8 @@ public class MyRecyclerAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHol
                     mOnMyItemClick.myItemClick(type, majorVO.getId());
                 });
                 break;
-            case 3:
-            case 4:
+            case 3://关键字
+            case 4://关键字
                 WordVO wordVO = item.getWordVO();
                 helper.setText(R.id.text, wordVO.getAntistop());
                 helper.setChecked(R.id.text, selectIds.contains(wordVO.getId()));
@@ -128,7 +128,7 @@ public class MyRecyclerAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHol
         }
     }
 
-    interface OnMyItemClick {
+    public interface OnMyItemClick {
         void myItemClick(int type, String id);
     }
 

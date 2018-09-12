@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.net.NetChangeObserver;
 import com.giiisp.giiisp.net.NetWorkUtil;
 import com.giiisp.giiisp.net.NetworkStateReceiver;
@@ -48,7 +50,8 @@ public abstract class BaseFragment extends SupportFragment implements NetChangeO
     public boolean timeout;
     protected boolean mLastNetworkConnect; // 上次网络连接状态
     protected boolean isResume = false;
-    protected String type="";
+    protected String type = "";
+
     public String getType() {
         return type;
     }
@@ -114,7 +117,7 @@ public abstract class BaseFragment extends SupportFragment implements NetChangeO
     public void onResume() {
         super.onResume();
         isResume = true;
-        Log.i("--->>", "onResume: "+this + mLastNetworkConnect);
+        Log.i("--->>", "onResume: " + this + mLastNetworkConnect);
         NetworkStateReceiver.registerObserver(this);
         isNetworkConnect = NetWorkUtil.isNetworkAvailable(getContext());
         isResume = true;
@@ -216,8 +219,12 @@ public abstract class BaseFragment extends SupportFragment implements NetChangeO
 
     }
 
-    public void collection(int id, int integer, String type, String isFollowed,int parentPosition,int position) {
+    public void collection(int id, int integer, String type, String isFollowed, int parentPosition, int position) {
 
+    }
+
+    public String getUserID() {
+        return SPUtils.getInstance().getString(UrlConstants.UID, "");
     }
 
 }

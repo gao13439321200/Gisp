@@ -33,6 +33,7 @@ import com.giiisp.giiisp.view.fragment.BannerRecyclerViewFragment;
 import com.giiisp.giiisp.view.fragment.CollectionDownloadFragment;
 import com.giiisp.giiisp.view.fragment.HomeFragment;
 import com.giiisp.giiisp.view.fragment.MineFragment;
+import com.giiisp.giiisp.view.fragment.SubscribeFragment;
 import com.giiisp.giiisp.widget.MViewPager;
 import com.giiisp.giiisp.widget.recording.AppCache;
 import com.giiisp.giiisp.widget.recording.Extras;
@@ -224,7 +225,7 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
     public void initView() {
 
         fragments.add(HomeFragment.newInstance("home", type));
-        fragments.add(BannerRecyclerViewFragment.newInstance("subscribe", "1"));
+        fragments.add(SubscribeFragment.newInstance());
         fragments.add(BannerRecyclerViewFragment.newInstance("play", "giiisp"));
         fragments.add(CollectionDownloadFragment.newInstance("collection_fragment", "4"));
         fragments.add(new MineFragment());
