@@ -6,8 +6,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
+import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseFragment;
@@ -163,6 +170,18 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
                 }, throwable -> Log.i("--->>", "onError", throwable), () -> {
 
                 });
+        LocationManager locaManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = locaManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        final TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        final GsmCellLocation gsm = (GsmCellLocation) telephony.getCellLocation();
+        ToastUtils.showShort(gsm.getLac() + "," + location.getLongitude() + "," + location.getLatitude());
+
     }
 
     @Subscribe
@@ -244,10 +263,10 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
         } else {
             if (!TextUtils.isEmpty(paperId)) {
                 PaperDetailsActivity.actionActivityNew(this, PaperDetailsActivity.pid,
-                        PaperDetailsActivity.paperId, "online_paper", getLanguage(),this.getClass().getName());
+                        PaperDetailsActivity.paperId, "online_paper", getLanguage(), this.getClass().getName());
             } else if (!TextUtils.isEmpty(downloadId)) {
                 PaperDetailsActivity.actionActivityNew(this, PaperDetailsActivity.pid,
-                        PaperDetailsActivity.downloadId, "download_paper", getLanguage(),this.getClass().getName());
+                        PaperDetailsActivity.downloadId, "download_paper", getLanguage(), this.getClass().getName());
             }
 
         }
