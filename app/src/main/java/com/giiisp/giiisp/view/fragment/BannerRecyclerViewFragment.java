@@ -86,6 +86,7 @@ import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.Log;
 import com.giiisp.giiisp.utils.PackageUtil;
 import com.giiisp.giiisp.utils.RxBus;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.DubbingActivity;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
@@ -937,8 +938,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 //这里需要获取作者论文和综述，暂时不用了
                 break;
             case "course":
-                hMap.put("pageno",page);
-                presenter.getDataAll("321",hMap);
+                hMap.put("pageno", page);
+                presenter.getDataAll("321", hMap);
                 break;
             case "scholar_list":
                 hMap.put("pageno", page);
@@ -1930,7 +1931,10 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 FragmentActivity.actionActivity(getContext(), "he");
                 break;
             case "course":
-                ToastUtils.showShort("点击了：" + itemClickAdapter.getItem(position).getCourseVO().getFileurl());
+                CoursePlayActivity.newInstance(getActivity(),
+                        ToolString.getUrl(itemClickAdapter.getItem(position).getCourseVO().getFileurl()),
+                        itemClickAdapter.getItem(position).getCourseVO().getTitle());
+//                ToastUtils.showShort("点击了：" + ToolString.getUrl(itemClickAdapter.getItem(position).getCourseVO().getFileurl()));
                 break;
             case "plays":
             case "play":
