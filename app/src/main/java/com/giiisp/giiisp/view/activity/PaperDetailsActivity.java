@@ -996,9 +996,9 @@ public class PaperDetailsActivity extends
         hMap.put("uid", uid);
         hMap.put("pid", pid);
         hMap.put("version", myVersionNo);
-        hMap.put("ftype", 1);
-
-
+        hMap.put("picid", imageId.get(position));
+        hMap.put("language", getLanguage());
+        hMap.put("type", "1");
         switch (isFollowed) {
             case "2":
                 presenter.getDataAll("213", hMap);
@@ -1600,7 +1600,7 @@ public class PaperDetailsActivity extends
             recyclerView.scrollToPosition(position);
             itemClickAdapter.setSelectedPosition(position);
             itemClickAdapter.notifyDataSetChanged();
-            seekBarPaper.setMax((music.getDuration()-1) * 1000);
+            seekBarPaper.setMax((music.getDuration() - 1) * 1000);
             seekBarPaper.setProgress(0);
             List<Song> songs = AppCache.getPlayService().getmMusicList();
             note.setType("play");
@@ -1977,6 +1977,7 @@ public class PaperDetailsActivity extends
                     entity.setPaperInfoVO(vo);
                     itemClickAdapter.addData(entity);
                     photoList.add(BASE_IMG_URL + vo.getUrl());
+//                    photoList.add("abc.mp4");
                     imageId.add(vo.getId());
                 }
 

@@ -3047,15 +3047,19 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "collect":
                 map.put("uid", getUserID());
                 map.put("pid", pid);
+                map.put("picid", "");
+                map.put("type", "2");
                 map.put("version", version);
-                map.put("ftype", 1);
+                map.put("language", getLanguage());
                 presenter.getDataAll("213", map);
                 break;
             case "nocollect":
                 map.put("uid", getUserID());
                 map.put("pid", pid);
+                map.put("picid", "");
+                map.put("type", "2");
                 map.put("version", version);
-                map.put("ftype", 1);
+                map.put("language", getLanguage());
                 presenter.getDataAll("217", map);
                 break;
             case "download":
