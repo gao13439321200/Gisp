@@ -18,6 +18,8 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.EditInfoBean;
+import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
@@ -157,7 +159,8 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         userMap.put("language", getLanguage());
         if (presenter != null) {
             swipeRefreshLayout.setRefreshing(true);
-            presenter.getDataAll("306",userMap);
+            presenter.getDataAll("306", userMap);
+            presenter.getDataAll("326", userMap);//获取教育经历
         }
         super.initNetwork();
     }
@@ -178,11 +181,29 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     @Override
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
-        switch(url){
+        switch (url) {
             case "306":
                 swipeRefreshLayout.setRefreshing(false);
                 MIneInfoBean bean = (MIneInfoBean) baseBean;
                 initUser(bean);
+                break;
+            case "326":
+                EditInfoBean bean1 = (EditInfoBean) baseBean;
+                if (null != bean1.getList() && bean1.getList().size() > 0) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    List<ClickEntity> list = new ArrayList<>();
+                    for (EditInfoVo vo : bean1.getList()) {
+                        ClickEntity entity = new ClickEntity();
+                        entity.setEditInfoVo(vo);
+                        list.add(entity);
+                    }
+                    itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_scholar_education, list, type);
+                    recyclerView.setAdapter(itemClickAdapter);
+                } else {
+                    recyclerView.setVisibility(View.GONE);
+                }
+
                 break;
             default:
                 break;

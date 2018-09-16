@@ -24,6 +24,7 @@ import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.common.MyDialog;
 import com.giiisp.giiisp.dto.DubbingVO;
+import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
@@ -687,18 +688,18 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     }
                     break;
                 case R.layout.item_scholar_education:
-                    final UserInfoEntity.IntroductionBean introductionBean = item.getIntroduction(); // Todo 学者详情需要更改
-                    helper.setText(R.id.tv_description, introductionBean.getSchool());//introductionBean.getSchool()
-                    String start = introductionBean.getTimeStart().substring(0, 4);
-                    String end = introductionBean.getTimeEnd().substring(0, 4);
-                    String major = introductionBean.getMajor();
-                    String degree = introductionBean.getDegree();
+                    final EditInfoVo editInfoVo = item.getEditInfoVo();
+                    helper.setText(R.id.tv_description, editInfoVo.getUcname());//introductionBean.getSchool()
+                    String start = editInfoVo.getTimestart().substring(0, 4);
+                    String end = editInfoVo.getTimeend().substring(0, 4);
+                    String major = editInfoVo.getMcname();
+                    String degree = editInfoVo.getEcname();
                     helper.setText(R.id.tv_university_name, start + "~" + end + ", " + major + ", " + degree);
 //                    helper.setText(R.id.tv_university_name,item.getString()+item.getUrl());
                     helper.getView(R.id.tv_edit).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            ExperienceActivity.actionActivity(activity, "edit", introductionBean);
+                            ExperienceActivity.actionActivity(activity, "edit", editInfoVo);
                         }
                     });
                     break;

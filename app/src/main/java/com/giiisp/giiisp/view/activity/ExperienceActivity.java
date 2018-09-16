@@ -4,25 +4,36 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
+import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.CountryListBean;
+import com.giiisp.giiisp.dto.EditInfoVo;
+import com.giiisp.giiisp.dto.SchoolListBean;
+import com.giiisp.giiisp.dto.SchoolVO;
 import com.giiisp.giiisp.entity.BaseEntity;
-import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.ProgressPopupWindow;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,17 +58,34 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     TextView tvUserMajor;
     @BindView(R.id.tv_user_edubackground)
     TextView tvUserEdubackground;
-    @BindView(R.id.tv_user_degree)
-    TextView tvUserDagree;
+    //    @BindView(R.id.tv_user_degree)
+//    TextView tvUserDagree;
     @BindView(R.id.tv_user_starttime)
     TextView tvUserStarttime;
     @BindView(R.id.tv_user_endtime)
     TextView tvUserEndtime;
     @BindView(R.id.tv_delete)
     TextView tvDelete;
+    @BindView(R.id.spin_name)
+    Spinner mNameSpin;
+    @BindView(R.id.spin_major)
+    Spinner mMajorSpin;
+    @BindView(R.id.spin_edu)
+    Spinner mEduSpin;
     int pType;
     ProgressPopupWindow progressPopupWindow;
-    UserInfoEntity.IntroductionBean introductionBean;
+    EditInfoVo introductionBean;
+    SimpleAdapter nameAdapter;
+    SimpleAdapter majorAdapter;
+    SimpleAdapter eduAdapter;
+    List<Map<String, String>> nameList = new ArrayList<>();
+    List<Map<String, String>> majorList = new ArrayList<>();
+    List<Map<String, String>> eduList = new ArrayList<>();
+    private String cId = "";
+    private String nId = "";
+    private String mId = "";
+    private String eId = "";
+
 
     String rid = "";
 
@@ -66,10 +94,10 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         return R.layout.layout_fragment_experience;
     }
 
-    public static void actionActivity(Activity context, String type, UserInfoEntity.IntroductionBean introductionBean) {
+    public static void actionActivity(Activity context, String type, EditInfoVo vo) {
         Intent sIntent = new Intent(context, ExperienceActivity.class);
         sIntent.putExtra("type", type);
-        sIntent.putExtra("introductionBean", introductionBean);
+        sIntent.putExtra("introductionBean", vo);
 //        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivityForResult(sIntent, 1002);
     }
@@ -78,7 +106,6 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     public void initData() {
         super.initData();
         type = getIntent().getStringExtra("type");
-        introductionBean = (UserInfoEntity.IntroductionBean) getIntent().getSerializableExtra("introductionBean");
         progressPopupWindow = new ProgressPopupWindow(this);
     }
 
@@ -91,18 +118,66 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
             switch (type) {
                 case "add":
                     tvDelete.setVisibility(View.GONE);
+                    getCountryList();
                     break;
                 case "edit":
-                    tvUserSchool.setText(TextUtils.isEmpty(introductionBean.getSchool()) ? "" : introductionBean.getSchool());
-                    tvUserMajor.setText(TextUtils.isEmpty(introductionBean.getMajor()) ? "" : introductionBean.getMajor());
-                    tvUserEdubackground.setText(introductionBean.getEduBackground());
-                    tvUserDagree.setText(introductionBean.getDegree());
-                    tvUserStarttime.setText(introductionBean.getTimeStart());
-                    tvUserEndtime.setText(introductionBean.getTimeEnd());
+                    introductionBean = (EditInfoVo) getIntent().getSerializableExtra("introductionBean");
+                    tvUserSchool.setText(TextUtils.isEmpty(introductionBean.getUcname()) ? "" : introductionBean.getUcname());
+                    tvUserMajor.setText(TextUtils.isEmpty(introductionBean.getMcname()) ? "" : introductionBean.getMcname());
+                    tvUserEdubackground.setText(introductionBean.getEcname());
+//                    tvUserDagree.setText(introductionBean.getEcname());
+                    tvUserStarttime.setText(introductionBean.getTimestart());
+                    tvUserEndtime.setText(introductionBean.getTimeend());
                     rid = introductionBean.getId();
+                    cId = introductionBean.getCid();
+                    nId = introductionBean.getUnid();
+                    mId = introductionBean.getUmid();
+                    eId = introductionBean.getEid();
                     break;
             }
         }
+
+        nameAdapter = new SimpleAdapter(this, nameList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
+        mNameSpin.setAdapter(nameAdapter);
+        mNameSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                nId = nameList.get(i).get("id");
+                getMajorList();
+                getEduList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        majorAdapter = new SimpleAdapter(this, majorList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
+        mMajorSpin.setAdapter(majorAdapter);
+        mMajorSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mId = majorList.get(i).get("id");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        eduAdapter = new SimpleAdapter(this, eduList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
+        mEduSpin.setAdapter(eduAdapter);
+        mEduSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                eId = eduList.get(i).get("id");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -121,16 +196,16 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 finish();
                 break;
             case R.id.fl_user_school:
-                inputTitleDialog(tvUserSchool, getString(R.string.school));
+//                inputTitleDialog(tvUserSchool, getString(R.string.school));
                 break;
             case R.id.fl_user_major:
-                inputTitleDialog(tvUserMajor, getString(R.string.major));
+//                inputTitleDialog(tvUserMajor, getString(R.string.major));
                 break;
             case R.id.fl_user_edubackground:
-                inputTitleDialog(tvUserEdubackground, getString(R.string.edubackground));
+//                inputTitleDialog(tvUserEdubackground, getString(R.string.edubackground));
                 break;
             case R.id.fl_user_degree:
-                inputTitleDialog(tvUserDagree, getString(R.string.degree));
+//                inputTitleDialog(tvUserDagree, getString(R.string.degree));
                 break;
             case R.id.fl_user_starttime:
                 showDate(tvUserStarttime, getString(R.string.starttime));
@@ -139,66 +214,57 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 showDate(tvUserEndtime, getString(R.string.endtime));
                 break;
             case R.id.tv_delete:
-                ArrayMap<String, Object> dmap = new ArrayMap<>();
-                dmap.put("uid", uid);
-                if (introductionBean.getId() != null) {
-                    dmap.put("rid", introductionBean.getId());
-                    if (presenter != null) {
-                        pType = 2;
-                        progressPopupWindow.showPopupWindow();
-                        presenter.deleteIntroduction(dmap);
-                    }
-                }
-
+                HashMap<String, Object> dmap = new HashMap<>();
+                dmap.put("rid", rid);
+                progressPopupWindow.showPopupWindow();
+                presenter.getDataAll("329", dmap);
                 break;
             case R.id.tv_right:
-                String school = tvUserSchool.getText().toString();
-                String major = tvUserMajor.getText().toString();
-                String edubackground = tvUserEdubackground.getText().toString();
-                String degree = tvUserDagree.getText().toString();
-                String timeStart = tvUserStarttime.getText().toString();
-                String timeEnd = tvUserEndtime.getText().toString();
+//                String school = tvUserSchool.getText().toString();
+//                String major = tvUserMajor.getText().toString();
+//                String edubackground = tvUserEdubackground.getText().toString();
+////                String degree = tvUserDagree.getText().toString();
+//                String timeStart = tvUserStarttime.getText().toString();
+//                String timeEnd = tvUserEndtime.getText().toString();
 
-                ArrayMap<String, Object> map = new ArrayMap<>();
+                HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", uid);
-                if (!TextUtils.isEmpty(school)) {
-                    map.put("school", school);
+                if (!TextUtils.isEmpty(nId)) {
+                    map.put("unid", nId);
                 }
-                if (!TextUtils.isEmpty(major)) {
-                    map.put("major", major);
+                if (!TextUtils.isEmpty(mId)) {
+                    map.put("umid", mId);
                 }
-                if (TextUtils.isEmpty(edubackground)) {
+                if (TextUtils.isEmpty(eId)) {
                     Utils.showToast(R.string.edubackground_verified);
                 } else {
-                    map.put("edubackground", edubackground);
+                    map.put("eid", eId);
                 }
-                if (TextUtils.isEmpty(degree)) {
-                    Utils.showToast(R.string.degree_verified);
-                    return;
-                } else {
-                    map.put("degree", degree);
-                }
-                if (TextUtils.isEmpty(timeStart)) {
+//                if (TextUtils.isEmpty(degree)) {
+//                    Utils.showToast(R.string.degree_verified);
+//                    return;
+//                } else {
+//                    map.put("degree", degree);
+//                }
+                if (TextUtils.isEmpty(ToolString.getString(tvUserStarttime))) {
                     Utils.showToast(R.string.time_start_verified);
                     return;
                 } else {
-                    map.put("timestart", timeStart);
+                    map.put("timestart", ToolString.getString(tvUserStarttime));
                 }
-                if (TextUtils.isEmpty(timeEnd)) {
+                if (TextUtils.isEmpty(ToolString.getString(tvUserEndtime))) {
                     Utils.showToast(R.string.time_end_verified);
                     return;
                 } else {
-                    map.put("timeend", timeEnd);
+                    map.put("timeend", ToolString.getString(tvUserEndtime));
                 }
                 map.put("rid", rid);
                 if (presenter != null) {
                     progressPopupWindow.showPopupWindow();
                     if (type.equals("add")) {
-                        pType = 1;
-                        presenter.addIntroduction(map);
+                        presenter.getDataAll("327", map);
                     } else if (type.equals("edit")) {
-                        pType = 3;
-                        presenter.updateIntroduction(map);
+                        presenter.getDataAll("328", map);
                     }
                 }
 
@@ -303,5 +369,80 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     @Override
     public String getNowActivityName() {
         return this.getClass().getName();
+    }
+
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseBean) {
+        super.onSuccessNew(url, baseBean);
+        switch (url) {
+            case "322":
+                CountryListBean bean = (CountryListBean) baseBean;
+
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("id", bean.getList().get(0).getId());
+                presenter.getDataAll("323", map);
+                break;
+            case "323"://学校
+                SchoolListBean schoolListBean = (SchoolListBean) baseBean;
+                for (SchoolVO vo : schoolListBean.getList()) {
+                    Map<String, String> sMap = new HashMap<>();
+                    sMap.put("text", vo.getCname());
+                    sMap.put("id", vo.getId());
+                    nameList.add(sMap);
+                }
+                nameAdapter.notifyDataSetChanged();
+                break;
+            case "324"://专业
+                SchoolListBean majorBean = (SchoolListBean) baseBean;
+                for (SchoolVO vo : majorBean.getList()) {
+                    Map<String, String> sMap = new HashMap<>();
+                    sMap.put("text", vo.getCname());
+                    sMap.put("id", vo.getId());
+                    majorList.add(sMap);
+                }
+                majorAdapter.notifyDataSetChanged();
+                break;
+            case "325"://学历
+                SchoolListBean eduBean = (SchoolListBean) baseBean;
+                for (SchoolVO vo : eduBean.getList()) {
+                    Map<String, String> sMap = new HashMap<>();
+                    sMap.put("text", vo.getCname());
+                    sMap.put("id", vo.getId());
+                    eduList.add(sMap);
+                }
+                eduAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
+    }
+
+    //国家
+    private void getCountryList() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("uid", getUserID());
+        presenter.getDataAll("322", map);
+    }
+
+    //学校
+    private void getSchoolList() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("cid", cId);
+        presenter.getDataAll("323", map);
+    }
+
+    //专业
+    private void getMajorList() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("unid", nId);
+        presenter.getDataAll("324", map);
+    }
+
+    //学历
+    private void getEduList() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("unid", nId);
+        presenter.getDataAll("325", map);
     }
 }

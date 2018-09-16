@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorBackground"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
 
-    <include layout="@layout/layout_fragment_banner" />
+    <include layout="@layout/layout_fragment_banner"/>
 
     <FrameLayout
         android:id="@+id/fl_user_school"
@@ -18,18 +18,26 @@
             style="@style/info_text_colorsize"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="14dp"
-            android:text="@string/school" />
+            android:text="@string/school"/>
 
         <TextView
             android:id="@+id/tv_user_school"
             style="@style/edit_text_colorsize"
-            android:layout_marginEnd="15dp" />
+            android:layout_marginEnd="15dp"
+            android:visibility="invisible"/>
+
+        <Spinner
+            android:id="@+id/spin_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:minWidth="200dp"/>
     </FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorBackground" />
+        android:background="@color/colorBackground"/>
 
     <FrameLayout
         android:id="@+id/fl_user_major"
@@ -41,18 +49,26 @@
             style="@style/info_text_colorsize"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="14dp"
-            android:text="@string/major" />
+            android:text="@string/major"/>
 
         <TextView
             android:id="@+id/tv_user_major"
             style="@style/edit_text_colorsize"
-            android:layout_marginEnd="15dp" />
+            android:visibility="invisible"
+            android:layout_marginEnd="15dp"/>
+
+        <Spinner
+            android:id="@+id/spin_major"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:minWidth="200dp"/>
     </FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorBackground" />
+        android:background="@color/colorBackground"/>
 
     <FrameLayout
         android:id="@+id/fl_user_edubackground"
@@ -64,38 +80,47 @@
             style="@style/info_text_colorsize"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="14dp"
-            android:text="@string/edubackground" />
+            android:text="@string/edubackground"/>
 
         <TextView
             android:id="@+id/tv_user_edubackground"
             style="@style/right_text_colorsize"
             android:hint="@string/mandatory"
-            android:textColorHint="@color/colorTextLineGrey" />
+            android:textColorHint="@color/colorTextLineGrey"
+            android:visibility="invisible"/>
+
+        <Spinner
+            android:id="@+id/spin_edu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:minWidth="200dp"/>
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/fl_user_degree"
         android:layout_width="match_parent"
         android:layout_height="52.3dp"
-        android:background="@color/colorWhite">
+        android:background="@color/colorWhite"
+        android:visibility="gone">
 
         <TextView
             style="@style/info_text_colorsize"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="14dp"
-            android:text="@string/degree" />
+            android:text="@string/degree"/>
 
         <TextView
             android:id="@+id/tv_user_degree"
             style="@style/right_text_colorsize"
             android:hint="@string/mandatory"
-            android:textColorHint="@color/colorTextLineGrey" />
+            android:textColorHint="@color/colorTextLineGrey"/>
     </FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorBackground" />
+        android:background="@color/colorBackground"/>
 
     <FrameLayout
         android:id="@+id/fl_user_starttime"
@@ -107,19 +132,19 @@
             style="@style/info_text_colorsize"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="14dp"
-            android:text="@string/starttime" />
+            android:text="@string/starttime"/>
 
         <TextView
             android:id="@+id/tv_user_starttime"
             style="@style/right_text_colorsize"
             android:hint="@string/mandatory"
-            android:textColorHint="@color/colorTextLineGrey" />
+            android:textColorHint="@color/colorTextLineGrey"/>
     </FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorBackground" />
+        android:background="@color/colorBackground"/>
 
     <FrameLayout
         android:id="@+id/fl_user_endtime"
@@ -131,13 +156,13 @@
             style="@style/info_text_colorsize"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="14dp"
-            android:text="@string/endtime" />
+            android:text="@string/endtime"/>
 
         <TextView
             android:id="@+id/tv_user_endtime"
             style="@style/right_text_colorsize"
             android:hint="@string/mandatory"
-            android:textColorHint="@color/colorTextLineGrey" />
+            android:textColorHint="@color/colorTextLineGrey"/>
     </FrameLayout>
 
 
@@ -149,5 +174,5 @@
         android:background="@mipmap/guide_next"
         android:gravity="center"
         android:text="@string/delete"
-        android:textSize="@dimen/text_size" />
+        android:textSize="@dimen/text_size"/>
 </LinearLayout>

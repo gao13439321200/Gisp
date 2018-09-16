@@ -198,8 +198,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             }
 //            switch (isVip) {
 //                case "0":
-//                    tvVerified.setVisibility(View.VISIBLE);
-//                    tvVerified.setText("身份认证");
+                    tvVerified.setVisibility(View.VISIBLE);
+                    tvVerified.setText("身份认证");
 //                    break;
 //                case "1":
 //                    tvVerified.setVisibility(View.VISIBLE);
@@ -389,20 +389,20 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //                SettingActivity.actionActivity(getContext());
                 break;
             case R.id.tv_verified://身份认证
-                switch (isVip) {
-                    case "0":
+//                switch (isVip) {
+//                    case "0":
                         VerifiedActivity.actionActivity(context);
-                        break;
-                    case "1":
-                        VerifiedActivity.actionActivity(context);
-                        break;
-                    case "2":
-                        VerifiedActivity.actionActivity(context);
-                        break;
-                    case "3":
-                        Utils.showToast(R.string.in_authentication);
-                        break;
-                }
+//                        break;
+//                    case "1":
+//                        VerifiedActivity.actionActivity(context);
+//                        break;
+//                    case "2":
+//                        VerifiedActivity.actionActivity(context);
+//                        break;
+//                    case "3":
+//                        Utils.showToast(R.string.in_authentication);
+//                        break;
+//                }
                 break;
             case R.id.ll_email://邮箱认证
                 FragmentActivity.actionActivity(getContext(), "mailbox_authentication");

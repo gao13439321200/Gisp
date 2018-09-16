@@ -12,10 +12,12 @@ import com.giiisp.giiisp.api.ApiStoreNew;
 import com.giiisp.giiisp.base.BasePresenter;
 import com.giiisp.giiisp.dto.AppInfoBean;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.CountryListBean;
 import com.giiisp.giiisp.dto.CourseBean;
 import com.giiisp.giiisp.dto.DownloadInfoBean;
 import com.giiisp.giiisp.dto.DubbingBean;
 import com.giiisp.giiisp.dto.DubbingListBean;
+import com.giiisp.giiisp.dto.EditInfoBean;
 import com.giiisp.giiisp.dto.FansBean;
 import com.giiisp.giiisp.dto.FollowBean;
 import com.giiisp.giiisp.dto.HeadImgBean;
@@ -33,6 +35,7 @@ import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperQaBean;
 import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.PlayNoteBean;
+import com.giiisp.giiisp.dto.SchoolListBean;
 import com.giiisp.giiisp.dto.SubjectBean;
 import com.giiisp.giiisp.dto.WordBean;
 import com.giiisp.giiisp.entity.AnswerEntity;
@@ -1550,7 +1553,18 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             case "321":
                 baseEntity = new Gson().fromJson(cipher, CourseBean.class);
                 break;
-            default://101、105、111、304、318、215
+            case "322":
+                baseEntity = new Gson().fromJson(cipher, CountryListBean.class);
+                break;
+            case "323":
+            case "324":
+            case "325":
+                baseEntity = new Gson().fromJson(cipher, SchoolListBean.class);
+                break;
+            case "326":
+                baseEntity = new Gson().fromJson(cipher, EditInfoBean.class);
+                break;
+            default://101、105、111、304、318、215、327、328、329
                 baseEntity = new Gson().fromJson(cipher, BaseBean.class);
                 break;
         }
