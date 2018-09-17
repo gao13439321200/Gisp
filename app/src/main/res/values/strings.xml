@@ -17,6 +17,7 @@
     <string name="enter_phone">手机号码</string>
     <string name="enter_nickname">输入昵称</string>
     <string name="sex">性别</string>
+    <string name="area_major">领域/专业</string>
     <string name="man">男</string>
     <string name="gril">女</string>
     <string name="get_verification_code">获取验证码</string>
@@ -153,6 +154,7 @@
     <string name="examine_prompt">我们会在3~5个工作日完成对资料的审核</string>
     <string name="sms_notification">并以短信的形式通知您。</string>
     <string name="confirm_submission">确认提交</string>
+    <string name="confirm_delete">确认删除</string>
     <string name="screening_certificate">筛选证明人</string>
     <string name="privacy_setting">隐私设置</string>
     <string name="unknown">未知</string>

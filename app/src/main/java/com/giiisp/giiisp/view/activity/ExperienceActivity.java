@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,30 +66,25 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     TextView tvUserEndtime;
     @BindView(R.id.tv_delete)
     TextView tvDelete;
-    @BindView(R.id.spin_name)
-    Spinner mNameSpin;
-    @BindView(R.id.spin_major)
-    Spinner mMajorSpin;
-    @BindView(R.id.spin_edu)
-    Spinner mEduSpin;
     int pType;
     ProgressPopupWindow progressPopupWindow;
     EditInfoVo introductionBean;
-    SimpleAdapter nameAdapter;
-    SimpleAdapter majorAdapter;
-    SimpleAdapter eduAdapter;
-    List<Map<String, String>> nameList = new ArrayList<>();
-    List<Map<String, String>> majorList = new ArrayList<>();
-    List<Map<String, String>> eduList = new ArrayList<>();
     private String cId = "";
     private String nId = "";
     private String mId = "";
     private String eId = "";
-    private boolean nameFirst = true;
-    private boolean majorFirst = true;
-    private boolean eduFirst = true;
-
-
+    private ListPopupWindow namePop;
+    private ListPopupWindow majorPop;
+    private ListPopupWindow eduPop;
+    private List<String> names = new ArrayList<>();
+    private List<String> majors = new ArrayList<>();
+    private List<String> edus = new ArrayList<>();
+    private ArrayAdapter nameAdapter;
+    private ArrayAdapter majorAdapter;
+    private ArrayAdapter eduAdapter;
+    private SchoolListBean nameListBean;
+    private SchoolListBean majorListBean;
+    private SchoolListBean eduListBean;
     String rid = "";
 
     @Override
@@ -125,24 +119,10 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                     break;
                 case "edit":
                     introductionBean = (EditInfoVo) getIntent().getSerializableExtra("introductionBean");
-//                    tvUserSchool.setText(TextUtils.isEmpty(introductionBean.getUcname()) ? "" : introductionBean.getUcname());
-//                    tvUserMajor.setText(TextUtils.isEmpty(introductionBean.getMcname()) ? "" : introductionBean.getMcname());
-//                    tvUserEdubackground.setText(introductionBean.getEcname());
-////                    tvUserDagree.setText(introductionBean.getEcname());
-                    Map<String, String> sMap = new HashMap<>();
-                    sMap.put("text", introductionBean.getUcname());
-                    sMap.put("id", introductionBean.getUnid());
-                    nameList.add(sMap);
-
-                    sMap = new HashMap<>();
-                    sMap.put("text", introductionBean.getMcname());
-                    sMap.put("id", introductionBean.getUmid());
-                    majorList.add(sMap);
-
-                    sMap = new HashMap<>();
-                    sMap.put("text", introductionBean.getEcname());
-                    sMap.put("id", introductionBean.getEid());
-                    eduList.add(sMap);
+                    tvUserSchool.setText(TextUtils.isEmpty(introductionBean.getUcname()) ? "" : introductionBean.getUcname());
+                    tvUserMajor.setText(TextUtils.isEmpty(introductionBean.getMcname()) ? "" : introductionBean.getMcname());
+                    tvUserEdubackground.setText(introductionBean.getEcname());
+//                    tvUserDagree.setText(introductionBean.getEcname());
                     tvUserStarttime.setText(introductionBean.getTimestart());
                     tvUserEndtime.setText(introductionBean.getTimeend());
                     rid = introductionBean.getId();
@@ -154,64 +134,51 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
             }
         }
 
-        nameAdapter = new SimpleAdapter(this, nameList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
-        mNameSpin.setAdapter(nameAdapter);
-        if (nameList.size() != 0)
-            mNameSpin.setSelection(0, true);
-        mNameSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (nameFirst) {
-                    nameFirst = false;
-                } else {
-                    nId = nameList.get(i).get("id");
-                    getMajorList();
-                    getEduList();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+        namePop = new ListPopupWindow(this);
+        nameAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names);
+        namePop.setAdapter(nameAdapter);
+        namePop.setAnchorView(tvUserSchool);
+        namePop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        namePop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        namePop.setModal(true);
+        namePop.setOnItemClickListener((parent, view, position, id) -> {
+            tvUserSchool.setText(names.get(position));
+            nId = nameListBean.getList().get(position).getId();
+            mId = "";
+            eId = "";
+            tvUserMajor.setText("");
+            tvUserEdubackground.setText("");
+            getMajorList();
+            getEduList();
+            namePop.dismiss();
         });
-        majorAdapter = new SimpleAdapter(this, majorList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
-        mMajorSpin.setAdapter(majorAdapter);
-        if (majorList.size() != 0)
-            mMajorSpin.setSelection(0, true);
-        mMajorSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (majorFirst) {
-                    majorFirst = false;
-                } else {
-                    mId = majorList.get(i).get("id");
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
+        majorPop = new ListPopupWindow(this);
+        majorAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, majors);
+        majorPop.setAdapter(majorAdapter);
+        majorPop.setAnchorView(tvUserMajor);
+        majorPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        majorPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        majorPop.setModal(true);
+        majorPop.setOnItemClickListener((parent, view, position, id) -> {
+            tvUserMajor.setText(majors.get(position));
+            mId = majorListBean.getList().get(position).getId();
+            majorPop.dismiss();
         });
-        eduAdapter = new SimpleAdapter(this, eduList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
-        mEduSpin.setAdapter(eduAdapter);
-        if (eduList.size() != 0)
-            mEduSpin.setSelection(0, true);
-        mEduSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (eduFirst) {
-                    eduFirst = false;
-                } else {
-                    eId = eduList.get(i).get("id");
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
+        eduPop = new ListPopupWindow(this);
+        eduAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, edus);
+        eduPop.setAdapter(eduAdapter);
+        eduPop.setAnchorView(tvUserEdubackground);
+        eduPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        eduPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        eduPop.setModal(true);
+        eduPop.setOnItemClickListener((parent, view, position, id) -> {
+            tvUserEdubackground.setText(edus.get(position));
+            eId = eduListBean.getList().get(position).getId();
+            eduPop.dismiss();
         });
         switch (type) {
             case "add":
@@ -219,6 +186,8 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 break;
             case "edit":
                 getSchoolList();
+                getMajorList();
+                getEduList();
                 break;
         }
 
@@ -240,13 +209,13 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 finish();
                 break;
             case R.id.fl_user_school:
-//                inputTitleDialog(tvUserSchool, getString(R.string.school));
+                namePop.show();
                 break;
             case R.id.fl_user_major:
-//                inputTitleDialog(tvUserMajor, getString(R.string.major));
+                majorPop.show();
                 break;
             case R.id.fl_user_edubackground:
-//                inputTitleDialog(tvUserEdubackground, getString(R.string.edubackground));
+                eduPop.show();
                 break;
             case R.id.fl_user_degree:
 //                inputTitleDialog(tvUserDagree, getString(R.string.degree));
@@ -258,19 +227,23 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 showDate(tvUserEndtime, getString(R.string.endtime));
                 break;
             case R.id.tv_delete:
-                HashMap<String, Object> dmap = new HashMap<>();
-                dmap.put("rid", rid);
-                progressPopupWindow.showPopupWindow();
-                presenter.getDataAll("329", dmap);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.confirm_delete)).setIcon(
+                        R.mipmap.ic_launcher).setNegativeButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        HashMap<String, Object> dmap = new HashMap<>();
+                        dmap.put("rid", rid);
+                        progressPopupWindow.showPopupWindow();
+                        presenter.getDataAll("329", dmap);
+                    }
+                });
+                builder.setPositiveButton(getString(R.string.cancel),
+                        (dialog, which) -> {
+                        });
+                builder.show();
                 break;
             case R.id.tv_right:
-//                String school = tvUserSchool.getText().toString();
-//                String major = tvUserMajor.getText().toString();
-//                String edubackground = tvUserEdubackground.getText().toString();
-////                String degree = tvUserDagree.getText().toString();
-//                String timeStart = tvUserStarttime.getText().toString();
-//                String timeEnd = tvUserEndtime.getText().toString();
-
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", uid);
                 if (!TextUtils.isEmpty(nId)) {
@@ -426,41 +399,51 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 getSchoolList();
                 break;
             case "323"://学校
-                nameList.clear();
-                SchoolListBean schoolListBean = (SchoolListBean) baseBean;
-                for (SchoolVO vo : schoolListBean.getList()) {
-                    Map<String, String> sMap = new HashMap<>();
-                    sMap.put("text", vo.getCname());
-                    sMap.put("id", vo.getId());
-                    nameList.add(sMap);
+                names.clear();
+                nameListBean = (SchoolListBean) baseBean;
+                for (SchoolVO vo : nameListBean.getList()) {
+                    names.add(vo.getCname());
                 }
                 nameAdapter.notifyDataSetChanged();
                 break;
             case "324"://专业
-                majorList.clear();
-                SchoolListBean majorBean = (SchoolListBean) baseBean;
-                for (SchoolVO vo : majorBean.getList()) {
-                    Map<String, String> sMap = new HashMap<>();
-                    sMap.put("text", vo.getCname());
-                    sMap.put("id", vo.getId());
-                    majorList.add(sMap);
+                majors.clear();
+                majorListBean = (SchoolListBean) baseBean;
+                for (SchoolVO vo : majorListBean.getList()) {
+                    majors.add(vo.getCname());
                 }
                 majorAdapter.notifyDataSetChanged();
                 break;
             case "325"://学历
-                eduList.clear();
-                SchoolListBean eduBean = (SchoolListBean) baseBean;
-                for (SchoolVO vo : eduBean.getList()) {
-                    Map<String, String> sMap = new HashMap<>();
-                    sMap.put("text", vo.getCname());
-                    sMap.put("id", vo.getId());
-                    eduList.add(sMap);
+                edus.clear();
+                eduListBean = (SchoolListBean) baseBean;
+                for (SchoolVO vo : eduListBean.getList()) {
+                    edus.add(vo.getCname());
                 }
                 eduAdapter.notifyDataSetChanged();
                 break;
             case "327":
+            case "328":
                 ToastUtils.showShort("保存成功！");
                 finish();
+                break;
+            case "329":
+                ToastUtils.showShort("删除成功！");
+                finish();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onFailNew(String url, String msg) {
+        super.onFailNew(url, msg);
+        switch (url) {
+            case "327":
+            case "328":
+            case "329":
+                progressPopupWindow.dismiss();
                 break;
             default:
                 break;

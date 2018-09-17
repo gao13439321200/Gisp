@@ -23,15 +23,9 @@
         <TextView
             android:id="@+id/tv_user_school"
             style="@style/edit_text_colorsize"
+            android:layout_width="200dp"
             android:layout_marginEnd="15dp"
-            android:visibility="invisible"/>
-
-        <Spinner
-            android:id="@+id/spin_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:minWidth="200dp"/>
+            android:gravity="end"/>
     </FrameLayout>
 
     <View
@@ -54,15 +48,10 @@
         <TextView
             android:id="@+id/tv_user_major"
             style="@style/edit_text_colorsize"
-            android:visibility="invisible"
-            android:layout_marginEnd="15dp"/>
+            android:layout_width="200dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="end"/>
 
-        <Spinner
-            android:id="@+id/spin_major"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:minWidth="200dp"/>
     </FrameLayout>
 
     <View
@@ -85,16 +74,11 @@
         <TextView
             android:id="@+id/tv_user_edubackground"
             style="@style/right_text_colorsize"
+            android:layout_width="200dp"
+            android:gravity="end"
             android:hint="@string/mandatory"
-            android:textColorHint="@color/colorTextLineGrey"
-            android:visibility="invisible"/>
+            android:textColorHint="@color/colorTextLineGrey"/>
 
-        <Spinner
-            android:id="@+id/spin_edu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:minWidth="200dp"/>
     </FrameLayout>
 
     <FrameLayout

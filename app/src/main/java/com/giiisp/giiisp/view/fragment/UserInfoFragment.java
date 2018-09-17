@@ -267,8 +267,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 String email = tvUserEmail.getText().toString();
                 String organization = tvUserMechanism.getText().toString();
                 String position = tvUserPosition.getText().toString();
-                String department = tvUserResume.getText().toString();
-                String web = tvUserWeb.getText().toString();
+//                String department = tvUserResume.getText().toString();
+//                String web = tvUserWeb.getText().toString();
                 if (!TextUtils.isEmpty(phone)) {
                     map.put("phone", phone);
                 } else {
@@ -284,12 +284,12 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 if (!TextUtils.isEmpty(position)) {
                     map.put("position", position);
                 }
-                if (!TextUtils.isEmpty(department)) {
-                    map.put("department", department);
-                }
-                if (!TextUtils.isEmpty(web)) {
-                    map.put("web", web);
-                }
+//                if (!TextUtils.isEmpty(department)) {
+//                    map.put("department", department);
+//                }
+//                if (!TextUtils.isEmpty(web)) {
+//                    map.put("web", web);
+//                }
                 if (map.size() > 0) {
                     map.put("id", getUserID());
                     progressPopupWindow.showPopupWindow();

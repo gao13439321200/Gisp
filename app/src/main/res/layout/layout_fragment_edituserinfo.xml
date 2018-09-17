@@ -8,7 +8,7 @@
               android:gravity="center_horizontal"
               android:orientation="vertical">
 
-    <include layout="@layout/layout_fragment_banner"/>
+    <include layout="@layout/layout_fragment_banner_new"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,8 +21,7 @@
 
             <FrameLayout
                 android:id="@+id/fl_user_icon"
-                style="@style/mine_frame"
-                android:layout_marginTop="20dp">
+                style="@style/mine_frame">
 
                 <TextView
                     style="@style/info_text_colorsize"
@@ -44,9 +43,7 @@
 
             <FrameLayout
                 android:id="@+id/fl_user_name"
-
-                style="@style/mine_frame"
-                android:layout_marginTop="20dp">
+                style="@style/mine_frame">
 
                 <TextView
                     style="@style/info_text_colorsize"
@@ -73,6 +70,23 @@
                 <TextView
                     android:id="@+id/tv_user_sex"
                     style="@style/right_text_colorsize"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_user_professional"
+                style="@style/mine_frame"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/info_text_colorsize"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="14dp"
+                    android:text="@string/fieldmajor"/>
+
+                <TextView
+                    android:id="@+id/tv_user_professional"
+                    style="@style/right_text_colorsize"/>
+
             </FrameLayout>
 
             <FrameLayout
@@ -108,25 +122,9 @@
 
 
             <FrameLayout
-                android:id="@+id/fl_user_professional"
+                android:id="@+id/fl_user_resume"
                 style="@style/mine_frame"
                 android:visibility="gone">
-
-                <TextView
-                    style="@style/info_text_colorsize"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="14dp"
-                    android:text="@string/fieldmajor"/>
-
-                <TextView
-                    android:id="@+id/tv_user_professional"
-                    style="@style/right_text_colorsize"/>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/fl_user_resume"
-                style="@style/mine_frame">
 
                 <TextView
                     style="@style/info_text_colorsize"
@@ -141,7 +139,8 @@
 
             <FrameLayout
                 android:id="@+id/fl_user_web"
-                style="@style/mine_frame">
+                style="@style/mine_frame"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/info_text_colorsize"
@@ -178,7 +177,9 @@
 
                 <TextView
                     android:id="@+id/tv_user_email"
-                    style="@style/right_text_colorsize"/>
+                    style="@style/right_text_colorsize"
+                    android:gravity="end"
+                    android:hint="请填写您的机构邮箱"/>
             </FrameLayout>
 
 

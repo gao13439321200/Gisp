@@ -3,10 +3,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:fitsSystemWindows="true"
-              android:layout_marginTop="-24dp"
               android:orientation="vertical">
 
-    <include layout="@layout/layout_fragment_banner"
+    <include layout="@layout/layout_fragment_banner_new"
        />
 
     <com.giiisp.giiisp.widget.StepsView
