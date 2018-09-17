@@ -690,18 +690,17 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_scholar_education:
                     final EditInfoVo editInfoVo = item.getEditInfoVo();
                     helper.setText(R.id.tv_description, editInfoVo.getUcname());//introductionBean.getSchool()
-                    String start = editInfoVo.getTimestart().substring(0, 4);
-                    String end = editInfoVo.getTimeend().substring(0, 4);
+                    String start = "";
+                    String end = "";
+                    if (ObjectUtils.isNotEmpty(editInfoVo.getTimestart()))
+                        start = editInfoVo.getTimestart().substring(0, 4);
+                    if (ObjectUtils.isNotEmpty(editInfoVo.getTimeend()))
+                        end = editInfoVo.getTimeend().substring(0, 4);
                     String major = editInfoVo.getMcname();
                     String degree = editInfoVo.getEcname();
                     helper.setText(R.id.tv_university_name, start + "~" + end + ", " + major + ", " + degree);
 //                    helper.setText(R.id.tv_university_name,item.getString()+item.getUrl());
-                    helper.getView(R.id.tv_edit).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ExperienceActivity.actionActivity(activity, "edit", editInfoVo);
-                        }
-                    });
+                    helper.getView(R.id.tv_edit).setOnClickListener(view -> ExperienceActivity.actionActivity(activity, "edit", editInfoVo));
                     break;
                 case R.layout.item_authentication_info:
                     helper.setText(R.id.tv_research_field, item.getString());
@@ -764,8 +763,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_course:
                     if (item.getCourseVO() == null)
                         return;
-                    helper.setText(R.id.tv_name,item.getCourseVO().getTitle());
-                    helper.setText(R.id.tv_no,item.getCourseVO().getOrdervalue());
+                    helper.setText(R.id.tv_name, item.getCourseVO().getTitle());
+                    helper.setText(R.id.tv_no, item.getCourseVO().getOrdervalue());
                     break;
                 case R.layout.item_attention_text:
                     switch (type) {

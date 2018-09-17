@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.dto.BaseBean;
@@ -85,6 +86,9 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     private String nId = "";
     private String mId = "";
     private String eId = "";
+    private boolean nameFirst = true;
+    private boolean majorFirst = true;
+    private boolean eduFirst = true;
 
 
     String rid = "";
@@ -118,14 +122,27 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
             switch (type) {
                 case "add":
                     tvDelete.setVisibility(View.GONE);
-                    getCountryList();
                     break;
                 case "edit":
                     introductionBean = (EditInfoVo) getIntent().getSerializableExtra("introductionBean");
-                    tvUserSchool.setText(TextUtils.isEmpty(introductionBean.getUcname()) ? "" : introductionBean.getUcname());
-                    tvUserMajor.setText(TextUtils.isEmpty(introductionBean.getMcname()) ? "" : introductionBean.getMcname());
-                    tvUserEdubackground.setText(introductionBean.getEcname());
-//                    tvUserDagree.setText(introductionBean.getEcname());
+//                    tvUserSchool.setText(TextUtils.isEmpty(introductionBean.getUcname()) ? "" : introductionBean.getUcname());
+//                    tvUserMajor.setText(TextUtils.isEmpty(introductionBean.getMcname()) ? "" : introductionBean.getMcname());
+//                    tvUserEdubackground.setText(introductionBean.getEcname());
+////                    tvUserDagree.setText(introductionBean.getEcname());
+                    Map<String, String> sMap = new HashMap<>();
+                    sMap.put("text", introductionBean.getUcname());
+                    sMap.put("id", introductionBean.getUnid());
+                    nameList.add(sMap);
+
+                    sMap = new HashMap<>();
+                    sMap.put("text", introductionBean.getMcname());
+                    sMap.put("id", introductionBean.getUmid());
+                    majorList.add(sMap);
+
+                    sMap = new HashMap<>();
+                    sMap.put("text", introductionBean.getEcname());
+                    sMap.put("id", introductionBean.getEid());
+                    eduList.add(sMap);
                     tvUserStarttime.setText(introductionBean.getTimestart());
                     tvUserEndtime.setText(introductionBean.getTimeend());
                     rid = introductionBean.getId();
@@ -139,12 +156,18 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
 
         nameAdapter = new SimpleAdapter(this, nameList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
         mNameSpin.setAdapter(nameAdapter);
+        if (nameList.size() != 0)
+            mNameSpin.setSelection(0, true);
         mNameSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                nId = nameList.get(i).get("id");
-                getMajorList();
-                getEduList();
+                if (nameFirst) {
+                    nameFirst = false;
+                } else {
+                    nId = nameList.get(i).get("id");
+                    getMajorList();
+                    getEduList();
+                }
             }
 
             @Override
@@ -154,10 +177,16 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         });
         majorAdapter = new SimpleAdapter(this, majorList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
         mMajorSpin.setAdapter(majorAdapter);
+        if (majorList.size() != 0)
+            mMajorSpin.setSelection(0, true);
         mMajorSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mId = majorList.get(i).get("id");
+                if (majorFirst) {
+                    majorFirst = false;
+                } else {
+                    mId = majorList.get(i).get("id");
+                }
             }
 
             @Override
@@ -167,10 +196,16 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         });
         eduAdapter = new SimpleAdapter(this, eduList, R.layout.item_spinner, new String[]{"text", "id"}, new int[]{R.id.tv_name});
         mEduSpin.setAdapter(eduAdapter);
+        if (eduList.size() != 0)
+            mEduSpin.setSelection(0, true);
         mEduSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                eId = eduList.get(i).get("id");
+                if (eduFirst) {
+                    eduFirst = false;
+                } else {
+                    eId = eduList.get(i).get("id");
+                }
             }
 
             @Override
@@ -178,6 +213,15 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
 
             }
         });
+        switch (type) {
+            case "add":
+                getCountryList();
+                break;
+            case "edit":
+                getSchoolList();
+                break;
+        }
+
     }
 
     @Override
@@ -378,12 +422,11 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         switch (url) {
             case "322":
                 CountryListBean bean = (CountryListBean) baseBean;
-
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("id", bean.getList().get(0).getId());
-                presenter.getDataAll("323", map);
+                cId = bean.getList().get(0).getId();
+                getSchoolList();
                 break;
             case "323"://学校
+                nameList.clear();
                 SchoolListBean schoolListBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : schoolListBean.getList()) {
                     Map<String, String> sMap = new HashMap<>();
@@ -394,6 +437,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 nameAdapter.notifyDataSetChanged();
                 break;
             case "324"://专业
+                majorList.clear();
                 SchoolListBean majorBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : majorBean.getList()) {
                     Map<String, String> sMap = new HashMap<>();
@@ -404,6 +448,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 majorAdapter.notifyDataSetChanged();
                 break;
             case "325"://学历
+                eduList.clear();
                 SchoolListBean eduBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : eduBean.getList()) {
                     Map<String, String> sMap = new HashMap<>();
@@ -412,6 +457,10 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                     eduList.add(sMap);
                 }
                 eduAdapter.notifyDataSetChanged();
+                break;
+            case "327":
+                ToastUtils.showShort("保存成功！");
+                finish();
                 break;
             default:
                 break;
