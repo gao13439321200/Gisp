@@ -136,7 +136,6 @@ public class TemporaryRecordTable {
         try {
             return map.get(url).readLastModify();
         } catch (IOException e) {
-            //TODO log
             //If read failed,return an empty string.
             //If we send empty last-modify,server will response 200.
             //That means file changed.

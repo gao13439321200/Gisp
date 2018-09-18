@@ -325,7 +325,6 @@ public class Utils {
             if (!TextUtils.isEmpty(imsi))
                 SharedPreferencesHelper.getInstance(sContext).putStringValue("IMSI", imsi);
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         return imsi;
@@ -438,10 +437,8 @@ public class Utils {
             out.flush();
             out.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

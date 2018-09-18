@@ -192,12 +192,10 @@ public class FloatDragView {
 
                 @Override
                 public void onAnimationStart(Animation arg0) {
-                    // TODO: 2017/3/1
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation arg0) {
-                    // TODO: 2017/3/1
                 }
 
                 @Override
@@ -225,12 +223,10 @@ public class FloatDragView {
 
                 @Override
                 public void onAnimationStart(Animation arg0) {
-                    // TODO: 2017/3/1
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation arg0) {
-                    // TODO Auto-generated method stub
                 }
 
                 @Override

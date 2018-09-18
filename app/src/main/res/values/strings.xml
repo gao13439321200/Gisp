@@ -322,6 +322,7 @@
     <string name="email_not_tu">请添加论文图片</string>
     <string name="position_verified">身份认证</string>
     <string name="phone_verified">手机号不能为空</string>
+    <string name="professional_verified">机构不能为空</string>
     <string name="degree_verified">学位信息不能为空</string>
     <string name="edubackground_verified">学历信息不能为空</string>
     <string name="time_start_verified">开始时间不能为空</string>

@@ -68,7 +68,6 @@ public class FloatingManager implements View.OnTouchListener {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 if (isWidgetShowing())
                     return;
                 if (v == null || url == null || mContext == null)
@@ -149,7 +148,6 @@ public class FloatingManager implements View.OnTouchListener {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 if (isWidgetShowing()) {
                     mWindowManager.removeView(mFloatWidgetView);
                     mFloatWidgetView = null;
@@ -173,7 +171,6 @@ public class FloatingManager implements View.OnTouchListener {
 
         @Override
         public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
             switch (msg.what) {
                 case MSG_CLOSE_SELF:
                     if (mInstance != null) {

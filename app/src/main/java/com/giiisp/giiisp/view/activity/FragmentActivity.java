@@ -141,7 +141,6 @@ public class FragmentActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK && type.equals("webView_home")) {
             if (fragment instanceof AgreementFragment) {
                 WebView webView = ((AgreementFragment) fragment).getWebview();

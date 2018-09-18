@@ -339,7 +339,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
 //                        mTvUse.setText(showDiaoYong ? "调用" : "返回");
                     } else if ("返回".equals(ToolString.getString(mTvUse))) {
                         sendData304(0, 0, 5);
-                        //TODO 这里需要跳到录音的图片页
+                        // 这里需要跳到录音的图片页
                         setImageStatus(dubbingPosition);
 //                        mTvUse.setText("调用");
 //                        mRlBig.setVisibility(View.GONE);

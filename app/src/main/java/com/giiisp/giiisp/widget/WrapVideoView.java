@@ -33,7 +33,6 @@ public class WrapVideoView extends VideoView {
 
     @Override
     protected void onDetachedFromWindow() {
-        // TODO Auto-generated method stub
         super.onDetachedFromWindow();
     }
 }

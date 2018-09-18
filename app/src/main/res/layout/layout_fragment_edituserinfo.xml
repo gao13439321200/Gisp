@@ -101,7 +101,9 @@
 
                 <TextView
                     android:id="@+id/tv_user_mechanism"
-                    style="@style/right_text_colorsize"/>
+                    style="@style/right_text_colorsize"
+                    android:layout_width="200dp"
+                    android:gravity="end"/>
             </FrameLayout>
 
 

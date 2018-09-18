@@ -371,7 +371,6 @@ public class AnimationUtil {
 
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view, "translationX",
                         getWidth(activity), 0f);
                 ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(view, "alpha", 0.1f, 1f);
@@ -383,24 +382,20 @@ public class AnimationUtil {
 
                     @Override
                     public void onAnimationStart(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationRepeat(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationEnd(Animator arg0) {
-                        // TODO Auto-generated method stub
                         if (helper != null)
                             helper.onAnimatorEnd(arg0);
                     }
 
                     @Override
                     public void onAnimationCancel(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
                 });
                 animatorSet.start();
@@ -428,7 +423,6 @@ public class AnimationUtil {
         postAnimation(new Runnable() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 final ScaleAnimation animation = new ScaleAnimation(fromX, toX, fromY, toY,
                         Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 animation.setDuration(300);// 设置动画持续时间
@@ -437,17 +431,14 @@ public class AnimationUtil {
 
                     @Override
                     public void onAnimationStart(Animation arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationRepeat(Animation arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationEnd(Animation arg0) {
-                        // TODO Auto-generated method stub
                         if (end) {
                             view.clearAnimation();
                             animation.setAnimationListener(null);
@@ -480,24 +471,20 @@ public class AnimationUtil {
 
                     @Override
                     public void onAnimationStart(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationRepeat(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationEnd(Animator arg0) {
-                        // TODO Auto-generated method stub
                         if (helper != null)
                             helper.onAnimatorEnd(arg0);
                     }
 
                     @Override
                     public void onAnimationCancel(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
                 });
                 animatorSet.start();
@@ -523,24 +510,20 @@ public class AnimationUtil {
 
                     @Override
                     public void onAnimationStart(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationRepeat(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationEnd(Animator arg0) {
-                        // TODO Auto-generated method stub
                         if (helper != null)
                             helper.onAnimatorEnd(arg0);
                     }
 
                     @Override
                     public void onAnimationCancel(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
                 });
                 animatorSet.start();
@@ -602,24 +585,20 @@ public class AnimationUtil {
 
                     @Override
                     public void onAnimationStart(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationRepeat(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
 
                     @Override
                     public void onAnimationEnd(Animator arg0) {
-                        // TODO Auto-generated method stub
                         if (helper != null)
                             helper.onAnimatorEnd(arg0);
                     }
 
                     @Override
                     public void onAnimationCancel(Animator arg0) {
-                        // TODO Auto-generated method stub
                     }
                 });
                 animatorSet.start();
@@ -761,17 +740,14 @@ public class AnimationUtil {
 
                 @Override
                 public void onAnimationStart(Animation arg0) {
-                    // TODO Auto-generated method stub
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation arg0) {
-                    // TODO Auto-generated method stub
                 }
 
                 @Override
                 public void onAnimationEnd(Animation arg0) {
-                    // TODO Auto-generated method stub
                     //                    if (helper != null)
                     //                        helper.onAnimationEnd(AnimationUtil.this, arg0);
                 }

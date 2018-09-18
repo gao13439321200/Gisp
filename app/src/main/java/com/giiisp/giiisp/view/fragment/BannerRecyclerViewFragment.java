@@ -2119,7 +2119,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                        version.add("2");
 //                    }
 //                    if (version.size() > 0 && !TextUtils.isEmpty(id)) {
-//                        if (null != subscribeEntityRows.getIsEncrypt() && subscribeEntityRows.getIsEncrypt().equals("0")) { // TODO checkpwd
+//                        if (null != subscribeEntityRows.getIsEncrypt() && subscribeEntityRows.getIsEncrypt().equals("0")) { // checkpwd
 //                            PaperDetailsActivity.checkPwd(getContext(), id, version, "online_paper");
 //                        } else {
 //                            PaperDetailsActivity.actionActivity(getContext(), id, version, "online_paper");
@@ -2322,7 +2322,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
 
                 break;
-            case R.id.iv_attention: // TODO  iv_attention
+            case R.id.iv_attention: // iv_attention
                 ClickEntity item1 = multipleItemQuickAdapter.getItem(position);
                 if (ObjectUtils.isEmpty(BaseActivity.uid)) {
                     AlertDialog.Builder normalDialog =
@@ -2347,7 +2347,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                        map.put("token", token);
                         map.put("oid", id);
                         map.put("uid", uid);
-                        switch (userInfoEntity.getIsFollowed()) { // TODO getIsFollowed 1 未关注。0以关注
+                        switch (userInfoEntity.getIsFollowed()) { //  getIsFollowed 1 未关注。0以关注
                             case "1":
                                 presenter.getSaveFollowUserData(map);
                                 break;

@@ -26,6 +26,7 @@ import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.fragment.EditInfoFragment;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.ProgressPopupWindow;
 
@@ -234,6 +235,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                     public void onClick(DialogInterface dialogInterface, int i) {
                         HashMap<String, Object> dmap = new HashMap<>();
                         dmap.put("rid", rid);
+                        dmap.put("uid", getUserID());
                         progressPopupWindow.showPopupWindow();
                         presenter.getDataAll("329", dmap);
                     }
@@ -424,10 +426,12 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 break;
             case "327":
             case "328":
+                EditInfoFragment.newRxBus();
                 ToastUtils.showShort("保存成功！");
                 finish();
                 break;
             case "329":
+                EditInfoFragment.newRxBus();
                 ToastUtils.showShort("删除成功！");
                 finish();
                 break;

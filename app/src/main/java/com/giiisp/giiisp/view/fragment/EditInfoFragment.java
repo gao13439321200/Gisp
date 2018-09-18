@@ -1,5 +1,6 @@
 package com.giiisp.giiisp.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,10 +22,12 @@ import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.EditInfoBean;
 import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.MIneInfoBean;
+import com.giiisp.giiisp.entity.APPConstants;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ImageLoader;
+import com.giiisp.giiisp.utils.RxBus;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.ExperienceActivity;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
@@ -36,6 +39,7 @@ import com.giiisp.giiisp.view.impl.BaseImpl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,6 +53,8 @@ import static com.giiisp.giiisp.base.BaseActivity.uid;
  */
 
 public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements BaseImpl, SwipeRefreshLayout.OnRefreshListener {
+    private static final String TAG = "EditInfoFragment";
+
     @BindView(R.id.iv_user_icon)
     ImageView ivUserIcon;
     @BindView(R.id.tv_user_name)
@@ -82,12 +88,19 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     ItemClickAdapter itemClickAdapter = null;
     UserInfoEntity.IntroductionBean introductionBean;
 
+    public static void newRxBus() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(APPConstants.MyBus.TO, TAG);
+        RxBus.getInstance().send(map);
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.layout_fragment_editinfo;
     }
 
 
+    @SuppressLint({"CheckResult", "ClickableViewAccessibility"})
     @Override
     public void initView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -111,6 +124,15 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAuxiliary);
         swipeRefreshLayout.setOnRefreshListener(this);
+        RxBus.getInstance().toObservable(Map.class).subscribe(map -> {
+            switch ((String) map.get(APPConstants.MyBus.TO)) {
+                case TAG:
+                    initNetwork();
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     @Override

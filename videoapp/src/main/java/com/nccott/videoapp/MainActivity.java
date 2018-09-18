@@ -2,22 +2,15 @@ package com.nccott.videoapp;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -26,8 +19,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,BaseQuickAdapter.OnItemClickListener {
 
@@ -71,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 
         // viewPager 展示 recyclerView 列表项内容
-        viewPager.setAdapter(new ImageAdapter(this,list)); // todo fix photo and video
+        viewPager.setAdapter(new ImageAdapter(this,list)); // fix photo and video
         viewPager.setCurrentItem(0);
     }
 
@@ -103,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private class ImageAdapter extends PagerAdapter {
 
-        private List<PhotoDao> viewlist; // todo 图片和视频混排
+        private List<PhotoDao> viewlist; // 图片和视频混排
         private Activity activity;
         public ImageAdapter(Activity activity) {
             this.viewlist = viewlist;

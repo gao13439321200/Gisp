@@ -324,7 +324,6 @@ public class FullScreenPopupWindow extends BasePopupWindow implements View.OnCli
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         //手动调节进度
-        // TODO Auto-generated method stub
         //seekbar的拖动位置
         int dest = seekBar.getProgress();
         //seekbar的最大值

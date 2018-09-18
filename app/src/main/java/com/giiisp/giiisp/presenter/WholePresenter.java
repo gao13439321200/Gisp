@@ -35,6 +35,7 @@ import com.giiisp.giiisp.dto.PaperMainBean;
 import com.giiisp.giiisp.dto.PaperQaBean;
 import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.PlayNoteBean;
+import com.giiisp.giiisp.dto.ProfessionalListBean;
 import com.giiisp.giiisp.dto.SchoolListBean;
 import com.giiisp.giiisp.dto.SubjectBean;
 import com.giiisp.giiisp.dto.WordBean;
@@ -511,7 +512,6 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
 
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
-            // todo change the file location/name according to your needs
             File futureStudioIconFile = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + File.separator + "Giiisp/" + System.currentTimeMillis() + ".mp3");
 
             InputStream inputStream = null;
@@ -615,7 +615,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         });
     }
 
-    public void getCancelFollowUserData(ArrayMap<String, Object> options) { // TODO getCancelFollowUserData
+    public void getCancelFollowUserData(ArrayMap<String, Object> options) { // getCancelFollowUserData
         ModelFactory.getBaseModel().getCancelFollowUserData(options, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
@@ -1365,7 +1365,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
     public static List<MultipartBody.Part> filesToMultipartBodyParts(List<File> files) {
         List<MultipartBody.Part> parts = new ArrayList<>(files.size());
         for (File file : files) {
-            // TODO: 16-4-2  这里为了简单起见，没有判断file的类型
+            //  16-4-2  这里为了简单起见，没有判断file的类型
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
             parts.add(part);
@@ -1563,6 +1563,9 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 break;
             case "326":
                 baseEntity = new Gson().fromJson(cipher, EditInfoBean.class);
+                break;
+            case "330":
+                baseEntity = new Gson().fromJson(cipher, ProfessionalListBean.class);
                 break;
             default://101、105、111、304、318、215、327、328、329
                 baseEntity = new Gson().fromJson(cipher, BaseBean.class);

@@ -68,7 +68,6 @@ public class PackageUtil {
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
             sContext.startActivity(intent);
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
     }
@@ -154,7 +153,6 @@ public class PackageUtil {
                 return true;
             }
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         return false;
@@ -346,7 +344,6 @@ public class PackageUtil {
         try {
             return MD5.getMD5(signature);
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
             return "";
         }

@@ -98,7 +98,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                     }
                     helper.setVisible(R.id.iv_attention, !Objects.equals(item.getPaperId(), uid + ""));
                     helper.setVisible(R.id.tv_user_phone, Objects.equals(item.getPaperId(), uid + ""));
-//                    helper.getView(R.id.iv_attention).setSelected(Objects.equals("0", userInfoEntity.getIsFollowed())); // todo getIsFollowed
+//                    helper.getView(R.id.iv_attention).setSelected(Objects.equals("0", userInfoEntity.getIsFollowed())); // getIsFollowed
                     ImageLoader.getInstance().displayCricleImage(context, userInfo.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
                     helper.setText(R.id.tv_prompt, userInfo.getSchool());
                     helper.setVisible(R.id.tv_user_position, !TextUtils.isEmpty(userInfo.getDepartment()) || !TextUtils.isEmpty(userInfo.getPosition()));
@@ -164,7 +164,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                                         buffer.append(introductionBean.getEduBackground());
                                     }
 //                                    arrayList.add(new ClickEntity(introductionBean.getTimeStart() + "~" + introductionBean.getTimeEnd(), buffer.toString()));
-                                    // TODO 学者详情页
+                                    // 学者详情页
                                     arrayList.add(new ClickEntity(introductionBean));
                                 }
                             }

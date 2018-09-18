@@ -28,11 +28,15 @@ import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.CountryListBean;
 import com.giiisp.giiisp.dto.MIneInfoBean;
+import com.giiisp.giiisp.dto.ProfessionalListBean;
+import com.giiisp.giiisp.dto.ProfessionalVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ImageLoader;
@@ -122,6 +126,9 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     private ListPopupWindow majorPop;
     private List<String> majors = new ArrayList<>();
     private ArrayAdapter majorAdapter;
+    private String oid;//机构id
+    private String mid;//专业id
+    private ProfessionalListBean listBean;
 
     public static UserInfoFragment newInstance(String param1, String param2) {
         UserInfoFragment fragment = new UserInfoFragment();
@@ -186,6 +193,27 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 onMessageUserInfo(bean);
 
                 break;
+            case "320":
+                EditInfoFragment.newRxBus();
+                ToastUtils.showShort("保存成功！");
+                getActivity().finish();
+                break;
+            case "322":
+                CountryListBean countryListBean = (CountryListBean) baseBean;
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("cid", countryListBean.getList().get(0).getId());
+                presenter.getDataAll("330", map);
+                break;
+            case "330":
+                listBean = (ProfessionalListBean) baseBean;
+                if (listBean != null) {
+                    majors.clear();
+                    for (ProfessionalVO vo : listBean.getList()) {
+                        majors.add(vo.getCname());
+                    }
+                    majorAdapter.notifyDataSetChanged();
+                }
+                break;
             default:
                 break;
         }
@@ -236,16 +264,19 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         majorPop = new ListPopupWindow(getContext());
         majorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, majors);
         majorPop.setAdapter(majorAdapter);
-        majorPop.setAnchorView(tvUserProfessional);
+        majorPop.setAnchorView(tvUserMechanism);
         majorPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
         majorPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         majorPop.setModal(true);
         majorPop.setOnItemClickListener((parent, view, position, id) -> {
-            tvUserProfessional.setText(majors.get(position));
+            oid = listBean.getList().get(position).getId();
+            tvUserMechanism.setText(majors.get(position));
             majorPop.dismiss();
         });
 
-        // TODO: 2018/9/18 高鹏 这里获取专业机构
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("uid", getUserID());
+        presenter.getDataAll("322", map);
     }
 
     @Override
@@ -297,11 +328,14 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                     Utils.showToast(R.string.phone_verified);
                     return;
                 }
+                if (!TextUtils.isEmpty(oid)) {
+                    map.put("oid", oid);
+                }
                 if (!TextUtils.isEmpty(email)) {
                     map.put("email", email);
                 }
-                if (!TextUtils.isEmpty(organization)) {
-                    map.put("organization", organization);
+                if (!TextUtils.isEmpty(mid)) {
+                    map.put("mid", mid);
                 }
                 if (!TextUtils.isEmpty(position)) {
                     map.put("position", position);
@@ -313,7 +347,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
 //                    map.put("web", web);
 //                }
                 if (map.size() > 0) {
-                    map.put("id", getUserID());
+                    map.put("uid", getUserID());
                     progressPopupWindow.showPopupWindow();
                     presenter.getDataAll("320", map);
                 }
@@ -326,7 +360,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 inputTitleDialog(tvUserName, getString(R.string.real_name));
                 break;
             case R.id.fl_user_mechanism:
-                inputTitleDialog(tvUserMechanism, getString(R.string.subordinate_institution));
+//                inputTitleDialog(tvUserMechanism, getString(R.string.subordinate_institution));
+                majorPop.show();
                 break;
             case R.id.fl_user_position:
                 inputTitleDialog(tvUserPosition, getString(R.string.user_position));
@@ -341,8 +376,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 inputTitleDialog(tvUserEmail, getString(R.string.email));
                 break;
             case R.id.fl_user_professional:
-                majorPop.show();
-//                Utils.showToast(R.string.web_editing_data);
+                Utils.showToast(R.string.web_editing_data);
                 break;
             case R.id.fl_user_web:
                 inputTitleDialog(tvUserWeb, getString(R.string.edit_user_web));
@@ -392,6 +426,15 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         }
         if (TextUtils.isEmpty(userInfoEntity.getUserweb())) {
             tvUserWeb.setText(userInfoEntity.getUserweb());
+        }
+        if (TextUtils.isEmpty(userInfoEntity.getMajor())) {
+            tvUserProfessional.setText(userInfoEntity.getMajor());
+        }
+        if (TextUtils.isEmpty(userInfoEntity.getMid())) {
+            mid = userInfoEntity.getMid();
+        }
+        if (TextUtils.isEmpty(userInfoEntity.getOid())) {
+            oid = userInfoEntity.getOid();
         }
     }
 

@@ -47,8 +47,26 @@ public class MIneInfoBean extends BaseBean {
     private String fansnum;
     private String follownum;
     private String major;
+    private String mid;
+    private String oid;
     private String school;
     private String phone;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public String getMid() {
+        return mid;
+    }
+
+    public void setMid(String mid) {
+        this.mid = mid;
+    }
 
     public String getPhone() {
         return phone;

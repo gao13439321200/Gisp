@@ -945,7 +945,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + dubbingVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }
                     break;
-                case R.layout.item_paperpull_pic: // TODO 图片+视频
+                case R.layout.item_paperpull_pic: // 图片+视频
                     DubbingVO vo = item.getDubbingVO();
                     View viewBg = helper.getView(R.id.iv_bg);
                     if (helper.getLayoutPosition() == selectedPosition) {
@@ -1102,7 +1102,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setText(R.id.tv_position, fansVO.getOrganization());
                         ImageLoader.getInstance().displayCricleImage(activity, fansVO.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
 
-                        final String isFollowed = fansVO.getIsfollow(); // todo 关注
+                        final String isFollowed = fansVO.getIsfollow(); // 关注
                         final String id = fansVO.getId();
                         helper.getView(R.id.iv_user_icon).setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -1149,7 +1149,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     });
                                     break;
                                 case "2":
-                                    textViewAttention.setText("互相关注"); // TODO 关注
+                                    textViewAttention.setText("互相关注"); // 关注
                                     textViewAttention.setBackground(null);
                                     textViewAttention.setOnClickListener(new View.OnClickListener() {
                                         @Override
