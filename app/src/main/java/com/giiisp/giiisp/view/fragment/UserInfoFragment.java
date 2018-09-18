@@ -19,10 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
@@ -48,8 +51,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -114,6 +119,9 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     ProgressPopupWindow progressPopupWindow;
     private String imagUrl = "";
     private String PageType;
+    private ListPopupWindow majorPop;
+    private List<String> majors = new ArrayList<>();
+    private ArrayAdapter majorAdapter;
 
     public static UserInfoFragment newInstance(String param1, String param2) {
         UserInfoFragment fragment = new UserInfoFragment();
@@ -224,6 +232,20 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         }
 //        presenter.getQNTokenData(uid);
         progressPopupWindow = new ProgressPopupWindow((BaseActivity) getActivity());
+
+        majorPop = new ListPopupWindow(getContext());
+        majorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, majors);
+        majorPop.setAdapter(majorAdapter);
+        majorPop.setAnchorView(tvUserProfessional);
+        majorPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        majorPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        majorPop.setModal(true);
+        majorPop.setOnItemClickListener((parent, view, position, id) -> {
+            tvUserProfessional.setText(majors.get(position));
+            majorPop.dismiss();
+        });
+
+        // TODO: 2018/9/18 高鹏 这里获取专业机构
     }
 
     @Override
@@ -319,7 +341,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 inputTitleDialog(tvUserEmail, getString(R.string.email));
                 break;
             case R.id.fl_user_professional:
-                Utils.showToast(R.string.web_editing_data);
+                majorPop.show();
+//                Utils.showToast(R.string.web_editing_data);
                 break;
             case R.id.fl_user_web:
                 inputTitleDialog(tvUserWeb, getString(R.string.edit_user_web));
