@@ -277,12 +277,12 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 } else {
                     map.put("timeend", ToolString.getString(tvUserEndtime));
                 }
-                map.put("rid", rid);
                 if (presenter != null) {
                     progressPopupWindow.showPopupWindow();
                     if (type.equals("add")) {
                         presenter.getDataAll("327", map);
                     } else if (type.equals("edit")) {
+                        map.put("rid", rid);
                         presenter.getDataAll("328", map);
                     }
                 }
@@ -334,7 +334,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 view.setText(getTime(date));
             }
         })
-                .setType(new boolean[]{true, true, true, false, false, false})// 默认全部显示
+                .setType(new boolean[]{true, true, false, false, false, false})// 默认全部显示
                 .setCancelText(getString(R.string.cancel))//取消按钮文字
                 .setSubmitText(getString(R.string.confirm))//确认按钮文字
                 .setTitleText(name)//标题文字
@@ -345,7 +345,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     }
 
     private String getTime(Date date) {//可根据需要自行截取数据显示
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
         return format.format(date);
     }
 

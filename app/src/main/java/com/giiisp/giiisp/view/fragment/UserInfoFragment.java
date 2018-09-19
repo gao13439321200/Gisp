@@ -35,8 +35,11 @@ import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.CountryListBean;
 import com.giiisp.giiisp.dto.MIneInfoBean;
+import com.giiisp.giiisp.dto.MajorBean;
+import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.ProfessionalListBean;
 import com.giiisp.giiisp.dto.ProfessionalVO;
+import com.giiisp.giiisp.dto.SubjectBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.ImageLoader;
@@ -124,11 +127,15 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     private String imagUrl = "";
     private String PageType;
     private ListPopupWindow majorPop;
+    private ListPopupWindow audisPop;
     private List<String> majors = new ArrayList<>();
+    private List<String> audiss = new ArrayList<>();
     private ArrayAdapter majorAdapter;
+    private ArrayAdapter audisAdapter;
     private String oid;//机构id
     private String mid;//专业id
     private ProfessionalListBean listBean;
+    private MajorBean majorBean;
 
     public static UserInfoFragment newInstance(String param1, String param2) {
         UserInfoFragment fragment = new UserInfoFragment();
@@ -214,6 +221,27 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                     majorAdapter.notifyDataSetChanged();
                 }
                 break;
+            case "109":
+                SubjectBean subjectBean = (SubjectBean) baseBean;
+                if (subjectBean != null && subjectBean.getList() != null && subjectBean.getList().size() > 0) {
+                    map = new HashMap<>();
+                    map.put("pid", subjectBean.getList().get(0).getId());
+                    map.put("uid", getUserID());
+                    map.put("language", getLanguage());
+                    presenter.getDataAll("110", map);
+                }
+
+                break;
+            case "110":
+                majorBean = (MajorBean) baseBean;
+                if (majorBean != null && majorBean.getMajors() != null && majorBean.getMajors().size() > 0) {
+                    audiss.clear();
+                    for (MajorVO vo : majorBean.getMajors()) {
+                        audiss.add(vo.getName());
+                    }
+                    audisAdapter.notifyDataSetChanged();
+                }
+                break;
             default:
                 break;
         }
@@ -269,14 +297,32 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         majorPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         majorPop.setModal(true);
         majorPop.setOnItemClickListener((parent, view, position, id) -> {
-            oid = listBean.getList().get(position).getId();
+            mid = listBean.getList().get(position).getId();
             tvUserMechanism.setText(majors.get(position));
             majorPop.dismiss();
+        });
+
+        audisPop = new ListPopupWindow(getContext());
+        audisAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, audiss);
+        audisPop.setAdapter(audisAdapter);
+        audisPop.setAnchorView(tvUserProfessional);
+        audisPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        audisPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        audisPop.setModal(true);
+        audisPop.setOnItemClickListener((parent, view, position, id) -> {
+            oid = majorBean.getMajors().get(position).getId();
+            tvUserProfessional.setText(audiss.get(position));
+            audisPop.dismiss();
         });
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
         presenter.getDataAll("322", map);
+
+        map = new HashMap<>();
+        map.put("language", getLanguage());
+        map.put("pname", "");
+        presenter.getDataAll("109", map);
     }
 
     @Override
@@ -311,9 +357,15 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 HashMap<String, Object> map = new HashMap<>();
                 if (!changeSex.equals(sex)) {
                     map.put("sex", changeSex.equals(getString(R.string.man)) ? 1 : 2);
+                } else {
+                    Utils.showToast("请选择性别");
+                    return;
                 }
                 if (!changeName.equals(name)) {
                     map.put("name", changeName);
+                } else {
+                    Utils.showToast("请填写姓名");
+                    return;
                 }
 
                 String phone = tvUserPhone.getText().toString();
@@ -330,15 +382,27 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 }
                 if (!TextUtils.isEmpty(oid)) {
                     map.put("oid", oid);
+                } else {
+                    Utils.showToast("请选择领域或专业");
+                    return;
                 }
                 if (!TextUtils.isEmpty(email)) {
                     map.put("email", email);
+                } else {
+                    Utils.showToast("请填写邮箱");
+                    return;
                 }
                 if (!TextUtils.isEmpty(mid)) {
                     map.put("mid", mid);
+                } else {
+                    Utils.showToast("请选择机构");
+                    return;
                 }
                 if (!TextUtils.isEmpty(position)) {
                     map.put("position", position);
+                } else {
+                    Utils.showToast("请填写职称");
+                    return;
                 }
 //                if (!TextUtils.isEmpty(department)) {
 //                    map.put("department", department);
@@ -376,7 +440,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 inputTitleDialog(tvUserEmail, getString(R.string.email));
                 break;
             case R.id.fl_user_professional:
-                Utils.showToast(R.string.web_editing_data);
+                audisPop.show();
+//                Utils.showToast(R.string.web_editing_data);
                 break;
             case R.id.fl_user_web:
                 inputTitleDialog(tvUserWeb, getString(R.string.edit_user_web));
@@ -435,6 +500,9 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         }
         if (TextUtils.isEmpty(userInfoEntity.getOid())) {
             oid = userInfoEntity.getOid();
+        }
+        if (TextUtils.isEmpty(userInfoEntity.getPosition())) {
+            tvUserPosition.setText(userInfoEntity.getPosition());
         }
     }
 

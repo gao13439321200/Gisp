@@ -205,7 +205,9 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         super.onSuccessNew(url, baseBean);
         switch (url) {
             case "306":
-                swipeRefreshLayout.setRefreshing(false);
+                if (swipeRefreshLayout != null) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 MIneInfoBean bean = (MIneInfoBean) baseBean;
                 initUser(bean);
                 break;
