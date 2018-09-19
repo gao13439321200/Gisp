@@ -132,8 +132,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     private List<String> audiss = new ArrayList<>();
     private ArrayAdapter majorAdapter;
     private ArrayAdapter audisAdapter;
-    private String oid;//机构id
-    private String mid;//专业id
+    private String oid;//专业id
+    private String mid;//机构id
     private ProfessionalListBean listBean;
     private MajorBean majorBean;
 
@@ -297,7 +297,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         majorPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         majorPop.setModal(true);
         majorPop.setOnItemClickListener((parent, view, position, id) -> {
-            mid = listBean.getList().get(position).getId();
+            oid = listBean.getList().get(position).getId();
             tvUserMechanism.setText(majors.get(position));
             majorPop.dismiss();
         });
@@ -310,7 +310,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         audisPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         audisPop.setModal(true);
         audisPop.setOnItemClickListener((parent, view, position, id) -> {
-            oid = majorBean.getMajors().get(position).getId();
+            mid = majorBean.getMajors().get(position).getId();
             tvUserProfessional.setText(audiss.get(position));
             audisPop.dismiss();
         });
@@ -480,28 +480,28 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         if (userInfoEntity.getEmailauthen() == null) {
             return;
         }
-        if (TextUtils.isEmpty(userInfoEntity.getOrganization())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getOrganization())) {
             tvUserMechanism.setText(userInfoEntity.getOrganization());
         }
-        if (TextUtils.isEmpty(userInfoEntity.getPosition())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getPosition())) {
             tvUserPosition.setText(userInfoEntity.getPosition());
         }
-        if (TextUtils.isEmpty(userInfoEntity.getDepartment())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getDepartment())) {
             tvUserResume.setText(userInfoEntity.getDepartment());
         }
-        if (TextUtils.isEmpty(userInfoEntity.getUserweb())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getUserweb())) {
             tvUserWeb.setText(userInfoEntity.getUserweb());
         }
-        if (TextUtils.isEmpty(userInfoEntity.getMajor())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getMajor())) {
             tvUserProfessional.setText(userInfoEntity.getMajor());
         }
-        if (TextUtils.isEmpty(userInfoEntity.getMid())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getMid())) {
             mid = userInfoEntity.getMid();
         }
-        if (TextUtils.isEmpty(userInfoEntity.getOid())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getOid())) {
             oid = userInfoEntity.getOid();
         }
-        if (TextUtils.isEmpty(userInfoEntity.getPosition())) {
+        if (!TextUtils.isEmpty(userInfoEntity.getPosition())) {
             tvUserPosition.setText(userInfoEntity.getPosition());
         }
     }
