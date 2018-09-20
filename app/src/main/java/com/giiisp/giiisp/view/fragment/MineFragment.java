@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
@@ -223,6 +225,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         tvFollowNumber.setText(infoBean.getFollownum());
         mTvCodeNumber.setText(infoBean.getScore() + "分");
         mTvTimeNumber.setText(infoBean.getStudytime() + "小时");
+        SPUtils.getInstance().put(UrlConstants.EMAILPER,infoBean.getEmailper());
+        SPUtils.getInstance().put(UrlConstants.PHONEPER,infoBean.getPhoneper());
     }
 
     @Override

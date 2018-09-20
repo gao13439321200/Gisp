@@ -459,7 +459,9 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         if (!imagUrl.equals(avatar))
             ImageLoader.getInstance().displayCricleImage((BaseActivity) getActivity(), avatar, ivUserIcon);
         imagUrl = avatar + "";
-        tvUserName.setText(userInfoEntity.getName());
+        if (!TextUtils.isEmpty(userInfoEntity.getName())) {
+            tvUserName.setText(userInfoEntity.getName());
+        }
         switch (userInfoEntity.getSex()) {
             case "1":
                 tvUserSex.setText(getString(R.string.man));

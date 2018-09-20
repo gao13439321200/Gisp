@@ -20,6 +20,7 @@ import com.giiisp.giiisp.view.fragment.FeedbackFragment;
 import com.giiisp.giiisp.view.fragment.ModifyPasswordFragment;
 import com.giiisp.giiisp.view.fragment.ModifyPhoneFragment;
 import com.giiisp.giiisp.view.fragment.NotificationSettingFragment;
+import com.giiisp.giiisp.view.fragment.PrivacySettingFragment;
 import com.giiisp.giiisp.view.fragment.SettingFragment;
 import com.giiisp.giiisp.view.fragment.SystemSettingFragment;
 import com.giiisp.giiisp.view.fragment.UserInfoFragment;
@@ -100,8 +101,8 @@ public class SettingActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
         fragments.add(new SystemSettingFragment());
         fragments.add(new AboutGiiispFragment());
         fragments.add(new FeedbackFragment());
-        //        fragments.add(new PrivacySettingFragment());
-        //        fragments.add(new PrivacySelectFragment());
+        fragments.add(new PrivacySettingFragment());
+//                fragments.add(new PrivacySelectFragment());
         //                vpLogin.setOffscreenPageLimit(8);
         vpLogin.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments, null));
         vpLogin.addOnPageChangeListener(this);

@@ -47,7 +47,6 @@
     </FrameLayout>
 
     <FrameLayout
-        android:visibility="gone"
         android:id="@+id/fl_privacy_setting"
         style="@style/mine_frame">
 

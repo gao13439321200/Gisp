@@ -51,6 +51,24 @@ public class MIneInfoBean extends BaseBean {
     private String oid;
     private String school;
     private String phone;
+    private String phoneper;
+    private String emailper;
+
+    public String getPhoneper() {
+        return phoneper;
+    }
+
+    public void setPhoneper(String phoneper) {
+        this.phoneper = phoneper;
+    }
+
+    public String getEmailper() {
+        return emailper;
+    }
+
+    public void setEmailper(String emailper) {
+        this.emailper = emailper;
+    }
 
     public String getOid() {
         return oid;

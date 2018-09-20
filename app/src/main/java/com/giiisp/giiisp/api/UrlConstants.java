@@ -261,6 +261,8 @@ public class UrlConstants {
     public static final String PID = "pid";
     public static final String PAPERTYPE = "papertype";
     public static final String PAPERVERSION = "paperversion";
+    public static final String PHONEPER = "phoneper";
+    public static final String EMAILPER = "emailper";
 
 
 }

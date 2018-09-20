@@ -93,8 +93,7 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
                 getSettingActivity().getVpLogin().setCurrentItem(1);
                 break;
             case R.id.fl_privacy_setting:
-                //                getSettingActivity().getVpLogin().setCurrentItem(9);
-
+                getSettingActivity().getVpLogin().setCurrentItem(10);
                 break;
             case R.id.fl_account_security:
                 getSettingActivity().getVpLogin().setCurrentItem(2, false);
