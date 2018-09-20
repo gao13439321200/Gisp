@@ -47,6 +47,7 @@ import android.widget.VideoView;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
@@ -475,7 +476,9 @@ public class PaperDetailsActivity extends
                 position = note1.getPlayPosition();
             }
         }
-
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mMyCustomView.getLayoutParams();
+        params.width = ScreenUtils.getScreenWidth();
+        mMyCustomView.setLayoutParams(params);
     }
 
     @Override
