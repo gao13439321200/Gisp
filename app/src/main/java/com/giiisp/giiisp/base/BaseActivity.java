@@ -39,6 +39,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportActivity;
 
+import static com.giiisp.giiisp.api.UrlConstants.CN;
+
 
 public abstract class BaseActivity extends SupportActivity implements NetChangeObserver {
 
@@ -312,11 +314,15 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
     }
 
     public String getLanguage() {
-        return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1");
+        return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN);
     }
 
 
     public void hideImg() {
         baseImg.setVisibility(View.GONE);
+    }
+
+    public boolean isChinese() {
+        return CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN));
     }
 }

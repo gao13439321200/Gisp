@@ -125,6 +125,8 @@ import zlc.season.rxdownload2.db.DataBaseHelper;
 import zlc.season.rxdownload2.entity.DownloadBean;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
+import static com.giiisp.giiisp.api.UrlConstants.CN;
+import static com.giiisp.giiisp.api.UrlConstants.EN;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.ACTIVITYNAME;
@@ -225,8 +227,8 @@ public class PaperDetailsActivity extends
     @BindView(R.id.rl_all)
     RelativeLayout mRlAll;
 
-    public static final String CN = "1";
-    public static final String EN = "2";
+//    public static final String CN = "1";
+//    public static final String EN = "2";
 
     private boolean isFulllScreen = false;
     private FullScreenPopupWindow fullScreenPopup;

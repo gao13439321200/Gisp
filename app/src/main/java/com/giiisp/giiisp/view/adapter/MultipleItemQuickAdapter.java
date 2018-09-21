@@ -35,9 +35,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.giiisp.giiisp.R.layout.item_user_info;
+import static com.giiisp.giiisp.api.UrlConstants.CN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
-import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
 
 
 /**
@@ -290,7 +290,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                             case "综述专栏":
                             case "热门推荐":
                                 PaperDetailsActivity.actionActivityNew(context, paperId, "1",
-                                        "home", "1", mContext.getClass().getName());
+                                        "home", CN, mContext.getClass().getName());
                                 break;
                             default:
                                 break;

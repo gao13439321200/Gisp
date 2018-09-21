@@ -49,10 +49,37 @@ public class MIneInfoBean extends BaseBean {
     private String major;
     private String mid;
     private String oid;
+    private String ocid;
     private String school;
     private String phone;
     private String phoneper;
     private String emailper;
+    private String ocename;
+    private String occname;
+
+    public String getOcename() {
+        return ocename;
+    }
+
+    public void setOcename(String ocename) {
+        this.ocename = ocename;
+    }
+
+    public String getOccname() {
+        return occname;
+    }
+
+    public void setOccname(String occname) {
+        this.occname = occname;
+    }
+
+    public String getOcid() {
+        return ocid;
+    }
+
+    public void setOcid(String ocid) {
+        this.ocid = ocid;
+    }
 
     public String getPhoneper() {
         return phoneper;

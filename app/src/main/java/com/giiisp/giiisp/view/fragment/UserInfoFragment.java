@@ -34,6 +34,7 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.CountryListBean;
+import com.giiisp.giiisp.dto.CountryVO;
 import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.dto.MajorBean;
 import com.giiisp.giiisp.dto.MajorVO;
@@ -103,6 +104,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     TextView tvUserEmail;
     @BindView(R.id.tv_right)
     TextView tvRight;
+    @BindView(R.id.tv_user_country)
+    TextView tvUserCountry;
     @BindView(R.id.tv_user_phone)
     TextView tvUserPhone;
     @BindView(R.id.tv_user_web)
@@ -126,16 +129,21 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     ProgressPopupWindow progressPopupWindow;
     private String imagUrl = "";
     private String PageType;
+    private ListPopupWindow institutionPop;
     private ListPopupWindow majorPop;
-    private ListPopupWindow audisPop;
+    private ListPopupWindow countryPop;
+    private List<String> institutions = new ArrayList<>();
     private List<String> majors = new ArrayList<>();
-    private List<String> audiss = new ArrayList<>();
+    private List<String> countrys = new ArrayList<>();
+    private ArrayAdapter institutionAdapter;
     private ArrayAdapter majorAdapter;
-    private ArrayAdapter audisAdapter;
+    private ArrayAdapter countryAdapter;
     private String oid;//专业id
     private String mid;//机构id
+    private String cid;//国家id
     private ProfessionalListBean listBean;
     private MajorBean majorBean;
+    private CountryListBean countryListBean;
 
     public static UserInfoFragment newInstance(String param1, String param2) {
         UserInfoFragment fragment = new UserInfoFragment();
@@ -206,25 +214,26 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 getActivity().finish();
                 break;
             case "322":
-                CountryListBean countryListBean = (CountryListBean) baseBean;
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("cid", countryListBean.getList().get(0).getId());
-                presenter.getDataAll("330", map);
+                countryListBean = (CountryListBean) baseBean;
+                for (CountryVO vo : countryListBean.getList()) {
+                    countrys.add(isChinese()?vo.getCname():vo.getEname());
+                }
+                countryAdapter.notifyDataSetChanged();
                 break;
             case "330":
                 listBean = (ProfessionalListBean) baseBean;
                 if (listBean != null) {
-                    majors.clear();
+                    institutions.clear();
                     for (ProfessionalVO vo : listBean.getList()) {
-                        majors.add(vo.getCname());
+                        institutions.add(isChinese()?vo.getCname():vo.getEname());
                     }
-                    majorAdapter.notifyDataSetChanged();
+                    institutionAdapter.notifyDataSetChanged();
                 }
                 break;
             case "109":
                 SubjectBean subjectBean = (SubjectBean) baseBean;
                 if (subjectBean != null && subjectBean.getList() != null && subjectBean.getList().size() > 0) {
-                    map = new HashMap<>();
+                    HashMap<String, Object> map = new HashMap<>();
                     map.put("pid", subjectBean.getList().get(0).getId());
                     map.put("uid", getUserID());
                     map.put("language", getLanguage());
@@ -235,11 +244,11 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             case "110":
                 majorBean = (MajorBean) baseBean;
                 if (majorBean != null && majorBean.getMajors() != null && majorBean.getMajors().size() > 0) {
-                    audiss.clear();
+                    majors.clear();
                     for (MajorVO vo : majorBean.getMajors()) {
-                        audiss.add(vo.getName());
+                        majors.add(vo.getName());
                     }
-                    audisAdapter.notifyDataSetChanged();
+                    majorAdapter.notifyDataSetChanged();
                 }
                 break;
             default:
@@ -289,30 +298,47 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
 //        presenter.getQNTokenData(uid);
         progressPopupWindow = new ProgressPopupWindow((BaseActivity) getActivity());
 
+        institutionPop = new ListPopupWindow(getContext());
+        institutionAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, institutions);
+        institutionPop.setAdapter(institutionAdapter);
+        institutionPop.setAnchorView(tvUserMechanism);
+        institutionPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        institutionPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        institutionPop.setModal(true);
+        institutionPop.setOnItemClickListener((parent, view, position, id) -> {
+            oid = listBean.getList().get(position).getId();
+            tvUserMechanism.setText(institutions.get(position));
+            institutionPop.dismiss();
+            countryPop.dismiss();
+        });
+
+        countryPop = new ListPopupWindow(getContext());
+        countryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, countrys);
+        countryPop.setAdapter(countryAdapter);
+        countryPop.setAnchorView(tvUserCountry);
+        countryPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        countryPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        countryPop.setModal(true);
+        countryPop.setOnItemClickListener((parent, view, position, id) -> {
+            cid = countryListBean.getList().get(position).getId();
+            if (!institutionPop.isShowing())
+                institutionPop.show();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("cid", cid);
+            presenter.getDataAll("330", map);
+        });
+
         majorPop = new ListPopupWindow(getContext());
         majorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, majors);
         majorPop.setAdapter(majorAdapter);
-        majorPop.setAnchorView(tvUserMechanism);
+        majorPop.setAnchorView(tvUserProfessional);
         majorPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
         majorPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         majorPop.setModal(true);
         majorPop.setOnItemClickListener((parent, view, position, id) -> {
-            oid = listBean.getList().get(position).getId();
-            tvUserMechanism.setText(majors.get(position));
-            majorPop.dismiss();
-        });
-
-        audisPop = new ListPopupWindow(getContext());
-        audisAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, audiss);
-        audisPop.setAdapter(audisAdapter);
-        audisPop.setAnchorView(tvUserProfessional);
-        audisPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-        audisPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-        audisPop.setModal(true);
-        audisPop.setOnItemClickListener((parent, view, position, id) -> {
             mid = majorBean.getMajors().get(position).getId();
-            tvUserProfessional.setText(audiss.get(position));
-            audisPop.dismiss();
+            tvUserProfessional.setText(majors.get(position));
+            majorPop.dismiss();
         });
 
         HashMap<String, Object> map = new HashMap<>();
@@ -425,7 +451,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 break;
             case R.id.fl_user_mechanism:
 //                inputTitleDialog(tvUserMechanism, getString(R.string.subordinate_institution));
-                majorPop.show();
+//                institutionPop.show();
+                countryPop.show();
                 break;
             case R.id.fl_user_position:
                 inputTitleDialog(tvUserPosition, getString(R.string.user_position));
@@ -439,8 +466,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             case R.id.fl_user_email:
                 inputTitleDialog(tvUserEmail, getString(R.string.email));
                 break;
-            case R.id.fl_user_professional:
-                audisPop.show();
+            case R.id.fl_user_professional://机构
+                majorPop.show();
 //                Utils.showToast(R.string.web_editing_data);
                 break;
             case R.id.fl_user_web:
@@ -502,6 +529,9 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         }
         if (!TextUtils.isEmpty(userInfoEntity.getOid())) {
             oid = userInfoEntity.getOid();
+        }
+        if (!TextUtils.isEmpty(userInfoEntity.getOcid())) {
+            cid = userInfoEntity.getOcid();
         }
         if (!TextUtils.isEmpty(userInfoEntity.getPosition())) {
             tvUserPosition.setText(userInfoEntity.getPosition());

@@ -18,7 +18,7 @@ import com.giiisp.giiisp.view.adapter.ClickEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
+import static com.giiisp.giiisp.api.UrlConstants.CN;
 
 public class MyRecyclerAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHolder> {
     private int type;

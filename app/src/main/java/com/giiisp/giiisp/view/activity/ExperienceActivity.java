@@ -14,11 +14,13 @@ import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.CountryListBean;
+import com.giiisp.giiisp.dto.CountryVO;
 import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.SchoolListBean;
 import com.giiisp.giiisp.dto.SchoolVO;
@@ -59,6 +61,8 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     TextView tvUserMajor;
     @BindView(R.id.tv_user_edubackground)
     TextView tvUserEdubackground;
+    @BindView(R.id.tv_user_country)
+    TextView tvUserCountry;
     //    @BindView(R.id.tv_user_degree)
 //    TextView tvUserDagree;
     @BindView(R.id.tv_user_starttime)
@@ -77,15 +81,19 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     private ListPopupWindow namePop;
     private ListPopupWindow majorPop;
     private ListPopupWindow eduPop;
+    private ListPopupWindow countryPop;
     private List<String> names = new ArrayList<>();
     private List<String> majors = new ArrayList<>();
     private List<String> edus = new ArrayList<>();
+    private List<String> countrys = new ArrayList<>();
     private ArrayAdapter nameAdapter;
     private ArrayAdapter majorAdapter;
     private ArrayAdapter eduAdapter;
+    private ArrayAdapter countryAdapter;
     private SchoolListBean nameListBean;
     private SchoolListBean majorListBean;
     private SchoolListBean eduListBean;
+    private CountryListBean countryListBean;
     String rid = "";
 
     @Override
@@ -135,6 +143,20 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
             }
         }
 
+        countryPop = new ListPopupWindow(this);
+        countryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, countrys);
+        countryPop.setAdapter(countryAdapter);
+        countryPop.setAnchorView(tvUserCountry);
+        countryPop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        countryPop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        countryPop.setModal(true);
+        countryPop.setOnItemClickListener((parent, view, position, id) -> {
+            cId = countryListBean.getList().get(position).getId();
+            if (!namePop.isShowing())
+                namePop.show();
+            getSchoolList();
+        });
+
         namePop = new ListPopupWindow(this);
         nameAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names);
         namePop.setAdapter(nameAdapter);
@@ -143,15 +165,18 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         namePop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         namePop.setModal(true);
         namePop.setOnItemClickListener((parent, view, position, id) -> {
-            tvUserSchool.setText(names.get(position));
-            nId = nameListBean.getList().get(position).getId();
-            mId = "";
-            eId = "";
-            tvUserMajor.setText("");
-            tvUserEdubackground.setText("");
-            getMajorList();
-            getEduList();
+            if (!ObjectUtils.equals(nId, nameListBean.getList().get(position).getId())) {
+                tvUserSchool.setText(names.get(position));
+                nId = nameListBean.getList().get(position).getId();
+                mId = "";
+                eId = "";
+                tvUserMajor.setText("");
+                tvUserEdubackground.setText("");
+                getMajorList();
+                getEduList();
+            }
             namePop.dismiss();
+            countryPop.dismiss();
         });
 
 
@@ -186,7 +211,8 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 getCountryList();
                 break;
             case "edit":
-                getSchoolList();
+                getCountryList();
+//                getSchoolList();
                 getMajorList();
                 getEduList();
                 break;
@@ -210,7 +236,8 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 finish();
                 break;
             case R.id.fl_user_school:
-                namePop.show();
+                countryPop.show();
+//                namePop.show();
                 break;
             case R.id.fl_user_major:
                 majorPop.show();
@@ -396,15 +423,19 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         super.onSuccessNew(url, baseBean);
         switch (url) {
             case "322":
-                CountryListBean bean = (CountryListBean) baseBean;
-                cId = bean.getList().get(0).getId();
-                getSchoolList();
+                countryListBean = (CountryListBean) baseBean;
+                for (CountryVO vo : countryListBean.getList()) {
+                    countrys.add(isChinese()?vo.getCname():vo.getEname());
+                }
+                countryAdapter.notifyDataSetChanged();
+//                cId = countryListBean.getList().get(0).getId();
+//                getSchoolList();
                 break;
             case "323"://学校
                 names.clear();
                 nameListBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : nameListBean.getList()) {
-                    names.add(vo.getCname());
+                    names.add(isChinese()?vo.getCname():vo.getEname());
                 }
                 nameAdapter.notifyDataSetChanged();
                 break;
@@ -412,7 +443,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 majors.clear();
                 majorListBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : majorListBean.getList()) {
-                    majors.add(vo.getCname());
+                    majors.add(isChinese()?vo.getCname():vo.getEname());
                 }
                 majorAdapter.notifyDataSetChanged();
                 break;
@@ -420,7 +451,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 edus.clear();
                 eduListBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : eduListBean.getList()) {
-                    edus.add(vo.getCname());
+                    edus.add(isChinese()?vo.getCname():vo.getEname());
                 }
                 eduAdapter.notifyDataSetChanged();
                 break;

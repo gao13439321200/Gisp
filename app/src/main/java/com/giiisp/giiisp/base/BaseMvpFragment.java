@@ -10,6 +10,7 @@ import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
+import static com.giiisp.giiisp.api.UrlConstants.CN;
 
 /**
  * ----------BigGod be here!----------/
@@ -84,11 +85,11 @@ public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFr
     }
 
     public boolean isChinese() {
-        return "1".equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1"));
+        return CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN));
     }
 
     public String getLanguage() {
-        return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, "1");
+        return SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN);
     }
 
     public String getUserID() {

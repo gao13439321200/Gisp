@@ -126,10 +126,10 @@ import zlc.season.rxdownload2.entity.DownloadRecord;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.ContentValues.TAG;
+import static com.giiisp.giiisp.api.UrlConstants.CN;
+import static com.giiisp.giiisp.api.UrlConstants.EN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
-import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
-import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.EN;
 
 /**
  * 众多Fragment的基类

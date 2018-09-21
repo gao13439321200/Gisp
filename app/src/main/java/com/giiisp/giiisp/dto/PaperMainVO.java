@@ -2,6 +2,8 @@ package com.giiisp.giiisp.dto;
 
 import java.util.List;
 
+import static com.giiisp.giiisp.api.UrlConstants.CN;
+
 public class PaperMainVO {
 
     /**
@@ -25,7 +27,7 @@ public class PaperMainVO {
     private String type;
     private String code;
     private String version;
-    private String myLanguage = "1";//默认是中文
+    private String myLanguage = CN;//默认是中文
     private List<VlistBean> vlist;
 
     public String getVersion() {

@@ -74,8 +74,8 @@ import static com.giiisp.giiisp.R.id.tv_answer_reply;
 import static com.giiisp.giiisp.R.id.tv_problem;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
-import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.CN;
-import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.EN;
+import static com.giiisp.giiisp.api.UrlConstants.CN;
+import static com.giiisp.giiisp.api.UrlConstants.EN;
 
 /**
  * 重用的适配器
@@ -819,7 +819,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             });
                             ((RadioButton) helper.getView(R.id.rb_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
                                 if (b) {
-                                    vo.setMyLanguage("1");//记录是中文
+                                    vo.setMyLanguage(CN);//记录是中文
                                     list.clear();
                                     for (PaperMainVO.VlistBean bean : vo.getVlist()) {
                                         ClickEntity entity = new ClickEntity();
@@ -832,7 +832,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             });
                             ((RadioButton) helper.getView(R.id.rb_en)).setOnCheckedChangeListener((compoundButton, b) -> {
                                 if (b) {
-                                    vo.setMyLanguage("2");//记录是英文
+                                    vo.setMyLanguage(EN);//记录是英文
                                     list.clear();
                                     for (PaperMainVO.VlistBean bean : vo.getVlist()) {
                                         ClickEntity entity = new ClickEntity();
@@ -870,15 +870,15 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setChecked(R.id.cb_collect, "1".equals(vlistBean.getIsfollow()));
                         helper.getView(R.id.cb_collect).setOnClickListener(view -> {
                             if (((CheckBox) helper.getView(R.id.cb_collect)).isChecked()) {
-                                mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
+                                mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
                             } else {
-                                mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1");
+                                mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
                             }
                         });
                         helper.setChecked(R.id.cb_download, "1".equals(vlistBean.getIsdownload()));
-                        helper.getView(R.id.cb_download).setOnClickListener(view -> mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1"));
+                        helper.getView(R.id.cb_download).setOnClickListener(view -> mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN));
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
-                        helper.getView(R.id.cb_add).setOnClickListener(view -> mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? "2" : "1"));
+                        helper.getView(R.id.cb_add).setOnClickListener(view -> mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN));
                         String btnString;
                         if (vlistBean.isEnglish()) {
                             btnString = "EN   ▷" + vlistBean.getEnduration() + "   " + vlistBean.getEnsize();

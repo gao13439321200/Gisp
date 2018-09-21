@@ -263,6 +263,8 @@ public class UrlConstants {
     public static final String PAPERVERSION = "paperversion";
     public static final String PHONEPER = "phoneper";
     public static final String EMAILPER = "emailper";
+    public static final String CN = "1";
+    public static final String EN = "2";
 
 
 }

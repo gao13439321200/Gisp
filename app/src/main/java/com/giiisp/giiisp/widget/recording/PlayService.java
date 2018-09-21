@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import static com.giiisp.giiisp.api.UrlConstants.CN;
+import static com.giiisp.giiisp.api.UrlConstants.EN;
+
 /**
  * 音乐播放后台服务
  * Created by wcy on 2015/11/27.
@@ -534,10 +537,10 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
                 ImgInfoBean bean = (ImgInfoBean) baseBean;
                 Song song = new Song();
                 switch (language) {
-                    case "1":
+                    case CN:
                         song.setPhotoPath(ToolString.getUrl(bean.getCnrecord().getUrl()));
                         break;
-                    case "2":
+                    case EN:
                         song.setPhotoPath(ToolString.getUrl(bean.getEnrecord().getUrl()));
                         break;
                     default:
