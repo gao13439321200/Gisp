@@ -125,10 +125,10 @@ import zlc.season.rxdownload2.db.DataBaseHelper;
 import zlc.season.rxdownload2.entity.DownloadBean;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
-import static com.giiisp.giiisp.api.UrlConstants.CN;
-import static com.giiisp.giiisp.api.UrlConstants.EN;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.giiisp.giiisp.api.UrlConstants.CN;
+import static com.giiisp.giiisp.api.UrlConstants.EN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.ACTIVITYNAME;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.widget.recording.AppCache.getPlayService;
@@ -905,8 +905,10 @@ public class PaperDetailsActivity extends
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("uid", getUserID());
                     map.put("pid", pid);
+                    map.put("picid", imageId.get(position));
                     map.put("version", myVersionNo);
                     map.put("language", language);
+                    map.put("type", "1");
                     presenter.getDataAll("216", map);
                 }
                 //                presenter.downloadFileWithDynamicUrlSync();

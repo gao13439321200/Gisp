@@ -3044,7 +3044,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     public void listClick(String type, String pid, String version, String language) {
         HashMap<String, Object> map = new HashMap<>();
         switch (type) {
-            case "collect":
+            case "collect"://收藏
                 map.put("uid", getUserID());
                 map.put("pid", pid);
                 map.put("picid", "");
@@ -3053,7 +3053,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("language", getLanguage());
                 presenter.getDataAll("213", map);
                 break;
-            case "nocollect":
+            case "nocollect"://取消收藏
                 map.put("uid", getUserID());
                 map.put("pid", pid);
                 map.put("picid", "");
@@ -3062,14 +3062,15 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("language", getLanguage());
                 presenter.getDataAll("217", map);
                 break;
-            case "download":
+            case "download"://下载
                 map.put("uid", getUserID());
                 map.put("pid", pid);
                 map.put("version", version);
                 map.put("language", language);
+                map.put("type", "2");
                 presenter.getDataAll("216", map);
                 break;
-            case "add":
+            case "add"://订阅
                 ToastUtils.showShort("测试-添加");
                 break;
             default:

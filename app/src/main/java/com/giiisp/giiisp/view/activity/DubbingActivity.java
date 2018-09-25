@@ -1,9 +1,14 @@
 package com.giiisp.giiisp.view.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,7 +22,9 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,6 +50,7 @@ import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.widget.MyCustomView;
+import com.giiisp.giiisp.widget.WrapVideoView;
 import com.giiisp.giiisp.widget.recording.Util;
 
 import java.io.File;
@@ -62,7 +70,11 @@ import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
  * 配音的页面
  * Created by Thinkpad on 2017/6/5.
  */
-public class DubbingActivity extends DubbingPermissionActivity implements BaseQuickAdapter.OnItemClickListener, ViewPager.OnPageChangeListener, MyCustomView.DrawListen {
+public class DubbingActivity extends DubbingPermissionActivity implements
+        BaseQuickAdapter.OnItemClickListener,
+        ViewPager.OnPageChangeListener,
+        MyCustomView.DrawListen,
+        MyOnCompletion {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_right)
@@ -99,6 +111,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     ImageView mImgFull;
     @BindView(R.id.btn_small)
     Button mBtnSmall;
+    @BindView(R.id.btn_full)
+    Button mBtnFull;
+    @BindView(R.id.btn_solo)
+    Button mBtnSolo;
     @BindView(R.id.tv_mark)
     TextView mTvMark;
     @BindView(R.id.rl_full)
@@ -109,6 +125,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     //    private ItemClickAdapter itemClickAdapter;
     private PlayEvent playEvent = new PlayEvent();
     private ItemClickAdapter itemClickAdapte;
+    private ImageAdapter mImageAdapter;
 
     private int dubbingPosition = 0;
     //    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
@@ -302,6 +319,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             linearLayout.setVisibility(View.GONE);
             resolvePausePlayRecord();
             startTimer();
+            if (dataList.get(dubbingPosition).getUrl().contains("mp4")) {
+                mBtnSolo.setVisibility(View.VISIBLE);
+                //这里需要静音
+                mImageAdapter.setVolume0();
+            }
         } else {//暂停录音
             isDubbing = false;
             stopTimer();
@@ -312,6 +334,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             linearLayout.setVisibility(View.VISIBLE);
             tvFinish.setVisibility(View.VISIBLE);
             tvDubbingDudition.setVisibility(View.VISIBLE);
+            if (dataList.get(dubbingPosition).getUrl().contains("mp4")) {
+                mBtnSolo.setVisibility(View.INVISIBLE);
+                //这里需要播放原视频声音
+                mImageAdapter.setVolumeSystem();
+            }
         }
 
     }
@@ -320,7 +347,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     @OnClick({R.id.tv_back, R.id.iv_btn, R.id.tv_right, R.id.iv_dubbing,
             R.id.tv_dubbing_audition, R.id.tv_dubbing_determine,
             R.id.tv_dubbing_re_record, R.id.iv_left_slip, R.id.iv_right_slide,
-            R.id.tv_mark, R.id.img_mark, R.id.btn_use, R.id.tv_use,
+            R.id.tv_mark, R.id.img_mark, R.id.btn_use, R.id.tv_use, R.id.btn_solo,
             R.id.btn_yes, R.id.btn_no, R.id.btn_full, R.id.img_full, R.id.btn_small})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -465,6 +492,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 } else {
                     finish();
                 }*/
+                break;
+            case R.id.btn_solo://原音
+                // TODO: 2018/9/25 高鹏 这里需要默认上传录音吗？
+                if (viewPager.getCurrentItem() < viewPager.getChildCount()) {
+                    setImageStatus(viewPager.getCurrentItem() + 1);
+                } else {
+                    setImageStatus(0);
+                }
                 break;
         }
     }
@@ -638,6 +673,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                 tvDubbingDudition.setVisibility(View.INVISIBLE);
                 tvFinish.setVisibility(View.INVISIBLE);
             } else {
+                if (dataList.get(position).getUrl().contains("mp4")) {//视频不可放大
+                    mBtnFull.setVisibility(View.GONE);
+                } else {//图片
+                    mBtnFull.setVisibility(View.VISIBLE);
+                }
                 linearLayout.setVisibility(View.GONE);
                 mCbMark.setVisibility(View.VISIBLE);
                 mTvMark.setVisibility(View.VISIBLE);
@@ -660,21 +700,45 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
         sendData304(x, y, 3);
     }
 
+    @Override
+    public void onCompletion(MediaPlayer videoView) {
+        if (isDubbing) {
+            videoView.start();
+            videoView.setLooping(true);
+        } else {
+            // TODO: 2018/9/25 高鹏 这里需要确认是否上传语音
+        }
+    }
+
     private static class ImageAdapter extends PagerAdapter {
 
         private List<DubbingVO> viewlist;
         private BaseActivity activity;
+        private MediaPlayer mMediaPlayer;
+        private int volume;
+        private MyOnCompletion mOnCompletion;
 
 
-        public ImageAdapter(BaseActivity activity, List<DubbingVO> viewlist) {
+        ImageAdapter(BaseActivity activity, List<DubbingVO> viewlist, MyOnCompletion onCompletion) {
             this.viewlist = viewlist;
             this.activity = activity;
+            this.mOnCompletion = onCompletion;
+            AudioManager am = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
+            volume = am.getStreamVolume(AudioManager.STREAM_SYSTEM);
         }
 
         @Override
         public int getCount() {
             //设置成最大，使用户看不到边界
             return viewlist.size();
+        }
+
+        public void setVolume0() {
+            mMediaPlayer.setVolume(0, 0);
+        }
+
+        public void setVolumeSystem() {
+            mMediaPlayer.setVolume(volume, volume);
         }
 
         @Override
@@ -688,26 +752,82 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
             //Warning：不要在这里调用removeView
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             //对ViewPager页号求模取出View列表中要显示的项
-            ImageView imageView = new ImageView(activity);
             position %= viewlist.size();
             if (position < 0) {
                 position = viewlist.size() + position;
             }
-            String path = viewlist.get(position).getUrl();
-            //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
-            ViewParent vp = imageView.getParent();
-            if (vp != null) {
-                ViewGroup parent = (ViewGroup) vp;
-                parent.removeView(imageView);
+//            String path = viewlist.get(position).getUrl();
+            String path = "http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
+            if (path.contains("mp4")) {
+                View videoview_layout = View.inflate(activity, R.layout.item_paper_videoview,
+                        null);
+                WrapVideoView videoview = videoview_layout.findViewById(R.id.videoview);
+                View mVideoBgView = videoview_layout.findViewById(R.id.iv_bg);
+                ImageButton imPlayBtn = videoview_layout.findViewById(R.id.imbtn_video_play);
+//                imPlayBtn.setBackground(activity.getResources().getDrawable(R.mipmap.main_stop));
+                imPlayBtn.setOnClickListener(v -> {
+                    mVideoBgView.setVisibility(View.GONE);
+                    if (videoview.isPlaying()) {
+                        videoview.pause();
+//                        imPlayBtn.setBackground(activity.getResources().getDrawable(R.mipmap.main_stop));
+                    } else {
+//                        imPlayBtn.setBackground(activity.getResources().getDrawable(R.mipmap.main_play));
+                        v.setVisibility(View.GONE);
+                        videoview.start();
+                    }
+                });
+//                mVideoBgView.setBackground(new BitmapDrawable(getVideoBitmap(path)));
+
+                MediaController mpc = new MediaController(activity, false);
+                videoview.setVideoPath(path);
+                videoview.setMediaController(mpc);
+                videoview.setOnPreparedListener(mp -> mMediaPlayer = mp);
+                videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mOnCompletion.onCompletion(mp);
+                    }
+                });
+                videoview.setOnClickListener(v -> {
+                    if (videoview.isPlaying()) {
+                        mpc.show();
+                    } else {
+                        mpc.hide();
+                        imPlayBtn.setVisibility(View.VISIBLE);
+                    }
+                });
+//                videoview.setOnTouchListener((v, event) -> {
+//                    imPlayBtn.setVisibility(View.VISIBLE);
+//                    return false;
+//                });
+                container.addView(videoview_layout);
+                return videoview_layout;
+            } else {
+                ImageView imageView = new ImageView(activity);
+                //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
+                ViewParent vp = imageView.getParent();
+                if (vp != null) {
+                    ViewGroup parent = (ViewGroup) vp;
+                    parent.removeView(imageView);
+                }
+                ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + path, imageView);
+                //            view.setImageURI(Uri.parse(path));
+                container.addView(imageView);
+                //add listeners here if necessary
+                return imageView;
             }
-            ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + path, imageView);
-            //            view.setImageURI(Uri.parse(path));
-            container.addView(imageView);
-            //add listeners here if necessary
-            return imageView;
+        }
+
+        public Bitmap getVideoBitmap(String mVideoUrl) {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(mVideoUrl, new HashMap<>());
+            Bitmap bitmap = retriever.getFrameAtTime();
+            retriever.release();
+            return bitmap;
         }
     }
 
@@ -810,7 +930,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
                     }
                 }
                 dubbingPosition = position;
-                viewPager.setAdapter(new ImageAdapter(this, bean.getList()));
+                mImageAdapter = new ImageAdapter(this, bean.getList(), this);
+                viewPager.setAdapter(mImageAdapter);
                 viewPager.addOnPageChangeListener(this);
 //                viewPager.setCurrentItem(position);
                 itemClickAdapte = new ItemClickAdapter(this, R.layout.item_dubbing_pic, dataList, "paper_pic");
@@ -875,4 +996,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements BaseQu
     private String getImageId() {
         return dataList.get(viewPager.getCurrentItem()).getDubbingVO().getPcid();
     }
+}
+
+interface MyOnCompletion {
+    void onCompletion(MediaPlayer mediaPlayer);
 }
