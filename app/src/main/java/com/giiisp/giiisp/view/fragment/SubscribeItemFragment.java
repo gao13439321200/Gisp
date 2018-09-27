@@ -55,6 +55,7 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
     private String type;
     private int page = 0;
     private List<String> selectIDs = new ArrayList<>();
+    private List<String> allIDs = new ArrayList<>();
 
     public static SubscribeItemFragment newInstance(String type) {
         Bundle args = new Bundle();
@@ -110,21 +111,23 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
     }
 
     private void getPaperData() {
-        if (selectIDs.size() == 0) {
-            mLvPaper.clear();
-            mItemClickAdapter.notifyDataSetChanged();
-            swipeRefreshLayout.setRefreshing(false);
-            return;
+        StringBuilder stringBuilder = new StringBuilder();
+//        if (selectIDs.size() == 0) {
+//            mLvPaper.clear();
+//            mItemClickAdapter.notifyDataSetChanged();
+//            swipeRefreshLayout.setRefreshing(false);
+//            return;
+        for (String mId : selectIDs.size() == 0 ? allIDs : selectIDs) {
+            stringBuilder.append(mId);
+            stringBuilder.append("#");
         }
-        StringBuffer stringBuffer = new StringBuffer();
-        for (String mId : selectIDs) {
-            stringBuffer.append(mId);
-            stringBuffer.append(",");
-        }
-        String sId = stringBuffer.substring(0, stringBuffer.length() - 1);
+        String sId = stringBuilder.substring(0, stringBuilder.length() - 1);
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
         map.put("pageno", page);
+        map.put("aid", "");
+        map.put("mid", "");
+        map.put("auid", "");
         switch (this.type) {
             case "113":
                 map.put("aid", sId);
@@ -157,6 +160,7 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
         if (!"219".equals(url)) {
             mLvLabel.clear();
             mAdapterSystem.clearSelectIds();
+            allIDs.clear();
             switch (url) {
                 case "113":
                     WordBean bean1 = (WordBean) baseBean;
@@ -164,6 +168,7 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
                         ClickEntity entity1 = new ClickEntity();
                         entity1.setWordVO(vo);
                         mLvLabel.add(entity1);
+                        allIDs.add(vo.getId());
 //                    mAdapterSystem.setSelectIdsData(vo.getId());
                     }
                     break;
@@ -176,6 +181,7 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
                         vo1.setAntistop(vo.getName());
                         entity1.setWordVO(vo1);
                         mLvLabel.add(entity1);
+                        allIDs.add(vo.getId());
                     }
                     break;
                 case "117":
@@ -187,6 +193,7 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
                         vo1.setAntistop(vo.getName());
                         entity1.setWordVO(vo1);
                         mLvLabel.add(entity1);
+                        allIDs.add(vo.getId());
                     }
                     break;
                 default:
@@ -201,6 +208,7 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
             }
             mRvLabel.setLayoutManager(mManagerUser);
             mAdapterSystem.notifyDataSetChanged();
+            getPaperData();
         } else {
             swipeRefreshLayout.setRefreshing(false);
             PaperMainBean bean = (PaperMainBean) baseBean;

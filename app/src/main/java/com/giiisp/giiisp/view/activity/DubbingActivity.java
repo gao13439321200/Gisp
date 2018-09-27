@@ -568,6 +568,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         map.put("uid", uid);
         map.put("pcid", dataList.get(dubbingPosition).getDubbingVO().getPcid());
         map.put("size", fileSize);
+        map.put("useinit", "2");
         map.put("duration", (long) recorderSecondsElapsed);
         map.put("language", language); //application/x-www-form-urlencoded ,multipart/form-data
         map.put("resolution", ScreenUtils.getScreenWidth() + "*" + ScreenUtils.getScreenHeight());//手机分辨率
