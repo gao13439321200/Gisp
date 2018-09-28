@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.os.Environment;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -128,6 +129,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private ImageAdapter mImageAdapter;
 
     private int dubbingPosition = 0;
+    private int abc = -1;
     //    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
 //    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows;
     private DubbingListVO mVO;
@@ -140,6 +142,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private String imgId = "";//录音图片id
     private List<ClickEntity> dataList = new ArrayList<>();
     private boolean isDubbing = false;
+    private int videoAllTime = 0;
 
 
     public static void actionActivity(Context context) {
@@ -264,9 +267,15 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         Util.wait(100, new Runnable() {
             @Override
             public void run() {
-                if (mIsRecord) {
+                if (mIsRecord) {//暂停
+                    //这里判断如果是视频的话 并且 录音时间大于视频时间 才可以暂停
+                    if (isVideo(dubbingPosition)
+                            && recorderSecondsElapsed < videoAllTime) {
+                        ToastUtils.showShort("录音时长需大于或等于视频时长");
+                        return;
+                    }
                     resolvePause();
-                } else {
+                } else {//开始
                     resolveRecord();
                     tvHint.setText(R.string.is_dubbing);
                     linearLayout.setVisibility(View.GONE);
@@ -319,11 +328,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             linearLayout.setVisibility(View.GONE);
             resolvePausePlayRecord();
             startTimer();
-            if (dataList.get(dubbingPosition).getUrl().contains("mp4")) {
-                mBtnSolo.setVisibility(View.VISIBLE);
-                //这里需要静音
-                mImageAdapter.setVolume0();
-            }
+//            if (isVideo(dubbingPosition)) {
+//                mBtnSolo.setVisibility(View.VISIBLE);
+//                //这里需要静音
+//                mImageAdapter.setVolume0();
+//            }
         } else {//暂停录音
             isDubbing = false;
             stopTimer();
@@ -334,11 +343,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             linearLayout.setVisibility(View.VISIBLE);
             tvFinish.setVisibility(View.VISIBLE);
             tvDubbingDudition.setVisibility(View.VISIBLE);
-            if (dataList.get(dubbingPosition).getUrl().contains("mp4")) {
-                mBtnSolo.setVisibility(View.INVISIBLE);
-                //这里需要播放原视频声音
-                mImageAdapter.setVolumeSystem();
-            }
+//            if (isVideo(dubbingPosition)) {
+//                mBtnSolo.setVisibility(View.INVISIBLE);
+            //这里需要播放原视频声音
+//                mImageAdapter.setVolumeSystem();
+//            }
         }
 
     }
@@ -449,11 +458,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
             case R.id.iv_btn://录音
                 if (!isDubbing && ObjectUtils.isNotEmpty(dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRid())) {
-                    ToastUtils.showShort("该图片已有录音，请点击重录后再尝试");
+                    ToastUtils.showShort("该图片或视频已有录音，请点击重录后再尝试");
                     break;
                 }
                 if (!isDubbing) {//开始录音
                     dubbingPosition = viewPager.getCurrentItem();
+                    mBtnSolo.setVisibility(View.INVISIBLE);
                     isDubbing = true;
                     imgId = getImageId();
                 }
@@ -494,12 +504,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 }*/
                 break;
             case R.id.btn_solo://原音
-                // TODO: 2018/9/25 高鹏 这里需要默认上传录音吗？
-                if (viewPager.getCurrentItem() < viewPager.getChildCount()) {
-                    setImageStatus(viewPager.getCurrentItem() + 1);
-                } else {
-                    setImageStatus(0);
-                }
+                //直接上传原音
+                filePath = "";
+                upAudio();
+//                if (viewPager.getCurrentItem() < viewPager.getChildCount()) {
+//                    setImageStatus(viewPager.getCurrentItem() + 1);
+//                } else {
+//                    setImageStatus(0);
+//                }
                 break;
         }
     }
@@ -550,13 +562,17 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         ArrayMap<String, Object> map = new ArrayMap<>();
 //        double duration = 0;
         long fileSize = 0;
-        file = new File(filePath);
-        try {
-            fileSize = SDFileHelper.getFileSize(new File(filePath));
+        if (ObjectUtils.isNotEmpty(filePath)) {
+            file = new File(filePath);
+            try {
+                fileSize = SDFileHelper.getFileSize(new File(filePath));
 //            double rint = SDFileHelper.FormetFileSize(fileSize);
 //            duration = Math.rint(rint * 100) / 100;
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            file = new File(Environment.getDownloadCacheDirectory().getPath() + "/test");
         }
 //      if (recordRows != null && recordRows.size() > position) {
 //          String recordId = recordRows.get(position).getId();
@@ -568,7 +584,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         map.put("uid", uid);
         map.put("pcid", dataList.get(dubbingPosition).getDubbingVO().getPcid());
         map.put("size", fileSize);
-        map.put("useinit", "2");
+        map.put("useinit", ObjectUtils.isNotEmpty(filePath) ? "2" : "1");
         map.put("duration", (long) recorderSecondsElapsed);
         map.put("language", language); //application/x-www-form-urlencoded ,multipart/form-data
         map.put("resolution", ScreenUtils.getScreenWidth() + "*" + ScreenUtils.getScreenHeight());//手机分辨率
@@ -601,12 +617,20 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         Log.i("--->>", "onPageScrolled: " + position);
+        Log.i("--->>", "positionOffset: " + positionOffset);
+        Log.i("--->>", "positionOffsetPixels: " + positionOffsetPixels);
+        if (positionOffset == 0){
+            setImageStatus(position);
+        }
     }
 
     @Override
     public void onPageSelected(int position) {
         Log.i("--->>", "onPageSelected: " + position);
-        setImageStatus(position);
+//        if (position != abc) {
+//            setImageStatus(position);
+//            abc = position;
+//        }
      /*   if (itemClickAdapte.getSelectedPosition() > position) {
             recyclerView.scrollToPosition(position - 2);
         } else {
@@ -651,6 +675,16 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     }
 
     private void setImageStatus(int position) {
+        if (dataList != null
+                && isVideo(position)) {
+            if (this.dubbingPosition == position) {
+                videoAllTime = mImageAdapter.getVideoDuration();//这里记录视频的总时间
+                if (!isDubbing)
+                    mBtnSolo.setVisibility(View.VISIBLE);
+            } else {
+                mBtnSolo.setVisibility(View.INVISIBLE);
+            }
+        }
         viewPager.setCurrentItem(position);
         itemClickAdapte.setSelectedPosition(position);
         itemClickAdapte.notifyDataSetChanged();
@@ -674,7 +708,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 tvDubbingDudition.setVisibility(View.INVISIBLE);
                 tvFinish.setVisibility(View.INVISIBLE);
             } else {
-                if (dataList.get(position).getUrl().contains("mp4")) {//视频不可放大
+                if (isVideo(position)) {//视频不可放大
                     mBtnFull.setVisibility(View.GONE);
                 } else {//图片
                     mBtnFull.setVisibility(View.VISIBLE);
@@ -703,11 +737,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     @Override
     public void onCompletion(MediaPlayer videoView) {
-        if (isDubbing) {
+        if (isDubbing) {//如果还在录音的话重新播放视频
             videoView.start();
             videoView.setLooping(true);
         } else {
-            // TODO: 2018/9/25 高鹏 这里需要确认是否上传语音
+            //这里需要上传原音
+            filePath = "";
+            upAudio();
         }
     }
 
@@ -718,6 +754,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         private MediaPlayer mMediaPlayer;
         private int volume;
         private MyOnCompletion mOnCompletion;
+        private WrapVideoView videoview;
 
 
         ImageAdapter(BaseActivity activity, List<DubbingVO> viewlist, MyOnCompletion onCompletion) {
@@ -761,12 +798,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             if (position < 0) {
                 position = viewlist.size() + position;
             }
-//            String path = viewlist.get(position).getUrl();
-            String path = "http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
+            String path = viewlist.get(position).getUrl();
+//            String path = "http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4";
             if (path.contains("mp4")) {
                 View videoview_layout = View.inflate(activity, R.layout.item_paper_videoview,
                         null);
-                WrapVideoView videoview = videoview_layout.findViewById(R.id.videoview);
+                videoview = videoview_layout.findViewById(R.id.videoview);
                 View mVideoBgView = videoview_layout.findViewById(R.id.iv_bg);
                 ImageButton imPlayBtn = videoview_layout.findViewById(R.id.imbtn_video_play);
 //                imPlayBtn.setBackground(activity.getResources().getDrawable(R.mipmap.main_stop));
@@ -829,6 +866,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             Bitmap bitmap = retriever.getFrameAtTime();
             retriever.release();
             return bitmap;
+        }
+
+        public int getVideoDuration() {
+            return videoview != null ? videoview.getDuration() : 0;
         }
     }
 
@@ -918,6 +959,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             case "317"://论文图片信息
                 DubbingBean bean = (DubbingBean) baseBean;
                 for (DubbingVO vo : bean.getList()) {
+                    vo.setUrl("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4");
                     ClickEntity clickEntity = new ClickEntity();
                     clickEntity.setDubbingVO(vo);
                     dataList.add(clickEntity);
@@ -996,6 +1038,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     private String getImageId() {
         return dataList.get(viewPager.getCurrentItem()).getDubbingVO().getPcid();
+    }
+
+    private boolean isVideo(int position) {
+        return dataList.get(position).getDubbingVO().getUrl().contains("mp4");
     }
 }
 
