@@ -33,6 +33,7 @@
 
                 <com.giiisp.giiisp.widget.MyCustomView
                     android:id="@+id/cv_mark"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="270dp"
                     android:background="#00000000"/>

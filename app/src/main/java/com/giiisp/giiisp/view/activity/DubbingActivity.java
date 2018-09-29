@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -58,6 +60,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -144,6 +147,16 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private boolean isDubbing = false;
     private int videoAllTime = 0;
 
+    /*** 页面的视频控件集合,Integer所处位置 ***/
+    static Map<Integer, WrapVideoView> mVideoViewMap = new HashMap<>();
+    static Map<Integer, View> mVideoBgViewMap;
+
+    /*** 记录每个page页面视频播放的进度 ***/
+    static Map<Integer, Integer> mCurrentPositions;
+
+    /*** 记录当前page页面是否为视频 ***/
+    static Map<Integer, Boolean> mIsVideo;
+
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, DubbingActivity.class);
@@ -183,6 +196,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     @Override
     public void initData() {
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         super.initData();
         language = getIntent().getIntExtra("language", 0);
         typeActivity = getIntent().getStringExtra("type");
@@ -619,8 +633,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         Log.i("--->>", "onPageScrolled: " + position);
         Log.i("--->>", "positionOffset: " + positionOffset);
         Log.i("--->>", "positionOffsetPixels: " + positionOffsetPixels);
-        if (positionOffset == 0){
+        if (positionOffset == 0 && position != abc) {
+            if (mVideoViewMap.get(abc) != null)
+                mVideoViewMap.get(abc).pause();
             setImageStatus(position);
+            abc = position;
         }
     }
 
@@ -678,7 +695,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         if (dataList != null
                 && isVideo(position)) {
             if (this.dubbingPosition == position) {
-                videoAllTime = mImageAdapter.getVideoDuration();//这里记录视频的总时间
+                videoAllTime = mImageAdapter.getVideoDuration(dubbingPosition);//这里记录视频的总时间
                 if (!isDubbing)
                     mBtnSolo.setVisibility(View.VISIBLE);
             } else {
@@ -747,15 +764,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         }
     }
 
-    private static class ImageAdapter extends PagerAdapter {
+    private class ImageAdapter extends PagerAdapter {
 
         private List<DubbingVO> viewlist;
         private BaseActivity activity;
         private MediaPlayer mMediaPlayer;
         private int volume;
         private MyOnCompletion mOnCompletion;
-        private WrapVideoView videoview;
-
+//        private WrapVideoView videoview;
 
         ImageAdapter(BaseActivity activity, List<DubbingVO> viewlist, MyOnCompletion onCompletion) {
             this.viewlist = viewlist;
@@ -803,25 +819,27 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             if (path.contains("mp4")) {
                 View videoview_layout = View.inflate(activity, R.layout.item_paper_videoview,
                         null);
-                videoview = videoview_layout.findViewById(R.id.videoview);
+                WrapVideoView videoview = videoview_layout.findViewById(R.id.videoview);
                 View mVideoBgView = videoview_layout.findViewById(R.id.iv_bg);
                 ImageButton imPlayBtn = videoview_layout.findViewById(R.id.imbtn_video_play);
 //                imPlayBtn.setBackground(activity.getResources().getDrawable(R.mipmap.main_stop));
                 imPlayBtn.setOnClickListener(v -> {
                     mVideoBgView.setVisibility(View.GONE);
-                    if (videoview.isPlaying()) {
-                        videoview.pause();
+                    if (mVideoViewMap.get(viewPager.getCurrentItem()).isPlaying()) {
+                        mVideoViewMap.get(viewPager.getCurrentItem()).pause();
 //                        imPlayBtn.setBackground(activity.getResources().getDrawable(R.mipmap.main_stop));
                     } else {
 //                        imPlayBtn.setBackground(activity.getResources().getDrawable(R.mipmap.main_play));
                         v.setVisibility(View.GONE);
-                        videoview.start();
+                        mVideoViewMap.get(viewPager.getCurrentItem()).start();
+                        mVideoBgView.setVisibility(View.GONE);
                     }
                 });
-//                mVideoBgView.setBackground(new BitmapDrawable(getVideoBitmap(path)));
+                mVideoBgView.setBackground(new BitmapDrawable(getVideoBitmap(path)));
 
                 MediaController mpc = new MediaController(activity, false);
                 videoview.setVideoPath(path);
+                videoview.setZOrderOnTop(true);
                 videoview.setMediaController(mpc);
                 videoview.setOnPreparedListener(mp -> mMediaPlayer = mp);
                 videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -830,18 +848,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                         mOnCompletion.onCompletion(mp);
                     }
                 });
-                videoview.setOnClickListener(v -> {
-                    if (videoview.isPlaying()) {
-                        mpc.show();
-                    } else {
-                        mpc.hide();
-                        imPlayBtn.setVisibility(View.VISIBLE);
-                    }
-                });
-//                videoview.setOnTouchListener((v, event) -> {
-//                    imPlayBtn.setVisibility(View.VISIBLE);
-//                    return false;
-//                });
+                mVideoViewMap.put(position, videoview);
                 container.addView(videoview_layout);
                 return videoview_layout;
             } else {
@@ -868,8 +875,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             return bitmap;
         }
 
-        public int getVideoDuration() {
-            return videoview != null ? videoview.getDuration() : 0;
+        public int getVideoDuration(int position) {
+            return mVideoViewMap.get(position) != null ? mVideoViewMap.get(position).getDuration() : 0;
         }
     }
 
@@ -973,6 +980,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     }
                 }
                 dubbingPosition = position;
+//                List<DubbingVO> list = new ArrayList<>();
+//                list.add(bean.getList().get(0));
                 mImageAdapter = new ImageAdapter(this, bean.getList(), this);
                 viewPager.setAdapter(mImageAdapter);
                 viewPager.addOnPageChangeListener(this);
