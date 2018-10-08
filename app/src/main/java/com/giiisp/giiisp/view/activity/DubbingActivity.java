@@ -146,6 +146,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private List<ClickEntity> dataList = new ArrayList<>();
     private boolean isDubbing = false;
     private int videoAllTime = 0;
+    private boolean isFinish = true;
 
     /*** 页面的视频控件集合,Integer所处位置 ***/
     static Map<Integer, WrapVideoView> mVideoViewMap = new HashMap<>();
@@ -284,7 +285,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 if (mIsRecord) {//暂停
                     //这里判断如果是视频的话 并且 录音时间大于视频时间 才可以暂停
                     if (isVideo(dubbingPosition)
-                            && recorderSecondsElapsed < videoAllTime) {
+                            && !isFinish) {
                         ToastUtils.showShort("录音时长需大于或等于视频时长");
                         return;
                     }
@@ -293,6 +294,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     resolveRecord();
                     tvHint.setText(R.string.is_dubbing);
                     linearLayout.setVisibility(View.GONE);
+                    if (isVideo(dubbingPosition)) {
+                        mImageAdapter.setVolume0();
+                        if (mVideoViewMap != null && mVideoViewMap.get(dubbingPosition) != null)
+                            mVideoViewMap.get(dubbingPosition).start();
+                        isFinish = false;
+                    }
                     //                    DubbingPermissionActivityPermissionsDispatcher.resolveRecordWithCheck(DubbingActivity.this);
                 }
             }
@@ -335,6 +342,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         if (!mIsRecord)
             return;
         if (mRecorder.isPause()) {//继续录音
+            if (mVideoViewMap != null && mVideoViewMap.get(dubbingPosition) != null)
+                mVideoViewMap.get(dubbingPosition).start();
             isDubbing = true;
             tvHint.setText(R.string.is_dubbing);
             ivBtn.setImageResource(R.mipmap.in_recording);
@@ -348,6 +357,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //                mImageAdapter.setVolume0();
 //            }
         } else {//暂停录音
+            if (mVideoViewMap != null && mVideoViewMap.get(dubbingPosition) != null)
+                mVideoViewMap.get(dubbingPosition).pause();
             isDubbing = false;
             stopTimer();
             mRecorder.setPause(true);
@@ -429,6 +440,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
             case R.id.tv_dubbing_re_record://重录
                 dataList.get(viewPager.getCurrentItem()).getDubbingVO().setRid("");
+                if (isVideo(viewPager.getCurrentItem())) {
+                    mBtnSolo.setVisibility(View.VISIBLE);
+                }
                 resolveStopRecord();
                 mMyCustomView.clearData();
                 tvHint.setText(R.string.click_start_voice);
@@ -692,15 +706,17 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     }
 
     private void setImageStatus(int position) {
-        if (dataList != null
-                && isVideo(position)) {
+        if (dataList != null && isVideo(position)) {
             if (this.dubbingPosition == position) {
                 videoAllTime = mImageAdapter.getVideoDuration(dubbingPosition);//这里记录视频的总时间
-                if (!isDubbing)
-                    mBtnSolo.setVisibility(View.VISIBLE);
-            } else {
-                mBtnSolo.setVisibility(View.INVISIBLE);
+//                if (!isDubbing)
+//                    mBtnSolo.setVisibility(View.VISIBLE);
+//            } else {
+//                mBtnSolo.setVisibility(View.INVISIBLE);
             }
+            mBtnSolo.setVisibility(isDubbing ? View.INVISIBLE : View.VISIBLE);
+        } else {
+            mBtnSolo.setVisibility(View.INVISIBLE);
         }
         viewPager.setCurrentItem(position);
         itemClickAdapte.setSelectedPosition(position);
@@ -724,6 +740,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 linearLayout.setVisibility(View.VISIBLE);
                 tvDubbingDudition.setVisibility(View.INVISIBLE);
                 tvFinish.setVisibility(View.INVISIBLE);
+                mBtnSolo.setVisibility(View.INVISIBLE);
             } else {
                 if (isVideo(position)) {//视频不可放大
                     mBtnFull.setVisibility(View.GONE);
@@ -754,6 +771,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     @Override
     public void onCompletion(MediaPlayer videoView) {
+        isFinish = true;
         if (isDubbing) {//如果还在录音的话重新播放视频
             videoView.start();
             videoView.setLooping(true);
@@ -965,12 +983,19 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
             case "317"://论文图片信息
                 DubbingBean bean = (DubbingBean) baseBean;
-                for (DubbingVO vo : bean.getList()) {
-                    vo.setUrl("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4");
+                for (int i = 0; i < bean.getList().size(); i++) {
+                    DubbingVO vo = bean.getList().get(i);
+                    if (i == 0)
+                        vo.setUrl("http://flashmedia.eastday.com/newdate/news/2016-11/shznews1125-19.mp4");
                     ClickEntity clickEntity = new ClickEntity();
                     clickEntity.setDubbingVO(vo);
                     dataList.add(clickEntity);
                 }
+//                for (DubbingVO vo : bean.getList()) {
+//                    ClickEntity clickEntity = new ClickEntity();
+//                    clickEntity.setDubbingVO(vo);
+//                    dataList.add(clickEntity);
+//                }
                 int position = 0;
                 //确定第一个未录音的图片位置，如果全都录过了就是从修改进来的，默认也是从第0个开始
                 for (int i = 0; i < bean.getList().size(); i++) {

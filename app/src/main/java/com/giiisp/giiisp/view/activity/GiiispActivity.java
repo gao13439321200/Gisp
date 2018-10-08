@@ -181,8 +181,11 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
         Location location = locaManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         final TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         final GsmCellLocation gsm = (GsmCellLocation) telephony.getCellLocation();
-        ToastUtils.showShort(gsm.getLac() + "," + location.getLongitude() + "," + location.getLatitude());
+        try {
+            ToastUtils.showShort(gsm.getLac() + "," + location.getLongitude() + "," + location.getLatitude());
+        } catch (Exception e) {
 
+        }
     }
 
     @Subscribe

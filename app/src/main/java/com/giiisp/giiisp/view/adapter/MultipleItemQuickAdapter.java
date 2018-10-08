@@ -279,6 +279,7 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                 view.setLayoutManager(scrollSpeedLinearLayoutManger);
                 ItemClickAdapter itemClickAdapterChild = new ItemClickAdapter(context, R.layout.item_home_child, list, "");
                 view.setAdapter(itemClickAdapterChild);
+                view.setOnFlingListener(null);
                 LinearSnapHelper mLinearSnapHelper = new LinearSnapHelper();
                 mLinearSnapHelper.attachToRecyclerView(view);
 

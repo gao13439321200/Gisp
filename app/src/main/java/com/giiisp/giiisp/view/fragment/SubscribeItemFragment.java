@@ -121,7 +121,9 @@ public class SubscribeItemFragment extends BaseMvpFragment<BaseImpl, WholePresen
             stringBuilder.append(mId);
             stringBuilder.append("#");
         }
-        String sId = stringBuilder.substring(0, stringBuilder.length() - 1);
+        String sId = "";
+        if (stringBuilder.length() > 1)
+            sId = stringBuilder.substring(0, stringBuilder.length() - 1);
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
         map.put("pageno", page);

@@ -335,13 +335,15 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             cnt += 3;
             if (cnt > count) {
                 cnt = 2;
-                view.smoothScrollToPosition(0);
+                if (view != null)
+                    view.smoothScrollToPosition(0);
                 return cnt;
             } else if (cnt > count - 3) {
                 cnt = count;
             }
             Log.d("MyHandler", "mActivity.cnt:" + cnt);
-            view.smoothScrollToPosition(cnt);
+            if (view != null)
+                view.smoothScrollToPosition(cnt);
             return cnt;
         }
     }
