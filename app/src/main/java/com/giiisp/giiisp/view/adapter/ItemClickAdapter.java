@@ -919,7 +919,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     if (infoVO != null && ObjectUtils.isNotEmpty(infoVO.getUrl())) {
                         if ("mp4".equals(FileUtils.parseSuffix(infoVO.getUrl()))) { // 视频
                             ImageView imageView1 = helper.getView(R.id.iv_pic);
-                            imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(infoVO.getUrl(), 1));
+                            imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(BASE_IMG_URL + infoVO.getUrl(), 1));
                         } else {
                             if (!infoVO.getUrl().contains("storage")) {
                                 ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
