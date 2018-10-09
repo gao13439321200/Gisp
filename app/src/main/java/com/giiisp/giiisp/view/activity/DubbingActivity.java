@@ -32,7 +32,6 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
-import com.blankj.utilcode.util.SDCardUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -58,6 +57,7 @@ import com.giiisp.giiisp.widget.WrapVideoView;
 import com.giiisp.giiisp.widget.recording.Util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -623,15 +623,21 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         map.put("duration", (long) recorderSecondsElapsed);
         map.put("language", language); //application/x-www-form-urlencoded ,multipart/form-data
         map.put("resolution", ScreenUtils.getScreenWidth() + "*" + ScreenUtils.getScreenHeight());//手机分辨率
-        MultipartBody.Part part;
+        MultipartBody.Part part = null;
         if (!isSolo) {//录音
             map.put("size", fileSize);
             RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), file);
             part = MultipartBody.Part.createFormData("recordFile", file.getName(), requestBody);
         } else {//原音
             map.put("size", 0);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), new File(SDCardUtils.getSDCardPaths() + "/abc"));
-            part = MultipartBody.Part.createFormData("recordFile", "abc", requestBody);
+            File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/abc.mp3");
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            RequestBody requestBody = RequestBody.create(MediaType.parse("audio/mp3"), f);
+            part = MultipartBody.Part.createFormData("recordFile", "abc.mp3", requestBody);
         }
         presenter.getSaveRecordData(map, part);
 //        }

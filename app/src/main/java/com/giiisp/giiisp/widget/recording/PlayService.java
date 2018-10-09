@@ -19,7 +19,6 @@ import com.giiisp.giiisp.dto.PaperInfoBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.Song;
 import com.giiisp.giiisp.presenter.WholePresenter;
-import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.fragment.BannerRecyclerViewFragment;
@@ -228,9 +227,9 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
     //播放
     public void play(Song music) {
         mPlayingMusic = music;
-        if ("mp4".equals(FileUtils.parseSuffix(mPlayingMusic.getPath()))) {
-            return;
-        }
+//        if ("mp4".equals(FileUtils.parseSuffix(mPlayingMusic.getPath()))) {
+//            return;
+//        }
         try {
             mPlayer.reset();
             mPlayer.setDataSource(music.getPath());

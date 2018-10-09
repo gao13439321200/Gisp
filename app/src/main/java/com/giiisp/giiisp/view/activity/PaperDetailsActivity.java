@@ -1705,7 +1705,7 @@ public class PaperDetailsActivity extends
         }
 
         public void setVolume0() {
-            mMediaPlayer.setVolume(0, 0);
+                mMediaPlayer.setVolume(0, 0);
         }
 
 
@@ -1737,11 +1737,12 @@ public class PaperDetailsActivity extends
 
 //                    MediaController mpc = new MediaController(activity);
                     videoview.setVideoPath(path);
-                    videoview.setOnPreparedListener(mp -> mMediaPlayer = mp);
-                    videoview.setOnCompletionListener(mp -> mOnCompletion.onMyCompletion(mp));
-//                    videoview.setMediaController(mpc);
                     videoview.setZOrderOnTop(true);
                     videoview.setZOrderMediaOverlay(true);
+
+                    videoview.setOnPreparedListener(mp -> mp.setVolume(0,0));
+                    videoview.setOnCompletionListener(mp -> mOnCompletion.onMyCompletion(mp));
+//                    videoview.setMediaController(mpc);
 //                    videoview.setOnClickListener(new View.OnClickListener() {
 //                        @Override
 //                        public void onClick(View v) {
@@ -2083,7 +2084,7 @@ public class PaperDetailsActivity extends
                 break;
             case "205"://获取论文语音
                 ImgInfoBean bean1 = (ImgInfoBean) baseBean;
-                if (bean1.getCnrecord() != null && !bean1.getCnrecord().getUrl().contains("mp4")) {
+                if (bean1.getCnrecord() != null ) {
                     songCN = new Song();
                     songCN.setPath(BASE_IMG_URL + bean1.getCnrecord().getUrl());
                     songCN.setDuration(Integer.parseInt(bean1.getCnrecord().getDuration()));
@@ -2094,7 +2095,7 @@ public class PaperDetailsActivity extends
                     songCN = null;
                 }
 
-                if (bean1.getEnrecord() != null && !bean1.getEnrecord().getUrl().contains("mp4")) {
+                if (bean1.getEnrecord() != null ) {
                     songEN = new Song();
                     songEN.setPath(BASE_IMG_URL + bean1.getEnrecord().getUrl());
                     songEN.setDuration(Integer.parseInt(bean1.getEnrecord().getDuration()));
@@ -2125,13 +2126,15 @@ public class PaperDetailsActivity extends
                     }
                 }
                 if (photoList.get(position).contains("mp4")) {//视频
-                    if (songCN != null || songEN != null) {
-                        mImageAdapter.setVolume0();
-                    }
+
                     if (mVideoViewMap.get(position) != null) {
                         mVideoBgViewMap.get(position).setVisibility(View.GONE);
                         mVideoViewMap.get(position).start();
                     }
+//                    if (songCN != null || songEN != null) {
+////                        mImageAdapter.setVolume0();
+//                        sMediaPlayerMap.get(position).setVolume(0,0);
+//                    }
                 }
                 break;
             case "213":
