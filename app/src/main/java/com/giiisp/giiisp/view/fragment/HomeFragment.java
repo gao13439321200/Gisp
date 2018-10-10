@@ -197,17 +197,15 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 break;
             case "202"://热门和综述
                 HotImgBean bean1 = (HotImgBean) baseBean;
-                List<HotImgVO> list = bean1.getList();
-                bean1.getList().addAll(list);
-                bean1.getList().addAll(list);
+//                List<HotImgVO> list = bean1.getList();
+//                bean1.getList().addAll(list);
                 ClickEntity clickEntityHot = new ClickEntity(R.layout.item_home_recycler, getString(R.string.in_a_column));
                 clickEntityHot.setHotImgBean(bean1);
                 multipleItemQuickAdapter.addData(clickEntityHot);
                 ClickEntity clickEntity = new ClickEntity(R.layout.item_home_recycler, getString(R.string.hot_recommended));
                 clickEntity.setHotImgBean(bean1);
                 multipleItemQuickAdapter.addData(clickEntity);
-                for (HotImgVO vo :
-                        bean1.getList()) {
+                for (HotImgVO vo :bean1.getList()) {
                     if ("1".equals(vo.getType())) {
                         list1.add(vo);
                     } else {

@@ -946,7 +946,9 @@ public class PaperDetailsActivity extends
                             @Override
                             public void run() throws Exception {
 
-                                UMWeb web = new UMWeb("http://giiisp.com/paper_play.php?id=" + pid);
+                                UMWeb web = new UMWeb("http://mall.xdiandian.cn/jsp/play?pid="
+                                        + pid + "&type=1&language=" + language
+                                        + "&version=" + myVersionNo);
                                 UMImage thumb = new UMImage(PaperDetailsActivity.this, firstPic);
                                 web.setTitle(title);//标题
                                 web.setThumb(thumb);  //缩略图
@@ -962,10 +964,16 @@ public class PaperDetailsActivity extends
                 if (nowProgress < 15000) {
                     seekBarPaper.setProgress(0);//如果已经播放的时间少于15秒，则从头开始播放
                     getPlayService().seekTo(0);
+                    if (mVideoViewMap.get(position) != null) {
+                        mVideoViewMap.get(position).seekTo(0);
+                    }
                 } else {
                     int time = nowProgress - 15000;
                     seekBarPaper.setProgress(time);
                     getPlayService().seekTo(time);
+                    if (mVideoViewMap.get(position) != null) {
+                        mVideoViewMap.get(position).seekTo(time);
+                    }
                 }
                 break;
             case R.id.tv_right://快进
@@ -973,10 +981,16 @@ public class PaperDetailsActivity extends
                 if (seekBarPaper.getMax() - nowProgress < 15000) {
                     seekBarPaper.setProgress(seekBarPaper.getMax() - 1000);//如果未播放的时间少于15秒，则直接到最后一秒
                     getPlayService().seekTo(seekBarPaper.getMax() - 1000);
+                    if (mVideoViewMap.get(position) != null) {
+                        mVideoViewMap.get(position).seekTo(seekBarPaper.getMax() - 1000);
+                    }
                 } else {
                     int time = nowProgress + 15000;
                     seekBarPaper.setProgress(time);
                     getPlayService().seekTo(time);
+                    if (mVideoViewMap.get(position) != null) {
+                        mVideoViewMap.get(position).seekTo(time);
+                    }
                 }
                 break;
         }
@@ -1705,7 +1719,7 @@ public class PaperDetailsActivity extends
         }
 
         public void setVolume0() {
-                mMediaPlayer.setVolume(0, 0);
+            mMediaPlayer.setVolume(0, 0);
         }
 
 
@@ -1740,7 +1754,7 @@ public class PaperDetailsActivity extends
                     videoview.setZOrderOnTop(true);
                     videoview.setZOrderMediaOverlay(true);
 
-                    videoview.setOnPreparedListener(mp -> mp.setVolume(0,0));
+                    videoview.setOnPreparedListener(mp -> mp.setVolume(0, 0));
                     videoview.setOnCompletionListener(mp -> mOnCompletion.onMyCompletion(mp));
 //                    videoview.setMediaController(mpc);
 //                    videoview.setOnClickListener(new View.OnClickListener() {
@@ -2084,21 +2098,32 @@ public class PaperDetailsActivity extends
                 break;
             case "205"://获取论文语音
                 ImgInfoBean bean1 = (ImgInfoBean) baseBean;
-                if (bean1.getCnrecord() != null ) {
+                if (bean1.getCnrecord() != null) {
                     songCN = new Song();
                     songCN.setPath(BASE_IMG_URL + bean1.getCnrecord().getUrl());
-                    songCN.setDuration(Integer.parseInt(bean1.getCnrecord().getDuration()));
+                    if (photoList.get(position).contains("mp4")) {//视频
+                        LogUtils.i("========", "CN视频时长：" + getVideoDuration(songCN.getPath()));
+                        songCN.setDuration(getVideoDuration(songCN.getPath()));
+                    } else {
+                        songCN.setDuration(Integer.parseInt(bean1.getCnrecord().getDuration()));
+                    }
                     songCN.setTitle(bean1.getCnrecord().getId() + "音频");
                     songCN.setPhotoPath(photoList.get(position));
                     songCN.setPosition(position);
+
                 } else {
                     songCN = null;
                 }
 
-                if (bean1.getEnrecord() != null ) {
+                if (bean1.getEnrecord() != null) {
                     songEN = new Song();
                     songEN.setPath(BASE_IMG_URL + bean1.getEnrecord().getUrl());
-                    songEN.setDuration(Integer.parseInt(bean1.getEnrecord().getDuration()));
+                    if (photoList.get(position).contains("mp4")) {//视频
+                        LogUtils.i("========", "EN视频时长：" + getVideoDuration(songEN.getPath()));
+                        songEN.setDuration(getVideoDuration(songEN.getPath()));
+                    } else {
+                        songEN.setDuration(Integer.parseInt(bean1.getEnrecord().getDuration()));
+                    }
                     songEN.setTitle(bean1.getEnrecord().getId() + "音频");
                     songEN.setPhotoPath(photoList.get(position));
                     songEN.setPosition(position);
@@ -2237,6 +2262,14 @@ public class PaperDetailsActivity extends
     @Override
     public String getNowActivityName() {
         return this.getClass().getName();
+    }
+
+    private int getVideoDuration(String path) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path, new HashMap<String, String>());
+        String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
+        mmr.release();
+        return (Integer.parseInt(duration)) / 1000;
     }
 
 }

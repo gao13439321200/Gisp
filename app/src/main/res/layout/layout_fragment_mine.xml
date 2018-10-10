@@ -37,12 +37,12 @@
                     android:drawableStart="@mipmap/mine_recording"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:paddingEnd="70dp"
                     android:paddingStart="70dp"
+                    android:paddingEnd="70dp"
                     android:text="@string/unauthorized"
-                    android:visibility="gone"
                     android:textColor="@color/colorWhite"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_verified"
@@ -53,15 +53,15 @@
                     android:background="@drawable/item_blue_bg"
                     android:gravity="center"
                     android:text="@string/position_verified"
-                    android:visibility="gone"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/text_size"/>
+                    android:textSize="@dimen/text_size"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@color/colorWhite"
                     android:orientation="horizontal">
 
@@ -75,8 +75,8 @@
                             android:src="@mipmap/img_summary"/>
 
                         <TextView
-                            android:text="@string/summary"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/summary"/>
 
                     </LinearLayout>
 
@@ -90,8 +90,8 @@
                             android:src="@mipmap/img_paper"/>
 
                         <TextView
-                            android:text="@string/paper"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/paper"/>
 
                     </LinearLayout>
 
@@ -105,8 +105,8 @@
                             android:src="@mipmap/mine_qa"/>
 
                         <TextView
-                            android:text="@string/question_and_answer"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/question_and_answer"/>
 
                     </LinearLayout>
 
@@ -134,8 +134,8 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:text="@string/download"
-                                style="@style/mine_tv_btn"/>
+                                style="@style/mine_tv_btn"
+                                android:text="@string/download"/>
 
                             <TextView
                                 android:id="@+id/tv_mine_download"
@@ -159,8 +159,8 @@
                             android:src="@mipmap/mine_subscribe"/>
 
                         <TextView
-                            android:text="@string/follow"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/follow"/>
 
                     </LinearLayout>
 
@@ -174,8 +174,8 @@
                             android:src="@mipmap/img_history"/>
 
                         <TextView
-                            android:text="@string/play_the_history"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/play_the_history"/>
 
                     </LinearLayout>
 
@@ -198,14 +198,15 @@
                             android:src="@mipmap/img_meet"/>
 
                         <TextView
-                            android:text="@string/meeting"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/meeting"/>
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/fl_mine_news"
-                        style="@style/main_ll">
+                        style="@style/main_ll"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="40dp"
@@ -213,8 +214,23 @@
                             android:src="@mipmap/img_news"/>
 
                         <TextView
-                            android:text="@string/news"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/news"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_course"
+                        style="@style/main_ll">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/mine_course"/>
+
+                        <TextView
+                            style="@style/mine_tv_btn"
+                            android:text="@string/course"/>
 
                     </LinearLayout>
 
@@ -228,8 +244,8 @@
                             android:src="@mipmap/mine_collection"/>
 
                         <TextView
-                            android:text="@string/collection"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/collection"/>
 
                     </LinearLayout>
 
@@ -240,9 +256,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:visibility="visible"
                     android:background="@color/colorWhite"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:id="@+id/ll_dubbing"
+                        style="@style/main_ll">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/mine_dubbing"/>
+
+                        <TextView
+                            style="@style/mine_tv_btn"
+                            android:text="@string/dubbing"/>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_email"
@@ -251,11 +282,11 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_collection"/>
+                            android:src="@mipmap/mine_email"/>
 
                         <TextView
-                            android:text="@string/mailbox_authentication"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/mailbox_authentication"/>
 
                     </LinearLayout>
 
@@ -266,29 +297,13 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_collection"/>
+                            android:src="@mipmap/mine_auth"/>
 
                         <TextView
-                            android:text="@string/information_auth"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/information_auth"/>
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_dubbing"
-                        style="@style/main_ll">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@mipmap/mine_collection"/>
-
-                        <TextView
-                            android:text="@string/dubbing"
-                            style="@style/mine_tv_btn"/>
-
-                    </LinearLayout>
-
 
                 </LinearLayout>
 
@@ -297,13 +312,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:visibility="visible"
                     android:background="@color/colorWhite"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <!--<LinearLayout-->
+                    <!--android:id="@+id/ll_course"-->
+                    <!--style="@style/main_ll">-->
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:src="@mipmap/mine_collection"/>-->
+
+                    <!--<TextView-->
+                    <!--android:text="@string/course"-->
+                    <!--style="@style/mine_tv_btn"/>-->
+
+                    <!--</LinearLayout>-->
 
                     <LinearLayout
-                        android:id="@+id/ll_course"
-                        style="@style/main_ll">
+                        style="@style/main_ll"
+                        android:visibility="invisible">
 
                         <ImageView
                             android:layout_width="40dp"
@@ -311,8 +341,8 @@
                             android:src="@mipmap/mine_collection"/>
 
                         <TextView
-                            android:text="@string/course"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/information_auth"/>
 
                     </LinearLayout>
 
@@ -326,23 +356,8 @@
                             android:src="@mipmap/mine_collection"/>
 
                         <TextView
-                            android:text="@string/information_auth"
-                            style="@style/mine_tv_btn"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        style="@style/main_ll"
-                        android:visibility="invisible">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@mipmap/mine_collection"/>
-
-                        <TextView
-                            android:text="@string/dubbing"
-                            style="@style/mine_tv_btn"/>
+                            style="@style/mine_tv_btn"
+                            android:text="@string/dubbing"/>
 
                     </LinearLayout>
 
@@ -383,8 +398,8 @@
                 <FrameLayout
                     android:id="@+id/fl_mine_setting"
                     style="@style/mine_frame"
-                    android:layout_marginBottom="1dp"
                     android:layout_marginTop="7dp"
+                    android:layout_marginBottom="1dp"
                     android:visibility="gone">
 
                     <TextView

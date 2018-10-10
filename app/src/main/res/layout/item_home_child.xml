@@ -3,8 +3,8 @@
               android:layout_width="110dp"
               android:layout_height="wrap_content"
               android:layout_marginStart="5dp"
-              android:layout_marginEnd="5dp"
               android:layout_marginTop="10dp"
+              android:layout_marginEnd="5dp"
               android:orientation="vertical">
 
     <ImageView
@@ -12,14 +12,15 @@
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:scaleType="centerCrop"
-       />
+        />
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_marginBottom="6.7dp"
-        android:layout_marginTop="6.7dp"
-        android:ellipsize="end"
-        android:maxLines="2"
+        style="@style/text_12sp_colorblack"
         android:layout_width="110dp"
-        style="@style/text_12sp_colorblack"/>
+        android:layout_marginTop="6.7dp"
+        android:layout_marginBottom="6.7dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"/>
 </LinearLayout>

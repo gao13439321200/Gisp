@@ -113,6 +113,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     TextView mTvCodeNumber;
     @BindView(R.id.tv_time_number)
     TextView mTvTimeNumber;
+    @BindView(R.id.fl_auth)
+    LinearLayout mLlAuth;
+    @BindView(R.id.ll_email)
+    LinearLayout mLlEmail;
     private int downloadNunber;
     private String imageUrl = "";
 
@@ -185,35 +189,43 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             isVip = infoBean.getIsvip();
             switch (emailauthen) { // 新认证字段 // userInfo.getEmailauthen()
                 case "3":
+                    mLlEmail.setVisibility(View.VISIBLE);
                     tvRecordinAuthentication.setText("去认证");
                     tvRecordinAuthentication.setCompoundDrawables(null, null, null, null);
                     break;
                 case "2":
+                    mLlEmail.setVisibility(View.GONE);
                     tvRecordinAuthentication.setText("开始配音");
                     break;
                 case "1":
+                    mLlEmail.setVisibility(View.VISIBLE);
                     tvRecordinAuthentication.setText("正在认证中");
                     break;
                 default:
+                    mLlEmail.setVisibility(View.VISIBLE);
                     tvRecordinAuthentication.setText("未认证");
                     break;
             }
-//            switch (isVip) {
-//                case "0":
+            switch (isVip) {
+                case "0":
+                    mLlAuth.setVisibility(View.VISIBLE);
                     tvVerified.setVisibility(View.VISIBLE);
                     tvVerified.setText("身份认证");
-//                    break;
-//                case "1":
-//                    tvVerified.setVisibility(View.VISIBLE);
-//                    break;
-//                case "2":
-//                    tvVerified.setVisibility(View.VISIBLE);
-//                    break;
-//                case "3":
-//                    tvVerified.setVisibility(View.VISIBLE);
-//                    tvVerified.setText("认证中");
-//                    break;
-//            }
+                    break;
+                case "1":
+                    mLlAuth.setVisibility(View.GONE);
+                    tvVerified.setVisibility(View.VISIBLE);
+                    break;
+                case "2":
+                    mLlAuth.setVisibility(View.GONE);
+                    tvVerified.setVisibility(View.VISIBLE);
+                    break;
+                case "3":
+                    mLlAuth.setVisibility(View.VISIBLE);
+                    tvVerified.setVisibility(View.VISIBLE);
+                    tvVerified.setText("认证中");
+                    break;
+            }
         }
         tvPrompt.setText(infoBean.getSchool());
         if (!TextUtils.isEmpty(infoBean.getDepartment()) && TextUtils.isEmpty(infoBean.getPosition())) {
@@ -225,8 +237,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         tvFollowNumber.setText(infoBean.getFollownum());
         mTvCodeNumber.setText(infoBean.getScore() + "分");
         mTvTimeNumber.setText(infoBean.getStudytime() + "小时");
-        SPUtils.getInstance().put(UrlConstants.EMAILPER,infoBean.getEmailper());
-        SPUtils.getInstance().put(UrlConstants.PHONEPER,infoBean.getPhoneper());
+        SPUtils.getInstance().put(UrlConstants.EMAILPER, infoBean.getEmailper());
+        SPUtils.getInstance().put(UrlConstants.PHONEPER, infoBean.getPhoneper());
     }
 
     @Override
@@ -393,20 +405,20 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //                SettingActivity.actionActivity(getContext());
                 break;
             case R.id.tv_verified://身份认证
-//                switch (isVip) {
-//                    case "0":
+                switch (isVip) {
+                    case "0":
                         VerifiedActivity.actionActivity(context);
-//                        break;
-//                    case "1":
-//                        VerifiedActivity.actionActivity(context);
-//                        break;
-//                    case "2":
-//                        VerifiedActivity.actionActivity(context);
-//                        break;
-//                    case "3":
-//                        Utils.showToast(R.string.in_authentication);
-//                        break;
-//                }
+                        break;
+                    case "1":
+                        VerifiedActivity.actionActivity(context);
+                        break;
+                    case "2":
+                        VerifiedActivity.actionActivity(context);
+                        break;
+                    case "3":
+                        Utils.showToast(R.string.in_authentication);
+                        break;
+                }
                 break;
             case R.id.ll_email://邮箱认证
                 FragmentActivity.actionActivity(getContext(), "mailbox_authentication");

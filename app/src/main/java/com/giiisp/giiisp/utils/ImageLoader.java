@@ -19,6 +19,8 @@ import com.giiisp.giiisp.model.GlideApp;
 import java.io.File;
 import java.util.Hashtable;
 
+import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
+
 
 public class ImageLoader {
     public static final String ANDROID_RESOURCE = "android.resource://";
@@ -188,7 +190,7 @@ public class ImageLoader {
                 retriever.setDataSource(filePath);
             }
 //            bitmap = retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC); //retriever.getFrameAtTime(-1);
-            bitmap = retriever.getFrameAtTime();
+            bitmap = retriever.getFrameAtTime(1000000,OPTION_CLOSEST_SYNC);
         }
         catch (IllegalArgumentException ex){
             // Assume this is a corrupt video file
