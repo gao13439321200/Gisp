@@ -940,7 +940,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     }
                     if ("mp4".equals(FileUtils.parseSuffix(dubbingVO.getUrl()))) { // 视频
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
-                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(dubbingVO.getUrl(), 1));
+                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(BASE_IMG_URL + dubbingVO.getUrl(), 1));
                     } else {
                         ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + dubbingVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }
@@ -956,7 +956,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     }
                     if ("mp4".equals(FileUtils.parseSuffix(vo.getUrl()))) { // 视频
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
-                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(vo.getUrl(), 1));
+                        imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(BASE_IMG_URL + vo.getUrl(), 1));
                     } else {
                         ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + vo.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                     }

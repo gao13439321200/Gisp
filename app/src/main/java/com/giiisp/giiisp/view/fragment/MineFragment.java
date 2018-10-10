@@ -194,7 +194,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     tvRecordinAuthentication.setCompoundDrawables(null, null, null, null);
                     break;
                 case "2":
-                    mLlEmail.setVisibility(View.GONE);
+                    mLlEmail.setVisibility(View.INVISIBLE);
                     tvRecordinAuthentication.setText("开始配音");
                     break;
                 case "1":
@@ -213,11 +213,11 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     tvVerified.setText("身份认证");
                     break;
                 case "1":
-                    mLlAuth.setVisibility(View.GONE);
+                    mLlAuth.setVisibility(View.INVISIBLE);
                     tvVerified.setVisibility(View.VISIBLE);
                     break;
                 case "2":
-                    mLlAuth.setVisibility(View.GONE);
+                    mLlAuth.setVisibility(View.INVISIBLE);
                     tvVerified.setVisibility(View.VISIBLE);
                     break;
                 case "3":
