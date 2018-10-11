@@ -72,10 +72,10 @@ import static com.giiisp.giiisp.R.id.linear_layout_two;
 import static com.giiisp.giiisp.R.id.tv_answer_name;
 import static com.giiisp.giiisp.R.id.tv_answer_reply;
 import static com.giiisp.giiisp.R.id.tv_problem;
-import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 import static com.giiisp.giiisp.api.UrlConstants.CN;
 import static com.giiisp.giiisp.api.UrlConstants.EN;
+import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
+import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 /**
  * 重用的适配器
@@ -88,6 +88,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
     private int selectedPosition = 0;
     private ListItemClick mListItemClick;
     private String pid, imgId;
+    private List<String> paths = new ArrayList<>();
 
     public String getPid() {
         return pid;
@@ -141,6 +142,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
         this.layoutResId = layoutResId;
         this.activity = activity;
         this.type = type;
+        paths = new ArrayList<>();
         mRxDownload = RxDownload.getInstance(activity);
     }
 
@@ -150,6 +152,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
         this.activity = activity;
         this.type = type;
         this.mListItemClick = listItemClick;
+        paths = new ArrayList<>();
         mRxDownload = RxDownload.getInstance(activity);
     }
 
@@ -916,7 +919,11 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     } else {
                         bg.setVisibility(View.VISIBLE);
                     }
-                    if (infoVO != null && ObjectUtils.isNotEmpty(infoVO.getUrl())) {
+                    if (paths.contains(infoVO.getUrl())) {
+                        break;
+                    }
+                    paths.add(infoVO.getUrl());
+                    if (ObjectUtils.isNotEmpty(infoVO.getUrl())) {
                         if ("mp4".equals(FileUtils.parseSuffix(infoVO.getUrl()))) { // 视频
                             ImageView imageView1 = helper.getView(R.id.iv_pic);
                             imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(BASE_IMG_URL + infoVO.getUrl(), 1));
@@ -924,7 +931,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             if (!infoVO.getUrl().contains("storage")) {
                                 ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                             } else {
-                                GlideApp.with(mContext).load(infoVO.getUrl()).into((ImageView) helper.getView(R.id.iv_pic));
+                                GlideApp.with(mContext).load(BASE_IMG_URL + infoVO.getUrl()).into((ImageView) helper.getView(R.id.iv_pic));
 //                                ImageLoader.getInstance().displayImage(activity, infoVO.getUrl(), (ImageView) helper.getView(R.id.iv_pic));
                             }
                         }
@@ -938,6 +945,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     } else {
                         helper.getView(R.id.iv_bg).setVisibility(View.VISIBLE);
                     }
+                    if (paths.contains(dubbingVO.getUrl())) {
+                        break;
+                    }
+                    paths.add(dubbingVO.getUrl());
                     if ("mp4".equals(FileUtils.parseSuffix(dubbingVO.getUrl()))) { // 视频
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
                         imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(BASE_IMG_URL + dubbingVO.getUrl(), 1));

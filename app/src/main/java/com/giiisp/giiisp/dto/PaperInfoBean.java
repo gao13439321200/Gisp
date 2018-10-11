@@ -17,7 +17,25 @@ public class PaperInfoBean extends BaseBean implements Serializable {
     private String fourid;
     private String isfollow;
     private String downloadnum;
+    private String title;
+    private String showimg;
     private List<PaperInfoVO> imglist;
+
+    public String getShowimg() {
+        return showimg;
+    }
+
+    public void setShowimg(String showimg) {
+        this.showimg = showimg;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getIsfollow() {
         return isfollow;

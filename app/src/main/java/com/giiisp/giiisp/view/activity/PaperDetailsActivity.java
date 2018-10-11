@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -263,7 +264,7 @@ public class PaperDetailsActivity extends
 
     private String language = CN;
     private String title = "";
-    private String firstPic = "";
+    private String picImage = "";
     private String realName = "";
     private ProgressPopupWindow progressPopupWindow;
     private boolean isMove = false;
@@ -305,6 +306,7 @@ public class PaperDetailsActivity extends
     @Override
     public void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.back_right_in, R.anim.push_left_out);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         super.onCreate(savedInstanceState);
     }
 
@@ -612,6 +614,7 @@ public class PaperDetailsActivity extends
                             viewpagerPaper.setAdapter(mImageAdapter);
                         }
                         viewpagerPaper.setCurrentItem(playService.getPlayingPosition());
+                        viewpagerPaper.setOffscreenPageLimit(playService.getPlayingPosition() + 1);
                         recyclerView.scrollToPosition(playService.getPlayingPosition());
                         //                        Song playingMusic = playService.getPlayingMusic();
                         ivPlayStop.setSelected(playService.isPlaying());
@@ -631,6 +634,7 @@ public class PaperDetailsActivity extends
                             mImageAdapter = new ImageAdapter(this, photoList, this);
                             viewpagerPaper.setAdapter(mImageAdapter);
                             viewpagerPaper.setCurrentItem(0);
+                            viewpagerPaper.setOffscreenPageLimit(1);
                             for (String url : photoList) {
                                 ClickEntity entity = new ClickEntity();
                                 PaperInfoVO vo = new PaperInfoVO();
@@ -686,6 +690,7 @@ public class PaperDetailsActivity extends
             @Override
             public void onClick(View view) {
                 viewpagerPaper.setCurrentItem(getPlayService().getPlayingPosition());
+                viewpagerPaper.setOffscreenPageLimit(getPlayService().getPlayingPosition() + 1);
             }
         }, new FloatDragView.OnMyListening() {
             @Override
@@ -791,6 +796,7 @@ public class PaperDetailsActivity extends
                 if (getPlayService() != null) {
                     if (position < imageId.size() - 1) {
                         sendPlayNote();
+                        setRecyclerPosition(position, position + 1);
                         position++;
                         getImageInfo();
                     } else {
@@ -803,6 +809,7 @@ public class PaperDetailsActivity extends
                 if (getPlayService() != null) {
                     if (position > 0) {
                         sendPlayNote();
+                        setRecyclerPosition(position, position - 1);
                         position--;
                         getImageInfo();
                     } else {
@@ -946,10 +953,10 @@ public class PaperDetailsActivity extends
                             @Override
                             public void run() throws Exception {
 
-                                UMWeb web = new UMWeb("http://mall.xdiandian.cn/jsp/play?pid="
+                                UMWeb web = new UMWeb("http://mall.xdiandian.cn/api/play?pid="
                                         + pid + "&type=1&language=" + language
                                         + "&version=" + myVersionNo);
-                                UMImage thumb = new UMImage(PaperDetailsActivity.this, firstPic);
+                                UMImage thumb = new UMImage(PaperDetailsActivity.this, picImage);
                                 web.setTitle(title);//标题
                                 web.setThumb(thumb);  //缩略图
                                 web.setDescription(realName);//描述
@@ -1211,6 +1218,7 @@ public class PaperDetailsActivity extends
 
         if (this.position != position) {
             sendPlayNote();
+            setRecyclerPosition(this.position, position);
             this.position = position;
 //            if (getPlayService() != null)
 //                getPlayService().play(position);
@@ -1219,6 +1227,7 @@ public class PaperDetailsActivity extends
 
 
         viewpagerPaper.setCurrentItem(position);
+        viewpagerPaper.setOffscreenPageLimit(position + 1);
     }
 
     @Override
@@ -1235,6 +1244,7 @@ public class PaperDetailsActivity extends
             currentViewPagerItem = position;
             tvTitle.setText("P" + (position + 1));
             viewpagerPaper.setCurrentItem(position);
+            viewpagerPaper.setOffscreenPageLimit(position + 1);
 //        recyclerView.scrollToPosition(position);
 //        itemClickAdapter.setSelectedPosition(position);
 //        itemClickAdapter.notifyDataSetChanged();
@@ -1247,14 +1257,14 @@ public class PaperDetailsActivity extends
                 if (!isFulllScreen) {
                     mRelativeLayout.setVisibility(View.VISIBLE);
                 }
-                if (mIsVideo.get(lastItem)) { // 上一个为视频时
-                    if (mVideoViewMap.get(lastItem).isPlaying()) {
-                        mVideoViewMap.get(lastItem).pause();
-                    }
+//                if (mIsVideo.get(lastItem)) { // 上一个为视频时
+//                    if (mVideoViewMap.get(lastItem).isPlaying()) {
+//                        mVideoViewMap.get(lastItem).pause();
+//                    }
 //                    if (mMediaControllerMap.get(lastItem).isShowing()) {
 //                        mMediaControllerMap.get(lastItem).setVisibility(View.INVISIBLE);
 //                    }
-                }
+//                }
             }
             switch (type) {
                 case "online_paper":
@@ -1274,6 +1284,7 @@ public class PaperDetailsActivity extends
             }
         } else {//是事件的只是显示图片，不做其他处理
             viewpagerPaper.setCurrentItem(position);
+            viewpagerPaper.setOffscreenPageLimit(position + 1);
         }
     }
 
@@ -1587,10 +1598,12 @@ public class PaperDetailsActivity extends
 
         if (getPlayService() != null) {
             if (position < imageId.size() - 1) {
+                setRecyclerPosition(position, position + 1);
                 position++;
                 getImageInfo();
             } else {
                 if (imageId.size() > 0) {
+                    setRecyclerPosition(position, 0);
                     position = 0;
                     getImageInfo();
                 }
@@ -1625,11 +1638,12 @@ public class PaperDetailsActivity extends
             }
             int position = music.getPosition();
             viewpagerPaper.setCurrentItem(position);
+            viewpagerPaper.setOffscreenPageLimit(position + 1);
             tvDuration.setText("/ " + Util.formatSeconds(music.getDuration()));
 
             recyclerView.scrollToPosition(position);
-            itemClickAdapter.setSelectedPosition(position);
-            itemClickAdapter.notifyDataSetChanged();
+//            itemClickAdapter.setSelectedPosition(position);
+//            itemClickAdapter.notifyDataSetChanged();
             seekBarPaper.setMax((music.getDuration() - 1) * 1000);
             seekBarPaper.setProgress(0);
             List<Song> songs = AppCache.getPlayService().getmMusicList();
@@ -1686,10 +1700,12 @@ public class PaperDetailsActivity extends
                 mVideoViewMap.get(position).pause();
             }
             if (position < imageId.size() - 1) {
+                setRecyclerPosition(position, position + 1);
                 position++;
                 getImageInfo();
             } else {
                 if (imageId.size() > 0) {
+                    setRecyclerPosition(position, 0);
                     position = 0;
                     getImageInfo();
                 }
@@ -2020,6 +2036,7 @@ public class PaperDetailsActivity extends
                 imageId.clear();
                 myVersionNo = bean.getVersion();
                 pid = bean.getId();
+                picImage = bean.getShowimg();
                 //完整
                 tvPaperComplete.setVisibility(!"2".equals(myVersionNo) && "1".equals(bean.getTwo())
                         ? View.VISIBLE : View.GONE);
@@ -2050,15 +2067,19 @@ public class PaperDetailsActivity extends
 
                 getPlayService().setImageList(photoList);
 
+                if (!TextUtils.isEmpty(bean.getTitle()))
+                    title = bean.getTitle();
                 if (!TextUtils.isEmpty(bean.getDigest()))
-                    title = bean.getDigest();
+                    realName = bean.getDigest();
 
                 mImageAdapter = new ImageAdapter(this, photoList, this);
                 viewpagerPaper.setAdapter(mImageAdapter);
                 if (bean.getImglist() != null && bean.getImglist().size() != 0) {
                     position = 0;
+                    setRecyclerPosition(0, 0);
                     getImageInfo();
                     viewpagerPaper.setCurrentItem(0);
+                    viewpagerPaper.setOffscreenPageLimit(1);
                     paperQA.setImageId(imageId.get(position));
                     paperQA.initNetwork();
                 }
@@ -2092,8 +2113,10 @@ public class PaperDetailsActivity extends
                 viewpagerPaper.setAdapter(mImageAdapter);
                 if (dubbingBean.getList() != null && dubbingBean.getList().size() != 0) {
                     position = 0;
+                    setRecyclerPosition(0, 0);
                     getImageInfo();
                     viewpagerPaper.setCurrentItem(0);
+                    viewpagerPaper.setOffscreenPageLimit(1);
                 }
                 break;
             case "205"://获取论文语音
@@ -2197,7 +2220,7 @@ public class PaperDetailsActivity extends
                 ToastUtils.showShort("取消收藏成功！");
                 ivLikedIcon.setSelected(false);
                 break;
-            case "305":
+            case "305"://获取论文事件
                 PaperEventBean bean2 = (PaperEventBean) baseBean;
                 Log.v("====", "事件获取完成,个数" + bean2.getList().size());
                 mBeanMap = new HashMap<>();
@@ -2270,6 +2293,12 @@ public class PaperDetailsActivity extends
         String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
         mmr.release();
         return (Integer.parseInt(duration)) / 1000;
+    }
+
+    private void setRecyclerPosition(int oldPosition, int newPosition) {
+        itemClickAdapter.setSelectedPosition(newPosition);
+        itemClickAdapter.notifyItemChanged(oldPosition, "123");
+        itemClickAdapter.notifyItemChanged(newPosition, "123");
     }
 
 }

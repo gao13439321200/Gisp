@@ -214,11 +214,11 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     break;
                 case "1":
                     mLlAuth.setVisibility(View.INVISIBLE);
-                    tvVerified.setVisibility(View.VISIBLE);
+                    tvVerified.setVisibility(View.GONE);
                     break;
                 case "2":
                     mLlAuth.setVisibility(View.INVISIBLE);
-                    tvVerified.setVisibility(View.VISIBLE);
+                    tvVerified.setVisibility(View.GONE);
                     break;
                 case "3":
                     mLlAuth.setVisibility(View.VISIBLE);

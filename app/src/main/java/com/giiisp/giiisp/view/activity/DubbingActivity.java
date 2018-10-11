@@ -69,6 +69,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 
 /**
@@ -147,7 +148,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private List<ClickEntity> dataList = new ArrayList<>();
     private boolean isDubbing = false;
     private int videoAllTime = 0;
-    private boolean isFinish = true;
+//    private boolean isFinish = true;
 
     /*** 页面的视频控件集合,Integer所处位置 ***/
     static Map<Integer, WrapVideoView> mVideoViewMap = new HashMap<>();
@@ -286,7 +287,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 if (mIsRecord) {//暂停
                     //这里判断如果是视频的话 并且 录音时间大于视频时间 才可以暂停
                     if (isVideo(dubbingPosition)
-                            && !isFinish) {
+                            && recorderSecondsElapsed < videoAllTime) {
                         ToastUtils.showShort("录音时长需大于或等于视频时长");
                         return;
                     }
@@ -301,7 +302,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                             mVideoViewMap.get(dubbingPosition).start();
                         if (mVideoBgViewMap != null && mVideoBgViewMap.get(dubbingPosition) != null)
                             mVideoBgViewMap.get(dubbingPosition).setVisibility(View.GONE);
-                        isFinish = false;
                     }
                     //                    DubbingPermissionActivityPermissionsDispatcher.resolveRecordWithCheck(DubbingActivity.this);
                 }
@@ -494,6 +494,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 }
                 if (!isDubbing) {//开始录音
                     dubbingPosition = viewPager.getCurrentItem();
+                    if (isVideo(dubbingPosition)) {
+                        videoAllTime = getVideoDuration(
+                                BASE_IMG_URL + dataList.get(dubbingPosition).getDubbingVO().getUrl());
+                    }
                     mBtnSolo.setVisibility(View.INVISIBLE);
                     isDubbing = true;
                     imgId = getImageId();
@@ -669,8 +673,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         Log.i("--->>", "positionOffset: " + positionOffset);
         Log.i("--->>", "positionOffsetPixels: " + positionOffsetPixels);
         if (positionOffset == 0 && position != abc) {
-            if (mVideoViewMap.get(abc) != null)
-                mVideoViewMap.get(abc).pause();
+//            if (mVideoViewMap.get(abc) != null)
+//                mVideoViewMap.get(abc).pause();
             setImageStatus(position);
             abc = position;
         }
@@ -728,20 +732,23 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     private void setImageStatus(int position) {
         if (dataList != null && isVideo(position)) {
-            if (this.dubbingPosition == position) {
-                videoAllTime = mImageAdapter.getVideoDuration(dubbingPosition);//这里记录视频的总时间
-//                if (!isDubbing)
-//                    mBtnSolo.setVisibility(View.VISIBLE);
-//            } else {
-//                mBtnSolo.setVisibility(View.INVISIBLE);
-            }
+//            if (dubbingPosition == position && isDubbing && !mVideoViewMap.get(dubbingPosition).isPlaying()) {
+//                mVideoViewMap.get(dubbingPosition).seekTo(recorderSecondsElapsed % videoAllTime);
+//                mVideoViewMap.get(dubbingPosition).start();
+//            }
+
             mBtnSolo.setVisibility(isDubbing ? View.INVISIBLE : View.VISIBLE);
         } else {
             mBtnSolo.setVisibility(View.INVISIBLE);
         }
-        viewPager.setCurrentItem(position);
+        if (viewPager.getCurrentItem() != position) {
+            viewPager.setCurrentItem(position);
+            viewPager.setOffscreenPageLimit(dataList.size());
+        }
         itemClickAdapte.setSelectedPosition(position);
-        itemClickAdapte.notifyDataSetChanged();
+        itemClickAdapte.notifyItemChanged(abc, "123");
+        itemClickAdapte.notifyItemChanged(position, "123");
+//        itemClickAdapte.notifyDataSetChanged();
         canMark = false;
         mMyCustomView.setCanMark(false);
         mCbMark.setChecked(false);
@@ -792,15 +799,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     @Override
     public void onMyCompletion(MediaPlayer videoView) {
-        isFinish = true;
-        if (isDubbing) {//如果还在录音的话重新播放视频
+//        if (isDubbing) {//如果还在录音的话重新播放视频
             videoView.start();
             videoView.setLooping(true);
-        } else {
-            //这里需要上传原音
+//        } else {
+//            这里需要上传原音
 //            filePath = "";
-            upAudio(true);
-        }
+//            upAudio(true);
+//        }
     }
 
     private class ImageAdapter extends PagerAdapter {
@@ -876,7 +882,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     }
                 });
                 mVideoBgView.setBackground(new BitmapDrawable(getVideoBitmap(BASE_IMG_URL + path)));
-
+                mVideoBgView.setVisibility(View.GONE);
 //                MediaController mpc = new MediaController(activity, false);
                 videoview.setVideoPath(BASE_IMG_URL + path);
                 videoview.setZOrderOnTop(true);
@@ -907,14 +913,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         public Bitmap getVideoBitmap(String mVideoUrl) {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.setDataSource(mVideoUrl, new HashMap<>());
-            Bitmap bitmap = retriever.getFrameAtTime();
+            Bitmap bitmap = retriever.getFrameAtTime(1000000, OPTION_CLOSEST_SYNC);
             retriever.release();
             return bitmap;
         }
 
-        public int getVideoDuration(int position) {
-            return mVideoViewMap.get(position) != null ? mVideoViewMap.get(position).getDuration() : 0;
-        }
+//        public int getVideoDuration(int position) {
+//            return mVideoViewMap.get(position) != null ? mVideoViewMap.get(position).getDuration() : 0;
+//        }
     }
 
     @Override
@@ -1101,5 +1107,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     private boolean isVideo(int position) {
         return dataList.get(position).getDubbingVO().getUrl().contains("mp4");
+    }
+
+    private int getVideoDuration(String path) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path, new HashMap<>());
+        String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
+        mmr.release();
+        return (Integer.parseInt(duration)) / 1000;
     }
 }
