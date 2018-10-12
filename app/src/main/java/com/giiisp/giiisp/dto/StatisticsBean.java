@@ -7,6 +7,24 @@ public class StatisticsBean extends BaseBean {
     private List<String> download;
     private List<String> collect;
     private List<String> time;
+    private String ziji;
+    private String bieren;
+
+    public String getZiji() {
+        return ziji;
+    }
+
+    public void setZiji(String ziji) {
+        this.ziji = ziji;
+    }
+
+    public String getBieren() {
+        return bieren;
+    }
+
+    public void setBieren(String bieren) {
+        this.bieren = bieren;
+    }
 
     public List<String> getX() {
         return x;

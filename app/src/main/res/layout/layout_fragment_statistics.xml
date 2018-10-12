@@ -68,7 +68,7 @@
                 android:layout_margin="10dp"
                 android:ems="1"
                 android:gravity="center"
-                android:text="下载人数"/>
+                android:text="收藏人数"/>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart_collection"
@@ -97,7 +97,7 @@
                 android:layout_margin="10dp"
                 android:ems="1"
                 android:gravity="center"
-                android:text="下载人数"/>
+                android:text="播放时长"/>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart_time"

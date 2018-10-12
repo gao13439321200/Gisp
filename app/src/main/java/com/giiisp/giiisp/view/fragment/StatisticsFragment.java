@@ -2,7 +2,6 @@ package com.giiisp.giiisp.view.fragment;
 
 import android.os.Bundle;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
@@ -48,13 +47,16 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
 
     @Override
     public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
+        super.initData();
         HashMap<String, Object> map = new HashMap<>();
         map.put("pid", getArguments().getString("pid"));
         map.put("uid", getUserID());
-        map.put("ziji", "2");
-        map.put("bieren", "2");
         presenter.getDataAll("220", map);
-
     }
 
     @Override
@@ -73,32 +75,38 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         switch (url) {
             case "220":
                 StatisticsBean bean = (StatisticsBean) baseBean;
-                if (bean.getX().size() != bean.getCollect().size()
-                        || bean.getX().size() != bean.getDownload().size()
-                        || bean.getX().size() != bean.getTime().size()) {
-                    ToastUtils.showShort("统计数据信息异常");
-                    break;
-                }
+//                if (bean.getX().size() != bean.getCollect().size()
+//                        || bean.getX().size() != bean.getDownload().size()
+//                        || bean.getX().size() != bean.getTime().size()) {
+//                    ToastUtils.showShort("统计数据信息异常");
+//                    break;
+//                }
                 List<String> xDataList = new ArrayList<>();//x轴数据源
                 List<Entry> downtimeDataList = new ArrayList<>();// y轴数据数据源
                 List<Entry> collectDataList = new ArrayList<>();// y轴数据数据源
                 List<Entry> timeDataList = new ArrayList<>();// y轴数据数据源
+                boolean down = bean.getX().size() == bean.getDownload().size();
+                boolean collect = bean.getX().size() == bean.getCollect().size();
+                boolean time = bean.getX().size() == bean.getTime().size();
                 for (int i = 0; i < bean.getX().size(); i++) {
                     xDataList.add(bean.getX().get(i) + ":00");
-                    downtimeDataList.add(new Entry(Float.parseFloat(bean.getX().get(i))
-                            , Float.parseFloat(bean.getDownload().get(i))));
-                    collectDataList.add(new Entry(Float.parseFloat(bean.getX().get(i))
-                            , Float.parseFloat(bean.getCollect().get(i))));
-                    timeDataList.add(new Entry(Float.parseFloat(bean.getX().get(i))
-                            , Float.parseFloat(bean.getTime().get(i))));
+                    if (down)
+                        downtimeDataList.add(new Entry(Float.parseFloat(bean.getX().get(i))
+                                , Float.parseFloat(bean.getDownload().get(i))));
+                    if (collect)
+                        collectDataList.add(new Entry(Float.parseFloat(bean.getX().get(i))
+                                , Float.parseFloat(bean.getCollect().get(i))));
+                    if (time)
+                        timeDataList.add(new Entry(Float.parseFloat(bean.getX().get(i))
+                                , Float.parseFloat(bean.getTime().get(i))));
                 }
-
                 //显示图表,参数（ 上下文，图表对象， X轴数据，Y轴数据，图表标题，曲线图例名称，坐标点击弹出提示框中数字单位）
-                ChartUtil.showChart(getActivity(), mLineChartUpdate, xDataList, downtimeDataList, "", "", "");
-                ChartUtil.showChart(getActivity(), mLineChartCollection, xDataList, collectDataList, "", "", "");
-                ChartUtil.showChart(getActivity(), mLineChartTime, xDataList, timeDataList, "", "", "");
-
-
+                if (downtimeDataList.size() != 0)
+                    ChartUtil.showChart(getActivity(), mLineChartUpdate, xDataList, downtimeDataList, "", "", "");
+                if (collectDataList.size() != 0)
+                    ChartUtil.showChart(getActivity(), mLineChartCollection, xDataList, collectDataList, "", "", "");
+                if (timeDataList.size() != 0)
+                    ChartUtil.showChart(getActivity(), mLineChartTime, xDataList, timeDataList, "", "", "");
                 break;
             default:
                 break;

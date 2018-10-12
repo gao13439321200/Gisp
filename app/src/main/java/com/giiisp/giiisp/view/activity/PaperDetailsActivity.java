@@ -559,7 +559,7 @@ public class PaperDetailsActivity extends
                 paperQA = BannerRecyclerViewFragment.newInstance("paper_qa", pid);
                 fragments.add(paperQA);
                 fragments.add(BannerRecyclerViewFragment.newInstance("paper_literature", pid));
-                fragments.add(StatisticsFragment.newInstance());
+                fragments.add(StatisticsFragment.newInstance(pid));
                 List<String> mTitles = new ArrayList<>();
                 mTitles.add("问答");
                 mTitles.add("文献索引");
