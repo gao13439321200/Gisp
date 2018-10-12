@@ -933,8 +933,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         HashMap<String, Object> hMap = new HashMap<>();
 //        map.put("token", token);
         switch (type) {
-            case "he":
-                hMap.put("uid", uid);
+            case "he"://学者详情
+                hMap.put("uid", string);
                 hMap.put("language", getLanguage());
                 presenter.getDataAll("306", hMap);
                 //这里需要获取作者论文和综述，暂时不用了
@@ -1960,12 +1960,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
 
             case "scholar_list":
-                ClickEntity scholarList = itemClickAdapter.getItem(position);
+                // TODO: 2018/10/12 高鹏 这里需要查看详情吗？
+                /*ClickEntity scholarList = itemClickAdapter.getItem(position);
                 if (scholarList != null) {
-                    String oid = scholarList.getMyScholarBean().getId() + "";
+                    String oid = scholarList.getPeopleVO().getId() + "";
                     if (!TextUtils.isEmpty(oid))
                         FragmentActivity.actionActivity(getContext(), "he", oid);
-                }
+                }*/
                 break;
             case "paper_download":
                 ClickEntity paperDownloadItem = mDragAdapter.getItem(position);
@@ -2858,7 +2859,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 ClickEntity clickEntity = new ClickEntity(R.layout.item_user_info, "head");
                 clickEntity.setMIneInfoBean(mIneInfoBean);
                 clickEntity.setPaperId(string);
-                multipleItemQuickAdapter.addData(clickEntity);
+                List<ClickEntity> clickEntities = new ArrayList<>();
+                clickEntities.add(clickEntity);
+                multipleItemQuickAdapter.setNewData(clickEntities);
                 break;
             case "307":
                 FansBean bean2 = (FansBean) baseBean;
