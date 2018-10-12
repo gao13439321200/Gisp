@@ -86,6 +86,10 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
                 break;
             case 2://已选择
                 mButton.setVisibility(View.GONE);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("uid", getUserID());
+                map.put("language", getLanguage());
+                presenter.getDataAll("113", map);
                 break;
         }
 

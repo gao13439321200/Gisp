@@ -82,6 +82,9 @@ public class SelectFieldFragment extends BaseMvpFragment<BaseImpl, WholePresente
                 break;
             case 2://已选择
                 mButton.setVisibility(View.GONE);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("uid", getUserID());
+                presenter.getDataAll("115", map);//获取关注的专业
                 break;
         }
 
@@ -160,6 +163,17 @@ public class SelectFieldFragment extends BaseMvpFragment<BaseImpl, WholePresente
                 break;
             case "111":
 //                ToastUtils.showShort("成功！");
+                break;
+            case "115":
+                MajorBean bean2 = (MajorBean) entity;
+                mEntityMajor.clear();
+                for (MajorVO vo : bean2.getMajors()) {
+                    ClickEntity entity1 = new ClickEntity();
+                    entity1.setMajorVO(vo);
+                    mEntityMajor.add(entity1);
+                    mAdapterMajor.setSelectIdsData(vo.getId());
+                }
+                mAdapterMajor.notifyDataSetChanged();
                 break;
             default:
                 break;

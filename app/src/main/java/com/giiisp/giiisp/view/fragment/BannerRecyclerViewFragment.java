@@ -35,6 +35,8 @@ import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.dto.CollectListBean;
+import com.giiisp.giiisp.dto.CollectListVO;
 import com.giiisp.giiisp.dto.CourseBean;
 import com.giiisp.giiisp.dto.CourseVO;
 import com.giiisp.giiisp.dto.DownloadImgInfoVO;
@@ -794,7 +796,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "collection_paper"://首页收藏论文
             case "collection_summary"://首页收藏综述
                 list.clear();
-                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_collection, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
 
@@ -2095,9 +2097,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "collection_paper":
             case "collection_summary":
-                PaperMainVO vo1 = itemClickAdapter.getItem(position).getPaperMainVO();
-                PaperDetailsActivity.actionActivityNew(getContext(), vo1.getId(),
-                        vo1.getVersion(), "online_paper", vo1.getMyLanguage(), getActivity().getClass().getName());
+                CollectListVO vo1 = itemClickAdapter.getItem(position).getCollectListVO();
+                PaperDetailsActivity.actionActivityNew(getContext(), vo1.getPid(),
+                        vo1.getVersion(), "online_paper", vo1.getLanguage(), getActivity().getClass().getName());
 
 
 //                ClickEntity item = itemClickAdapter.getItem(position);
@@ -2721,7 +2723,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 break;
             case "209"://首页的论文和综述
-            case "212"://收藏的论文和综述
+//            case "212"://收藏的论文和综述
             case "312"://我的论文和综述
                 PaperMainBean mainBean = (PaperMainBean) baseBean;
                 itemClickAdapter.loadMoreComplete();
@@ -2738,17 +2740,34 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     mainEntity.setPaperMainVO(vo);
                     itemClickAdapter.addData(mainEntity);
                 }
-//                if (mainBean.getList().size() == 0) {
-//                    if (page != 0)
-//                        ToastUtils.showShort("数据已经全部加载了");
-//                    else
-//                        ToastUtils.showShort("暂无数据");
-//                }
                 if (mainBean.getList().size() >= pageSize) {
                     page++;
                 } else {
                     itemClickAdapter.loadMoreEnd(false);
                 }
+                break;
+            case "212"://收藏的论文和综述
+                CollectListBean collectListBean = (CollectListBean) baseBean;
+                itemClickAdapter.loadMoreComplete();
+                if (itemClickAdapter == null || collectListBean == null
+                        || collectListBean.getList() == null) {
+                    itemClickAdapter.loadMoreEnd(false);
+                    return;
+                }
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+                for (CollectListVO vo : collectListBean.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setCollectListVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
+                if (collectListBean.getList().size() >= pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
+                }
+
                 break;
             case "206"://论文详情问答列表
                 PaperQaBean qaBean = (PaperQaBean) baseBean;

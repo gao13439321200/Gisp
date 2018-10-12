@@ -590,35 +590,39 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_collection:
                     switch (type) {
                         case "popular":
-                            if (item.getNote() == null)
+                        case "collection_paper"://首页收藏论文
+                        case "collection_summary"://首页收藏综述
+                            if (item.getCollectListVO() == null)
                                 return;
-                            helper.setText(R.id.tv_title, item.getNote().getTitle() + "");
-                            helper.setText(R.id.tv_time, item.getNote().getCreateTime() + "");
-                            helper.setText(R.id.tv_paper_browse, item.getNote().getReadNum() + "");
-                            helper.setText(R.id.tv_paper_collected, item.getNote().getFollowedNum() + "");
-                            //                            helper.getView(R.id.tv_paper_collected).setSelected(true);
-                            helper.setText(R.id.tv_paper_download, /*item.getNote().getLikedNum() + */"");
-                            helper.setText(R.id.tv_paper_problem, item.getNote().getCommentNum() + "");
-                            helper.setText(R.id.tv_time, item.getNote().getCreateTime() + "");
-                            helper.setVisible(R.id.tv_progress, true);
-                            int playPosition = item.getNote().getPlayPosition();
-                            int songsSize = item.getNote().getSongsSize();
-//                            helper.getView(R.id.iv_frame).setSelected(item.getNote().getId() == paperId);
-                            if (songsSize != 0) {
-                                double rint = Math.rint((playPosition + 1) / (float) songsSize * 100);
-                                helper.setText(R.id.tv_progress, rint + "%");
-                            }
+                            helper.setText(R.id.tv_title, item.getCollectListVO().getTitle() + "");
+//                            helper.setText(R.id.tv_time, item.getCollectListVO().getCreateTime() + "");
+                            helper.setText(R.id.tv_paper_browse, item.getCollectListVO().getReadnum() + "");
+                            helper.setText(R.id.tv_paper_collected, item.getCollectListVO().getCollectnum() + "");
+                            helper.setText(R.id.tv_paper_download, item.getCollectListVO().getDownloadnum() + "");
+                            helper.setText(R.id.tv_paper_problem, item.getCollectListVO().getQuiznum() + "");
+//                            helper.setText(R.id.tv_time, item.getCollectListVO().getCreateTime() + "");
+                            helper.setVisible(R.id.tv_time, false);
+                            helper.setVisible(R.id.tv_progress, false);
+                            helper.setVisible(R.id.tv_menu, false);
+                            helper.setVisible(R.id.iv_frame, false);
+//                            int playPosition = item.getCollectListVO().getPlayPosition();
+//                            int songsSize = item.getCollectListVO().getSongsSize();
+////                            helper.getView(R.id.iv_frame).setSelected(item.getCollectListVO().getId() == paperId);
+//                            if (songsSize != 0) {
+//                                double rint = Math.rint((playPosition + 1) / (float) songsSize * 100);
+//                                helper.setText(R.id.tv_progress, rint + "%");
+//                            }
 
-                            ImageLoader.getInstance().displayCricleImage(activity, item.getNote().getPath(), (ImageView) helper.getView(R.id.iv_icon));
+                            ImageLoader.getInstance().displayCricleImage(activity, BASE_IMG_URL + item.getCollectListVO().getImg(), (ImageView) helper.getView(R.id.iv_icon));
 
-                            switch (item.getNote().getVersions()) {
-                                case "0":
+                            switch (item.getCollectListVO().getVersion()) {
+                                case "2":
                                     helper.setText(R.id.tv_version, "完整版");
                                     break;
-                                case "1":
+                                case "4":
                                     helper.setText(R.id.tv_version, "精华版");
                                     break;
-                                case "2":
+                                case "3":
                                     helper.setText(R.id.tv_version, "摘要版");
                                     break;
                             }
@@ -667,8 +671,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             }
 
                             break;
-                        case "collection_summary":
-                        case "collection_paper":
+//                        case "collection_summary":
+//                        case "collection_paper":
                            /* if (item.getSubscribeEntityRows() == null)
                                 return;
                             SubscribeEntity.PageInfoBean.RowsBeanXXXXX collectionEntity = item.getSubscribeEntityRows();
@@ -682,12 +686,12 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                             helper.setText(R.id.tv_paper_download, collectionEntity.getDownloadNum() + "");
                             helper.setText(R.id.tv_paper_problem, collectionEntity.getCommentNum() + "");
                             helper.setText(R.id.tv_time, collectionEntity.getCreateTime() + "");*/
-                            //                            ImageLoader.getInstance().displayCricleImage(activity, firstPic, (ImageView) helper.getView(R.id.iv_icon));
+                        //                            ImageLoader.getInstance().displayCricleImage(activity, firstPic, (ImageView) helper.getView(R.id.iv_icon));
                          /*   if (collectionEntity.getPhotoOne() != null&&collectionEntity.getPhotoOne().s) {
 
                             }*/
-                            //                            initCollection();
-                            break;
+                        //                            initCollection();
+//                        break;
                     }
                     break;
                 case R.layout.item_scholar_education:
