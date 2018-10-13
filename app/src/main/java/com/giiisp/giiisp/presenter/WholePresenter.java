@@ -21,6 +21,7 @@ import com.giiisp.giiisp.dto.DubbingListBean;
 import com.giiisp.giiisp.dto.EditInfoBean;
 import com.giiisp.giiisp.dto.FansBean;
 import com.giiisp.giiisp.dto.FollowBean;
+import com.giiisp.giiisp.dto.HeBean;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.ImgInfoBean;
@@ -1534,6 +1535,9 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 break;
             case "220":
                 baseEntity = new Gson().fromJson(cipher, StatisticsBean.class);
+                break;
+            case "222":
+                baseEntity = new Gson().fromJson(cipher, HeBean.class);
                 break;
             case "305":
                 baseEntity = new Gson().fromJson(cipher, PaperEventBean.class);

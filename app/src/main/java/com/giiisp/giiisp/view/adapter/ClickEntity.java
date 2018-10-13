@@ -15,6 +15,8 @@ import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
+import com.giiisp.giiisp.dto.HeEduListVO;
+import com.giiisp.giiisp.dto.HePaperTitleVO;
 import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.MIneInfoBean;
@@ -403,6 +405,24 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private CourseVO mCourseVO;
     private EditInfoVo mEditInfoVo;
     private CollectListVO mCollectListVO;
+    private HeEduListVO mHeEduListVO;
+    private HePaperTitleVO mHePaperTitleVO;
+
+    public HeEduListVO getHeEduListVO() {
+        return mHeEduListVO;
+    }
+
+    public void setHeEduListVO(HeEduListVO heEduListVO) {
+        mHeEduListVO = heEduListVO;
+    }
+
+    public HePaperTitleVO getHePaperTitleVO() {
+        return mHePaperTitleVO;
+    }
+
+    public void setHePaperTitleVO(HePaperTitleVO hePaperTitleVO) {
+        mHePaperTitleVO = hePaperTitleVO;
+    }
 
     public CollectListVO getCollectListVO() {
         return mCollectListVO;

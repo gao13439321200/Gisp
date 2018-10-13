@@ -1960,13 +1960,14 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
 
             case "scholar_list":
-                // TODO: 2018/10/12 高鹏 这里需要查看详情吗？
-                /*ClickEntity scholarList = itemClickAdapter.getItem(position);
+
+                ClickEntity scholarList = itemClickAdapter.getItem(position);
                 if (scholarList != null) {
                     String oid = scholarList.getPeopleVO().getId() + "";
                     if (!TextUtils.isEmpty(oid))
-                        FragmentActivity.actionActivity(getContext(), "he", oid);
-                }*/
+                        HeActivity.newInstance(getActivity(), oid);
+//                        FragmentActivity.actionActivity(getContext(), "he", oid);
+                }
                 break;
             case "paper_download":
                 ClickEntity paperDownloadItem = mDragAdapter.getItem(position);
@@ -3092,8 +3093,19 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("type", "2");
                 presenter.getDataAll("216", map);
                 break;
-            case "add"://订阅
-                ToastUtils.showShort("测试-添加");
+            case "add"://添加播放
+                map.put("uid", getUserID());
+                map.put("pid", pid);
+                map.put("language", language);
+                map.put("type", "1");
+                presenter.getDataAll("221", map);
+                break;
+            case "noadd"://删除播放
+                map.put("uid", getUserID());
+                map.put("pid", pid);
+                map.put("language", language);
+                map.put("type", "2");
+                presenter.getDataAll("221", map);
                 break;
             default:
                 break;

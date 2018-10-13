@@ -27,6 +27,8 @@ import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
+import com.giiisp.giiisp.dto.HeEduListVO;
+import com.giiisp.giiisp.dto.HePaperTitleVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
@@ -885,7 +887,13 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setChecked(R.id.cb_download, "1".equals(vlistBean.getIsdownload()));
                         helper.getView(R.id.cb_download).setOnClickListener(view -> mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN));
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
-                        helper.getView(R.id.cb_add).setOnClickListener(view -> mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN));
+                        helper.getView(R.id.cb_add).setOnClickListener(view -> {
+                            if (((CheckBox) helper.getView(R.id.cb_add)).isChecked()) {
+                                mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                            } else {
+                                mListItemClick.listClick("noadd", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                            }
+                        });
                         String btnString;
                         if (vlistBean.isEnglish()) {
                             btnString = "EN   ▷" + vlistBean.getEnduration() + "   " + vlistBean.getEnsize();
@@ -1085,12 +1093,19 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 
                         initFlow(helper, list);
                     }
+
+
                     TextView textViewDescription1 = helper.getView(R.id.tv_description);
                     if (textViewDescription1.getLineCount() == 1) {
                         viewSwitch1.setVisibility(View.GONE);
                     } else {
                         initSwitch(viewSwitch1, new TextView(activity), textViewDescription1, new TextView(activity), new TextView(activity));
 
+                    }
+                    if (item.getHePaperTitleVO() != null) {//学者详情页
+                        HePaperTitleVO titleVO = item.getHePaperTitleVO();
+                        helper.setText(R.id.tv_title, titleVO.getTitle());
+                        viewSwitch1.setVisibility(View.GONE);
                     }
                     break;
                 case R.layout.item_paper_indexes_new://论文详情文献
@@ -1256,6 +1271,17 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_time, collectionEntity.getCreateTime());
                     ImageLoader.getInstance().displayCricleImage(activity, collectionEntity.getFirstPic(), (ImageView) helper.getView(R.id.iv_icon));
 
+                    break;
+                case R.layout.item_editinfo_education:
+                    HeEduListVO heEduListVO = item.getHeEduListVO();
+                    helper.setText(R.id.tv_university_name, heEduListVO.getTimestart() + "-" + heEduListVO.getTimeend());
+                    String text = "";
+                    if (CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE))) {
+                        text = heEduListVO.getCcname() + heEduListVO.getUcname() + heEduListVO.getMcname() + "," + heEduListVO.getEcname();
+                    } else {
+                        text = heEduListVO.getCename() + heEduListVO.getUename() + heEduListVO.getMename() + "," + heEduListVO.getEename();
+                    }
+                    helper.setText(R.id.tv_name, text);
                     break;
             }
         }
