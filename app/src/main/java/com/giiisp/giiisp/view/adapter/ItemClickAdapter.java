@@ -1274,7 +1274,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     break;
                 case R.layout.item_editinfo_education:
                     HeEduListVO heEduListVO = item.getHeEduListVO();
-                    helper.setText(R.id.tv_university_name, heEduListVO.getTimestart() + "-" + heEduListVO.getTimeend());
+                    String timeStart = heEduListVO.getTimestart().substring(0, 4);
+                    String timeEnd = heEduListVO.getTimeend().substring(0, 4);
+                    helper.setText(R.id.tv_university_name, timeStart + "-" + timeEnd);
                     String text = "";
                     if (CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE))) {
                         text = heEduListVO.getCcname() + heEduListVO.getUcname() + heEduListVO.getMcname() + "," + heEduListVO.getEcname();

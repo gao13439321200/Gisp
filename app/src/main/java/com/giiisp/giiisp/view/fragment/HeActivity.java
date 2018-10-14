@@ -1,5 +1,6 @@
 package com.giiisp.giiisp.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.dto.BaseBean;
@@ -94,6 +96,9 @@ public class HeActivity extends BaseMvpActivity<BaseImpl, WholePresenter> {
     @BindView(R.id.scroll_view)
     ScrollView scrollView;
 
+    private boolean isFollow = false;
+    private String suid = "";
+
     public static void newInstance(Context context, String scholarId) {
         Bundle bundle = new Bundle();
         bundle.putString("scholarId", scholarId);
@@ -124,7 +129,7 @@ public class HeActivity extends BaseMvpActivity<BaseImpl, WholePresenter> {
         recyclerViewPaperList.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewReviewList.setLayoutManager(new LinearLayoutManager(this));
 
-        String suid = getIntent().getExtras().getString("scholarId");
+        suid = getIntent().getExtras().getString("scholarId");
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
@@ -134,11 +139,21 @@ public class HeActivity extends BaseMvpActivity<BaseImpl, WholePresenter> {
     }
 
 
-    @OnClick({R.id.tv_back, R.id.tv_paper_number, R.id.tv_review_number, R.id.tv_fans_number})
+    @OnClick({R.id.tv_back, R.id.tv_paper_number, R.id.iv_attention, R.id.tv_review_number, R.id.tv_fans_number})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_back:
                 finish();
+                break;
+            case R.id.iv_attention:
+                isFollow = !isFollow;
+                GlideApp.with(this)
+                        .load(isFollow ? R.mipmap.attention : R.mipmap.not_attention)
+                        .into(ivAttention);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("uid", getUserID());
+                map.put("sid", suid);
+                presenter.getDataAll("118", map);
                 break;
             case R.id.tv_paper_number:
                 break;
@@ -159,10 +174,14 @@ public class HeActivity extends BaseMvpActivity<BaseImpl, WholePresenter> {
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
         switch (url) {
+            case "118":
+                ToastUtils.showShort(isFollow ? "关注成功！" : "取消关注成功！");
+                break;
             case "222":
                 HeBean bean = (HeBean) baseBean;
                 if (bean == null)
@@ -171,7 +190,11 @@ public class HeActivity extends BaseMvpActivity<BaseImpl, WholePresenter> {
                         .load(bean.getUserinfo().getAvatar())
                         .into(ivUserIcon);
                 tvUserName.setText(bean.getUserinfo().getName());
-                ivAttention.setVisibility("1".equals(bean.getIsfollow()) ? View.INVISIBLE : View.VISIBLE);
+                isFollow = "1".equals(bean.getIsfollow());
+                GlideApp.with(this)
+                        .load(isFollow ? R.mipmap.attention : R.mipmap.not_attention)
+                        .into(ivAttention);
+//                ivAttention.setVisibility("1".equals(bean.getIsfollow()) ? View.INVISIBLE : View.VISIBLE);
                 tvPrompt.setText("这个字段后台没有返回");
                 tvUserPosition.setText(bean.getUserinfo().getPosition());
                 tvUserPhone.setText(bean.getUserinfo().getPhone());
