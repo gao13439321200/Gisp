@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
@@ -55,6 +57,9 @@ import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.widget.MyCustomView;
 import com.giiisp.giiisp.widget.WrapVideoView;
 import com.giiisp.giiisp.widget.recording.Util;
+import com.github.chrisbanes.photoview.OnMatrixChangedListener;
+import com.github.chrisbanes.photoview.OnScaleChangedListener;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
 import java.io.IOException;
@@ -800,8 +805,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     @Override
     public void onMyCompletion(MediaPlayer videoView) {
 //        if (isDubbing) {//如果还在录音的话重新播放视频
-            videoView.start();
-            videoView.setLooping(true);
+        videoView.start();
+        videoView.setLooping(true);
 //        } else {
 //            这里需要上传原音
 //            filePath = "";
@@ -895,14 +900,34 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 container.addView(videoview_layout);
                 return videoview_layout;
             } else {
-                ImageView imageView = new ImageView(activity);
+                PhotoView imageView = new PhotoView(activity);
+//                ImageView imageView = new ImageView(activity);
+//                imageView.setScaleType(ImageView.ScaleType.MATRIX);
+                imageView.setOnScaleChangeListener(new OnScaleChangedListener() {
+                    @Override
+                    public void onScaleChange(float scaleFactor, float focusX, float focusY) {
+                        Log.i("坐标", "onScaleChange坐标：" + scaleFactor + "," + focusX + "," + focusY);
+                    }
+                });
+                imageView.setOnMatrixChangeListener(new OnMatrixChangedListener() {
+                    @Override
+                    public void onMatrixChanged(RectF rect) {
+                        Log.i("坐标", "onMatrixChanged坐标：" + rect.left + "," + rect.top);
+                    }
+                });
+
                 //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
                 ViewParent vp = imageView.getParent();
                 if (vp != null) {
                     ViewGroup parent = (ViewGroup) vp;
                     parent.removeView(imageView);
                 }
+                Matrix matrix = new Matrix();
+                matrix.setTranslate(-260, -109);
+                matrix.preScale(1.7f, 1.7f);
+                imageView.setImageMatrix(matrix);
                 ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + path, imageView);
+
                 //            view.setImageURI(Uri.parse(path));
                 container.addView(imageView);
                 //add listeners here if necessary

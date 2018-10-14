@@ -226,4 +226,5 @@ dependencies {
     //自定义进度条
     compile 'com.xiaochendev.progressroundbtn:library:2.0.0'
 
+    compile 'com.github.chrisbanes:PhotoView:2.1.2'
 }
