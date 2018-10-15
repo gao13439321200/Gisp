@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.PixelFormat;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
@@ -39,6 +37,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.common.MutipleTouchViewPager;
 import com.giiisp.giiisp.common.MyOnCompletion;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.DubbingBean;
@@ -57,9 +56,6 @@ import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.widget.MyCustomView;
 import com.giiisp.giiisp.widget.WrapVideoView;
 import com.giiisp.giiisp.widget.recording.Util;
-import com.github.chrisbanes.photoview.OnMatrixChangedListener;
-import com.github.chrisbanes.photoview.OnScaleChangedListener;
-import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,13 +87,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     @BindView(R.id.tv_right)
     TextView tvRight;
     @BindView(R.id.viewPager)
-    ViewPager viewPager;
+    MutipleTouchViewPager viewPager;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.tv_hint)
     TextView tvHint;
     @BindView(R.id.tv_dubbing_audition)
-    TextView tvDubbingDudition;
+    TextView tvDubbingAudition;
     @BindView(R.id.tv_dubbing_determine)
     TextView tvFinish;
     @BindView(R.id.iv_btn)
@@ -321,10 +317,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             public void run() {
                 if (mIsPlay) {
                     resolvePausePlayRecord();
-                    tvDubbingDudition.setSelected(false);
+                    tvDubbingAudition.setSelected(false);
                 } else {
                     resolvePlayRecord();
-                    tvDubbingDudition.setSelected(true);
+                    tvDubbingAudition.setSelected(true);
                 }
             }
         });
@@ -375,7 +371,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             ivBtn.setImageResource(R.mipmap.in_recording_spot);
             linearLayout.setVisibility(View.VISIBLE);
             tvFinish.setVisibility(View.VISIBLE);
-            tvDubbingDudition.setVisibility(View.VISIBLE);
+            tvDubbingAudition.setVisibility(View.VISIBLE);
 //            if (isVideo(dubbingPosition)) {
 //                mBtnSolo.setVisibility(View.INVISIBLE);
             //这里需要播放原视频声音
@@ -771,7 +767,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 mCbMark.setVisibility(View.GONE);
                 mTvMark.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.VISIBLE);
-                tvDubbingDudition.setVisibility(View.INVISIBLE);
+                tvDubbingAudition.setVisibility(View.INVISIBLE);
                 tvFinish.setVisibility(View.INVISIBLE);
                 mBtnSolo.setVisibility(View.INVISIBLE);
             } else {
@@ -900,21 +896,23 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 container.addView(videoview_layout);
                 return videoview_layout;
             } else {
-                PhotoView imageView = new PhotoView(activity);
-//                ImageView imageView = new ImageView(activity);
+//                PhotoView imageView = new PhotoView(activity);
+                ImageView imageView = new ImageView(activity);
 //                imageView.setScaleType(ImageView.ScaleType.MATRIX);
-                imageView.setOnScaleChangeListener(new OnScaleChangedListener() {
-                    @Override
-                    public void onScaleChange(float scaleFactor, float focusX, float focusY) {
-                        Log.i("坐标", "onScaleChange坐标：" + scaleFactor + "," + focusX + "," + focusY);
-                    }
-                });
-                imageView.setOnMatrixChangeListener(new OnMatrixChangedListener() {
-                    @Override
-                    public void onMatrixChanged(RectF rect) {
-                        Log.i("坐标", "onMatrixChanged坐标：" + rect.left + "," + rect.top);
-                    }
-                });
+//                imageView.setOnScaleChangeListener(new OnScaleChangedListener() {
+//                    @Override
+//                    public void onScaleChange(float scaleFactor, float focusX, float focusY) {
+//                        Log.i("坐标", "onScaleChange坐标：" + scaleFactor + "," + focusX + "," + focusY);
+//                        Log.i("坐标", "缩放比例：" + imageView.getScale());
+//                    }
+//                });
+//                imageView.setOnMatrixChangeListener(new OnMatrixChangedListener() {
+//                    @Override
+//                    public void onMatrixChanged(RectF rect) {
+//                        Log.i("坐标", "onMatrixChanged坐标：" + rect.left + "," + rect.top);
+//                        Log.i("坐标", "onMatrixChanged坐标center：" + rect.centerX() + "," + rect.centerY());
+//                    }
+//                });
 
                 //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
                 ViewParent vp = imageView.getParent();
@@ -922,12 +920,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     ViewGroup parent = (ViewGroup) vp;
                     parent.removeView(imageView);
                 }
-                Matrix matrix = new Matrix();
-                matrix.setTranslate(-260, -109);
-                matrix.preScale(1.7f, 1.7f);
-                imageView.setImageMatrix(matrix);
                 ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + path, imageView);
-
+//                Matrix matrix = new Matrix();
+//                matrix.preScale(2.2035394f, 2.2035394f);
+//                matrix.postTranslate(-112.85651f,-338.09805f);
+//                imageView.setImageMatrix(matrix);
                 //            view.setImageURI(Uri.parse(path));
                 container.addView(imageView);
                 //add listeners here if necessary
