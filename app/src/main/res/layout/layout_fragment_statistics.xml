@@ -46,7 +46,14 @@
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_weight="1"
+                android:visibility="gone"
                 />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/BarChart_update"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"></com.github.mikephil.charting.charts.BarChart>
 
         </LinearLayout>
 
