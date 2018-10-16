@@ -3,6 +3,7 @@ package com.giiisp.giiisp.view.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
@@ -13,8 +14,10 @@ import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
@@ -36,7 +39,11 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
     @BindView(R.id.lineChart_time)
     LineChart mLineChartTime;
     @BindView(R.id.BarChart_update)
-    BarChart barChart;
+    BarChart barChartUpdate;
+    @BindView(R.id.BarChart_collection)
+    BarChart barChartCollection;
+    @BindView(R.id.BarChart_time)
+    BarChart barChartTime;
 
     public static StatisticsFragment newInstance(String pid) {
 
@@ -86,19 +93,22 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         switch (url) {
             case "220":
                 StatisticsBean bean = (StatisticsBean) baseBean;
-//                if (bean.getX().size() != bean.getCollect().size()
-//                        || bean.getX().size() != bean.getDownload().size()
-//                        || bean.getX().size() != bean.getTime().size()) {
-//                    ToastUtils.showShort("统计数据信息异常");
-//                    break;
-//                }
+                if (bean.getX().size() != bean.getCollect().size()
+                        || bean.getX().size() != bean.getDownload().size()
+                        || bean.getX().size() != bean.getTime().size()) {
+                    ToastUtils.showShort("统计数据信息异常");
+                    break;
+                }
 //                List<String> xDataList = new ArrayList<>();//x轴数据源
 //                List<Entry> downtimeDataList = new ArrayList<>();// y轴数据数据源
 //                List<Entry> collectDataList = new ArrayList<>();// y轴数据数据源
 //                List<Entry> timeDataList = new ArrayList<>();// y轴数据数据源
-//                boolean down = bean.getX().size() == bean.getDownload().size();
-//                boolean collect = bean.getX().size() == bean.getCollect().size();
-//                boolean time = bean.getX().size() == bean.getTime().size();
+                List<BarEntry> downtimeDataList = new ArrayList<>();// y轴数据数据源
+                List<BarEntry> collectDataList = new ArrayList<>();// y轴数据数据源
+                List<BarEntry> timeDataList = new ArrayList<>();// y轴数据数据源
+                boolean down = bean.getX().size() == bean.getDownload().size();
+                boolean collect = bean.getX().size() == bean.getCollect().size();
+                boolean time = bean.getX().size() == bean.getTime().size();
 //                for (int i = 0; i < bean.getX().size(); i++) {
 //                    xDataList.add(bean.getX().get(i) + ":00");
 //                    if (down)
@@ -111,22 +121,32 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
 //                        timeDataList.add(new Entry(Float.parseFloat(bean.getX().get(i))
 //                                , Float.parseFloat(bean.getTime().get(i))));
 //                }
-//                //显示图表,参数（ 上下文，图表对象， X轴数据，Y轴数据，图表标题，曲线图例名称，坐标点击弹出提示框中数字单位）
+                for (int i = 0; i < bean.getX().size(); i++) {
+//                    xDataList.add(bean.getX().get(i) + ":00");
+                    if (down)
+                        downtimeDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i))
+                                , Float.parseFloat(bean.getDownload().get(i))));
+                    if (collect)
+                        collectDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i))
+                                , Float.parseFloat(bean.getCollect().get(i))));
+                    if (time)
+                        timeDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i))
+                                , Float.parseFloat(bean.getTime().get(i))));
+                }
+//                //曲线图显示图表,参数（ 上下文，图表对象， X轴数据，Y轴数据，图表标题，曲线图例名称，坐标点击弹出提示框中数字单位）
 //                if (downtimeDataList.size() != 0)
 //                    ChartUtil.showChart(getActivity(), mLineChartUpdate, xDataList, downtimeDataList, "", "", "");
 //                if (collectDataList.size() != 0)
 //                    ChartUtil.showChart(getActivity(), mLineChartCollection, xDataList, collectDataList, "", "", "");
 //                if (timeDataList.size() != 0)
 //                    ChartUtil.showChart(getActivity(), mLineChartTime, xDataList, timeDataList, "", "", "");
-
-                List<BarEntry> list = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
-                    BarEntry barEntry = new BarEntry(i, (float) i);
-                    list.add(barEntry);
-                }
-                BarDataSet set = new BarDataSet(list, "哈哈");
-                initBarChart(set);
-
+                //柱状图
+                if (downtimeDataList.size() != 0)
+                    initBarChart(barChartUpdate, new BarDataSet(downtimeDataList, ""));
+                if (collectDataList.size() != 0)
+                    initBarChart(barChartCollection, new BarDataSet(collectDataList, ""));
+                if (timeDataList.size() != 0)
+                    initBarChart(barChartTime, new BarDataSet(timeDataList, ""));
 
                 break;
             default:
@@ -134,7 +154,7 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         }
     }
 
-    private void initBarChart(BarDataSet barDataSet) {
+    private void initBarChart(BarChart barChart, BarDataSet barDataSet) {
         //背景颜色
         barChart.setBackgroundColor(Color.WHITE);
         //不显示图表网格
@@ -143,7 +163,7 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         barChart.setDrawBarShadow(false);
         barChart.setHighlightFullBarEnabled(false);
         //显示边框
-        barChart.setDrawBorders(true);
+        barChart.setDrawBorders(false);
         //设置动画效果
         barChart.animateY(1000, Easing.EasingOption.Linear);
         barChart.animateX(1000, Easing.EasingOption.Linear);
@@ -162,11 +182,29 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         leftAxis.setAxisMinimum(0f);
         rightAxis.setAxisMinimum(0f);
 
+        //隐藏线条
+        xAxis.setDrawAxisLine(false);
+        leftAxis.setDrawAxisLine(false);
+        //隐藏右侧y轴
+        rightAxis.setEnabled(false);
+
+        //不显示X轴网格线
+        xAxis.setDrawGridLines(false);
+        //右侧Y轴网格线设置为虚线
+        rightAxis.enableGridDashedLine(0f, 0f, 0f);
+
         barDataSet.setColor(getResources().getColor(R.color.blue));
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
         //不显示柱状图顶部值
         barDataSet.setDrawValues(true);
+
+        barChart.setData(new BarData(barDataSet));
+
+        //隐藏右下角
+        Description description = new Description();
+        description.setEnabled(false);
+        barChart.setDescription(description);
     }
 
 }
