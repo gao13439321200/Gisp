@@ -94,6 +94,8 @@
     <string name="area_code">+86</string>
     <string name="user_mechanism">机构</string>
     <string name="user_position">职称</string>
+    <string name="user_department">部门</string>
+    <string name="user_jobtitle">职务</string>
     <string name="user_resume">履历</string>
     <string name="at_my">\@我的</string>
     <string name="praise">赞</string>

@@ -195,7 +195,11 @@ public class HeActivity extends BaseMvpActivity<BaseImpl, WholePresenter> {
                         .load(isFollow ? R.mipmap.attention : R.mipmap.not_attention)
                         .into(ivAttention);
 //                ivAttention.setVisibility("1".equals(bean.getIsfollow()) ? View.INVISIBLE : View.VISIBLE);
-                tvPrompt.setText("这个字段后台没有返回");
+                if (bean.getEdulist() != null && bean.getEdulist().size() > 0) {
+                    tvPrompt.setText(bean.getEdulist().get(0).getUcname() + "" + bean.getEdulist().get(0).getEcname());
+                } else {
+                    tvPrompt.setText("暂无信息");
+                }
                 tvUserPosition.setText(bean.getUserinfo().getPosition());
                 tvUserPhone.setText(bean.getUserinfo().getPhone());
                 tvUserEmail.setText(bean.getUserinfo().getEmail());

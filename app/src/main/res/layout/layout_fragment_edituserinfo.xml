@@ -121,6 +121,36 @@
 
 
             <FrameLayout
+                android:id="@+id/fl_user_department"
+                style="@style/mine_frame">
+
+                <TextView
+                    style="@style/info_text_colorsize"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="14dp"
+                    android:text="@string/user_department"/>
+
+                <TextView
+                    android:id="@+id/tv_user_department"
+                    style="@style/right_text_colorsize"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_user_jobtitle"
+                style="@style/mine_frame">
+
+                <TextView
+                    style="@style/info_text_colorsize"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="14dp"
+                    android:text="@string/user_jobtitle"/>
+
+                <TextView
+                    android:id="@+id/tv_user_jobtitle"
+                    style="@style/right_text_colorsize"/>
+            </FrameLayout>
+
+            <FrameLayout
                 android:id="@+id/fl_user_position"
                 style="@style/mine_frame">
 

@@ -53,8 +53,12 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
     @Override
     public void initData() {
         super.initData();
+        setPid(getArguments().getString("pid"));
+    }
+
+    public void setPid(String pid) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("pid", getArguments().getString("pid"));
+        map.put("pid", pid);
         map.put("uid", getUserID());
         presenter.getDataAll("220", map);
     }

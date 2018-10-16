@@ -302,6 +302,7 @@ public class PaperDetailsActivity extends
     private String fourId = "";
     private String lastPlayId = "";
     private ImageAdapter mImageAdapter;
+    private StatisticsFragment mFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -557,9 +558,10 @@ public class PaperDetailsActivity extends
                 List<BaseFragment> fragments = new ArrayList<>();
                 //问答、文献索引、统计
                 paperQA = BannerRecyclerViewFragment.newInstance("paper_qa", pid);
+                mFragment = StatisticsFragment.newInstance(pid);
                 fragments.add(paperQA);
                 fragments.add(BannerRecyclerViewFragment.newInstance("paper_literature", pid));
-                fragments.add(StatisticsFragment.newInstance(pid));
+                fragments.add(mFragment);
                 List<String> mTitles = new ArrayList<>();
                 mTitles.add("问答");
                 mTitles.add("文献索引");
@@ -2036,6 +2038,8 @@ public class PaperDetailsActivity extends
                 imageId.clear();
                 myVersionNo = bean.getVersion();
                 pid = bean.getId();
+                if (mFragment != null)
+                    mFragment.setPid(pid);
                 picImage = bean.getShowimg();
                 //完整
                 tvPaperComplete.setVisibility(!"2".equals(myVersionNo) && "1".equals(bean.getTwo())

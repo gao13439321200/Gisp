@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/img_head"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@mipmap/ic_launcher"
             />
 
@@ -24,6 +24,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="这里是名字"
             android:textColor="@color/blue"
             android:textSize="20sp"/>
@@ -50,16 +51,16 @@
             android:id="@+id/tv_qa_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
             android:maxWidth="300dp"
+            android:paddingLeft="10dp"
             android:text=""/>
 
         <ImageView
             android:id="@+id/img_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="5dp"
             android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:src="@mipmap/img_photo_orange"
             />
 

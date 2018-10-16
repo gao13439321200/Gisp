@@ -92,6 +92,10 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     TextView tvUserMechanism;
     @BindView(R.id.tv_user_position)
     TextView tvUserPosition;
+    @BindView(R.id.tv_user_department)
+    TextView tvUserDepartment;
+    @BindView(R.id.tv_user_jobtitle)
+    TextView tvUserJobtitle;
     @BindView(R.id.tv_user_resume)
     TextView tvUserResume;
     @BindView(R.id.tv_contact_information)
@@ -216,7 +220,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             case "322":
                 countryListBean = (CountryListBean) baseBean;
                 for (CountryVO vo : countryListBean.getList()) {
-                    countrys.add(isChinese()?vo.getCname():vo.getEname());
+                    countrys.add(isChinese() ? vo.getCname() : vo.getEname());
                 }
                 countryAdapter.notifyDataSetChanged();
                 break;
@@ -225,7 +229,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 if (listBean != null) {
                     institutions.clear();
                     for (ProfessionalVO vo : listBean.getList()) {
-                        institutions.add(isChinese()?vo.getCname():vo.getEname());
+                        institutions.add(isChinese() ? vo.getCname() : vo.getEname());
                     }
                     institutionAdapter.notifyDataSetChanged();
                 }
@@ -358,7 +362,11 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     }
 
 
-    @OnClick({R.id.tv_back, R.id.fl_user_icon, R.id.tv_right, R.id.fl_user_professional, R.id.fl_user_name, R.id.fl_user_email, R.id.fl_user_phone, R.id.fl_user_sex, R.id.fl_user_mechanism, R.id.fl_user_position, R.id.fl_user_resume, R.id.fl_user_web})
+    @OnClick({R.id.tv_back, R.id.fl_user_icon, R.id.tv_right,
+            R.id.fl_user_professional, R.id.fl_user_name, R.id.fl_user_email,
+            R.id.fl_user_phone, R.id.fl_user_sex, R.id.fl_user_mechanism,
+            R.id.fl_user_position,R.id.fl_user_department,R.id.fl_user_jobtitle,
+            R.id.fl_user_resume, R.id.fl_user_web})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_back:
@@ -398,7 +406,8 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 String email = tvUserEmail.getText().toString();
                 String organization = tvUserMechanism.getText().toString();
                 String position = tvUserPosition.getText().toString();
-//                String department = tvUserResume.getText().toString();
+                String department = tvUserDepartment.getText().toString();
+                String jobtitle = tvUserJobtitle.getText().toString();
 //                String web = tvUserWeb.getText().toString();
                 if (!TextUtils.isEmpty(phone)) {
                     map.put("phone", phone);
@@ -430,12 +439,12 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                     Utils.showToast("请填写职称");
                     return;
                 }
-//                if (!TextUtils.isEmpty(department)) {
-//                    map.put("department", department);
-//                }
-//                if (!TextUtils.isEmpty(web)) {
-//                    map.put("web", web);
-//                }
+                if (!TextUtils.isEmpty(department)) {
+                    map.put("department", department);
+                }
+                if (!TextUtils.isEmpty(jobtitle)) {
+                    map.put("jobtitle", jobtitle);
+                }
                 if (map.size() > 0) {
                     map.put("uid", getUserID());
                     progressPopupWindow.showPopupWindow();
@@ -456,6 +465,12 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 break;
             case R.id.fl_user_position:
                 inputTitleDialog(tvUserPosition, getString(R.string.user_position));
+                break;
+            case R.id.fl_user_department:
+                inputTitleDialog(tvUserDepartment, getString(R.string.user_department));
+                break;
+            case R.id.fl_user_jobtitle:
+                inputTitleDialog(tvUserJobtitle, getString(R.string.user_jobtitle));
                 break;
             case R.id.fl_user_resume:
                 inputTitleDialog(tvUserResume, getString(R.string.user_resume));
@@ -514,6 +529,12 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         }
         if (!TextUtils.isEmpty(userInfoEntity.getPosition())) {
             tvUserPosition.setText(userInfoEntity.getPosition());
+        }
+        if (!TextUtils.isEmpty(userInfoEntity.getDepartment())) {
+            tvUserDepartment.setText(userInfoEntity.getDepartment());
+        }
+        if (!TextUtils.isEmpty(userInfoEntity.getJobtitle())) {
+            tvUserJobtitle.setText(userInfoEntity.getJobtitle());
         }
         if (!TextUtils.isEmpty(userInfoEntity.getDepartment())) {
             tvUserResume.setText(userInfoEntity.getDepartment());

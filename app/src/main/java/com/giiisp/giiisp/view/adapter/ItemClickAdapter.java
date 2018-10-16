@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
@@ -217,7 +218,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     break;
                 case R.layout.item_questions_answers_new://论文详情问答列表(新)
                     PaperQaVO qaVO = item.getPaperQaVO();
-                    GlideApp.with(mContext).load(qaVO.getAvatar()).into((ImageView) helper.getView(R.id.img_head));
+                    GlideApp.with(mContext).load(qaVO.getAvatar())
+                            .apply(RequestOptions.circleCropTransform())
+                            .into((ImageView) helper.getView(R.id.img_head));
                     helper.setText(R.id.tv_name, qaVO.getUsername());
                     helper.setText(R.id.tv_time, qaVO.getCreatetime());
                     helper.setVisible(R.id.img_photo, ObjectUtils.isNotEmpty(qaVO.getImgurl()));
@@ -1111,8 +1114,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_paper_indexes_new://论文详情文献
                     if (item.getPaperLiteratureVO() != null) {
                         helper.setText(R.id.tv_title, item.getPaperLiteratureVO().getTitle());
-                        helper.setText(R.id.tv_info, item.getPaperLiteratureVO().getDigest()
-                                + item.getPaperLiteratureVO().getDigest() + item.getPaperLiteratureVO().getDigest());
+                        helper.setText(R.id.tv_info, item.getPaperLiteratureVO().getDigest());
                         helper.setText(R.id.tv_author, item.getPaperLiteratureVO().getAuthor());
                         TextView tv = helper.getView(R.id.tv_switch);
                         TextView tvInfo = helper.getView(R.id.tv_info);

@@ -72,6 +72,7 @@ import okhttp3.RequestBody;
 
 import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
+import static com.giiisp.giiisp.widget.recording.AppCache.getPlayService;
 
 /**
  * 配音的页面
@@ -200,6 +201,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     @Override
     public void initData() {
+        if (getPlayService() != null && getPlayService().isPlaying())
+            getPlayService().playPause();
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         super.initData();
         language = getIntent().getIntExtra("language", 0);
