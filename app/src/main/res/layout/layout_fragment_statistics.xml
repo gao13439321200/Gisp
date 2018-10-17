@@ -50,7 +50,7 @@
                 />
 
             <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/BarChart_update"
+                android:id="@+id/barChart_update"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_weight="1"/>
@@ -86,7 +86,7 @@
                 />
 
             <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/BarChart_collection"
+                android:id="@+id/barChart_collection"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_weight="1"/>
@@ -122,7 +122,7 @@
                 />
 
             <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/BarChart_time"
+                android:id="@+id/barChart_time"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_weight="1"/>

@@ -15,6 +15,7 @@ import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -38,11 +39,11 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
     LineChart mLineChartCollection;
     @BindView(R.id.lineChart_time)
     LineChart mLineChartTime;
-    @BindView(R.id.BarChart_update)
+    @BindView(R.id.barChart_update)
     BarChart barChartUpdate;
-    @BindView(R.id.BarChart_collection)
+    @BindView(R.id.barChart_collection)
     BarChart barChartCollection;
-    @BindView(R.id.BarChart_time)
+    @BindView(R.id.barChart_time)
     BarChart barChartTime;
 
     public static StatisticsFragment newInstance(String pid) {
@@ -205,6 +206,11 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         Description description = new Description();
         description.setEnabled(false);
         barChart.setDescription(description);
+
+        //折线图例 标签 设置
+        Legend legend = barChart.getLegend();
+        //是否显示图例
+        legend.setEnabled(false);
     }
 
 }
