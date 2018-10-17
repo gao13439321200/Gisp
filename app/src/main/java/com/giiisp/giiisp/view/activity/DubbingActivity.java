@@ -39,6 +39,7 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.common.MutipleTouchViewPager;
 import com.giiisp.giiisp.common.MyOnCompletion;
+import com.giiisp.giiisp.common.ScaleAttrsImageView;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.DubbingBean;
 import com.giiisp.giiisp.dto.DubbingListVO;
@@ -900,8 +901,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 return videoview_layout;
             } else {
 //                PhotoView imageView = new PhotoView(activity);
-                ImageView imageView = new ImageView(activity);
-//                imageView.setScaleType(ImageView.ScaleType.MATRIX);
+                ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity);
+                imageView.setScaleType(ImageView.ScaleType.MATRIX);
 //                imageView.setOnScaleChangeListener(new OnScaleChangedListener() {
 //                    @Override
 //                    public void onScaleChange(float scaleFactor, float focusX, float focusY) {
@@ -926,7 +927,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + path, imageView);
 //                Matrix matrix = new Matrix();
 //                matrix.preScale(2.2035394f, 2.2035394f);
-//                matrix.postTranslate(-112.85651f,-338.09805f);
+//                imageView.setImageMatrix(matrix);
+//                matrix = imageView.getImageMatrix();
+//                matrix.postTranslate(-112.85651f, -338.09805f);
 //                imageView.setImageMatrix(matrix);
                 //            view.setImageURI(Uri.parse(path));
                 container.addView(imageView);

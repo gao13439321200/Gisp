@@ -3,4 +3,17 @@
     <declare-styleable name="StepsViewIndicator">
         <attr name="numOfSteps" format="integer" />
     </declare-styleable>
+
+    <attr name="isScaleImage" format="boolean"/>
+
+    <attr name="isScaleToValue" format="boolean"/>
+    <attr name="scaleMaxValue" format="float"/>
+    <attr name="scaleMidValue" format="float"/>
+
+    <declare-styleable name="ScaleImageView">
+        <attr name="isScaleImage" />
+        <attr name="isScaleToValue"/>
+        <attr name="scaleMaxValue"/>
+        <attr name="scaleMidValue"/>
+    </declare-styleable>
 </resources>
