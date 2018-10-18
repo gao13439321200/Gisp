@@ -37,6 +37,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
+import com.giiisp.giiisp.common.ImageviewDouble;
 import com.giiisp.giiisp.common.MutipleTouchViewPager;
 import com.giiisp.giiisp.common.MyOnCompletion;
 import com.giiisp.giiisp.common.ScaleAttrsImageView;
@@ -83,6 +84,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         BaseQuickAdapter.OnItemClickListener,
         ViewPager.OnPageChangeListener,
         MyCustomView.DrawListen,
+        ImageviewDouble,
         MyOnCompletion {
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -814,6 +816,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //        }
     }
 
+    @Override
+    public void doubleClick(float x, float y, float scale) {
+
+    }
+
     private class ImageAdapter extends PagerAdapter {
 
         private List<DubbingVO> viewlist;
@@ -821,11 +828,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         private MediaPlayer mMediaPlayer;
         private int volume;
         private MyOnCompletion mOnCompletion;
+        private ImageviewDouble mDouble;
 //        private WrapVideoView videoview;
 
-        ImageAdapter(BaseActivity activity, List<DubbingVO> viewlist, MyOnCompletion onCompletion) {
+        ImageAdapter(BaseActivity activity, List<DubbingVO> viewlist, MyOnCompletion onCompletion, ImageviewDouble imageviewDouble) {
             this.viewlist = viewlist;
             this.activity = activity;
+            this.mDouble = imageviewDouble;
             this.mOnCompletion = onCompletion;
             AudioManager am = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
             volume = am.getStreamVolume(AudioManager.STREAM_SYSTEM);
@@ -901,23 +910,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 return videoview_layout;
             } else {
 //                PhotoView imageView = new PhotoView(activity);
-                ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, BASE_IMG_URL + path, "");
+                ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, BASE_IMG_URL + path,
+                        viewPager.getWidth(), viewPager.getHeight(), mDouble);
                 imageView.setScaleType(ImageView.ScaleType.MATRIX);
-//                imageView.setOnScaleChangeListener(new OnScaleChangedListener() {
-//                    @Override
-//                    public void onScaleChange(float scaleFactor, float focusX, float focusY) {
-//                        Log.i("坐标", "onScaleChange坐标：" + scaleFactor + "," + focusX + "," + focusY);
-//                        Log.i("坐标", "缩放比例：" + imageView.getScale());
-//                    }
-//                });
-//                imageView.setOnMatrixChangeListener(new OnMatrixChangedListener() {
-//                    @Override
-//                    public void onMatrixChanged(RectF rect) {
-//                        Log.i("坐标", "onMatrixChanged坐标：" + rect.left + "," + rect.top);
-//                        Log.i("坐标", "onMatrixChanged坐标center：" + rect.centerX() + "," + rect.centerY());
-//                    }
-//                });
-
                 //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
                 ViewParent vp = imageView.getParent();
                 if (vp != null) {
@@ -1059,7 +1054,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 dubbingPosition = position;
 //                List<DubbingVO> list = new ArrayList<>();
 //                list.add(bean.getList().get(0));
-                mImageAdapter = new ImageAdapter(this, bean.getList(), this);
+                mImageAdapter = new ImageAdapter(this, bean.getList(), this, this);
                 viewPager.setAdapter(mImageAdapter);
                 viewPager.addOnPageChangeListener(this);
 //                viewPager.setCurrentItem(position);

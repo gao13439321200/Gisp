@@ -1518,7 +1518,7 @@ public class PaperDetailsActivity extends
             matrix.getValues(floats);
             Log.v("=====", floats[Matrix.MSCALE_X] + "");
 
-            if (!isVideo() && progress / 1000 == 2) {
+            if (!isVideo() && progress / 1000 == 3) {
                 matrix = new Matrix();
                 matrix.setScale(2f, 2f, 100, 100);
                 sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
@@ -1616,27 +1616,22 @@ public class PaperDetailsActivity extends
 //        }
         sendPlayNote();
 
+        if (!isVideo() && sScaleAttrsImageViews != null) {
+            matrix = new Matrix();
+            matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
+                    , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
+            sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+        }
+
         if (getPlayService() != null) {
             if (position < imageId.size() - 1) {
                 setRecyclerPosition(position, position + 1);
                 position++;
-                if (!isVideo()) {
-                    matrix = new Matrix();
-                    matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
-                            , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
-                    sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
-                }
-
                 getImageInfo();
             } else {
                 if (imageId.size() > 0) {
                     setRecyclerPosition(position, 0);
                     position = 0;
-                    if (!isVideo()) {
-                        matrix = new Matrix();
-                        sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
-                    }
-
                     getImageInfo();
                 }
             }
@@ -1826,7 +1821,8 @@ public class PaperDetailsActivity extends
                     mIsVideo.put(i, true);// 每个页面的初始播放状态false
                 } else {
                     mIsVideo.put(i, false);
-                    ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, path, "");
+                    ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, path,
+                            viewpagerPaper.getWidth(), viewpagerPaper.getHeight(), null);
                     imageView.setScaleType(ImageView.ScaleType.MATRIX);
                     sScaleAttrsImageViews.add(imageView);
 //                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

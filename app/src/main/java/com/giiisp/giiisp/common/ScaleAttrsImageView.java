@@ -25,21 +25,22 @@ public class ScaleAttrsImageView extends ImageView
     private int much = 1;
     private int intrinsicWidth = 0;
     private int intrinsicHeight = 0;
+    private ImageviewDouble mImageviewDouble;
 
     public ScaleAttrsImageView(Context context) {
         this(context, null);
     }
 
-    public ScaleAttrsImageView(Context context, String url, String a) {
+    public ScaleAttrsImageView(Context context, String url, int width, int height, ImageviewDouble imageviewDouble) {
         this(context, null);
-
+//        parentWidth = width;
+//        parentHeight = height;
+        mImageviewDouble = imageviewDouble;
         Glide.with(context).asBitmap().load(url).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                 intrinsicWidth = bitmap.getWidth();
                 intrinsicHeight = bitmap.getHeight();
-                final int width = getWidth();
-                final int height = getHeight();
                 float scale = 1.0f;
                 float scaley = 1.0f;
 //            如果图片宽度大于控件宽度，图片高度小于控件高度  图片缩小
@@ -106,9 +107,11 @@ public class ScaleAttrsImageView extends ImageView
                 switch (much) {
                     case 1:
                         much = 2;
+                        mImageviewDouble.doubleClick(x, y, 2);
                         break;
                     case 2:
                         much = 3;
+                        mImageviewDouble.doubleClick(x, y, 4);
                         break;
                     case 3:
                         much = 1;
@@ -117,6 +120,7 @@ public class ScaleAttrsImageView extends ImageView
                         mMatrix.postScale(mInitScale, mInitScale, 0, 0);
                         setImageMatrix(mMatrix);
                         setScaleType(ScaleType.FIT_XY);
+                        mImageviewDouble.doubleClick(x, y, mInitScale);
                         return true;
                     default:
                         break;
