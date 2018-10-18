@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
@@ -27,7 +28,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -58,6 +58,7 @@ import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.common.MyOnCompletion;
+import com.giiisp.giiisp.common.ScaleAttrsImageView;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.DownloadImgInfoVO;
 import com.giiisp.giiisp.dto.DownloadInfoBean;
@@ -285,6 +286,8 @@ public class PaperDetailsActivity extends
 
     /*** 页面视频缓冲图集合 ***/
     static List<View> mCacheViewList;
+    /*** 页面视频缓冲图集合 ***/
+    static List<ScaleAttrsImageView> sScaleAttrsImageViews;
 
     /*** 记录每个page页面视频播放的进度 ***/
     static Map<Integer, Integer> mCurrentPositions;
@@ -1503,11 +1506,26 @@ public class PaperDetailsActivity extends
         return new WholePresenter(this);
     }
 
+    private Matrix matrix = new Matrix();
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("PaperDetailsActivity", "progress:" + progress);
         this.nowProgress = progress;
         tvPlayTime.setText(Util.formatSeconds((progress + 1000) / 1000));
+        if (sScaleAttrsImageViews != null) {
+            final float[] floats = new float[9];
+            matrix.getValues(floats);
+            Log.v("=====", floats[Matrix.MSCALE_X] + "");
+
+            if (!isVideo() && progress / 1000 == 2) {
+                matrix = new Matrix();
+                matrix.setScale(2f, 2f, 100, 100);
+                sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+            }
+        }
+
+
         if (timeString.contains(Util.formatSeconds((progress + 1000) / 1000))) {
             PaperEventVO vo = mBeanMap.get(Util.formatSeconds((progress + 1000) / 1000));
             switch (vo.getType()) {
@@ -1602,11 +1620,23 @@ public class PaperDetailsActivity extends
             if (position < imageId.size() - 1) {
                 setRecyclerPosition(position, position + 1);
                 position++;
+                if (!isVideo()) {
+                    matrix = new Matrix();
+                    matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
+                            , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
+                    sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+                }
+
                 getImageInfo();
             } else {
                 if (imageId.size() > 0) {
                     setRecyclerPosition(position, 0);
                     position = 0;
+                    if (!isVideo()) {
+                        matrix = new Matrix();
+                        sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+                    }
+
                     getImageInfo();
                 }
             }
@@ -1748,6 +1778,7 @@ public class PaperDetailsActivity extends
             mVideoBgViewMap = new HashMap<Integer, View>();
             mMediaControllerMap = new HashMap<Integer, MediaController>();
             mCacheViewList = new ArrayList<View>();
+            sScaleAttrsImageViews = new ArrayList<>();
 
             mCurrentPositions = new HashMap<>();
             mIsVideo = new HashMap<>();
@@ -1795,7 +1826,9 @@ public class PaperDetailsActivity extends
                     mIsVideo.put(i, true);// 每个页面的初始播放状态false
                 } else {
                     mIsVideo.put(i, false);
-                    ImageView imageView = new ImageView(activity);
+                    ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, path, "");
+                    imageView.setScaleType(ImageView.ScaleType.MATRIX);
+                    sScaleAttrsImageViews.add(imageView);
 //                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     ImageLoader.getInstance().displayImage((BaseActivity) activity, path, imageView);
                     ViewParent vp = imageView.getParent();
@@ -1804,10 +1837,7 @@ public class PaperDetailsActivity extends
                         parent.removeView(imageView);
                     }
                     mViewList.add(imageView);
-                    imageView.setOnTouchListener((view, motionEvent) -> {
-                        mGestureDetector.onTouchEvent(motionEvent);
-                        return true;
-                    });
+                    imageView.setOnTouchListener(null);
                 }
             }
         }
@@ -1865,14 +1895,14 @@ public class PaperDetailsActivity extends
             return mViewList.get(position);
         }
 
-        GestureDetector mGestureDetector = new GestureDetector(PaperDetailsActivity.this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                if (getPlayService() != null)
-                    getPlayService().play(position);
-                return true;
-            }
-        });
+//        GestureDetector mGestureDetector = new GestureDetector(PaperDetailsActivity.this, new GestureDetector.SimpleOnGestureListener() {
+//            @Override
+//            public boolean onDoubleTap(MotionEvent e) {
+//                if (getPlayService() != null)
+//                    getPlayService().play(position);
+//                return true;
+//            }
+//        });
 
 
     }
@@ -2128,7 +2158,7 @@ public class PaperDetailsActivity extends
                 if (bean1.getCnrecord() != null) {
                     songCN = new Song();
                     songCN.setPath(BASE_IMG_URL + bean1.getCnrecord().getUrl());
-                    if (photoList.get(position).contains("mp4")) {//视频
+                    if (isVideo()) {//视频
                         LogUtils.i("========", "CN视频时长：" + getVideoDuration(songCN.getPath()));
                         songCN.setDuration(getVideoDuration(songCN.getPath()));
                     } else {
@@ -2145,7 +2175,7 @@ public class PaperDetailsActivity extends
                 if (bean1.getEnrecord() != null) {
                     songEN = new Song();
                     songEN.setPath(BASE_IMG_URL + bean1.getEnrecord().getUrl());
-                    if (photoList.get(position).contains("mp4")) {//视频
+                    if (isVideo()) {//视频
                         LogUtils.i("========", "EN视频时长：" + getVideoDuration(songEN.getPath()));
                         songEN.setDuration(getVideoDuration(songEN.getPath()));
                     } else {
@@ -2171,13 +2201,13 @@ public class PaperDetailsActivity extends
                 } else if (songEN == null && songCN != null) {
                     changeLanguage(true);
                 } else {
-                    if (photoList.get(position).contains("mp4")) {//视频
+                    if (isVideo()) {//视频
 
                     } else {
                         ToastUtils.showShort("音频获取失败");
                     }
                 }
-                if (photoList.get(position).contains("mp4")) {//视频
+                if (isVideo()) {//视频
 
                     if (mVideoViewMap.get(position) != null) {
                         mVideoBgViewMap.get(position).setVisibility(View.GONE);
@@ -2237,6 +2267,13 @@ public class PaperDetailsActivity extends
                 break;
         }
 
+    }
+
+    private boolean isVideo() {
+        if (photoList != null && photoList.size() > position)
+            return photoList.get(position).contains("mp4");
+        else
+            return false;
     }
 
     @Override

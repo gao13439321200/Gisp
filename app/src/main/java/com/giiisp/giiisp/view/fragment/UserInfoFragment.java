@@ -418,7 +418,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 if (!TextUtils.isEmpty(oid)) {
                     map.put("oid", oid);
                 } else {
-                    Utils.showToast("请选择领域或专业");
+                    Utils.showToast("请选择机构");
                     return;
                 }
                 if (!TextUtils.isEmpty(email)) {
@@ -430,7 +430,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                 if (!TextUtils.isEmpty(mid)) {
                     map.put("mid", mid);
                 } else {
-                    Utils.showToast("请选择机构");
+                    Utils.showToast("请选择领域或专业");
                     return;
                 }
                 if (!TextUtils.isEmpty(position)) {
@@ -595,6 +595,12 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
                                 view.setText(inputName);
                                 break;
                             case "职称":
+                                view.setText(inputName);
+                                break;
+                            case "部门":
+                                view.setText(inputName);
+                                break;
+                            case "职务":
                                 view.setText(inputName);
                                 break;
                             case "履历":

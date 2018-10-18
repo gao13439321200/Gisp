@@ -901,7 +901,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 return videoview_layout;
             } else {
 //                PhotoView imageView = new PhotoView(activity);
-                ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity);
+                ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, BASE_IMG_URL + path, "");
                 imageView.setScaleType(ImageView.ScaleType.MATRIX);
 //                imageView.setOnScaleChangeListener(new OnScaleChangedListener() {
 //                    @Override
@@ -925,13 +925,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     parent.removeView(imageView);
                 }
                 ImageLoader.getInstance().displayImage(activity, BASE_IMG_URL + path, imageView);
-//                Matrix matrix = new Matrix();
-//                matrix.preScale(2.2035394f, 2.2035394f);
-//                imageView.setImageMatrix(matrix);
-//                matrix = imageView.getImageMatrix();
-//                matrix.postTranslate(-112.85651f, -338.09805f);
-//                imageView.setImageMatrix(matrix);
-                //            view.setImageURI(Uri.parse(path));
                 container.addView(imageView);
                 //add listeners here if necessary
                 return imageView;
