@@ -306,6 +306,7 @@ public class PaperDetailsActivity extends
     private String lastPlayId = "";
     private ImageAdapter mImageAdapter;
     private StatisticsFragment mFragment;
+    private int scale = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1507,35 +1508,49 @@ public class PaperDetailsActivity extends
     }
 
     private Matrix matrix = new Matrix();
+    private String eventTime = "";
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("PaperDetailsActivity", "progress:" + progress);
         this.nowProgress = progress;
         tvPlayTime.setText(Util.formatSeconds((progress + 1000) / 1000));
-        if (sScaleAttrsImageViews != null) {
-            final float[] floats = new float[9];
-            matrix.getValues(floats);
-            Log.v("=====", floats[Matrix.MSCALE_X] + "");
-
-            if (!isVideo() && progress / 1000 == 3) {
-                matrix = new Matrix();
-                matrix.setScale(2f, 2f, 100, 100);
-                sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
-            }
-        }
-
 
         if (timeString.contains(Util.formatSeconds((progress + 1000) / 1000))) {
             PaperEventVO vo = mBeanMap.get(Util.formatSeconds((progress + 1000) / 1000));
             switch (vo.getType()) {
                 case "1"://放大
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    isFulllScreen = true;
+                    if (sScaleAttrsImageViews != null && !eventTime.equals(vo.getTime())) {
+                        eventTime = vo.getTime();
+                        final float[] floats = new float[9];
+                        matrix.getValues(floats);
+                        Log.v("=====", floats[Matrix.MSCALE_X] + "");
+                        if (!isVideo()) {
+//                            matrix = new Matrix();
+                            if (floats[Matrix.MSCALE_X] == 1f) {
+                                matrix.setScale(2f, 2f,
+                                        Float.parseFloat(vo.getX()), Float.parseFloat(vo.getY()));
+                            } else {
+                                matrix.setScale(1f, 1f,
+                                        Float.parseFloat(vo.getX()), Float.parseFloat(vo.getY()));
+                            }
+                            sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+                        }
+                    }
+
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//                    isFulllScreen = true;
                     break;
                 case "2"://缩小
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    isFulllScreen = false;
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                    isFulllScreen = false;
+                    //还原图片大小
+                    if (!isVideo() && sScaleAttrsImageViews != null) {
+                        matrix = new Matrix();
+                        matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
+                                , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
+                        sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+                    }
                     break;
                 case "3"://标记
                     mMyCustomView.clearData();
@@ -1615,7 +1630,9 @@ public class PaperDetailsActivity extends
 //            noteDao.insertOrReplace(note);
 //        }
         sendPlayNote();
+        eventTime = "";//重置放大事件的时间
 
+        //还原图片大小
         if (!isVideo() && sScaleAttrsImageViews != null) {
             matrix = new Matrix();
             matrix.setScale(sScaleAttrsImageViews.get(position).getScale()

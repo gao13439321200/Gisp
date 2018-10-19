@@ -107,11 +107,11 @@ public class ScaleAttrsImageView extends ImageView
                 switch (much) {
                     case 1:
                         much = 2;
-                        mImageviewDouble.doubleClick(x, y, 2);
+                        mImageviewDouble.doubleClick(x, y, 1);
                         break;
                     case 2:
                         much = 3;
-                        mImageviewDouble.doubleClick(x, y, 4);
+                        mImageviewDouble.doubleClick(x, y, 1);
                         break;
                     case 3:
                         much = 1;
@@ -120,7 +120,7 @@ public class ScaleAttrsImageView extends ImageView
                         mMatrix.postScale(mInitScale, mInitScale, 0, 0);
                         setImageMatrix(mMatrix);
                         setScaleType(ScaleType.FIT_XY);
-                        mImageviewDouble.doubleClick(x, y, mInitScale);
+                        mImageviewDouble.doubleClick(x, y, 2);
                         return true;
                     default:
                         break;

@@ -211,6 +211,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                         switch (vo.getCnfinish()) {
                             case "1"://完成
                                 holder.setVisible(R.id.ll_dubbing_complete, !"1".equals(vo.getCnstatus()));
+//                                holder.setVisible(R.id.ll_dubbing_complete, true);
                                 holder.setVisible(R.id.ll_waiting_dubbing, false);
 //                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon));
                                 break;
@@ -229,6 +230,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                         switch (vo.getEnfinish()) {
                             case "1"://完成
                                 holder.setVisible(R.id.ll_dubbing_complete_EN, !"1".equals(vo.getEnstatus()));
+//                                holder.setVisible(R.id.ll_dubbing_complete_EN, true);
                                 holder.setVisible(R.id.ll_waiting_dubbing_EN, false);
 //                                ImageLoader.getInstance().displayCricleImage(activity, vo.getUrl(), holder.getView(R.id.iv_icon_EN));
                                 break;

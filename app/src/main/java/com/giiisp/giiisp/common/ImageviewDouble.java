@@ -2,7 +2,7 @@ package com.giiisp.giiisp.common;
 
 public interface ImageviewDouble {
 
-    void doubleClick(float x,float y,float scale);
+    void doubleClick(float x,float y,int scale);
 
 
 }
