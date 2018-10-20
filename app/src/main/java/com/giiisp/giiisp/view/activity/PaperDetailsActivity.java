@@ -345,6 +345,9 @@ public class PaperDetailsActivity extends
 
     @Override
     protected void onPause() {
+        if (isVideo() && mVideoViewMap != null) {
+            mVideoViewMap.get(position).pause();
+        }
         overridePendingTransition(R.anim.push_left_in, R.anim.back_right_out);
         super.onPause();
     }
@@ -848,6 +851,10 @@ public class PaperDetailsActivity extends
 //                    fullScreenPopup.showPopupWindow();
 //                    //                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 //                }
+                if (!isVideo() && sScaleAttrsImageViews != null)
+                    sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+
                 if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 } else {
@@ -1207,10 +1214,10 @@ public class PaperDetailsActivity extends
                 mRelativeLayout.setVisibility(View.GONE);
                 int mHideFlags =
                         View.SYSTEM_UI_FLAG_LOW_PROFILE
-                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE
-                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                                | View.SYSTEM_UI_FLAG_IMMERSIVE
+//                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
                 rl_viewpager_full.setSystemUiVisibility(mHideFlags);
             }
@@ -1301,196 +1308,6 @@ public class PaperDetailsActivity extends
 
     @Override
     public void onSuccess(BaseEntity entity) {
-//        if (viewpagerPaper == null)
-//            return;
-//
-//        if (entity instanceof PaperEntity) {
-//        } else if (entity instanceof LiteratureEntity) {
-//
-//        } else if (entity instanceof PaperDatailEntity) {
-//            if (baseImpl != null)
-//                baseImpl.onSuccess(entity);
-//            //            progressPopupWindow.dismiss();
-//            llEmptyView.setVisibility(View.GONE);
-//            PaperDatailEntity.PaperBaseBean paperBase = ((PaperDatailEntity) entity).getPaperBase();
-//            if (paperBase == null)
-//                return;
-//            if (!TextUtils.isEmpty(paperBase.getTitle()))
-//                title = paperBase.getTitle();
-//            if (!TextUtils.isEmpty(paperBase.getRealName()))
-//                realName = paperBase.getRealName();
-//            PaperDatailEntity.PaperBaseBean.PhotoOneBean photo = null;
-//            switch (myVersionNo) {
-//                case "0":
-//                    photo = paperBase.getPhotoOne();
-//                    break;
-//                case "1":
-//                    photo = paperBase.getPhotoTwo();
-//                    break;
-//                case "2":
-//                    photo = paperBase.getPhotoThree();
-//                    break;
-//            }
-//
-//            if (photo != null && photo.getRows() != null && photo.getRows().size() > 0) {
-//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX rowsBeanXX = photo.getRows().get(0);
-//                firstPic = rowsBeanXX.getFirstPic();
-//                isFollowed = rowsBeanXX.getIsFollowed();
-//                ivLikedIcon.setSelected("1".equals(isFollowed));
-//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean photos = rowsBeanXX.getPhotos();//  add type 1,png ,2 mp4, 3 gif
-//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean recordOne = rowsBeanXX.getRecordOne();
-//                PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.RecordOneBean recordTwo = rowsBeanXX.getRecordTwo();
-//                if (photos != null && photos.getRows() != null && photos.getRows().size() > 0) {
-//                    photosBeanRows = photos.getRows();
-//                    List<String> images = new ArrayList<>();
-//                    if (photoList != null) {
-//                        photoList.clear();
-//                    } else {
-//                        photoList = new ArrayList<>();
-//                    }
-//                    for (PaperDatailEntity.PaperBaseBean.PhotoOneBean.RowsBeanXX.PhotosBean.RowsBean photosBeanRow : photosBeanRows) {
-//                        itemClickAdapter.addData(new ClickEntity(photosBeanRow.getPath(), photosBeanRow.getId()));
-//                        photoList.add(photosBeanRow.getPath());
-//                        imageId.add(photosBeanRow.getId());
-//                    }
-//                    if (imageId.size() > position && paperQA != null) {
-//                        paperQA.setImageId(imageId.get(position));
-//                        paperQA.initNetwork();
-//
-//                    }
-//                    note.setPath(photos.getRows().get(0).getPath());
-////                    long time3 = System.currentTimeMillis(); //  time test 3
-//                    viewpagerPaper.setAdapter(new ImageAdapter(this, photoList));
-//                    viewpagerPaper.setCurrentItem(position);
-//                    recyclerView.scrollToPosition(position);
-//                    itemClickAdapter.setSelectedPosition(position);
-//                    itemClickAdapter.notifyDataSetChanged();
-////                    long result3 = (System.currentTimeMillis()-time3);
-////                    Log.e("time","result3= "+result3);
-//                }
-//
-//                if (recordOne != null && recordOne.getRows() != null && recordOne.getRows().size() > 0) {
-//                    recordsBeanOneRows = recordOne.getRows();
-//                    for (int i = 0; i < recordsBeanOneRows.size(); i++) {
-//                        Song song = new Song();
-//                        song.setPosition(i);
-//                        song.setTitle(paperBase.getTitle());
-//                        if (photosBeanRows != null && photosBeanRows.size() > i) {
-//                            song.setPhotoPath(photosBeanRows.get(i).getPath());
-//                        }
-//                        song.setPath(recordsBeanOneRows.get(i).getPath());
-//                        song.setType(recordsBeanOneRows.get(i).getType());
-//                        song.setDuration(Integer.parseInt(recordsBeanOneRows.get(i).getDuration()));
-//                        queueCN.add(song);
-//                    }
-//                }
-//                if (recordTwo != null && recordTwo.getRows() != null && recordTwo.getRows().size() > 0) {
-//                    recordsBeanTwoRows = recordTwo.getRows();
-//                    for (int i = 0; i < recordsBeanTwoRows.size(); i++) {
-//                        Song song = new Song();
-//                        song.setPosition(i);
-//                        song.setTitle(paperBase.getTitle());
-//                        if (photosBeanRows != null && photosBeanRows.size() > i) {
-//                            song.setPhotoPath(photosBeanRows.get(i).getPath());
-//                        }
-//                        song.setPath(recordsBeanTwoRows.get(i).getPath());
-//                        song.setType(recordsBeanOneRows.get(i).getType());
-//                        song.setDuration(Integer.parseInt(recordsBeanTwoRows.get(i).getDuration()));
-//                        queueEN.add(song);
-//                    }
-//                }
-//                if (queueEN.size() > 0 && queueCN.size() > 0) {
-//                    tvCn.setVisibility(View.VISIBLE);
-//                    tvEn.setVisibility(View.VISIBLE);
-//                }
-//
-//            /*    if (recordTwo != null && recordTwo.getRows() != null && recordTwo.getRows().size() > 0) {
-//                    recordsBeanTwoRows = recordTwo.getRows();
-//                    for (int i = 0; i < recordsBeanTwoRows.size(); i++) {
-//                        Song song = new Song();
-//                        song.setPosition(i);
-//                        song.setPath(recordsBeanTwoRows.get(i).getPath());
-//                        song.setDuration(recordsBeanTwoRows.get(i).getDuration());
-//                        queueEN.add(song);
-//                    }
-//                }*/
-//                note.setTitle(paperBase.getTitle());
-//
-//                note.setType("play");
-//                note.setId(storageId);
-//                note.setCommentNum(paperBase.getCommentNum() + "");
-//                note.setFollowedNum(paperBase.getFollowedNum() + "");
-//                note.setCreateTime(paperBase.getUpdateTime());
-//                note.setReadNum(paperBase.getReadNum() + "");
-//                note.setLikedNum(paperBase.getLikedNum() + "");
-//                note.setVersions(myVersionNo);
-//
-//                if (getPlayService() != null) {
-//                    PlayService playService = getPlayService();
-//                    if (storageId.equals(pid)) {
-//                        switch (language) {
-//                            case CN:
-//                                tvCn.setChecked(false);
-//                                tvEn.setChecked(true);
-//                                playService.setmMusicList(queueCN);
-//                                break;
-//                            case EN:
-//                                tvCn.setChecked(true);
-//                                tvEn.setChecked(false);
-//                                playService.setmMusicList(queueEN);
-//                                break;
-//                            default:
-//                                if (queueCN.size() > 0) {
-//                                    tvCn.setChecked(false);
-//                                    tvEn.setChecked(true);
-//                                    playService.setmMusicList(queueCN);
-//                                } else if (queueEN.size() > 0) {
-//                                    tvCn.setChecked(true);
-//                                    tvEn.setChecked(false);
-//                                    playService.setmMusicList(queueEN);
-//                                }
-//                                break;
-//                        }
-//                        playService.play(position);
-//                    }
-//                    switch (language) {
-//                        case CN:
-//                            tvCn.setChecked(false);
-//                            tvEn.setChecked(true);
-//                            break;
-//                        case EN:
-//                            tvCn.setChecked(true);
-//                            tvEn.setChecked(false);
-//                            break;
-//                        default:
-//                            if (queueCN.size() > 0) {
-//                                tvCn.setChecked(false);
-//                                tvEn.setChecked(true);
-//                            } else if (queueEN.size() > 0) {
-//                                tvCn.setChecked(true);
-//                                tvEn.setChecked(false);
-//                            }
-//                            break;
-//                    }
-//                    paperId = myVersionNo;
-//                    downloadId = "";
-//                }
-//            }
-//            //            isFollowed = ((PaperDatailEntity) entity).getIsFollowed();
-//
-//            tvShareNumber.setText(String.valueOf(paperBase.getShareNum()));
-//            tvLikedNumber.setText(String.valueOf(paperBase.getLikedNum()));
-//
-//
-//        } else {
-////            Utils.showToast(entity.getInfo());
-////            if (isSave == 10) {
-////                isFollowed = "1";
-////            } else if (isSave == 20) {
-////                isFollowed = "0";
-////            }
-////            ivLikedIcon.setSelected("1".equals(isFollowed));
-//        }
     }
 
     @Override
@@ -1527,6 +1344,7 @@ public class PaperDetailsActivity extends
                         Log.v("=====", floats[Matrix.MSCALE_X] + "");
                         if (!isVideo()) {
 //                            matrix = new Matrix();
+                            sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.MATRIX);
                             if (floats[Matrix.MSCALE_X] == 1f) {
                                 matrix.setScale(2f, 2f,
                                         Float.parseFloat(vo.getX()), Float.parseFloat(vo.getY()));
@@ -1550,6 +1368,7 @@ public class PaperDetailsActivity extends
                         matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
                                 , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
                         sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+                        sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.FIT_CENTER);
                     }
                     break;
                 case "3"://标记
@@ -1638,6 +1457,7 @@ public class PaperDetailsActivity extends
             matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
                     , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
             sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
+            sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
 
         if (getPlayService() != null) {
@@ -1841,8 +1661,15 @@ public class PaperDetailsActivity extends
                     ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, path,
                             viewpagerPaper.getWidth(), viewpagerPaper.getHeight(), null);
                     imageView.setScaleType(ImageView.ScaleType.MATRIX);
+
+//                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+//                            viewpagerPaper.getWidth(),
+//                            viewpagerPaper.getHeight());
+//                    param.leftMargin = 40;
+//                    param.gravity = Gravity.CENTER_HORIZONTAL;
+//                    imageView.setLayoutParams(param);
+
                     sScaleAttrsImageViews.add(imageView);
-//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     ImageLoader.getInstance().displayImage((BaseActivity) activity, path, imageView);
                     ViewParent vp = imageView.getParent();
                     if (vp != null) {
