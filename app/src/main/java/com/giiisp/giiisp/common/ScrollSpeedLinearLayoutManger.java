@@ -7,14 +7,27 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 
+import com.giiisp.giiisp.view.adapter.ClickEntity;
+
+import java.util.List;
+
 public class ScrollSpeedLinearLayoutManger extends LinearLayoutManager {
 
     private float MILLISECONDS_PER_INCH = 0.03f;
     private Context context;
+    private List<ClickEntity> list;
 
-    public ScrollSpeedLinearLayoutManger(Context context, int orientation, boolean reverseLayout) {
-        super(context,orientation,reverseLayout);
+    public ScrollSpeedLinearLayoutManger(Context context, int orientation, boolean reverseLayout, List<ClickEntity> list) {
+        super(context, orientation, reverseLayout);
         this.context = context;
+        this.list = list;
+    }
+
+    @Override
+    public boolean canScrollHorizontally() {
+        if (list != null)
+            return list.size() > 3;
+        return false;
     }
 
     @Override

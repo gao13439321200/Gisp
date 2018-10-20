@@ -175,9 +175,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 
     @Override
     public int getItemCount() {
-        if (layoutResId == R.layout.item_home_child) {
-            return Integer.MAX_VALUE;
-        }
+//        if (layoutResId == R.layout.item_home_child) {
+//            return Integer.MAX_VALUE;
+//        }
         return super.getItemCount();
     }
 

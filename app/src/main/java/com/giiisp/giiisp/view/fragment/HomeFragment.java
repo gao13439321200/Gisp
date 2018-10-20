@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
@@ -205,7 +206,7 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 ClickEntity clickEntity = new ClickEntity(R.layout.item_home_recycler, getString(R.string.hot_recommended));
                 clickEntity.setHotImgBean(bean1);
                 multipleItemQuickAdapter.addData(clickEntity);
-                for (HotImgVO vo :bean1.getList()) {
+                for (HotImgVO vo : bean1.getList()) {
                     if ("1".equals(vo.getType())) {
                         list1.add(vo);
                     } else {
@@ -301,8 +302,8 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             timer.cancel();
             timer = null;
         }
-        cnt1 = 0;
-        cnt2 = 0;
+        cnt1 = -1;
+        cnt2 = -1;
     }
 
     private static class MyHandler extends Handler {
@@ -322,22 +323,33 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //                mActivity.cnt += 3;
 //                mActivity.getRecyclerView1().smoothScrollToPosition(mActivity.cnt);
 //            } else {
-            Log.d("MyHandler", "mActivity.cnt1:" + mActivity.cnt1);
-            Log.d("MyHandler", "mActivity.cnt2:" + mActivity.cnt2);
+            if (mActivity.cnt1 != -1 && mActivity.getRecyclerView1() != null) {
+                mActivity.cnt1 = ((LinearLayoutManager) mActivity.getRecyclerView1().getLayoutManager()).findFirstVisibleItemPosition() + 2;
+            }
+            if (mActivity.cnt2 != -1 && mActivity.getRecyclerView2() != null) {
+                mActivity.cnt2 = ((LinearLayoutManager) mActivity.getRecyclerView2().getLayoutManager()).findFirstVisibleItemPosition() + 2;
+            }
+
             mActivity.cnt1 = setData(mActivity.cnt1, mActivity.list1.size() - 1, mActivity.getRecyclerView1());
             mActivity.cnt2 = setData(mActivity.cnt2, mActivity.list2.size() - 1, mActivity.getRecyclerView2());
 //            }
         }
 
         private int setData(int cnt, int count, RecyclerView view) {
-            cnt += 3;
-            if (cnt > count) {
+            LogUtils.a("aaaaa====cnt:" + cnt + ",count:" + count);
+            if (cnt == -1) {
                 cnt = 2;
+                return 2;
+            }
+            if (cnt == count) {//已经是最后一页了
                 if (view != null)
                     view.smoothScrollToPosition(0);
-                return cnt;
-            } else if (cnt > count - 3) {
+                cnt = 2;
+                return 2;
+            } else if (cnt > count - 3) {//下一页是最后一页
                 cnt = count;
+            } else {
+                cnt += 3;
             }
             Log.d("MyHandler", "mActivity.cnt:" + cnt);
             if (view != null)

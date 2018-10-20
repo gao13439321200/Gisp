@@ -274,9 +274,10 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
 
 //                LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 //                view.setLayoutManager(mLayoutManager);
-                ScrollSpeedLinearLayoutManger scrollSpeedLinearLayoutManger = new ScrollSpeedLinearLayoutManger(mContext, LinearLayoutManager.HORIZONTAL, false);
-                scrollSpeedLinearLayoutManger.setSpeedSlow();
-                view.setLayoutManager(scrollSpeedLinearLayoutManger);
+                ScrollSpeedLinearLayoutManger manger = new ScrollSpeedLinearLayoutManger(mContext,
+                        LinearLayoutManager.HORIZONTAL, false, list);
+                manger.setSpeedSlow();
+                view.setLayoutManager(manger);
                 ItemClickAdapter itemClickAdapterChild = new ItemClickAdapter(context, R.layout.item_home_child, list, "");
                 view.setAdapter(itemClickAdapterChild);
                 view.setOnFlingListener(null);
