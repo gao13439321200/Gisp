@@ -341,7 +341,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     @Override
     protected void startTimer() {
-        ivBtn.setImageResource(R.mipmap.in_recording);
+        ivBtn.setImageResource(R.mipmap.btn_zanting);
         super.startTimer();
     }
 

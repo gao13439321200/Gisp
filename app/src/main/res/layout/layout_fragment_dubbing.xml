@@ -225,7 +225,7 @@
                     android:layout_below="@+id/tv_time"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="5dp"
-                    android:src="@mipmap/in_recording_spot"/>
+                    android:src="@mipmap/btn_dubbing_before"/>
 
                 <RelativeLayout
                     android:id="@+id/linear_layout"
@@ -262,7 +262,7 @@
                         android:layout_marginEnd="65dp"
                         android:layout_marginStart="72dp"
                         android:layout_toRightOf="@+id/tv_dubbing_re_record"
-                        android:drawableTop="@mipmap/dubbing_determine"
+                        android:drawableTop="@mipmap/btn_queding"
                         android:text="@string/complete"
                         android:textColor="@color/colorWhite"/>
                 </RelativeLayout>

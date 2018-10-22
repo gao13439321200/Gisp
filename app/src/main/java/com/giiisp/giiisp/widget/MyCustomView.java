@@ -1,6 +1,8 @@
 package com.giiisp.giiisp.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
@@ -66,8 +68,13 @@ public class MyCustomView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.point);
         for (Map<String, Float> map : mPointList) {
-            canvas.drawCircle(map.get("x"), map.get("y"), 25, mPaint);
+            canvas.drawBitmap(bitmap,
+                    map.get("x") - (bitmap.getWidth() / 2),
+                    map.get("y") - (bitmap.getHeight() / 2),
+                    null);
+//            canvas.drawCircle(map.get("x"), map.get("y"), 25, mPaint);
         }
         super.onDraw(canvas);
     }
