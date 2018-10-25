@@ -198,6 +198,9 @@
         <activity
             android:name=".view.fragment.HeActivity"
             android:launchMode="singleTop"/>
+        <activity
+            android:name=".view.activity.GroupInfoActivity"
+            android:launchMode="singleTop"/>
 
 
         <service android:name=".widget.recording.PlayService"/>

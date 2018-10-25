@@ -23,11 +23,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
-import com.giiisp.giiisp.common.MyDialog;
+import com.giiisp.giiisp.common.MyDialogOnClick;
+import com.giiisp.giiisp.common.MyImgDialog;
 import com.giiisp.giiisp.dto.DubbingVO;
 import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
+import com.giiisp.giiisp.dto.GroupListVO;
 import com.giiisp.giiisp.dto.HeEduListVO;
 import com.giiisp.giiisp.dto.HePaperTitleVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
@@ -294,7 +296,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 
 
                     helper.getView(R.id.img_photo).setOnClickListener(v -> {
-                        MyDialog dialog = new MyDialog(mContext, new MyDialog.MyDialogOnClick() {
+                        MyImgDialog dialog = new MyImgDialog(mContext, new MyDialogOnClick() {
                             @Override
                             public void onOKClick() {
 
@@ -1286,6 +1288,17 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         text = heEduListVO.getCename() + heEduListVO.getUename() + heEduListVO.getMename() + "," + heEduListVO.getEename();
                     }
                     helper.setText(R.id.tv_name, text);
+                    break;
+                case R.layout.item_group_layout:
+                    GroupListVO groupListVO = item.getGroupListVO();
+                    helper.setText(R.id.tv_title, groupListVO.getTitle());
+                    helper.setText(R.id.tv_time, groupListVO.getCreatetime());
+                    helper.setText(R.id.tv_msg, groupListVO.getDetail());
+                    if ("1".equals(groupListVO.getStatus())){
+                        helper.setBackgroundColor(R.id.ll_all,mContext.getResources().getColor(R.color.bg_white));
+                    }else{
+                        helper.setBackgroundColor(R.id.ll_all,mContext.getResources().getColor(R.color.bg_white));
+                    }
                     break;
             }
         }

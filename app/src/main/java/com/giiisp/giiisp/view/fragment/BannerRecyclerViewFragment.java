@@ -47,6 +47,8 @@ import com.giiisp.giiisp.dto.FansBean;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowBean;
 import com.giiisp.giiisp.dto.FollowVO;
+import com.giiisp.giiisp.dto.GroupListBean;
+import com.giiisp.giiisp.dto.GroupListVO;
 import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.dto.MyAnswerBean;
 import com.giiisp.giiisp.dto.MyAnswerVO;
@@ -635,6 +637,13 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter.setOnItemLongClickListener(this);
                 tvTitle.setText(R.string.course);
                 break;
+            case "group"://团组
+                lineBanner.setVisibility(View.VISIBLE);
+                tvBack.setVisibility(View.VISIBLE);
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_group_layout, this.list, type);
+                itemClickAdapter.setOnItemLongClickListener(this);
+                tvTitle.setText(R.string.group);
+                break;
             case "paper_qa"://论文详情评论问答列表
                 list.clear();
                 swipeRefreshLayout.setEnabled(false);
@@ -977,6 +986,10 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                }
 //                itemClickAdapter.setNewData(list);
 //                swipeRefreshLayout.setRefreshing(false);
+                break;
+            case "group"://团组
+                hMap.put("uid", getUserID());
+                presenter.getDataAll("337", hMap);
                 break;
             case "paper_qa"://论文详情评论问答
                 if (TextUtils.isEmpty(imageId))
@@ -2167,6 +2180,18 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 //                if ()
                 //                PaperDetailsActivity.actionActivity(getContext());
                 break;
+            case "group":
+                GroupListVO groupListVO = itemClickAdapter.getItem(position).getGroupListVO();
+                if (groupListVO != null) {
+                    if ("1".equals(groupListVO.getStatus())) {
+                        //进入详情
+
+
+                    } else {
+                        ToastUtils.showShort("您已退出该团组，无法进入");
+                    }
+                }
+                break;
             default:
         }
     }
@@ -3047,6 +3072,24 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 } else {
                     itemClickAdapter.loadMoreEnd(false);
                 }
+                itemClickAdapter.expandAll();
+                swipeRefreshLayout.setRefreshing(false);
+                break;
+            case "337":
+                GroupListBean bean9 = (GroupListBean) baseBean;
+                itemClickAdapter.setNewData(null);
+                List<ClickEntity> listIn = new ArrayList<>();
+                List<ClickEntity> listOut = new ArrayList<>();
+                for (GroupListVO vo : bean9.getGlist()) {
+                    ClickEntity entity1 = new ClickEntity();
+                    entity1.setGroupListVO(vo);
+                    if ("1".equals(vo.getStatus()))
+                        listIn.add(entity1);
+                    else
+                        listOut.add(entity1);
+                }
+                itemClickAdapter.addData(listIn);
+                itemClickAdapter.addData(listOut);
                 itemClickAdapter.expandAll();
                 swipeRefreshLayout.setRefreshing(false);
                 break;

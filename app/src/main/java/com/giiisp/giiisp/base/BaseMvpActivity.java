@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.dto.BaseBean;
+import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseActivity implements BaseImpl {
@@ -36,6 +37,16 @@ public abstract class BaseMvpActivity<V, T extends BasePresenter> extends BaseAc
 
     @Override
     public void onSuccessNew(String url, BaseBean baseEntity) {
+
+    }
+
+    @Override
+    public void onSuccess(BaseEntity entity) {
+
+    }
+
+    @Override
+    public void onFailure(String msg, Exception ex) {
 
     }
 

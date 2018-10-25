@@ -27,4 +27,7 @@
     <color name="bg_white">#FFFFFF</color>
     <color name="bg_blue">#58ACED</color>
     <color name="text_yellow">#FFC800</color>
+    <color name="dimgray">#696969</color><!--暗灰色 -->
+    <color name="gray_black">#efeff4</color>
+    <color name="darkgray">#a9a9b9</color><!--暗灰色 -->
 </resources>
