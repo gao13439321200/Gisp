@@ -34,6 +34,8 @@ import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.base.BaseMvpFragment;
+import com.giiisp.giiisp.common.MyDialog;
+import com.giiisp.giiisp.common.MyDialogOnClick;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.CollectListBean;
 import com.giiisp.giiisp.dto.CollectListVO;
@@ -50,6 +52,8 @@ import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.GroupListBean;
 import com.giiisp.giiisp.dto.GroupListVO;
 import com.giiisp.giiisp.dto.MIneInfoBean;
+import com.giiisp.giiisp.dto.MsgNewBean;
+import com.giiisp.giiisp.dto.MsgNewVO;
 import com.giiisp.giiisp.dto.MyAnswerBean;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
@@ -92,8 +96,10 @@ import com.giiisp.giiisp.utils.PackageUtil;
 import com.giiisp.giiisp.utils.RxBus;
 import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.activity.CreateGroupActivity;
 import com.giiisp.giiisp.view.activity.DubbingActivity;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
+import com.giiisp.giiisp.view.activity.GroupInfoActivity;
 import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
@@ -158,6 +164,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     LinearLayout llDownload;
     @BindView(R.id.tv_back)
     TextView tvBack;
+    @BindView(R.id.tv_right)
+    TextView tvRight;
     @BindView(R.id.tv_back_rt)
     TextView tvBackRt;
     @BindView(R.id.tv_download_number)
@@ -640,6 +648,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "group"://团组
                 lineBanner.setVisibility(View.VISIBLE);
                 tvBack.setVisibility(View.VISIBLE);
+                tvRight.setVisibility(View.VISIBLE);
+                tvRight.setText("创建");
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_group_layout, this.list, type);
                 itemClickAdapter.setOnItemLongClickListener(this);
                 tvTitle.setText(R.string.group);
@@ -857,6 +867,45 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_message_notification, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
+                break;
+            case "msg_new"://我的消息
+                list.clear();
+                itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_message_new, this.list, type);
+                itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
+                itemClickAdapter.disableLoadMoreIfNotFullPage();
+                itemClickAdapter.loadMoreEnd(false);
+                itemClickAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                        MsgNewVO vo = itemClickAdapter.getData().get(position).getMsgNewVO();
+                        if ("3".equals(vo.getType()) && "1".equals(vo.getStatus())) {
+                            MyDialog dialog = new MyDialog(mActivity, new MyDialogOnClick() {
+                                @Override
+                                public void onOKClick() {
+                                    HashMap<String, Object> map = new HashMap<>();
+                                    map.put("pid", vo.getId());
+                                    map.put("status", "1");
+                                    presenter.getDataAll("341", map);
+                                }
+
+                                @Override
+                                public void onCancelClick() {
+                                    HashMap<String, Object> map = new HashMap<>();
+                                    map.put("pid", vo.getId());
+                                    map.put("status", "2");
+                                    presenter.getDataAll("341", map);
+                                }
+                            }, 2);
+                            dialog.setNameText("是否接受" + vo.getUsername() + "发出的团组邀请？");//内容
+                            dialog.setButtonOK("同意");//确定的按钮
+                            dialog.setButtonCancel("拒绝");//取消的按钮
+                            dialog.setCancelable(false);//点击外部是否可以取消
+                            dialog.show();
+
+                        }
+                        return false;
+                    }
+                });
                 break;
             case "interactive":
                 list.clear();
@@ -1093,6 +1142,10 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 hMap.put("ftype", 2);
                 presenter.getDataAll("212", hMap);
                 break;
+            case "msg_new":
+                hMap.put("uid", uid);
+                presenter.getDataAll("342", hMap);
+                break;
             case "notice":
                 map.put("uid", uid);
                 map.put("page", page);
@@ -1248,6 +1301,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "search_paper":
                 loadDownloadNunber();
                 break;
+            case "group":
+                HashMap<String, Object> hMap = new HashMap<>();
+                hMap.put("uid", getUserID());
+                presenter.getDataAll("337", hMap);
+                break;
             default:
 
         }
@@ -1271,7 +1329,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         return new WholePresenter(this);
     }
 
-    @OnClick({R.id.tv_back, R.id.fl_menu, R.id.fl_news, R.id.tv_back_rt, R.id.iv_play, R.id.iv_download, R.id.tv_all_start, R.id.tv_all_suspended})
+    @OnClick({R.id.tv_back, R.id.fl_menu, R.id.fl_news, R.id.tv_back_rt,
+            R.id.iv_play, R.id.iv_download, R.id.tv_all_start,
+            R.id.tv_all_suspended, R.id.tv_right})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_all_start:
@@ -1346,10 +1406,19 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case R.id.tv_back_rt:
                 getActivity().finish();
                 break;
+            case R.id.tv_right:
+                switch (type) {
+                    case "group":
+                        CreateGroupActivity.newInstance(mActivity);
+                        break;
+                    default:
+                        break;
+                }
+                break;
             case R.id.fl_news:
                 switch (type) {
                     case "plays":
-                        FragmentActivity.actionActivity(getContext(), "news");
+                        FragmentActivity.actionActivity(getContext(), "msg_new");
                         break;
                 }
                 break;
@@ -1544,58 +1613,6 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "popular":
                 break;
             case "wait_dubbing":
-//                if (entity instanceof WaitRecordPaperEntity) {
-//                    dubbingAdapter.loadMoreComplete();
-//                    if (dubbingAdapter == null || ((WaitRecordPaperEntity) entity).getWaitRecordPaper() == null || ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getRows() == null) {
-//                        dubbingAdapter.loadMoreEnd(false);
-//                        return;
-//                    }
-//                    if (page == 1) {
-//                        dubbingAdapter.setNewData(null);
-//                    }
-//
-//                    List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getRows();
-//                    if (rows != null && rows.size() > 0) {
-//                        for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows : rows) {
-//                            ClickEntity clickEntity0 = new ClickEntity(subscribeEntityRows);
-//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoOne = subscribeEntityRows.getPhotoOne();
-//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoTwo = subscribeEntityRows.getPhotoTwo();
-//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean photoThree = subscribeEntityRows.getPhotoThree();
-//                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoThreeRows = photoThree.getRows();
-//                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoTwoRows = photoTwo.getRows();
-//                            List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoOneRows = photoOne.getRows();
-//                            if (photoThreeRows != null && photoThreeRows.size() == 1) {
-//                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoThreeRows.get(0);
-//                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
-//                                    initEntity(subscribeEntityRows, clickEntity0, photoThreeRows, rowsBeanXXXX, "2");
-//
-//                            }
-//                            if (photoTwoRows != null && photoTwoRows.size() == 1) {
-//                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoTwoRows.get(0);
-//                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
-//                                    initEntity(subscribeEntityRows, clickEntity0, photoTwoRows, rowsBeanXXXX, "1");
-//                            }
-//                            if (photoOneRows != null && photoOneRows.size() == 1) {
-//                                SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = photoOneRows.get(0);
-//                                if (!Objects.equals("1", rowsBeanXXXX.getStatus()))
-//                                    initEntity(subscribeEntityRows, clickEntity0, photoOneRows, rowsBeanXXXX, "0");
-//                            }
-//                            clickEntity0.setItemType(0);
-//                            clickEntity0.setLevel(0);
-//                            dubbingAdapter.addData(clickEntity0);
-//                        }
-//                        if (dubbingAdapter.getItemCount() < ((WaitRecordPaperEntity) entity).getWaitRecordPaper().getTotal()) {
-//                            page++;
-//                        } else {
-//                            dubbingAdapter.loadMoreEnd(false);
-//                        }
-//                        dubbingAdapter.expandAll();
-//                    } else {
-//                        dubbingAdapter.loadMoreEnd(false);
-//                    }
-//                } else {
-//                    onRefresh();
-//                }
                 break;
             case "collection":
                 break;
@@ -1604,74 +1621,6 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "my_review":
             case "my_paper":
             case "summary_list":
-//                if (entity instanceof SubscribeEntity) {
-//                    itemClickAdapter.loadMoreComplete();
-//                    if (itemClickAdapter == null || ((SubscribeEntity) entity).getPageInfo() == null || ((SubscribeEntity) entity).getPageInfo().getRows() == null) {
-//                        itemClickAdapter.loadMoreEnd(false);
-//                        return;
-//                    }
-//                    if (page == 1) {
-//                        itemClickAdapter.setNewData(null);
-//                    }
-//                    SubscribeEntity.PageInfoBean pageInfo = ((SubscribeEntity) entity).getPageInfo();
-//                    if (pageInfo != null) {
-//                        List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX> rows = pageInfo.getRows();
-//                        if (rows != null && rows.size() > 0) {
-//                            for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX row : rows) {
-//                                itemClickAdapter.addData(new ClickEntity(row));
-//                            }
-//                            if (itemClickAdapter.getItemCount() < pageInfo.getTotal()) {
-//                                page++;
-//                            } else {
-//                                itemClickAdapter.loadMoreEnd(false);
-//                            }
-//                        } else {
-//                            itemClickAdapter.loadMoreEnd(false);
-//                        }
-//
-//                    }
-//                } else if (entity.getResult() == 1) {
-//                    if (itemClickAdapter.getItemCount() > changePosition) {
-//                        ClickEntity item = itemClickAdapter.getItem(changePosition);
-//                        if (item != null && item.getSubscribeEntityRows() != null) {
-//                            SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows = item.getSubscribeEntityRows();
-//                            String isFollowed = "";
-//                            int followedNum = 0;
-//                            if (isSave == 10) {
-//                                isFollowed = "1";
-//                                followedNum = 1;
-//                            } else if (isSave == 20) {
-//                                isFollowed = "0";
-//                                followedNum = -1;
-//                            }
-//                            switch (version) {
-//                                case 0:
-//                                    if (subscribeEntityRows.getPhotoOne() != null && subscribeEntityRows.getPhotoOne().getRows() != null && subscribeEntityRows.getPhotoOne().getRows().size() == 1 && subscribeEntityRows.getPhotoOne().getRows().get(0) != null) {
-//                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoOne().getRows().get(0);
-//                                        rowsBeanXXXX.setIsFollowed(isFollowed);
-//                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
-//                                    }
-//                                    break;
-//                                case 1:
-//                                    if (subscribeEntityRows.getPhotoTwo() != null && subscribeEntityRows.getPhotoTwo().getRows() != null && subscribeEntityRows.getPhotoTwo().getRows().size() == 1 && subscribeEntityRows.getPhotoTwo().getRows().get(0) != null) {
-//                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoTwo().getRows().get(0);
-//                                        rowsBeanXXXX.setIsFollowed(isFollowed);
-//                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
-//                                    }
-//                                    break;
-//                                case 2:
-//                                    if (subscribeEntityRows.getPhotoThree() != null && subscribeEntityRows.getPhotoThree().getRows() != null && subscribeEntityRows.getPhotoThree().getRows().size() == 1 && subscribeEntityRows.getPhotoThree().getRows().get(0) != null) {
-//                                        SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX = subscribeEntityRows.getPhotoThree().getRows().get(0);
-//                                        rowsBeanXXXX.setIsFollowed(isFollowed);
-//                                        rowsBeanXXXX.setFollowedNum(rowsBeanXXXX.getFollowedNum() + followedNum);
-//                                    }
-//                                    break;
-//                            }
-//                            itemClickAdapter.notifyItemChanged(changePosition);
-//                        }
-//                    }
-//                    //                    onRefresh();
-//                }
                 break;
             case "newest":
                 break;
@@ -1877,51 +1826,6 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             default:
                 break;
 
-        }
-    }
-
-    private void initEntity(SubscribeEntity.PageInfoBean.RowsBeanXXXXX subscribeEntityRows, ClickEntity clickEntity0, List<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX> photoThreeRows, SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX rowsBeanXXXX, String version) {
-        if (rowsBeanXXXX != null && rowsBeanXXXX.getRecordOne() != null && rowsBeanXXXX.getRecordTwo() != null) {
-            ClickEntity clickEntityCN = new ClickEntity();
-            clickEntityCN.setPhotoRecord(subscribeEntityRows.getTitle());
-            clickEntityCN.setPhotoOrder(subscribeEntityRows.getCreateTime());
-            clickEntityCN.setTitle(subscribeEntityRows.getTitle());
-            clickEntityCN.setTime(photoThreeRows.get(0).getCreateTime());
-            clickEntityCN.setVersion(version);
-            if (rowsBeanXXXX.getPhotos() != null && rowsBeanXXXX.getPhotos().getRows() != null)
-                clickEntityCN.setPhotoNumber(rowsBeanXXXX.getPhotos().getRows().size());
-            if (rowsBeanXXXX.getRecordOne() != null && rowsBeanXXXX.getRecordOne().getRows() != null)
-                clickEntityCN.setRecordNumber(rowsBeanXXXX.getRecordOne().getRows().size());
-            if (rowsBeanXXXX.getRecordTwo() != null && rowsBeanXXXX.getRecordTwo().getRows() != null)
-                clickEntityCN.setRecordTwoNumber(rowsBeanXXXX.getRecordTwo().getRows().size());
-            clickEntityCN.setItemType(1);
-            clickEntityCN.setLevel(1);
-            clickEntityCN.setPaperBan(rowsBeanXXXX);
-            clickEntityCN.setUrl(rowsBeanXXXX.getFirstPic());
-            clickEntityCN.setLanguage("CN");
-            clickEntityCN.setPaperId(subscribeEntityRows.getId() + "");
-            clickEntity0.addSubItem(clickEntityCN);
-
-
-            ClickEntity clickEntityEN = new ClickEntity();
-            clickEntityEN.setPhotoRecord(subscribeEntityRows.getTitle());
-            clickEntityEN.setPhotoOrder(subscribeEntityRows.getCreateTime());
-            clickEntityEN.setTitle(subscribeEntityRows.getTitle());
-            clickEntityEN.setTime(photoThreeRows.get(0).getCreateTime());
-            if (rowsBeanXXXX.getPhotos() != null && rowsBeanXXXX.getPhotos().getRows() != null)
-                clickEntityEN.setPhotoNumber(rowsBeanXXXX.getPhotos().getRows().size());
-            if (rowsBeanXXXX.getRecordOne() != null && rowsBeanXXXX.getRecordOne().getRows() != null)
-                clickEntityEN.setRecordTwoNumber(rowsBeanXXXX.getRecordOne().getRows().size());
-            if (rowsBeanXXXX.getRecordTwo() != null && rowsBeanXXXX.getRecordTwo().getRows() != null)
-                clickEntityEN.setRecordNumber(rowsBeanXXXX.getRecordTwo().getRows().size());
-            clickEntityEN.setItemType(1);
-            clickEntityEN.setVersion(version);
-            clickEntityEN.setLevel(1);
-            clickEntityEN.setPaperBan(rowsBeanXXXX);
-            clickEntityEN.setUrl(rowsBeanXXXX.getFirstPic());
-            clickEntityEN.setLanguage("EN");
-            clickEntityEN.setPaperId(subscribeEntityRows.getId() + "");
-            clickEntity0.addSubItem(clickEntityEN);
         }
     }
 
@@ -2185,8 +2089,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 if (groupListVO != null) {
                     if ("1".equals(groupListVO.getStatus())) {
                         //进入详情
-
-
+                        GroupInfoActivity.newInstance(mActivity, groupListVO.getId());
                     } else {
                         ToastUtils.showShort("您已退出该团组，无法进入");
                     }
@@ -3090,6 +2993,25 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 }
                 itemClickAdapter.addData(listIn);
                 itemClickAdapter.addData(listOut);
+                itemClickAdapter.expandAll();
+                swipeRefreshLayout.setRefreshing(false);
+                break;
+            case "341":
+                ToastUtils.showShort("操作成功！");
+                HashMap<String, Object> hMap = new HashMap<>();
+                hMap.put("uid", uid);
+                presenter.getDataAll("342", hMap);
+                break;
+            case "342":
+                MsgNewBean bean10 = (MsgNewBean) baseBean;
+                if (page == 0) {
+                    itemClickAdapter.setNewData(null);
+                }
+                for (MsgNewVO vo : bean10.getList()) {
+                    ClickEntity mainEntity = new ClickEntity();
+                    mainEntity.setMsgNewVO(vo);
+                    itemClickAdapter.addData(mainEntity);
+                }
                 itemClickAdapter.expandAll();
                 swipeRefreshLayout.setRefreshing(false);
                 break;

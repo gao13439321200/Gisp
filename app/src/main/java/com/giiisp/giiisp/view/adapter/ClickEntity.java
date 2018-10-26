@@ -23,6 +23,7 @@ import com.giiisp.giiisp.dto.HeadImgBean;
 import com.giiisp.giiisp.dto.HotImgBean;
 import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.dto.MajorVO;
+import com.giiisp.giiisp.dto.MsgNewVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperInfoVO;
@@ -411,7 +412,16 @@ public class ClickEntity extends AbstractExpandableItem<ClickEntity> implements 
     private HePaperTitleVO mHePaperTitleVO;
     private GroupListVO mGroupListVO;
     private GroupMemberInfo mGroupMemberInfo;
+    private MsgNewVO mMsgNewVO;
 
+
+    public MsgNewVO getMsgNewVO() {
+        return mMsgNewVO;
+    }
+
+    public void setMsgNewVO(MsgNewVO msgNewVO) {
+        mMsgNewVO = msgNewVO;
+    }
 
     public GroupMemberInfo getGroupMemberInfo() {
         return mGroupMemberInfo;

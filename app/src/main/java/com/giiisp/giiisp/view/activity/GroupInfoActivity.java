@@ -127,6 +127,11 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
             case "339":
                 ToastUtils.showShort("修改成功！");
                 break;
+            case "336":
+                ToastUtils.showShort("邀请信息已发送");
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("gid", gid);
+                presenter.getDataAll("338", map);
             case "340":
                 ToastUtils.showShort("退出成功！");
                 finish();
@@ -142,11 +147,15 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
         super.onFailNew(url, msg);
     }
 
-    @OnClick({R.id.tv_back, R.id.tv_right, R.id.fl_name, R.id.fl_notice})
+    @OnClick({R.id.tv_back, R.id.tv_right, R.id.fl_name, R.id.fl_notice,
+            R.id.tv_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_back:
                 finish();
+                break;
+            case R.id.tv_add:
+                inputTitleDialog(mTvName, "被邀请人用户名", "");
                 break;
             case R.id.tv_right:
                 MyDialog dialog = new MyDialog(this, new MyDialogOnClick() {
@@ -198,6 +207,9 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
             case "职务":
                 inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
                 break;
+            case "被邀请人用户名":
+                inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+                break;
             default:
                 break;
         }
@@ -216,6 +228,7 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
                                     view.setText(inputName);
                                 } else {
                                     Utils.showToast("请输入名称");
+                                    break;
                                 }
                                 map.put("gid", gid);
                                 map.put("title", inputName);
@@ -226,6 +239,7 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
                                     view.setText(inputName);
                                 } else {
                                     Utils.showToast("请输入公告");
+                                    break;
                                 }
                                 map.put("gid", gid);
                                 map.put("detail", inputName);
@@ -236,11 +250,21 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
                                     view.setText(inputName);
                                 } else {
                                     Utils.showToast("请输入职务");
+                                    break;
                                 }
                                 map.put("gid", gid);
                                 map.put("uid", id);
                                 map.put("job", inputName);
                                 presenter.getDataAll("339", map);
+                                break;
+                            case "被邀请人用户名":
+                                if (ObjectUtils.isEmpty(inputName)) {
+                                    Utils.showToast("请输入用户名");
+                                    break;
+                                }
+                                map.put("gid", gid);
+                                map.put("loginname", inputName);
+                                presenter.getDataAll("336", map);
                                 break;
                         }
                     }

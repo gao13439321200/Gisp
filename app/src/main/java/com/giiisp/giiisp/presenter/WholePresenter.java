@@ -30,6 +30,7 @@ import com.giiisp.giiisp.dto.ImgInfoBean;
 import com.giiisp.giiisp.dto.LoginBean;
 import com.giiisp.giiisp.dto.MIneInfoBean;
 import com.giiisp.giiisp.dto.MajorBean;
+import com.giiisp.giiisp.dto.MsgNewBean;
 import com.giiisp.giiisp.dto.MyAnswerBean;
 import com.giiisp.giiisp.dto.PaperBean;
 import com.giiisp.giiisp.dto.PaperEventBean;
@@ -1581,10 +1582,13 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                 baseEntity = new Gson().fromJson(cipher, ProfessionalListBean.class);
                 break;
             case "337":
-                baseEntity = new Gson().fromJson(cipher,GroupListBean.class);
+                baseEntity = new Gson().fromJson(cipher, GroupListBean.class);
                 break;
             case "338":
-                baseEntity = new Gson().fromJson(cipher,GroupInfoBean.class);
+                baseEntity = new Gson().fromJson(cipher, GroupInfoBean.class);
+                break;
+            case "342":
+                baseEntity = new Gson().fromJson(cipher, MsgNewBean.class);
                 break;
             default://101、105、111、304、318、215、327、328、329
                 baseEntity = new Gson().fromJson(cipher, BaseBean.class);

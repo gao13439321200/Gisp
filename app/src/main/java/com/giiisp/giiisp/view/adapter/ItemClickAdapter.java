@@ -32,6 +32,7 @@ import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.GroupListVO;
 import com.giiisp.giiisp.dto.HeEduListVO;
 import com.giiisp.giiisp.dto.HePaperTitleVO;
+import com.giiisp.giiisp.dto.MsgNewVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperInfoVO;
 import com.giiisp.giiisp.dto.PaperMainVO;
@@ -541,6 +542,27 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 //                            return tv;
 //                        }
 //                    });
+                    break;
+                case R.layout.item_message_new:
+                    if (item.getMsgNewVO() != null) {
+                        MsgNewVO msgNewVO = item.getMsgNewVO();
+                        helper.setText(R.id.tv_time, msgNewVO.getCreatetime());
+                        helper.setText(R.id.tv_content, msgNewVO.getContent());
+                        switch (msgNewVO.getStatus()) {
+                            case "1":
+                                helper.setBackgroundColor(R.id.ll_all,
+                                        mContext.getResources().getColor(R.color.bg_white));
+                                break;
+                            case "2":
+                                helper.setBackgroundColor(R.id.ll_all,
+                                        mContext.getResources().getColor(R.color.darkgray));
+                                break;
+                            default:
+                                break;
+                        }
+
+                        ImageLoader.getInstance().displayCricleImage(activity, msgNewVO.getUserphoto(), (ImageView) helper.getView(R.id.iv_user_icon));
+                    }
                     break;
                 case R.layout.item_message_notification:
                     if (item.getMsgEntity() != null) {
@@ -1294,10 +1316,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_title, groupListVO.getTitle());
                     helper.setText(R.id.tv_time, groupListVO.getCreatetime());
                     helper.setText(R.id.tv_msg, groupListVO.getDetail());
-                    if ("1".equals(groupListVO.getStatus())){
-                        helper.setBackgroundColor(R.id.ll_all,mContext.getResources().getColor(R.color.bg_white));
-                    }else{
-                        helper.setBackgroundColor(R.id.ll_all,mContext.getResources().getColor(R.color.bg_white));
+                    if ("1".equals(groupListVO.getStatus())) {
+                        helper.setBackgroundColor(R.id.ll_all, mContext.getResources().getColor(R.color.bg_white));
+                    } else {
+                        helper.setBackgroundColor(R.id.ll_all, mContext.getResources().getColor(R.color.bg_white));
                     }
                     break;
             }

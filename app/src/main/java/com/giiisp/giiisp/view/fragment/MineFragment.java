@@ -322,7 +322,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             R.id.rl_user_info, R.id.ll_dubbing, R.id.tv_fans_number,
             R.id.tv_fans, R.id.fl_mine_qa, R.id.fl_mine_download, R.id.fl_mine_subscribe,
             R.id.ll_meeting, R.id.ll_collection, R.id.iv_menu, R.id.ll_email, R.id.fl_auth,
-            R.id.ll_course,
+            R.id.ll_course, R.id.ll_group,
             R.id.fl_mine_news, R.id.fl_mine_contacts, R.id.fl_mine_collection, R.id.fl_mine_setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -337,6 +337,9 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //            case R.id.rl_user_info:
 //                FragmentActivity.actionActivity(getContext(), "he", uid + "");
 //                break;
+            case R.id.ll_group:
+                FragmentActivity.actionActivity(getContext(), "group");
+                break;
             case R.id.fl_mine_history:
                 FragmentActivity.actionActivity(getContext(), "plays");
                 break;
@@ -382,7 +385,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 AttentionActivity.actionActivity(getContext(), "mine");
                 break;
             case R.id.fl_mine_news://我的消息
-                FragmentActivity.actionActivity(getContext(), "news");
+                FragmentActivity.actionActivity(getContext(), "msg_new");
                 break;
             case R.id.fl_mine_contacts:
                 break;

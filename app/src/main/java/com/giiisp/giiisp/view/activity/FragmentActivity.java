@@ -74,6 +74,7 @@ public class FragmentActivity extends BaseActivity {
                     fragment = TabLayoutFragment.newInstance(type, "");
                     break;
                 case "he":
+                case "msg_new":
                 case "plays":
                 case "play":
                 case "scholar_list":

@@ -201,6 +201,9 @@
         <activity
             android:name=".view.activity.GroupInfoActivity"
             android:launchMode="singleTop"/>
+        <activity
+            android:name=".view.activity.CreateGroupActivity"
+            android:launchMode="singleTop"/>
 
 
         <service android:name=".widget.recording.PlayService"/>
