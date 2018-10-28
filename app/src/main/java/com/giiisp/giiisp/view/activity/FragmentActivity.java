@@ -75,6 +75,7 @@ public class FragmentActivity extends BaseActivity {
                     break;
                 case "he":
                 case "msg_new":
+                case "group":
                 case "plays":
                 case "play":
                 case "scholar_list":

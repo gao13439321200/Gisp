@@ -166,6 +166,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     TextView tvBack;
     @BindView(R.id.tv_right)
     TextView tvRight;
+    @BindView(R.id.fl_menu)
+    FrameLayout mFlMenu;
     @BindView(R.id.tv_back_rt)
     TextView tvBackRt;
     @BindView(R.id.tv_download_number)
@@ -648,6 +650,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "group"://团组
                 lineBanner.setVisibility(View.VISIBLE);
                 tvBack.setVisibility(View.VISIBLE);
+                mFlMenu.setVisibility(View.GONE);
                 tvRight.setVisibility(View.VISIBLE);
                 tvRight.setText("创建");
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_group_layout, this.list, type);
@@ -870,6 +873,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "msg_new"://我的消息
                 list.clear();
+                tvTitle.setText(R.string.my_msg);
+                lineBanner.setVisibility(View.VISIBLE);
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_message_new, this.list, type);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
@@ -1144,6 +1149,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "msg_new":
                 hMap.put("uid", uid);
+                hMap.put("pageno", page);
+                hMap.put("pagesize", pageSize);
                 presenter.getDataAll("342", hMap);
                 break;
             case "notice":
@@ -1302,9 +1309,12 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 loadDownloadNunber();
                 break;
             case "group":
-                HashMap<String, Object> hMap = new HashMap<>();
-                hMap.put("uid", getUserID());
-                presenter.getDataAll("337", hMap);
+//                page = 1;
+//                HashMap<String, Object> hMap = new HashMap<>();
+//                hMap.put("uid", getUserID());
+//                hMap.put("pageno", page);
+//                hMap.put("pageSize", pageSize);
+//                presenter.getDataAll("337", hMap);
                 break;
             default:
 
@@ -2998,8 +3008,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "341":
                 ToastUtils.showShort("操作成功！");
+                page = 0;
                 HashMap<String, Object> hMap = new HashMap<>();
                 hMap.put("uid", uid);
+                hMap.put("pageno", page);
+                hMap.put("pagesize", pageSize);
                 presenter.getDataAll("342", hMap);
                 break;
             case "342":
@@ -3011,6 +3024,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     ClickEntity mainEntity = new ClickEntity();
                     mainEntity.setMsgNewVO(vo);
                     itemClickAdapter.addData(mainEntity);
+                }
+                if (bean10.getList().size() == pageSize) {
+                    page++;
+                } else {
+                    itemClickAdapter.loadMoreEnd(false);
                 }
                 itemClickAdapter.expandAll();
                 swipeRefreshLayout.setRefreshing(false);

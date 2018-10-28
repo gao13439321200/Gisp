@@ -269,6 +269,7 @@
     <string name="next_choose_keywords">下一步：选择关注的关键字</string>
     <string name="next_attention_scholars">下一步：选择关注的学者</string>
     <string name="my_sub">我订阅的</string>
+    <string name="my_msg">我的消息</string>
     <string name="scholars_details_page">学者详情页</string>
     <string name="plays">播放历史</string>
     <string name="play">播放列表</string>

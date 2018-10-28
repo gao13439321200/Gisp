@@ -32,6 +32,7 @@ import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.GroupListVO;
 import com.giiisp.giiisp.dto.HeEduListVO;
 import com.giiisp.giiisp.dto.HePaperTitleVO;
+import com.giiisp.giiisp.dto.MarkVO;
 import com.giiisp.giiisp.dto.MsgNewVO;
 import com.giiisp.giiisp.dto.MyAnswerVO;
 import com.giiisp.giiisp.dto.PaperInfoVO;
@@ -1322,9 +1323,52 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setBackgroundColor(R.id.ll_all, mContext.getResources().getColor(R.color.bg_white));
                     }
                     break;
+                case R.layout.item_mark_layout:
+                    MarkVO vo1 = item.getMarkVO();
+                    if (isChinese()) {
+                        helper.setText(R.id.cb_mark, vo1.getCname());
+                    } else {
+                        helper.setText(R.id.cb_mark, vo1.getEname());
+                    }
+                    helper.setChecked(R.id.cb_mark, marks.contains(vo1.getId()));
+                    helper.getView(R.id.cb_mark).setOnClickListener(view -> {
+
+                        if (marks.size() == 2 && !marks.contains(vo1.getId())) {
+                            helper.setChecked(R.id.cb_mark, false);
+                            ToastUtils.showShort("最多选择两个标签");
+                            return;
+                        }
+
+                        if (marks.size() == 1 && marks.contains(vo1.getId())) {
+                            helper.setChecked(R.id.cb_mark, true);
+                            ToastUtils.showShort("最少选择一个标签");
+                            return;
+                        }
+                        if (marks.contains(vo1.getId())) {
+                            marks.remove(vo1.getId());
+                        } else {
+                            marks.add(vo1.getId());
+                        }
+                    });
+
+                    break;
+
             }
         }
 
+    }
+
+    private List<String> marks = new ArrayList<>();
+
+    public void setMarks(List<String> marks) {
+        this.marks = marks;
+    }
+
+    public List<String> getMarks() {
+        if (marks == null) {
+            marks = new ArrayList<>();
+        }
+        return marks;
     }
 
     private void initReclerView(BaseViewHolder helper, PaperMainVO paperMainVO) {
@@ -1430,5 +1474,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
         });
     }
 
+    public boolean isChinese() {
+        return CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN));
+    }
 
 }

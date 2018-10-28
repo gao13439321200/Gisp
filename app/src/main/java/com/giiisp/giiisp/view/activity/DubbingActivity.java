@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneStateListener;
@@ -27,6 +28,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,6 +47,8 @@ import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.DubbingBean;
 import com.giiisp.giiisp.dto.DubbingListVO;
 import com.giiisp.giiisp.dto.DubbingVO;
+import com.giiisp.giiisp.dto.MarkBean;
+import com.giiisp.giiisp.dto.MarkVO;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.PlayEvent;
 import com.giiisp.giiisp.entity.SubscribeEntity;
@@ -130,12 +134,19 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     TextView mTvMark;
     @BindView(R.id.rl_full)
     RelativeLayout mRlFull;
+    @BindView(R.id.ll_dubbing_all)
+    LinearLayout mLlDubbingAll;//录音界面
+    @BindView(R.id.ll_add_mark)
+    RelativeLayout mLlAddMark;//选标签界面
+    @BindView(R.id.rv_mark)
+    RecyclerView mRvMark;//标签列表
 
 
     String typeActivity;
     //    private ItemClickAdapter itemClickAdapter;
     private PlayEvent playEvent = new PlayEvent();
     private ItemClickAdapter itemClickAdapte;
+    private ItemClickAdapter mMarkAdapter;
     private ImageAdapter mImageAdapter;
 
     private int dubbingPosition = 0;
@@ -151,9 +162,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private String pid = "";//论文id
     private String imgId = "";//录音图片id
     private List<ClickEntity> dataList = new ArrayList<>();
+    private List<ClickEntity> markList = new ArrayList<>();
     private boolean isDubbing = false;
     private int videoAllTime = 0;
     private boolean isDiaoYong = false; // 是否正在调用图片
+    private List<String> imgMarkList = new ArrayList<>();
 //    private boolean isFinish = true;
 
     /*** 页面的视频控件集合,Integer所处位置 ***/
@@ -222,24 +235,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     public void initView() {
         super.initView();
         tvTime = findViewById(R.id.tv_time);
-//        List<String> list_url = new ArrayList<>();
-//        List<ClickEntity> list = new ArrayList<>();
-//        if (photoRows != null) {
-//            for (SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX photoRow : photoRows) {
-//                list_url.add(photoRow.getPath());
-//                list.add(new ClickEntity(photoRow.getPath()));
-//            }
-//            if (recordRows != null && photoRows.size() > recordRows.size()) {
-//                position = recordRows.size();
-//            }
-//        }
-
-//        viewPager.setAdapter(new ImageAdapter(this, list_url));
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-//        itemClickAdapte = new ItemClickAdapter(this, R.layout.item_paper_pic, list, "paper_pic");
-//        recyclerView.setAdapter(itemClickAdapte);
-//        itemClickAdapte.setOnItemClickListener(this);
-//        viewPager.addOnPageChangeListener(this);
+        GridLayoutManager manager = new GridLayoutManager(this, 2);
+        mRvMark.setLayoutManager(manager);
+        mMarkAdapter = new ItemClickAdapter(this, R.layout.item_mark_layout, markList);
+        mRvMark.setAdapter(mMarkAdapter);
         tvHint.setText(R.string.click_start_recording);
         //        tvRight.setText("保存");
         tvTitle.setText(R.string.dubbing);
@@ -278,6 +277,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         playEvent.setHandler(handler);
         EventBus.getDefault().post(playEvent);*/
 
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("uid", getUserID());
+        presenter.getDataAll("343", map);
     }
 
     private void getImageData() {
@@ -393,6 +395,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             R.id.tv_dubbing_audition, R.id.tv_dubbing_determine,
             R.id.tv_dubbing_re_record, R.id.iv_left_slip, R.id.iv_right_slide,
             R.id.tv_mark, R.id.img_mark, R.id.btn_use, R.id.tv_use, R.id.btn_solo,
+            R.id.tv_dubbing_re_record_mark, R.id.tv_dubbing_determine_mark,
             R.id.btn_yes, R.id.btn_no, R.id.btn_full, R.id.img_full, R.id.btn_small})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -451,7 +454,31 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 upAudio(false);//上传录音
 
                 break;
+            case R.id.tv_dubbing_determine_mark://保存标签
+                imgMarkList = mMarkAdapter.getMarks();
+                if (imgMarkList.size() == 0) {
+                    ToastUtils.showShort("至少选择一个标签");
+                    break;
+                }
+                StringBuffer buffer = new StringBuffer();
+                for (String id :
+                        imgMarkList) {
+                    buffer.append(id);
+                    buffer.append("#");
+                }
+                String ids = "";
+                if (buffer.length() != 0) {
+                    ids = buffer.substring(0, buffer.length() - 1);
+                }
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("picid", dataList.get(viewPager.getCurrentItem()).getDubbingVO().getPcid());
+                map.put("ids", ids);
+                map.put("language", language);
+                presenter.getDataAll("345", map);
+
+                break;
             case R.id.tv_dubbing_re_record://重录
+            case R.id.tv_dubbing_re_record_mark://重录(选标签)
                 dataList.get(viewPager.getCurrentItem()).getDubbingVO().setRid("");
                 if (isVideo(viewPager.getCurrentItem())) {
                     mBtnSolo.setVisibility(View.VISIBLE);
@@ -463,10 +490,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
                 resolvePausePlayRecord();
                 //清空当前图片事件
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("imgid", imgId);
-                map.put("language", language);
-                presenter.getDataAll("315", map);
+                HashMap<String, Object> map1 = new HashMap<>();
+                map1.put("imgid", imgId);
+                map1.put("language", language);
+                presenter.getDataAll("315", map1);
                 break;
             case R.id.tv_dubbing_audition://试听
                 togglePlaying(view);
@@ -810,6 +837,27 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
             }
         }
+
+        boolean isFinish = true;
+        for (ClickEntity entity : dataList) {
+            if (ObjectUtils.isEmpty(entity.getDubbingVO().getRid())) {
+                isFinish = false;
+                break;
+            }
+        }
+
+        if (isFinish) {//全录完了
+            mLlDubbingAll.setVisibility(View.GONE);
+            mLlAddMark.setVisibility(View.VISIBLE);
+            //获取图片标签
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("picid", dataList.get(position).getDubbingVO().getPcid());
+            map.put("language", language);
+            presenter.getDataAll("344", map);
+        } else {
+            mLlDubbingAll.setVisibility(View.VISIBLE);
+            mLlAddMark.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -994,6 +1042,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             case "315"://重录
                 mMyCustomView.clearData();
                 linearLayout.setVisibility(View.GONE);
+                mLlAddMark.setVisibility(View.GONE);
+                mLlDubbingAll.setVisibility(View.VISIBLE);
                 mCbMark.setChecked(false);
                 mCbMark.setVisibility(View.VISIBLE);
                 mTvMark.setVisibility(View.VISIBLE);
@@ -1083,6 +1133,31 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
                             break;
                     }
+                break;
+            case "343":
+                MarkBean bean1 = (MarkBean) baseBean;
+                for (MarkVO vo : bean1.getList()) {
+                    ClickEntity entity = new ClickEntity();
+                    entity.setMarkVO(vo);
+                    markList.add(entity);
+                }
+                mMarkAdapter.notifyDataSetChanged();
+                break;
+            case "344":
+                MarkBean bean2 = (MarkBean) baseBean;
+                imgMarkList = new ArrayList<>();
+                for (MarkVO vo : bean2.getList()) {
+                    imgMarkList.add(vo.getId());
+                }
+                mMarkAdapter.setMarks(imgMarkList);
+                mMarkAdapter.notifyDataSetChanged();
+                break;
+            case "345"://标签保存完成
+                if (viewPager.getCurrentItem() < viewPager.getChildCount()) {
+                    setImageStatus(viewPager.getCurrentItem() + 1);
+                } else {
+                    setImageStatus(0);
+                }
                 break;
             default:
                 break;

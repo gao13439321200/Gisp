@@ -204,22 +204,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/fl_mine_news"
-                        style="@style/main_ll"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@mipmap/img_news"/>
-
-                        <TextView
-                            style="@style/mine_tv_btn"
-                            android:text="@string/news"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/ll_course"
                         style="@style/main_ll">
 
@@ -332,17 +316,18 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/fl_mine_news"
                         style="@style/main_ll"
-                        android:visibility="invisible">
+                        android:visibility="visible">
 
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@mipmap/mine_collection"/>
+                            android:src="@mipmap/img_news"/>
 
                         <TextView
                             style="@style/mine_tv_btn"
-                            android:text="@string/information_auth"/>
+                            android:text="@string/news"/>
 
                     </LinearLayout>
 
