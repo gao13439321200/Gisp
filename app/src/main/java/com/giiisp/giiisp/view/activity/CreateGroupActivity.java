@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -27,6 +28,8 @@ public class CreateGroupActivity extends BaseMvpActivity<BaseImpl, WholePresente
     EditText mEtName;
     @BindView(R.id.et_detail)
     EditText mEtDetail;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
 
     public static void newInstance(Context context) {
         Bundle args = new Bundle();
@@ -50,7 +53,7 @@ public class CreateGroupActivity extends BaseMvpActivity<BaseImpl, WholePresente
 
     @Override
     public void initView() {
-        setTitle("创建团组");
+        tvTitle.setText("创建团组");
     }
 
     @OnClick({R.id.btn_create})

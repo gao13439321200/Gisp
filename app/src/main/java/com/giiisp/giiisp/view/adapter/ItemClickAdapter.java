@@ -30,6 +30,7 @@ import com.giiisp.giiisp.dto.EditInfoVo;
 import com.giiisp.giiisp.dto.FansVO;
 import com.giiisp.giiisp.dto.FollowVO;
 import com.giiisp.giiisp.dto.GroupListVO;
+import com.giiisp.giiisp.dto.GroupMemberInfo;
 import com.giiisp.giiisp.dto.HeEduListVO;
 import com.giiisp.giiisp.dto.HePaperTitleVO;
 import com.giiisp.giiisp.dto.MarkVO;
@@ -1351,6 +1352,13 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         }
                     });
 
+                    break;
+                case R.layout.item_member_info_layout:
+                    GroupMemberInfo info = item.getGroupMemberInfo();
+                    helper.setText(R.id.tv_name, info.getUsername());
+                    helper.setText(R.id.tv_position, info.getJob());
+                    ImageLoader.getInstance().displayCricleImage(activity, info.getUserphoto(),
+                            (ImageView) helper.getView(R.id.img_head));
                     break;
 
             }
