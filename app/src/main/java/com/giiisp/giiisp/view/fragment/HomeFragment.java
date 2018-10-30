@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.AppUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
@@ -336,7 +335,7 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         }
 
         private int setData(int cnt, int count, RecyclerView view) {
-            LogUtils.a("aaaaa====cnt:" + cnt + ",count:" + count);
+//            LogUtils.a("aaaaa====cnt:" + cnt + ",count:" + count);
             if (cnt == -1) {
                 cnt = 2;
                 return 2;

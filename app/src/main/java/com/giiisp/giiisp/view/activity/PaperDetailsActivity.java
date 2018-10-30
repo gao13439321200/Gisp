@@ -1151,7 +1151,8 @@ public class PaperDetailsActivity extends
                         .build();
                 list.add(downloadBean);
             }
-            if (DataBaseHelper.getSingleton(this).recordNotExists(mp3Path)) {
+            if (DataBaseHelper.getSingleton(this).recordNotExists(mp3Path)
+                    && !ObjectUtils.equals(imgPath, mp3Path)) {
                 DownloadBean downloadBean = new DownloadBean
                         .Builder(mp3Path)
                         .setSaveName(Utils.fileName(mp3Path))//文件名
@@ -1177,7 +1178,7 @@ public class PaperDetailsActivity extends
                     })
                     .compose(mRxDownload.transformMulti(list, pid))
                     .subscribe(o -> Utils.showToast("下载开始"), throwable -> {
-                        Log.w("--->>", throwable);
+                        Log.w("--->>", "下载异常：" + throwable);
                         Utils.showToast("下载中");
                     });
         } else {

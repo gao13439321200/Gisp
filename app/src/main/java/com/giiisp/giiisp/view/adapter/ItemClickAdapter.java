@@ -97,6 +97,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
     private ListItemClick mListItemClick;
     private String pid, imgId;
     private List<String> paths = new ArrayList<>();
+    private String groupOwnerId = "";
 
     public String getPid() {
         return pid;
@@ -1356,7 +1357,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_member_info_layout:
                     GroupMemberInfo info = item.getGroupMemberInfo();
                     helper.setText(R.id.tv_name, info.getUsername());
-                    if (ObjectUtils.equals(info.getUserid(), getUserID()))
+                    if (ObjectUtils.equals(info.getUserid(), groupOwnerId))
                         helper.setText(R.id.tv_position, "团长");
                     else
                         helper.setText(R.id.tv_position, info.getJob());
@@ -1367,6 +1368,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
             }
         }
 
+    }
+
+    public void setGroupOwnerId(String groupOwnerId) {
+        this.groupOwnerId = groupOwnerId;
     }
 
     private List<String> marks = new ArrayList<>();

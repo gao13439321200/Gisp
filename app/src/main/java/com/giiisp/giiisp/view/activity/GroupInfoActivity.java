@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.base.BaseView;
@@ -83,10 +82,11 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
         mTvRight.setText("退出");
 
         mAdapter = new ItemClickAdapter(this, R.layout.item_member_info_layout, mEntityList);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (!ObjectUtils.equals(mEntityList.get(position).getGroupMemberInfo().getUserid(), getUserID())) {
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (isOwner()) {//团长才可以修改
+                if (!ObjectUtils.equals(
+                        mEntityList.get(position).getGroupMemberInfo().getUserid(),
+                        getUserID())) {
                     inputTitleDialog(view.findViewById(R.id.tv_position), "职务",
                             mEntityList.get(position).getGroupMemberInfo().getUserid());
                 } else {
@@ -123,6 +123,7 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
                 mTvName.setText(bean.getGroup().getTitle());
                 mTvNotice.setText(bean.getGroup().getDetail());
                 mTvOwner.setText(bean.getGroup().getUsername());
+                mAdapter.setGroupOwnerId(ownerId);
                 for (GroupMemberInfo info : bean.getGroupusers()) {
                     ClickEntity entity = new ClickEntity();
                     entity.setGroupMemberInfo(info);
@@ -191,10 +192,12 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
                 dialog.show();
                 break;
             case R.id.fl_name:
-                inputTitleDialog(mTvName, "名称", "");
+                if (isOwner())
+                    inputTitleDialog(mTvName, "名称", "");
                 break;
             case R.id.fl_notice:
-                inputTitleDialog(mTvNotice, "公告", "");
+                if (isOwner())
+                    inputTitleDialog(mTvNotice, "公告", "");
                 break;
         }
     }
