@@ -1321,7 +1321,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     if ("1".equals(groupListVO.getStatus())) {
                         helper.setBackgroundColor(R.id.ll_all, mContext.getResources().getColor(R.color.bg_white));
                     } else {
-                        helper.setBackgroundColor(R.id.ll_all, mContext.getResources().getColor(R.color.bg_white));
+                        helper.setBackgroundColor(R.id.ll_all, mContext.getResources().getColor(R.color.colorGray));
                     }
                     break;
                 case R.layout.item_mark_layout:
@@ -1356,7 +1356,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_member_info_layout:
                     GroupMemberInfo info = item.getGroupMemberInfo();
                     helper.setText(R.id.tv_name, info.getUsername());
-                    helper.setText(R.id.tv_position, info.getJob());
+                    if (ObjectUtils.equals(info.getUserid(), getUserID()))
+                        helper.setText(R.id.tv_position, "团长");
+                    else
+                        helper.setText(R.id.tv_position, info.getJob());
                     ImageLoader.getInstance().displayCricleImage(activity, info.getUserphoto(),
                             (ImageView) helper.getView(R.id.img_head));
                     break;
@@ -1485,5 +1488,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
     public boolean isChinese() {
         return CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN));
     }
+
+    public String getUserID() {
+        return SPUtils.getInstance().getString(UrlConstants.UID, "");
+    }
+
 
 }

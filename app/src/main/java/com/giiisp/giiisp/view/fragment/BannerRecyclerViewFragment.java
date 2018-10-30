@@ -879,38 +879,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
                 itemClickAdapter.loadMoreEnd(false);
-                itemClickAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                        MsgNewVO vo = itemClickAdapter.getData().get(position).getMsgNewVO();
-                        if ("3".equals(vo.getType()) && "1".equals(vo.getStatus())) {
-                            MyDialog dialog = new MyDialog(mActivity, new MyDialogOnClick() {
-                                @Override
-                                public void onOKClick() {
-                                    HashMap<String, Object> map = new HashMap<>();
-                                    map.put("pid", vo.getId());
-                                    map.put("status", "1");
-                                    presenter.getDataAll("341", map);
-                                }
-
-                                @Override
-                                public void onCancelClick() {
-                                    HashMap<String, Object> map = new HashMap<>();
-                                    map.put("pid", vo.getId());
-                                    map.put("status", "2");
-                                    presenter.getDataAll("341", map);
-                                }
-                            }, 2);
-                            dialog.setNameText("是否接受" + vo.getUsername() + "发出的团组邀请？");//内容
-                            dialog.setButtonOK("同意");//确定的按钮
-                            dialog.setButtonCancel("拒绝");//取消的按钮
-                            dialog.setCancelable(false);//点击外部是否可以取消
-                            dialog.show();
-
-                        }
-                        return false;
-                    }
-                });
+                itemClickAdapter.setOnItemClickListener(this);
                 break;
             case "interactive":
                 list.clear();
@@ -1310,11 +1279,11 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "group":
 //                page = 1;
-//                HashMap<String, Object> hMap = new HashMap<>();
-//                hMap.put("uid", getUserID());
+                HashMap<String, Object> hMap = new HashMap<>();
+                hMap.put("uid", getUserID());
 //                hMap.put("pageno", page);
 //                hMap.put("pageSize", pageSize);
-//                presenter.getDataAll("337", hMap);
+                presenter.getDataAll("337", hMap);
                 break;
             default:
 
@@ -2103,6 +2072,36 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     } else {
                         ToastUtils.showShort("您已退出该团组，无法进入");
                     }
+                }
+                break;
+            case "msg_new":
+                MsgNewVO newVO = itemClickAdapter.getData().get(position).getMsgNewVO();
+                if ("3".equals(newVO.getType()) && "1".equals(newVO.getStatus())) {
+                    MyDialog dialog = new MyDialog(mActivity, new MyDialogOnClick() {
+                        @Override
+                        public void onOKClick() {
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("pid", newVO.getId());
+                            map.put("uid", getUserID());
+                            map.put("status", "1");
+                            presenter.getDataAll("341", map);
+                        }
+
+                        @Override
+                        public void onCancelClick() {
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("pid", newVO.getId());
+                            map.put("uid", getUserID());
+                            map.put("status", "2");
+                            presenter.getDataAll("341", map);
+                        }
+                    }, 2);
+                    dialog.setNameText("是否接受" + newVO.getUsername() + "发出的团组邀请？");//内容
+                    dialog.setButtonOK("同意");//确定的按钮
+                    dialog.setButtonCancel("拒绝");//取消的按钮
+                    dialog.setCancelable(false);//点击外部是否可以取消
+                    dialog.show();
+
                 }
                 break;
             default:

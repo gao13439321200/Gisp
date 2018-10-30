@@ -56,12 +56,12 @@ public class CreateGroupActivity extends BaseMvpActivity<BaseImpl, WholePresente
         tvTitle.setText("创建团组");
     }
 
-    @OnClick({R.id.btn_create})
+    @OnClick({R.id.btn_create, R.id.tv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-//            case R.id.back:
-//                finish();
-//                break;
+            case R.id.tv_back:
+                finish();
+                break;
             case R.id.btn_create:
                 if (ObjectUtils.isEmpty(ToolString.getString(mEtName))) {
                     ToastUtils.showShort("名称不能为空");

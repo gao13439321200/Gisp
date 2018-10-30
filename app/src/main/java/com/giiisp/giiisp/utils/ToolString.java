@@ -5,7 +5,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -481,14 +480,6 @@ public class ToolString {
         }
         return true;
     }
-
-    public static SpannableString getContractString() {
-        SpannableString spanText = new SpannableString("注册完成代表您已同意《马上来用户协议》");
-        spanText.setSpan(new ForegroundColorSpan(Color.BLUE), 10, spanText.length(),
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        return spanText;
-    }
-
 
     public static SpannableString getColorString(String str, int color) {
         SpannableString spanText = new SpannableString(str);

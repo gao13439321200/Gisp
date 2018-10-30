@@ -37,7 +37,7 @@ public class MyDialog extends Dialog implements View.OnClickListener {
         super(context, R.style.successDialog);
         mContext = context;
         mMyDialogOnClick = myDialogOnClick;
-        setContentView(R.layout.dialog_white_msg_layout);
+        setContentView(R.layout.dialog_white_msg_layout_new);
         initAlertImportDialogView(buttonNum);
     }
 
@@ -53,7 +53,7 @@ public class MyDialog extends Dialog implements View.OnClickListener {
         mContext = context;
         this.isShow = isshow;
         mMyDialogOnClick = myDialogOnClick;
-        setContentView(R.layout.dialog_white_msg_layout);
+        setContentView(R.layout.dialog_white_msg_layout_new);
         initAlertImportDialogView(buttonNum);
     }
 

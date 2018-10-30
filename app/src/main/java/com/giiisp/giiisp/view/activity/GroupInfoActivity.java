@@ -39,6 +39,8 @@ import butterknife.OnClick;
 public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter> implements BaseImpl {
     @BindView(R.id.tv_right)
     TextView mTvRight;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     @BindView(R.id.tv_name)
     TextView mTvName;
     @BindView(R.id.tv_notice)
@@ -77,15 +79,19 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
 
     @Override
     public void initView() {
-        setTitle("团组信息");
+        tvTitle.setText("团组信息");
         mTvRight.setText("退出");
 
         mAdapter = new ItemClickAdapter(this, R.layout.item_member_info_layout, mEntityList);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                inputTitleDialog(view.findViewById(R.id.tv_position), "职务",
-                        mEntityList.get(position).getGroupMemberInfo().getUserid());
+                if (!ObjectUtils.equals(mEntityList.get(position).getGroupMemberInfo().getUserid(), getUserID())) {
+                    inputTitleDialog(view.findViewById(R.id.tv_position), "职务",
+                            mEntityList.get(position).getGroupMemberInfo().getUserid());
+                } else {
+                    ToastUtils.showShort("团长的职务不可修改");
+                }
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -129,9 +135,10 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
                 break;
             case "336":
                 ToastUtils.showShort("邀请信息已发送");
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("gid", gid);
-                presenter.getDataAll("338", map);
+//                HashMap<String, Object> map = new HashMap<>();
+//                map.put("gid", gid);
+//                presenter.getDataAll("338", map);
+                break;
             case "340":
                 ToastUtils.showShort("退出成功！");
                 finish();
