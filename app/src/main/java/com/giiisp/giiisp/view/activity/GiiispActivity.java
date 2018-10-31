@@ -22,10 +22,13 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ToastUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ObjectUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseFragment;
+import com.giiisp.giiisp.base.BaseMvpActivity;
+import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.AppManager;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ViewPagerAdapter;
@@ -34,6 +37,7 @@ import com.giiisp.giiisp.view.fragment.CollectionDownloadFragment;
 import com.giiisp.giiisp.view.fragment.HomeFragment;
 import com.giiisp.giiisp.view.fragment.MineFragment;
 import com.giiisp.giiisp.view.fragment.SubscribeNewFragment;
+import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.MViewPager;
 import com.giiisp.giiisp.widget.recording.AppCache;
 import com.giiisp.giiisp.widget.recording.Extras;
@@ -46,6 +50,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,7 +62,7 @@ import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.paperId;
 /**
  * Giiisp主界面
  */
-public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class GiiispActivity extends BaseMvpActivity<BaseImpl, WholePresenter> implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
 
     @BindView(R.id.viewPager_giiisp)
@@ -182,9 +187,18 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
         final TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         final GsmCellLocation gsm = (GsmCellLocation) telephony.getCellLocation();
         try {
-            ToastUtils.showShort(gsm.getLac() + "," + location.getLongitude() + "," + location.getLatitude());
+            if (ObjectUtils.isNotEmpty(getUserID())) {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("uid", getUserID());
+                map.put("longitude", location.getLongitude());
+                map.put("latitude", location.getLatitude());
+                presenter.getDataAll("346", map);
+            } else {
+                LogUtils.i("未登录不发送定位");
+            }
+//            ToastUtils.showShort(gsm.getLac() + "," + location.getLongitude() + "," + location.getLatitude());
         } catch (Exception e) {
-
+            LogUtils.i("定位发送异常：" + e);
         }
     }
 
@@ -222,6 +236,11 @@ public class GiiispActivity extends BaseActivity implements ViewPager.OnPageChan
         //        stopService(new Intent(this, PlayerService.class));
         Log.i("--->>", "onDestroy: ");
         super.onDestroy();
+    }
+
+    @Override
+    protected WholePresenter initPresenter() {
+        return new WholePresenter(this);
     }
 
     @Override
