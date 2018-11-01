@@ -2792,6 +2792,9 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "217":
                 ToastUtils.showShort("取消收藏成功！");
                 break;
+            case "221":
+                ToastUtils.showShort("操作成功！");
+                break;
             case "306":
                 MIneInfoBean mIneInfoBean = (MIneInfoBean) baseBean;
                 ClickEntity clickEntity = new ClickEntity(R.layout.item_user_info, "head");

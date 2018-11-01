@@ -919,9 +919,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
                         helper.getView(R.id.cb_add).setOnClickListener(view -> {
                             if (((CheckBox) helper.getView(R.id.cb_add)).isChecked()) {
-                                mListItemClick.listClick("add", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                                mListItemClick.listClick("add", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
                             } else {
-                                mListItemClick.listClick("noadd", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                                mListItemClick.listClick("noadd", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
                             }
                         });
                         String btnString;
