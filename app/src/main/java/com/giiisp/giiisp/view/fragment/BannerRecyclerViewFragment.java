@@ -27,7 +27,6 @@ import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.giiisp.giiisp.R;
@@ -688,29 +687,30 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 itemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(), R.layout.item_paper, this.list, type, this);
                 itemClickAdapter.setOnLoadMoreListener(this, recyclerView);
                 itemClickAdapter.disableLoadMoreIfNotFullPage();
-                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
-                    @Override
-                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        PaperMainVO vo = itemClickAdapter.getData().get(position).getPaperMainVO();
-                        ArrayList<String> arrayVersion = new ArrayList<>();
-                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
-                            switch (bean.getVersion()) {
-                                case 2://完整
-                                    arrayVersion.add("2");
-                                    break;
-                                case 3://摘要
-                                    arrayVersion.add("3");
-                                    break;
-                                case 4://精华
-                                    arrayVersion.add("4");
-                                    break;
-                            }
-                        }
-                        String version = arrayVersion.size() > 0 ? arrayVersion.get(0) : "1";
-                        PaperDetailsActivity.actionActivityNew(context, vo.getId(), version,
-                                "home", getLanguage(), getActivity().getClass().getName());
-                    }
-                });
+//                recyclerView.addOnItemTouchListener(new OnItemClickListener() {
+//                    @Override
+//                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                        PaperMainVO vo = itemClickAdapter.getData().get(position).getPaperMainVO();
+//                        ArrayList<String> arrayVersion = new ArrayList<>();
+//                        for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+//                            switch (bean.getVersion()) {
+//                                case 2://完整
+//                                    arrayVersion.add("2");
+//                                    break;
+//                                case 3://摘要
+//                                    arrayVersion.add("3");
+//                                    break;
+//                                case 4://精华
+//                                    arrayVersion.add("4");
+//                                    break;
+//                            }
+//                        }
+//                        String version = arrayVersion.size() > 0 ? arrayVersion.get(0) : "1";
+//                        PaperDetailsActivity.actionActivityNew(context, vo.getId(), version,
+//                                "home", getLanguage(), getActivity().getClass().getName());
+//                    }
+//                });
+                itemClickAdapter.disableLoadMoreIfNotFullPage();
                 List<String> txt = new ArrayList<>();
                 //一级菜单
                 mSpinnerSubject = new CustomSpinner(getActivity(), "请选择", txt);
@@ -3116,7 +3116,8 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         .build();
                 list.add(downloadBean);
             }
-            if (DataBaseHelper.getSingleton(context).recordNotExists(mp3Path)) {
+            if (DataBaseHelper.getSingleton(context).recordNotExists(mp3Path)
+                    && !ObjectUtils.equals(mp3Path, imgPath)) {
                 DownloadBean downloadBean = new DownloadBean
                         .Builder(mp3Path)
                         .setSaveName(Utils.fileName(mp3Path))//文件名

@@ -739,6 +739,7 @@ public class PaperDetailsActivity extends
 //        map.put("token", token);
         map.put("pid", pid);
         map.put("version", myVersionNo);
+        map.put("uid", getUserID());
         presenter.getDataAll("204", map);
         super.initNetwork();
     }
@@ -828,13 +829,15 @@ public class PaperDetailsActivity extends
 
                 break;
             case R.id.iv_play_stop://暂停
-                if (getPlayService() != null)
-                    getPlayService().playPause();
-                if (mVideoViewMap.get(position) != null) {
-                    if (mVideoViewMap.get(position).isPlaying())
-                        mVideoViewMap.get(position).pause();
-                    else
-                        mVideoViewMap.get(position).start();
+                if (mVideoViewMap != null) {
+                    if (getPlayService() != null)
+                        getPlayService().playPause();
+                    if (mVideoViewMap.get(position) != null) {
+                        if (mVideoViewMap.get(position).isPlaying())
+                            mVideoViewMap.get(position).pause();
+                        else
+                            mVideoViewMap.get(position).start();
+                    }
                 }
                 break;
             case R.id.iv_fullscreen_button:
@@ -981,35 +984,39 @@ public class PaperDetailsActivity extends
 
                 break;
             case R.id.tv_left://快退
-                if (nowProgress < 15000) {
-                    seekBarPaper.setProgress(0);//如果已经播放的时间少于15秒，则从头开始播放
-                    getPlayService().seekTo(0);
-                    if (mVideoViewMap.get(position) != null) {
-                        mVideoViewMap.get(position).seekTo(0);
-                    }
-                } else {
-                    int time = nowProgress - 15000;
-                    seekBarPaper.setProgress(time);
-                    getPlayService().seekTo(time);
-                    if (mVideoViewMap.get(position) != null) {
-                        mVideoViewMap.get(position).seekTo(time);
+                if (mVideoViewMap != null) {
+                    if (nowProgress < 15000) {
+                        seekBarPaper.setProgress(0);//如果已经播放的时间少于15秒，则从头开始播放
+                        getPlayService().seekTo(0);
+                        if (mVideoViewMap.get(position) != null) {
+                            mVideoViewMap.get(position).seekTo(0);
+                        }
+                    } else {
+                        int time = nowProgress - 15000;
+                        seekBarPaper.setProgress(time);
+                        getPlayService().seekTo(time);
+                        if (mVideoViewMap.get(position) != null) {
+                            mVideoViewMap.get(position).seekTo(time);
+                        }
                     }
                 }
                 break;
             case R.id.tv_right://快进
-                Log.d("PaperDetailsActivity", "seekBarPaper.getMax():" + seekBarPaper.getMax());
-                if (seekBarPaper.getMax() - nowProgress < 15000) {
-                    seekBarPaper.setProgress(seekBarPaper.getMax() - 1000);//如果未播放的时间少于15秒，则直接到最后一秒
-                    getPlayService().seekTo(seekBarPaper.getMax() - 1000);
-                    if (mVideoViewMap.get(position) != null) {
-                        mVideoViewMap.get(position).seekTo(seekBarPaper.getMax() - 1000);
-                    }
-                } else {
-                    int time = nowProgress + 15000;
-                    seekBarPaper.setProgress(time);
-                    getPlayService().seekTo(time);
-                    if (mVideoViewMap.get(position) != null) {
-                        mVideoViewMap.get(position).seekTo(time);
+                if (mVideoViewMap != null) {
+                    Log.d("PaperDetailsActivity", "seekBarPaper.getMax():" + seekBarPaper.getMax());
+                    if (seekBarPaper.getMax() - nowProgress < 15000) {
+                        seekBarPaper.setProgress(seekBarPaper.getMax() - 1000);//如果未播放的时间少于15秒，则直接到最后一秒
+                        getPlayService().seekTo(seekBarPaper.getMax() - 1000);
+                        if (mVideoViewMap.get(position) != null) {
+                            mVideoViewMap.get(position).seekTo(seekBarPaper.getMax() - 1000);
+                        }
+                    } else {
+                        int time = nowProgress + 15000;
+                        seekBarPaper.setProgress(time);
+                        getPlayService().seekTo(time);
+                        if (mVideoViewMap.get(position) != null) {
+                            mVideoViewMap.get(position).seekTo(time);
+                        }
                     }
                 }
                 break;
@@ -1203,6 +1210,7 @@ public class PaperDetailsActivity extends
             if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 rl_viewpager_full.setVisibility(View.GONE);
                 rl_viewpager_full.removeAllViews();
+                toolbarLayout.removeAllViews();
                 toolbarLayout.addView(relativeFull);
                 mRelativeLayout.setVisibility(View.VISIBLE);
             } else {
