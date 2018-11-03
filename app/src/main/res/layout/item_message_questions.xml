@@ -8,16 +8,16 @@
     <TextView
         android:id="@+id/tv_time"
         style="@style/time_style"
-        android:text="这里是时间"
-        android:layout_alignTop="@+id/tv_problem"/>
+        android:layout_alignTop="@+id/tv_problem"
+        android:text="这里是时间"/>
 
 
     <TextView
         android:id="@+id/tv_problem"
-        android:text="我请教的问题"
         style="@style/text_12sp_colorauxiliary"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="6.7dp"/>
+        android:layout_marginTop="6.7dp"
+        android:text="我请教的问题"/>
 
     <TextView
         android:id="@+id/tv_problem_title"
@@ -25,16 +25,46 @@
         android:layout_below="@+id/tv_problem"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
-        android:text=""
-        android:layout_marginBottom="10dp"/>
+        android:text="12313131313"/>
+
+    <LinearLayout
+        android:id="@+id/ll_ask"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tv_problem_title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5.7dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_voice"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:src="@mipmap/qa_sound"/>
+
+        <TextView
+            android:id="@+id/tv_ask_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:text="10:10"
+            android:textColor="@color/bg_white"
+            android:textSize="10sp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_answers"
         style="@style/text_12sp_colorauxiliary"
-        android:layout_below="@+id/tv_problem_title"
+        android:layout_below="@+id/ll_ask"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="3.7dp"/>
+        android:layout_marginTop="3.7dp"
+        android:text="123131313131"/>
 
     <TextView
         android:id="@+id/tv_answers_content"
@@ -42,10 +72,42 @@
         android:layout_alignTop="@+id/tv_answers"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="10dp"
-        android:layout_toEndOf="@+id/tv_answers"
         android:layout_marginBottom="10dp"
+        android:layout_toEndOf="@+id/tv_answers"
         android:ellipsize="end"
-        android:maxLines="2"/>
+        android:maxLines="2"
+        android:text="12313131313"/>
+
+    <LinearLayout
+        android:id="@+id/ll_answer"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/tv_answers"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5.7dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_voice"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:src="@mipmap/qa_sound"/>
+
+        <TextView
+            android:id="@+id/tv_answer_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:text="10:10"
+            android:textColor="@color/bg_white"
+            android:textSize="10sp"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

@@ -84,9 +84,14 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
         context.startActivityForResult(sIntent, 1000);
     }
 
-    public static void actionActivity(Activity context, String type, String imgId, String pid, String questionid, String imgUrl) {
+    public static void actionActivity(Activity context,
+                                      String type,
+                                      String imgId,
+                                      String pid,
+                                      String questionid,
+                                      String imgUrl) {
         Intent sIntent = new Intent(context, ProblemActivity.class);
-        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         sIntent.putExtra("type", type);
         sIntent.putExtra("imgId", imgId);
         sIntent.putExtra("pid", pid);

@@ -67,7 +67,7 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
     public static void actionActivity(Activity context, String type, String answer,
                                       String pid, String questionid, String imgid) {
         Intent sIntent = new Intent(context, AnswerVoiceMP3Activity.class);
-        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         sIntent.putExtra("Answer", answer);
         sIntent.putExtra("type", type);
         sIntent.putExtra("pid", pid);
@@ -212,6 +212,9 @@ public class AnswerVoiceMP3Activity extends DubbingPermissionActivity implements
 
     @Override
     protected void onPause() {
+        if (mIsPlay) {
+            resolvePausePlayRecord();
+        }
         super.onPause();
     }
 

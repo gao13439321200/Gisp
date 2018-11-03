@@ -58,6 +58,8 @@ public class SubscribeNewFragment extends BaseMvpFragment<BaseImpl, WholePresent
 
     @BindView(R.id.rv_major)
     RecyclerView mRvMajor;
+    @BindView(R.id.tv_title_rt)
+    TextView mTvTitle;
     @BindView(R.id.rv_people)
     RecyclerView mRvPeople;
     @BindView(R.id.rv_word)
@@ -106,6 +108,7 @@ public class SubscribeNewFragment extends BaseMvpFragment<BaseImpl, WholePresent
     @Override
     public void initView() {
 //        type = getArguments().getString("type");
+        mTvTitle.setText("订阅");
         //专业
         mAdapterMajor = new MyRecyclerAdapter(R.layout.tag_select_item_layout,
                 mLvMajor, 3, (type, id) -> {

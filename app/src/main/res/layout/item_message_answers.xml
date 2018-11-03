@@ -9,49 +9,79 @@
         android:id="@+id/iv_user_icon"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginBottom="7dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="5.7dp"
         android:layout_marginTop="7dp"
+        android:layout_marginEnd="5.7dp"
+        android:layout_marginBottom="7dp"
         android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tv_time"
         style="@style/time_style"
-        android:text="2018-1-1"
-        android:layout_alignTop="@+id/iv_user_icon"/>
+        android:layout_alignTop="@+id/iv_user_icon"
+        android:text="2018-1-1"/>
 
     <TextView
         android:id="@+id/tv_user_name"
         style="@style/text_13sp_colorblack"
         android:layout_alignTop="@+id/iv_user_icon"
         android:layout_marginTop="12dp"
-        android:text="*****"
-        android:layout_toEndOf="@+id/iv_user_icon"/>
+        android:layout_toEndOf="@+id/iv_user_icon"
+        android:text="*****"/>
 
     <TextView
         android:id="@+id/tv_problem"
-        android:text="问题：*********"
         style="@style/text_12sp_colorauxiliary"
         android:layout_below="@+id/iv_user_icon"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="10dp"
+        android:text="有问题向您请教："/>
 
     <TextView
         android:id="@+id/tv_problem_title"
-        android:text="问题标题：*******"
         style="@style/text_12sp_colorblack"
         android:layout_below="@+id/tv_problem"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
-        android:layout_marginBottom="10dp"
+        android:text="问题标题：*******"
         />
+
+    <LinearLayout
+        android:id="@+id/ll_ask"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tv_problem_title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5.7dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_voice"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:src="@mipmap/qa_sound"/>
+
+        <TextView
+            android:id="@+id/tv_ask_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:text="10:10"
+            android:textColor="@color/bg_white"
+            android:textSize="10sp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_answers"
         style="@style/text_12sp_colorauxiliary"
-        android:layout_below="@+id/tv_problem_title"
+        android:layout_below="@+id/ll_ask"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="3.7dp"
+        android:layout_marginTop="5.7dp"
         android:text="@string/answers"/>
 
     <TextView
@@ -63,9 +93,40 @@
         android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/tv_answers"
         android:ellipsize="end"
-        android:text="这里是回答的内容"
         android:maxLines="2"
+        android:text="这里是回答的内容"
         />
+
+    <LinearLayout
+        android:id="@+id/ll_answer"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/tv_answers"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5.7dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_voice"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:src="@mipmap/qa_sound"/>
+
+        <TextView
+            android:id="@+id/tv_answer_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:text="10:10"
+            android:textColor="@color/bg_white"
+            android:textSize="10sp"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

@@ -84,14 +84,14 @@ public class GroupInfoActivity extends BaseMvpActivity<BaseView, WholePresenter>
         mAdapter = new ItemClickAdapter(this, R.layout.item_member_info_layout, mEntityList);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (isOwner()) {//团长才可以修改
-                if (!ObjectUtils.equals(
-                        mEntityList.get(position).getGroupMemberInfo().getUserid(),
-                        getUserID())) {
+//                if (!ObjectUtils.equals(
+//                        mEntityList.get(position).getGroupMemberInfo().getUserid(),
+//                        getUserID())) {
                     inputTitleDialog(view.findViewById(R.id.tv_position), "职务",
                             mEntityList.get(position).getGroupMemberInfo().getUserid());
-                } else {
-                    ToastUtils.showShort("团长的职务不可修改");
-                }
+//                } else {
+//                    ToastUtils.showShort("团长的职务不可修改");
+//                }
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

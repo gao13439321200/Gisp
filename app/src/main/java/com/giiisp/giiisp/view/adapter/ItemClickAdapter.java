@@ -45,7 +45,6 @@ import com.giiisp.giiisp.entity.DownloadController;
 import com.giiisp.giiisp.entity.HomeSearchEntity;
 import com.giiisp.giiisp.entity.MsgEntity;
 import com.giiisp.giiisp.entity.MyScholarBean;
-import com.giiisp.giiisp.entity.QAEntity;
 import com.giiisp.giiisp.entity.UserInfoEntity;
 import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.utils.FileUtils;
@@ -59,7 +58,6 @@ import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.giiisp.giiisp.view.activity.ProblemActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
 import com.giiisp.giiisp.view.fragment.ListItemClick;
-import com.giiisp.giiisp.widget.recording.AppCache;
 import com.giiisp.giiisp.widget.recording.Util;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -75,11 +73,6 @@ import zlc.season.rxdownload2.entity.DownloadEvent;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadStatus;
 
-import static com.giiisp.giiisp.R.id.linear_layout_one;
-import static com.giiisp.giiisp.R.id.linear_layout_two;
-import static com.giiisp.giiisp.R.id.tv_answer_name;
-import static com.giiisp.giiisp.R.id.tv_answer_reply;
-import static com.giiisp.giiisp.R.id.tv_problem;
 import static com.giiisp.giiisp.api.UrlConstants.CN;
 import static com.giiisp.giiisp.api.UrlConstants.EN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
@@ -277,7 +270,13 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 
                     helper.getView(R.id.btn_answer_1).setOnClickListener(view -> {
                         if ("2".equals(qaVO.getHasanswer())) {
-                            ProblemActivity.actionActivity(activity, "answer", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
+                            ProblemActivity.actionActivity(
+                                    activity,
+                                    "answer",
+                                    imgId,
+                                    pid,
+                                    qaVO.getQid(),
+                                    qaVO.getImgurl());
                         }
                     });
                     helper.getView(R.id.btn_answer_2).setOnClickListener(view -> {
@@ -321,192 +320,192 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.getView(R.id.ll_answer_2).setOnClickListener(v -> PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getNextQuiz().get(0).getArecord()));
                     break;
                 case R.layout.item_questions_answers://论文详情问答列表(旧)
-                    helper.getView(R.id.img_photo).setOnClickListener(view ->
-                            ToastUtils.showShort("点开了一张图片"));
-
-                    if (item.getQuizInfoBean() != null) {
-                        QAEntity.QuizInfoBean.RowsBeanXXXX quizInfoBean = item.getQuizInfoBean();
-                        final String pcid = quizInfoBean.getPcid();
-                        final String quid = quizInfoBean.getUid();
-                        helper.setText(R.id.tv_user_name, quizInfoBean.getRealName());
-                        helper.setText(R.id.tv_user_time, quizInfoBean.getCreateTime());
-                        ImageLoader.getInstance().displayCricleImage(activity, quizInfoBean.getAAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
-                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean answers = quizInfoBean.getAnswer();
-                        QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean quizs = quizInfoBean.getQuiz();
-                        if (quizs != null) {
-                            List<QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX> rows = quizs.getRows();
-                            if (rows != null && rows.size() > 0) {
-                                QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX rowsBeanX = rows.get(0);
-                                helper.setText(tv_problem, "Q: " + rowsBeanX.getContent());
-                                final String qid = rowsBeanX.getId();
-                                if (answers != null) {
-                                    List<QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean> answerRows = answers.getRows();
-                                    if (answerRows != null && answerRows.size() > 0) {
-                                        helper.setVisible(tv_answer_reply, false);
-                                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean answerBean = answerRows.get(0);
-                                        helper.setText(tv_answer_name, answerBean.getContent())
-                                                .setVisible(tv_answer_reply, true)
-                                                .setVisible(tv_answer_name, true)
-                                                .setText(tv_answer_reply, "A: " + answerBean.getRealName());
-
-                                        if (!TextUtils.isEmpty(answerBean.getRecord())) {
-                                            helper.setText(R.id.tv_voice, Util.formatSecond(Integer.parseInt(answerBean.getTiming()))).setVisible(R.id.tv_voice, true).addOnClickListener(R.id.tv_voice);
-                                        } else {
-                                            helper.setVisible(R.id.tv_voice, false);
-                                        }
-
-                                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean answerTwos = quizInfoBean.getAnswerTwo();
-                                        QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean quizTwos = quizInfoBean.getQuizTwo();
-                                        if (quizTwos != null) {
-                                            List<QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX> quizTwoRows = quizTwos.getRows();
-                                            if (quizTwoRows != null && quizTwoRows.size() > 0) {
-                                                helper.setVisible(linear_layout_one, true);
-                                                helper.setVisible(R.id.tv_ask_btn, false);
-                                                QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX rowsBeanXX = quizTwoRows.get(0);
-                                                helper.setText(R.id.tv_inquiry_text, rowsBeanXX.getContent());
-
-                                                if (answerTwos != null) {
-                                                    List<QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean> answerTwosRows = answerTwos.getRows();
-                                                    if (answerTwosRows != null && answerTwosRows.size() > 0) {
-                                                        helper.setVisible(linear_layout_two, true);
-                                                        helper.setVisible(R.id.tv_answer_two, false);
-                                                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean rowsBeanXXX = answerTwosRows.get(0);
-                                                        helper.setText(R.id.tv_answer_text, rowsBeanXXX.getContent());
-
-                                                        if (!TextUtils.isEmpty(rowsBeanXXX.getRecord())) {
-                                                            helper.setText(R.id.tv_voice_two, Util.formatSecond(Integer.parseInt(rowsBeanXXX.getTiming()))).setVisible(R.id.tv_voice_two, true).addOnClickListener(R.id.tv_voice_two);
-                                                        } else {
-                                                            helper.setVisible(R.id.tv_voice_two, false);
-                                                        }
-
-                                                    } else {
-                                                        if (uid.equals(item.getPaperId())) {
-                                                            helper.setVisible(R.id.tv_answer_two, true);
-                                                        } else {
-                                                            helper.setVisible(R.id.tv_answer_two, false);
-                                                        }
-                                                        helper.setVisible(linear_layout_two, false);
-                                                        helper.setVisible(R.id.tv_voice_two, false);
-                                                        helper.setVisible(R.id.tv_ask_btn, false);
-                                                        final String id = rowsBeanXX.getId();
-                                                        helper.getView(R.id.tv_answer_two).setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View v) {
-                                                                ProblemActivity.actionActivity(activity, "answer", id, uid);
-                                                            }
-                                                        });
-                                                    }
-
-                                                } else {
-                                                    if (uid.equals(item.getPaperId())) {
-                                                        helper.setVisible(R.id.tv_answer_two, true);
-                                                    } else {
-                                                        helper.setVisible(R.id.tv_answer_two, false);
-                                                    }
-                                                    helper.setVisible(linear_layout_two, false);
-                                                    helper.setVisible(R.id.tv_voice_two, false);
-                                                    helper.setVisible(R.id.tv_ask_btn, false);
-                                                    final String id = rowsBeanXX.getId();
-                                                    helper.getView(R.id.tv_answer_two).setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            ProblemActivity.actionActivity(activity, "answer", id, uid);
-                                                        }
-                                                    });
-                                                }
-                                            } else {
-                                                helper.setVisible(linear_layout_one, false);
-                                                helper.setVisible(linear_layout_two, false);
-                                                helper.setVisible(R.id.tv_ask_btn, false);
-                                                helper.setVisible(R.id.tv_answer_two, false);
-                                                helper.setVisible(R.id.tv_voice_two, false);
-                                                if (quizInfoBean.getUid().equals(uid)) {
-                                                    helper.setVisible(R.id.tv_ask_btn, true);
-                                                }
-                                                helper.getView(R.id.tv_ask_btn).setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        ProblemActivity.actionActivity(activity, "examineMinutely", qid, uid);
-                                                    }
-                                                });
-
-                                            }
-
-                                        } else {
-                                            helper.setVisible(R.id.tv_voice_two, false);
-                                            helper.setVisible(linear_layout_one, false);
-                                            helper.setVisible(linear_layout_two, false);
-                                            helper.setVisible(R.id.tv_ask_btn, false);
-                                            helper.setVisible(R.id.tv_answer_two, false);
-                                            if (quizInfoBean.getUid() == uid) {
-                                                helper.setVisible(R.id.tv_ask_btn, true);
-                                            }
-                                            helper.getView(R.id.tv_ask_btn).setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    ProblemActivity.actionActivity(activity, "examineMinutely", qid, uid);
-                                                }
-                                            });
-
-                                        }
-
-                                    } else {
-                                        if (uid.equals(item.getPaperId())) {
-                                            helper.setText(tv_answer_reply, "回复");
-                                            helper.setVisible(tv_answer_reply, true);
-                                        } else {
-                                            helper.setVisible(tv_answer_reply, false);
-
-                                        }
-                                        helper.setVisible(tv_answer_name, false);
-                                        helper.setVisible(linear_layout_two, false);
-                                        helper.setVisible(linear_layout_one, false);
-                                        helper.setVisible(R.id.tv_voice_two, false);
-                                        helper.setVisible(R.id.tv_voice, false);
-                                        helper.setVisible(R.id.tv_ask_btn, false);
-                                        helper.setVisible(R.id.tv_answer_two, false);
-                                        helper.getView(tv_answer_reply).setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                ProblemActivity.actionActivity(activity, "answer", qid, uid);
-                                            }
-                                        });
-                                    }
-
-                                } else {
-                                    if (uid.equals(item.getPaperId())) {
-                                        helper.setText(tv_answer_reply, "回复");
-                                        helper.setVisible(tv_answer_reply, true);
-                                    } else {
-                                        helper.setVisible(tv_answer_reply, false);
-                                    }
-                                    helper.setVisible(tv_answer_name, false);
-                                    helper.setVisible(linear_layout_two, false);
-                                    helper.setVisible(linear_layout_one, false);
-                                    helper.setVisible(R.id.tv_voice_two, false);
-                                    helper.setVisible(R.id.tv_voice, false);
-                                    helper.setVisible(R.id.tv_ask_btn, false);
-                                    helper.setVisible(R.id.tv_answer_two, false);
-                                    helper.getView(tv_answer_reply).setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            ProblemActivity.actionActivity(activity, "answer", qid, uid);
-                                        }
-                                    });
-                                }
-                            }
-                        }
-
-
-                    }
-
-                    TextView viewSwitch = helper.getView(R.id.tv_switch);
-
-                    TextView textViewDescription = helper.getView(R.id.tv_answer_name);
-                    TextView tvProblem = helper.getView(R.id.tv_problem);
-                    TextView answerOne = helper.getView(R.id.tv_answer_text);
-                    TextView answerTwo = helper.getView(R.id.tv_inquiry_text);
-                    initSwitch(viewSwitch, tvProblem, textViewDescription, answerOne, answerTwo);
+//                    helper.getView(R.id.img_photo).setOnClickListener(view ->
+//                            ToastUtils.showShort("点开了一张图片"));
+//
+//                    if (item.getQuizInfoBean() != null) {
+//                        QAEntity.QuizInfoBean.RowsBeanXXXX quizInfoBean = item.getQuizInfoBean();
+//                        final String pcid = quizInfoBean.getPcid();
+//                        final String quid = quizInfoBean.getUid();
+//                        helper.setText(R.id.tv_user_name, quizInfoBean.getRealName());
+//                        helper.setText(R.id.tv_user_time, quizInfoBean.getCreateTime());
+//                        ImageLoader.getInstance().displayCricleImage(activity, quizInfoBean.getAAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
+//                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean answers = quizInfoBean.getAnswer();
+//                        QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean quizs = quizInfoBean.getQuiz();
+//                        if (quizs != null) {
+//                            List<QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX> rows = quizs.getRows();
+//                            if (rows != null && rows.size() > 0) {
+//                                QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX rowsBeanX = rows.get(0);
+//                                helper.setText(tv_problem, "Q: " + rowsBeanX.getContent());
+//                                final String qid = rowsBeanX.getId();
+//                                if (answers != null) {
+//                                    List<QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean> answerRows = answers.getRows();
+//                                    if (answerRows != null && answerRows.size() > 0) {
+//                                        helper.setVisible(tv_answer_reply, false);
+//                                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean answerBean = answerRows.get(0);
+//                                        helper.setText(tv_answer_name, answerBean.getContent())
+//                                                .setVisible(tv_answer_reply, true)
+//                                                .setVisible(tv_answer_name, true)
+//                                                .setText(tv_answer_reply, "A: " + answerBean.getRealName());
+//
+//                                        if (!TextUtils.isEmpty(answerBean.getRecord())) {
+//                                            helper.setText(R.id.tv_voice, Util.formatSecond(Integer.parseInt(answerBean.getTiming()))).setVisible(R.id.tv_voice, true).addOnClickListener(R.id.tv_voice);
+//                                        } else {
+//                                            helper.setVisible(R.id.tv_voice, false);
+//                                        }
+//
+//                                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean answerTwos = quizInfoBean.getAnswerTwo();
+//                                        QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean quizTwos = quizInfoBean.getQuizTwo();
+//                                        if (quizTwos != null) {
+//                                            List<QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX> quizTwoRows = quizTwos.getRows();
+//                                            if (quizTwoRows != null && quizTwoRows.size() > 0) {
+//                                                helper.setVisible(linear_layout_one, true);
+//                                                helper.setVisible(R.id.tv_ask_btn, false);
+//                                                QAEntity.QuizInfoBean.RowsBeanXXXX.QuizBean.RowsBeanX rowsBeanXX = quizTwoRows.get(0);
+//                                                helper.setText(R.id.tv_inquiry_text, rowsBeanXX.getContent());
+//
+//                                                if (answerTwos != null) {
+//                                                    List<QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean> answerTwosRows = answerTwos.getRows();
+//                                                    if (answerTwosRows != null && answerTwosRows.size() > 0) {
+//                                                        helper.setVisible(linear_layout_two, true);
+//                                                        helper.setVisible(R.id.tv_answer_two, false);
+//                                                        QAEntity.QuizInfoBean.RowsBeanXXXX.AnswerBean.RowsBean rowsBeanXXX = answerTwosRows.get(0);
+//                                                        helper.setText(R.id.tv_answer_text, rowsBeanXXX.getContent());
+//
+//                                                        if (!TextUtils.isEmpty(rowsBeanXXX.getRecord())) {
+//                                                            helper.setText(R.id.tv_voice_two, Util.formatSecond(Integer.parseInt(rowsBeanXXX.getTiming()))).setVisible(R.id.tv_voice_two, true).addOnClickListener(R.id.tv_voice_two);
+//                                                        } else {
+//                                                            helper.setVisible(R.id.tv_voice_two, false);
+//                                                        }
+//
+//                                                    } else {
+//                                                        if (uid.equals(item.getPaperId())) {
+//                                                            helper.setVisible(R.id.tv_answer_two, true);
+//                                                        } else {
+//                                                            helper.setVisible(R.id.tv_answer_two, false);
+//                                                        }
+//                                                        helper.setVisible(linear_layout_two, false);
+//                                                        helper.setVisible(R.id.tv_voice_two, false);
+//                                                        helper.setVisible(R.id.tv_ask_btn, false);
+//                                                        final String id = rowsBeanXX.getId();
+//                                                        helper.getView(R.id.tv_answer_two).setOnClickListener(new View.OnClickListener() {
+//                                                            @Override
+//                                                            public void onClick(View v) {
+//                                                                ProblemActivity.actionActivity(activity, "answer", id, uid);
+//                                                            }
+//                                                        });
+//                                                    }
+//
+//                                                } else {
+//                                                    if (uid.equals(item.getPaperId())) {
+//                                                        helper.setVisible(R.id.tv_answer_two, true);
+//                                                    } else {
+//                                                        helper.setVisible(R.id.tv_answer_two, false);
+//                                                    }
+//                                                    helper.setVisible(linear_layout_two, false);
+//                                                    helper.setVisible(R.id.tv_voice_two, false);
+//                                                    helper.setVisible(R.id.tv_ask_btn, false);
+//                                                    final String id = rowsBeanXX.getId();
+//                                                    helper.getView(R.id.tv_answer_two).setOnClickListener(new View.OnClickListener() {
+//                                                        @Override
+//                                                        public void onClick(View v) {
+//                                                            ProblemActivity.actionActivity(activity, "answer", id, uid);
+//                                                        }
+//                                                    });
+//                                                }
+//                                            } else {
+//                                                helper.setVisible(linear_layout_one, false);
+//                                                helper.setVisible(linear_layout_two, false);
+//                                                helper.setVisible(R.id.tv_ask_btn, false);
+//                                                helper.setVisible(R.id.tv_answer_two, false);
+//                                                helper.setVisible(R.id.tv_voice_two, false);
+//                                                if (quizInfoBean.getUid().equals(uid)) {
+//                                                    helper.setVisible(R.id.tv_ask_btn, true);
+//                                                }
+//                                                helper.getView(R.id.tv_ask_btn).setOnClickListener(new View.OnClickListener() {
+//                                                    @Override
+//                                                    public void onClick(View v) {
+//                                                        ProblemActivity.actionActivity(activity, "examineMinutely", qid, uid);
+//                                                    }
+//                                                });
+//
+//                                            }
+//
+//                                        } else {
+//                                            helper.setVisible(R.id.tv_voice_two, false);
+//                                            helper.setVisible(linear_layout_one, false);
+//                                            helper.setVisible(linear_layout_two, false);
+//                                            helper.setVisible(R.id.tv_ask_btn, false);
+//                                            helper.setVisible(R.id.tv_answer_two, false);
+//                                            if (quizInfoBean.getUid() == uid) {
+//                                                helper.setVisible(R.id.tv_ask_btn, true);
+//                                            }
+//                                            helper.getView(R.id.tv_ask_btn).setOnClickListener(new View.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(View v) {
+//                                                    ProblemActivity.actionActivity(activity, "examineMinutely", qid, uid);
+//                                                }
+//                                            });
+//
+//                                        }
+//
+//                                    } else {
+//                                        if (uid.equals(item.getPaperId())) {
+//                                            helper.setText(tv_answer_reply, "回复");
+//                                            helper.setVisible(tv_answer_reply, true);
+//                                        } else {
+//                                            helper.setVisible(tv_answer_reply, false);
+//
+//                                        }
+//                                        helper.setVisible(tv_answer_name, false);
+//                                        helper.setVisible(linear_layout_two, false);
+//                                        helper.setVisible(linear_layout_one, false);
+//                                        helper.setVisible(R.id.tv_voice_two, false);
+//                                        helper.setVisible(R.id.tv_voice, false);
+//                                        helper.setVisible(R.id.tv_ask_btn, false);
+//                                        helper.setVisible(R.id.tv_answer_two, false);
+//                                        helper.getView(tv_answer_reply).setOnClickListener(new View.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(View v) {
+//                                                ProblemActivity.actionActivity(activity, "answer", qid, uid);
+//                                            }
+//                                        });
+//                                    }
+//
+//                                } else {
+//                                    if (uid.equals(item.getPaperId())) {
+//                                        helper.setText(tv_answer_reply, "回复");
+//                                        helper.setVisible(tv_answer_reply, true);
+//                                    } else {
+//                                        helper.setVisible(tv_answer_reply, false);
+//                                    }
+//                                    helper.setVisible(tv_answer_name, false);
+//                                    helper.setVisible(linear_layout_two, false);
+//                                    helper.setVisible(linear_layout_one, false);
+//                                    helper.setVisible(R.id.tv_voice_two, false);
+//                                    helper.setVisible(R.id.tv_voice, false);
+//                                    helper.setVisible(R.id.tv_ask_btn, false);
+//                                    helper.setVisible(R.id.tv_answer_two, false);
+//                                    helper.getView(tv_answer_reply).setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View v) {
+//                                            ProblemActivity.actionActivity(activity, "answer", qid, uid);
+//                                        }
+//                                    });
+//                                }
+//                            }
+//                        }
+//
+//
+//                    }
+//
+//                    TextView viewSwitch = helper.getView(R.id.tv_switch);
+//
+//                    TextView textViewDescription = helper.getView(R.id.tv_answer_name);
+//                    TextView tvProblem = helper.getView(R.id.tv_problem);
+//                    TextView answerOne = helper.getView(R.id.tv_answer_text);
+//                    TextView answerTwo = helper.getView(R.id.tv_inquiry_text);
+//                    initSwitch(viewSwitch, tvProblem, textViewDescription, answerOne, answerTwo);
                     break;
                 case R.layout.item_paper_label:
 //                    final TagFlowLayout tagLabel = helper.getView(R.id.tag_flowlayout);
@@ -590,10 +589,19 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         return;
                     helper.setText(R.id.tv_answers_content, myAnswerVO.getAnswer());
                     helper.setText(R.id.tv_time, myAnswerVO.getCreatetime());
+                    helper.setText(R.id.tv_ask_time, myAnswerVO.getQtime());
+                    helper.setText(R.id.tv_answer_time, myAnswerVO.getAtime());
+
+                    helper.getView(R.id.ll_ask).setOnClickListener(v ->
+                            PlayerUtil.getInstance().playUrl(BASE_IMG_URL + myAnswerVO.getQrecord()));
+                    helper.getView(R.id.ll_answer).setOnClickListener(v ->
+                            PlayerUtil.getInstance().playUrl(BASE_IMG_URL + myAnswerVO.getArecord()));
+
                     helper.setText(R.id.tv_problem_title, myAnswerVO.getQuiz());
                     helper.setText(R.id.tv_user_name, myAnswerVO.getUsername());
                     helper.setVisible(R.id.tv_answers_content, !TextUtils.isEmpty(myAnswerVO.getAnswer()));
                     helper.setVisible(R.id.tv_answers, !TextUtils.isEmpty(myAnswerVO.getAnswer()));
+                    helper.setVisible(R.id.ll_answer, !TextUtils.isEmpty(myAnswerVO.getAnswer()));
                     ImageLoader.getInstance().displayCricleImage(activity, myAnswerVO.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
 
 
@@ -602,14 +610,26 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     MyAnswerVO myQaVO = item.getMyAnswerVO();
                     helper.setText(R.id.tv_time, myQaVO.getCreatetime());
                     helper.setText(R.id.tv_problem_title, myQaVO.getQuiz());
+
+                    helper.setText(R.id.tv_ask_time, myQaVO.getQtime());
+                    helper.setText(R.id.tv_answer_time, myQaVO.getAtime());
+
+                    helper.getView(R.id.ll_ask).setOnClickListener(v ->
+                            PlayerUtil.getInstance().playUrl(BASE_IMG_URL + myQaVO.getQrecord()));
+                    helper.getView(R.id.ll_answer).setOnClickListener(v ->
+                            PlayerUtil.getInstance().playUrl(BASE_IMG_URL + myQaVO.getArecord()));
+
+
                     if ("1".equals(myQaVO.getHasanswer())) {
                         helper.setVisible(R.id.tv_answers_content, true);
                         helper.setVisible(R.id.tv_answers, true);
+                        helper.setVisible(R.id.ll_answer, true);
                         helper.setText(R.id.tv_answers_content, myQaVO.getAnswer());
                         helper.setText(R.id.tv_answers, myQaVO.getAusername() + " 答");
                     } else {
                         helper.setVisible(R.id.tv_answers_content, false);
                         helper.setVisible(R.id.tv_answers, false);
+                        helper.setVisible(R.id.ll_answer, false);
                     }
                     break;
                 case R.layout.item_collectionchild://收藏论文、收藏综述
@@ -664,11 +684,12 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         case "play"://播放列表
                             if (item.getPlayNoteVo() == null)
                                 return;
-                            if (AppCache.getPlayService() != null && AppCache.getPlayService().isPlaying() &&
-                                    item.getPlayNoteVo().getId().equals(SPUtils.getInstance().getString(UrlConstants.PID)))
-                                GlideApp.with(mContext).load(R.mipmap.in_play).into((ImageView) helper.getView(R.id.tv_menu));
-                            else
-                                GlideApp.with(mContext).load(R.mipmap.download_stop).into((ImageView) helper.getView(R.id.tv_menu));
+//                            if (AppCache.getPlayService() != null && AppCache.getPlayService().isPlaying() &&
+//                                    item.getPlayNoteVo().getId().equals(SPUtils.getInstance().getString(UrlConstants.PID)))
+//                                GlideApp.with(mContext).load(R.mipmap.in_play).into((ImageView) helper.getView(R.id.tv_menu));
+//                            else
+//                                GlideApp.with(mContext).load(R.mipmap.download_stop).into((ImageView) helper.getView(R.id.tv_menu));
+                            helper.setVisible(R.id.tv_menu, false);
                             helper.setText(R.id.tv_title, item.getPlayNoteVo().getTitle());
                             helper.setText(R.id.tv_time, item.getPlayNoteVo().getCreateTime());
                             helper.setText(R.id.tv_paper_browse, item.getPlayNoteVo().getReadnum());
@@ -1357,10 +1378,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_member_info_layout:
                     GroupMemberInfo info = item.getGroupMemberInfo();
                     helper.setText(R.id.tv_name, info.getUsername());
-                    if (ObjectUtils.equals(info.getUserid(), groupOwnerId))
-                        helper.setText(R.id.tv_position, "团长");
-                    else
-                        helper.setText(R.id.tv_position, info.getJob());
+                    helper.setText(R.id.tv_position,
+                            ObjectUtils.isNotEmpty(info.getJob()) ? info.getJob() :
+                                    ObjectUtils.equals(info.getUserid(), groupOwnerId) ?
+                                            "团长" : "组员");
                     ImageLoader.getInstance().displayCricleImage(activity, info.getUserphoto(),
                             (ImageView) helper.getView(R.id.img_head));
                     break;
