@@ -328,22 +328,21 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             if (mActivity.cnt2 != -1 && mActivity.getRecyclerView2() != null) {
                 mActivity.cnt2 = ((LinearLayoutManager) mActivity.getRecyclerView2().getLayoutManager()).findFirstVisibleItemPosition() + 2;
             }
-
-            mActivity.cnt1 = setData(mActivity.cnt1, mActivity.list1.size() - 1, mActivity.getRecyclerView1());
-            mActivity.cnt2 = setData(mActivity.cnt2, mActivity.list2.size() - 1, mActivity.getRecyclerView2());
+            if (mActivity.list1 != null && mActivity.list1.size() != 0)
+                mActivity.cnt1 = setData(mActivity.cnt1, mActivity.list1.size() - 1, mActivity.getRecyclerView1());
+            if (mActivity.list2 != null && mActivity.list2.size() != 0)
+                mActivity.cnt2 = setData(mActivity.cnt2, mActivity.list2.size() - 1, mActivity.getRecyclerView2());
 //            }
         }
 
         private int setData(int cnt, int count, RecyclerView view) {
 //            LogUtils.a("aaaaa====cnt:" + cnt + ",count:" + count);
             if (cnt == -1) {
-                cnt = 2;
                 return 2;
             }
             if (cnt == count) {//已经是最后一页了
                 if (view != null)
                     view.smoothScrollToPosition(0);
-                cnt = 2;
                 return 2;
             } else if (cnt > count - 3) {//下一页是最后一页
                 cnt = count;

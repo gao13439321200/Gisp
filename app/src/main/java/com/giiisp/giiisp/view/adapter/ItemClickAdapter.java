@@ -77,6 +77,7 @@ import static com.giiisp.giiisp.api.UrlConstants.CN;
 import static com.giiisp.giiisp.api.UrlConstants.EN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
 import static com.giiisp.giiisp.base.BaseActivity.uid;
+import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.PLAYQA;
 
 /**
  * 重用的适配器
@@ -314,10 +315,22 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         dialog.setCancelable(true);//点击外部是否可以取消
                         dialog.show();
                     });
-                    helper.getView(R.id.ll_ask_1).setOnClickListener(v -> PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getQrecord()));
-                    helper.getView(R.id.ll_ask_2).setOnClickListener(v -> PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getNextQuiz().get(0).getQrecord()));
-                    helper.getView(R.id.ll_answer_1).setOnClickListener(v -> PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getArecord()));
-                    helper.getView(R.id.ll_answer_2).setOnClickListener(v -> PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getNextQuiz().get(0).getArecord()));
+                    helper.getView(R.id.ll_ask_1).setOnClickListener(v -> {
+                        PaperDetailsActivity.newRxBus(PLAYQA);
+                        PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getQrecord());
+                    });
+                    helper.getView(R.id.ll_ask_2).setOnClickListener(v -> {
+                        PaperDetailsActivity.newRxBus(PLAYQA);
+                        PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getNextQuiz().get(0).getQrecord());
+                    });
+                    helper.getView(R.id.ll_answer_1).setOnClickListener(v -> {
+                        PaperDetailsActivity.newRxBus(PLAYQA);
+                        PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getArecord());
+                    });
+                    helper.getView(R.id.ll_answer_2).setOnClickListener(v -> {
+                        PaperDetailsActivity.newRxBus(PLAYQA);
+                        PlayerUtil.getInstance().playUrl(BASE_IMG_URL + qaVO.getNextQuiz().get(0).getArecord());
+                    });
                     break;
                 case R.layout.item_questions_answers://论文详情问答列表(旧)
 //                    helper.getView(R.id.img_photo).setOnClickListener(view ->

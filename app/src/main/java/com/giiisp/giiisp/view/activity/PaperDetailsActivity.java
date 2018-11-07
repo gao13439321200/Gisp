@@ -69,6 +69,7 @@ import com.giiisp.giiisp.dto.PaperEventBean;
 import com.giiisp.giiisp.dto.PaperEventVO;
 import com.giiisp.giiisp.dto.PaperInfoBean;
 import com.giiisp.giiisp.dto.PaperInfoVO;
+import com.giiisp.giiisp.entity.APPConstants;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.DaoSession;
 import com.giiisp.giiisp.entity.DownloadController;
@@ -79,6 +80,7 @@ import com.giiisp.giiisp.model.ModelFactory;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.FileUtils;
 import com.giiisp.giiisp.utils.ImageLoader;
+import com.giiisp.giiisp.utils.RxBus;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
@@ -149,6 +151,10 @@ public class PaperDetailsActivity extends
         ViewPager.OnPageChangeListener,
         SeekBar.OnSeekBarChangeListener,
         OnPlayerEventListener {
+    private static final String TAG = "PaperDetailsActivity";
+    private static final String TOFRAGMENT = "toFragment";
+    public static final int PLAYQA = 1;
+
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.viewpager_paper)
@@ -308,6 +314,13 @@ public class PaperDetailsActivity extends
     private StatisticsFragment mFragment;
     private int scale = 1;
 
+    public static void newRxBus(int toFragment) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(APPConstants.MyBus.TO, TAG);
+        map.put(TOFRAGMENT, toFragment);
+        RxBus.getInstance().send(map);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.back_right_in, R.anim.push_left_out);
@@ -450,6 +463,7 @@ public class PaperDetailsActivity extends
         context.startActivity(sIntent);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void initData() {
         pid = getIntent().getStringExtra("id");
@@ -493,6 +507,28 @@ public class PaperDetailsActivity extends
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mMyCustomView.getLayoutParams();
         params.width = ScreenUtils.getScreenWidth();
         mMyCustomView.setLayoutParams(params);
+
+        RxBus.getInstance().toObservable(Map.class)
+                .subscribe((Map map) -> {
+                    if (TAG.equals(map.get(APPConstants.MyBus.TO))) {
+                        switch ((int) map.get(TOFRAGMENT)) {
+                            case PLAYQA://播放问题录音的时候暂停播放视频
+                                ivPlayStop.setSelected(false);
+                                if (getPlayService() != null
+                                        && getPlayService().isPlaying())
+                                    getPlayService().playPause();
+                                if (mVideoViewMap != null
+                                        && mVideoViewMap.get(position) != null
+                                        && mVideoViewMap.get(position).isPlaying()) {
+                                    mVideoViewMap.get(position).pause();
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                });
     }
 
     @Override
