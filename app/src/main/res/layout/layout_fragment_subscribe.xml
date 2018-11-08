@@ -29,9 +29,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_major"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
     </LinearLayout>
 
     <LinearLayout
@@ -49,9 +51,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_people"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
     </LinearLayout>
 
     <LinearLayout
@@ -69,9 +73,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_word"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal"/>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
