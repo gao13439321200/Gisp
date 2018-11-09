@@ -570,7 +570,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 break;
                             case "2":
                                 helper.setBackgroundColor(R.id.ll_all,
-                                        mContext.getResources().getColor(R.color.darkgray));
+                                        mContext.getResources().getColor(R.color.colorGray));
                                 break;
                             default:
                                 break;

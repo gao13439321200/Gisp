@@ -2163,7 +2163,21 @@ public class PaperDetailsActivity extends
 
     @Override
     public void onFailNew(String url, String msg) {
-
+        switch (url) {
+            case "204":
+                ToastUtils.showShort("论文信息获取失败，请重试");
+                try {
+                    if (ObjectUtils.isNotEmpty(ACTIVITYNAME))
+                        startActivity(new Intent(this, Class.forName(ACTIVITYNAME)));
+                    else
+                        startActivity(new Intent(this, Class.forName("GiiispActivity")));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     //获取图片地址及事件
@@ -2196,7 +2210,9 @@ public class PaperDetailsActivity extends
 
     //保存播放记录
     private void sendPlayNote() {
-        if ((nowProgress / 1000) != 0 && !"wait_dubbing".equals(type) && !"download_paper".equals(type)) {
+        if ((nowProgress / 1000) != 0 && !"wait_dubbing".equals(type)
+                && !"download_paper".equals(type)
+                && imageId != null && imageId.size() > position) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("uid", getUserID());
             map.put("pid", pid);
