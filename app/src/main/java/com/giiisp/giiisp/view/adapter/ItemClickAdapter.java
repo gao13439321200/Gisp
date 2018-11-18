@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -979,7 +980,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setText(R.id.tv_tag, item.getString());
                     break;
                 case R.layout.item_home_tab:
-                    ImageLoader.getInstance().displayCricleImage(activity, item.getRid(), (ImageView) helper.getView(R.id.iv_icon));
+                    Glide.with(activity).load(item.getRid()).into((ImageView) helper.getView(R.id.iv_icon));
+//                    ImageLoader.getInstance().displayCricleImage(activity, item.getRid(), (ImageView) helper.getView(R.id.iv_icon));
                     helper.setText(R.id.tv_title, item.getString());
                     break;
                 case R.layout.item_home_child:

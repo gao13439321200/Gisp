@@ -795,10 +795,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             ivBtn.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
             mCbMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
             mTvMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
-            mBtnUse.setVisibility(this.dubbingPosition != position ? View.VISIBLE : View.GONE);
+            mBtnUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
             if (!isVideo(position)) {
-                mRlBig.setVisibility(this.dubbingPosition != position ? View.VISIBLE : View.GONE);
-                mTvUse.setVisibility(this.dubbingPosition != position ? View.VISIBLE : View.GONE);
+                mRlBig.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
+                mTvUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
             } else {
                 mRlBig.setVisibility(View.GONE);
                 mTvUse.setVisibility(View.GONE);
@@ -1169,7 +1169,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     }
 
     private boolean isVideo(int position) {
-        return dataList.get(position).getDubbingVO().getUrl().contains("mp4");
+        if (dataList != null && dataList.size() > position)
+            return dataList.get(position).getDubbingVO().getUrl().contains("mp4");
+        else
+            return false;
     }
 
     private int getVideoDuration(String path) {

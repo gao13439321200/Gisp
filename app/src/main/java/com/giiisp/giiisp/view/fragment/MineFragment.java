@@ -427,33 +427,33 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
                 break;
             case R.id.fl_auth://资料认证
-                switch (emailauthen) {
-                    case "3":
-                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
-                        break;
-                    case "2":
-                        switch (isVip) {
-                            case "0":
-                                VerifiedActivity.actionActivity(context);
-                                break;
-                            case "1":
-                                Utils.showToast(R.string.auth_pass);
-                                break;
-                            case "2":
-                                Utils.showToast(R.string.auth_pass);
-                                break;
-                            case "3":
-                                Utils.showToast(R.string.in_authentication);
-                                break;
-                        }
+//                switch (emailauthen) {
+//                    case "3":
+//                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
+//                        break;
+//                    case "2":
+                switch (isVip) {
+                    case "0":
+                        VerifiedActivity.actionActivity(context);
                         break;
                     case "1":
+                        Utils.showToast(R.string.auth_pass);
+                        break;
+                    case "2":
+                        Utils.showToast(R.string.auth_pass);
+                        break;
+                    case "3":
                         Utils.showToast(R.string.in_authentication);
                         break;
-                    default:
-                        //FragmentActivity.actionActivity(getContext(), "wait_dubbing");
-                        break;
                 }
+//                        break;
+//                    case "1":
+//                        Utils.showToast(R.string.in_authentication);
+//                        break;
+//                    default:
+//                        //FragmentActivity.actionActivity(getContext(), "wait_dubbing");
+//                        break;
+//                }
                 break;
         }
 
