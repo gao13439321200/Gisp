@@ -512,7 +512,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //                mBtnUse.setVisibility(viewPager.getCurrentItem() != position ? View.VISIBLE : View.GONE);
                 break;
             case R.id.iv_right_slide://下一张图片
-                if (viewPager.getCurrentItem() < viewPager.getChildCount()) {
+                if (viewPager.getCurrentItem() < viewPager.getChildCount() - 1) {
                     setImageStatus(viewPager.getCurrentItem() + 1);
                 } else {
                     setImageStatus(0);
@@ -768,95 +768,100 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     }
 
     private void setImageStatus(int position) {
-        if (dataList != null && isVideo(position)) {
+        if (dataList != null && position < dataList.size()) {
+
+            if (dataList != null && isVideo(position)) {
 //            if (dubbingPosition == position && isDubbing && !mVideoViewMap.get(dubbingPosition).isPlaying()) {
 //                mVideoViewMap.get(dubbingPosition).seekTo(recorderSecondsElapsed % videoAllTime);
 //                mVideoViewMap.get(dubbingPosition).start();
 //            }
 
-            mBtnSolo.setVisibility(isDubbing ? View.INVISIBLE : View.VISIBLE);
-        } else {
-            mBtnSolo.setVisibility(View.INVISIBLE);
-        }
-        if (viewPager.getCurrentItem() != position) {
-            viewPager.setCurrentItem(position);
-            viewPager.setOffscreenPageLimit(dataList.size());
-        }
-        itemClickAdapte.setSelectedPosition(position);
-        itemClickAdapte.notifyItemChanged(abc, "123");
-        itemClickAdapte.notifyItemChanged(position, "123");
-//        itemClickAdapte.notifyDataSetChanged();
-        canMark = false;
-        mMyCustomView.setCanMark(false);
-        mCbMark.setChecked(false);
-        LogUtils.v("ok-dubb:" + dubbingPosition);
-        LogUtils.v("ok-position:" + position);
-        if (isDubbing) {//正在录音
-            ivBtn.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
-            mCbMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
-            mTvMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
-            mBtnUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
-            if (!isVideo(position)) {
-                mRlBig.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
-                mTvUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
+                mBtnSolo.setVisibility(isDubbing ? View.INVISIBLE : View.VISIBLE);
             } else {
-                mRlBig.setVisibility(View.GONE);
-                mTvUse.setVisibility(View.GONE);
-            }
-            //正在调用 + 回到录音图片 = 调用结束
-            if (isDiaoYong && dubbingPosition == position) {
-                sendData304(0, 0, 5);
-                isDiaoYong = false;
-            }
-        } else {//未录音
-            if (ObjectUtils.isNotEmpty(dataList.get(position).getDubbingVO().getRid())) {//已经录过音了
-                mCbMark.setVisibility(View.GONE);
-                mTvMark.setVisibility(View.GONE);
-                linearLayout.setVisibility(View.VISIBLE);
-                tvDubbingAudition.setVisibility(View.INVISIBLE);
-                tvFinish.setVisibility(View.INVISIBLE);
                 mBtnSolo.setVisibility(View.INVISIBLE);
-            } else {
-                if (isVideo(position)) {//视频不可放大
-                    mBtnFull.setVisibility(View.GONE);
-                } else {//图片
-                    mBtnFull.setVisibility(View.VISIBLE);
+            }
+            if (viewPager.getCurrentItem() != position) {
+                viewPager.setCurrentItem(position);
+                viewPager.setOffscreenPageLimit(dataList.size());
+            }
+            itemClickAdapte.setSelectedPosition(position);
+            itemClickAdapte.notifyItemChanged(abc, "123");
+            itemClickAdapte.notifyItemChanged(position, "123");
+//        itemClickAdapte.notifyDataSetChanged();
+            canMark = false;
+            mMyCustomView.setCanMark(false);
+            mCbMark.setChecked(false);
+            LogUtils.v("ok-dubb:" + dubbingPosition);
+            LogUtils.v("ok-position:" + position);
+            if (isDubbing) {//正在录音
+                ivBtn.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
+                mCbMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
+                mTvMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
+                mBtnUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
+                if (!isVideo(position)) {
+                    mRlBig.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
+                    mTvUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
+                } else {
+                    mRlBig.setVisibility(View.GONE);
+                    mTvUse.setVisibility(View.GONE);
                 }
-                linearLayout.setVisibility(View.GONE);
-                mCbMark.setVisibility(View.VISIBLE);
-                mTvMark.setVisibility(View.VISIBLE);
+                //正在调用 + 回到录音图片 = 调用结束
+                if (isDiaoYong && dubbingPosition == position) {
+                    sendData304(0, 0, 5);
+                    isDiaoYong = false;
+                }
+            } else {//未录音
+                if (ObjectUtils.isNotEmpty(dataList.get(position).getDubbingVO().getRid())) {//已经录过音了
+                    mCbMark.setVisibility(View.GONE);
+                    mTvMark.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    tvDubbingAudition.setVisibility(View.INVISIBLE);
+                    tvFinish.setVisibility(View.INVISIBLE);
+                    mBtnSolo.setVisibility(View.INVISIBLE);
+                } else {
+                    if (isVideo(position)) {//视频不可放大
+                        mBtnFull.setVisibility(View.GONE);
+                    } else {//图片
+                        mBtnFull.setVisibility(View.VISIBLE);
+                    }
+                    linearLayout.setVisibility(View.GONE);
+                    mCbMark.setVisibility(View.VISIBLE);
+                    mTvMark.setVisibility(View.VISIBLE);
+                }
+                mRlBig.setVisibility(View.GONE);
+                mBtnUse.setVisibility(View.GONE);
+                mTvUse.setVisibility(View.GONE);
+                if (dubbingPosition != position) {//暂停配音
+                    resolveStopRecord();
+                    mMyCustomView.clearData();
+                    tvHint.setText(R.string.click_start_voice);
+                    recorderSecondsElapsed = 0;
+                    tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
+                }
             }
-            mRlBig.setVisibility(View.GONE);
-            mBtnUse.setVisibility(View.GONE);
-            mTvUse.setVisibility(View.GONE);
-            if (dubbingPosition != position) {//暂停配音
-                resolveStopRecord();
-                mMyCustomView.clearData();
-                tvHint.setText(R.string.click_start_voice);
-                recorderSecondsElapsed = 0;
-                tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
-            }
-        }
 
-        boolean isFinish = true;
-        for (ClickEntity entity : dataList) {
-            if (ObjectUtils.isEmpty(entity.getDubbingVO().getRid())) {
-                isFinish = false;
-                break;
+            boolean isFinish = true;
+            for (ClickEntity entity : dataList) {
+                if (ObjectUtils.isEmpty(entity.getDubbingVO().getRid())) {
+                    isFinish = false;
+                    break;
+                }
             }
-        }
 
-        if (isFinish) {//全录完了
-            mLlDubbingAll.setVisibility(View.GONE);
-            mLlAddMark.setVisibility(View.VISIBLE);
-            //获取图片标签
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("picid", dataList.get(position).getDubbingVO().getPcid());
-            map.put("language", language);
-            presenter.getDataAll("344", map);
+            if (isFinish) {//全录完了
+                mLlDubbingAll.setVisibility(View.GONE);
+                mLlAddMark.setVisibility(View.VISIBLE);
+                //获取图片标签
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("picid", dataList.get(position).getDubbingVO().getPcid());
+                map.put("language", language);
+                presenter.getDataAll("344", map);
+            } else {
+                mLlDubbingAll.setVisibility(View.VISIBLE);
+                mLlAddMark.setVisibility(View.GONE);
+            }
         } else {
-            mLlDubbingAll.setVisibility(View.VISIBLE);
-            mLlAddMark.setVisibility(View.GONE);
+            ToastUtils.showShort("信息异常，请重试");
         }
     }
 
@@ -1153,7 +1158,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 mMarkAdapter.notifyDataSetChanged();
                 break;
             case "345"://标签保存完成
-                if (viewPager.getCurrentItem() < viewPager.getChildCount()) {
+                if (viewPager.getCurrentItem() < viewPager.getChildCount() - 1) {
                     setImageStatus(viewPager.getCurrentItem() + 1);
                 } else {
                     setImageStatus(0);
