@@ -76,15 +76,22 @@ public class SelectFieldFragment extends BaseMvpFragment<BaseImpl, WholePresente
     @Override
     public void initView() {
         int type = getArguments().getInt(TYPE);
+        HashMap<String, Object> map = new HashMap<>();
         switch (type) {
             case 1://未选择
                 mButton.setVisibility(View.VISIBLE);
+                map.put("language", getLanguage());
+                map.put("pname", ObjectUtils.isNotEmpty(etText) ? etText : "");
+                presenter.getDataAll("109", map);
                 break;
             case 2://已选择
                 mButton.setVisibility(View.GONE);
-                HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", getUserID());
                 presenter.getDataAll("115", map);//获取关注的专业
+                map = new HashMap<>();
+                map.put("language", getLanguage());
+                map.put("pname", ObjectUtils.isNotEmpty(etText) ? etText : "");
+                presenter.getDataAll("109", map);
                 break;
         }
 

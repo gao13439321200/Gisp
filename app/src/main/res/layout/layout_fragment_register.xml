@@ -135,6 +135,7 @@
         android:id="@+id/tv_user_agreement"
         style="@style/login_text_colorsize"
         android:layout_marginBottom="30dp"
+        android:visibility="gone"
         android:text="@string/user_agreement"/>
 
 
