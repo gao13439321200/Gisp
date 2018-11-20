@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -82,6 +81,9 @@ public class MailboxAuthenticationFragment extends BaseMvpFragment<BaseImpl, Who
         unbinder.unbind();
     }
 
+    /**
+     * @param view
+     */
     @OnClick({R.id.tv_back, R.id.tv_submit, R.id.fl_email_tu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -93,13 +95,14 @@ public class MailboxAuthenticationFragment extends BaseMvpFragment<BaseImpl, Who
                 String trim = email.trim();
                 if (!Utils.checkEmail(trim)) {
                     Utils.showToast(R.string.email_not_correct);
-                } /*else if (part == null) {
+                } else if (part == null) {
                     Utils.showToast(R.string.email_not_tu);
-                } */ else {
-                    ArrayMap<String, Object> map = new ArrayMap<>();
-                    map.put("email", trim);
-                    map.put("uid", uid);
-                    presenter.getAuthenUserlData(trim, uid);
+                } else {
+//                    ArrayMap<String, Object> map = new ArrayMap<>();
+//                    map.put("email", trim);
+//                    map.put("uid", uid);
+
+                    presenter.getAuthenUserlData(trim, uid, part);
                     progressPopupWindow.showPopupWindow();
                 }
                 break;

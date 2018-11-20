@@ -347,7 +347,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 //
                 switch (emailauthen) { //  开始录音是否Ok  test 1 BaseActivity.emailauthen
                     case "3"://未认证
-                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
+                        ToastUtils.showShort("请先认证身份信息");
+//                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
                         break;
                     case "2"://认证成功
                         FragmentActivity.actionActivity(getContext(), "wait_dubbing"); //  认证完成开始录音
@@ -356,6 +357,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                         Utils.showToast(R.string.in_authentication);
                         break;
                     default:
+                        ToastUtils.showShort("请先认证身份信息");
                         //FragmentActivity.actionActivity(getContext(), "wait_dubbing");
                         break;
                 }

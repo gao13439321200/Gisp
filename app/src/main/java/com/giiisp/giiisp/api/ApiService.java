@@ -77,7 +77,8 @@ public interface ApiService {
     //更新用户头像接口
     @Multipart
     @POST(UrlConstants.RequestUrl.USER_UPDATE_PORTRAIT)
-    Call<BaseEntity> getUpdatePortraitInfo(@Query("uid") String uid, @Part MultipartBody.Part filePrta);
+    Call<BaseEntity> getUpdatePortraitInfo(@Query("uid") String uid,
+                                           @Part MultipartBody.Part filePrta);
 
     //检查指定手机号是否注册
     @GET(UrlConstants.RequestUrl.EXAMINE_PHONE)
@@ -325,7 +326,10 @@ public interface ApiService {
     //用邮箱认证
     @POST(UrlConstants.RequestUrl.AUTHEN_USER)
     @Headers("Connection:close")
-    Call<BaseEntity> getAuthenUserInfo(@Query("email") String email, @Query("uid") String uid);
+    @Multipart
+    Call<BaseEntity> getAuthenUserInfo(@Query("email") String email,
+                                       @Query("uid") String uid,
+                                       @Part MultipartBody.Part filePart);
 
     //添加教育经历
     @FormUrlEncoded

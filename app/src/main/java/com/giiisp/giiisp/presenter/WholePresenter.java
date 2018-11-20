@@ -1020,8 +1020,8 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
         });
     }
 
-    public void getAuthenUserlData(String email, String uid) {
-        ModelFactory.getBaseModel().getAuthenUserlData(email, uid, new Callback<BaseEntity>() {
+    public void getAuthenUserlData(String email, String uid,MultipartBody.Part imageBodyPart) {
+        ModelFactory.getBaseModel().getAuthenUserlData(email, uid,imageBodyPart, new Callback<BaseEntity>() {
             @Override
             public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
                 if (response.isSuccessful()) {
