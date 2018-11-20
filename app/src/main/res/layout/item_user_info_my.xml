@@ -48,6 +48,7 @@
                     android:layout_toEndOf="@+id/tv_user_name"
                     android:paddingBottom="3dp"
                     android:paddingEnd="8dp"
+                    android:visibility="invisible"
                     android:paddingStart="6.7dp"
                     android:paddingTop="2dp"/>
 

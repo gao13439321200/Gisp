@@ -5,15 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +19,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ObjectUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseFragment;
@@ -30,15 +28,10 @@ import com.giiisp.giiisp.utils.ImageLoader;
 import com.giiisp.giiisp.utils.PicUtils;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.VerifiedActivity;
-import com.giiisp.giiisp.view.adapter.ClickEntity;
-import com.giiisp.giiisp.view.adapter.MultipleItemQuickAdapter;
-import com.giiisp.giiisp.widget.ScreenPopupWindow;
-import com.giiisp.giiisp.widget.StepsView;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,8 +41,6 @@ import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * 资料上传
@@ -92,6 +83,26 @@ public class UserUploadFragment extends BaseFragment implements View.OnClickList
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_submission:
+                if (ObjectUtils.isEmpty(icAndpassport.getText().toString())) {
+                    ToastUtils.showShort("请选择证件类型");
+                    break;
+                }
+                if (icimg.getDrawable() == null) {
+                    ToastUtils.showShort("请上传证件图");
+                    break;
+                }
+                if (ObjectUtils.isEmpty(zzAndzd.getText().toString())) {
+                    ToastUtils.showShort("请选择在职或在读");
+                    break;
+                }
+                if (stuimg.getDrawable() == null) {
+                    ToastUtils.showShort("请上传工作证或学生证");
+                    break;
+                }
+                if (paperimg.getDrawable() == null) {
+                    ToastUtils.showShort("请上传论文截图");
+                    break;
+                }
                 getVerifiedActivity().getViewPagerVerified().setCurrentItem(2);
                 break;
             case R.id.fl_user_icAndpassport:

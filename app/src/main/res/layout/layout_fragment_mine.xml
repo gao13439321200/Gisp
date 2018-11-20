@@ -204,21 +204,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/ll_course"
-                        style="@style/main_ll">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@mipmap/mine_course"/>
-
-                        <TextView
-                            style="@style/mine_tv_btn"
-                            android:text="@string/course"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/ll_collection"
                         style="@style/main_ll">
 
@@ -230,6 +215,21 @@
                         <TextView
                             style="@style/mine_tv_btn"
                             android:text="@string/collection"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_course"
+                        style="@style/main_ll">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/mine_course"/>
+
+                        <TextView
+                            style="@style/mine_tv_btn"
+                            android:text="@string/course"/>
 
                     </LinearLayout>
 

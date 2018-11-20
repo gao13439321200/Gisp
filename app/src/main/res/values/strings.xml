@@ -1,360 +1,360 @@
-<resources>
-    <string name="app_name">集思谱</string>
-    <string name="prompt_exit_app">再按一次退出程序</string>
-    <string name="et_login_input_nunbers_phone">输入手机号</string>
-    <string name="et_input_psw">输入密码</string>
-    <string name="bt_forget_psw">密码</string>
-    <string name="loginID">注册新账号</string>
-    <string name="back">  返回</string>
-    <string name="register">登录</string>
-    <string name="login">手机号或邮箱注册</string>
-    <string name="confirm">确定</string>
-    <string name="user_agreement">用户协议</string>
-    <string name="forget_password">忘记密码?</string>
-    <string name="enter_password">输入密码</string>
-    <string name="login_enter_password">输入密码</string>
-    <string name="login_second_password">确认密码</string>
-    <string name="enter_phone">手机号码</string>
-    <string name="enter_nickname">输入昵称</string>
-    <string name="sex">性别</string>
-    <string name="area_major">领域/专业</string>
-    <string name="man">男</string>
-    <string name="gril">女</string>
-    <string name="get_verification_code">获取验证码</string>
-    <string name="enter_verification_code">输入验证码</string>
-    <string name="err">服务器异常或网络异常</string>
-    <string name="share_result">"分享成功啦"</string>
-    <string name="share_error">"分享失败啦"</string>
-    <string name="share_cancel">"分享取消了"</string>
-    <string name="please_log_in">请登录</string>
-    <string name="format_not_correct">手机号码格式不正确</string>
-    <string name="input_phone">请输入手机号码</string>
-    <string name="phone_not_registered">该手机号未注册</string>
-    <string name="phone_existing">该手机号已存在</string>
-    <string name="comment">评论  </string>
-    <string name="cancel">取消</string>
-    <string name="credits">积分</string>
-    <string name="complete">完成</string>
-    <string name="not_found">未找到结果</string>
-    <string name="unbounded">未绑定</string>
-    <string name="verification_code_empty">验证码不能为空</string>
-    <string name="password_cannot_empty">密码不能为空</string>
-    <string name="name_cannot_empty">姓名不能为空</string>
-    <string name="passwords_match">密码不一致</string>
-    <string name="password_can_only">密码不能少于6位,且只能包含数字字母下划线</string>
-    <string name="change_password">修改密码</string>
-    <string name="select_type_feedback">请选择反馈类型!</string>
-    <string name="input_feedback_content">请输入反馈内容!</string>
-    <string name="account_cannot_empty">账号不能为空</string>
-    <string name="authorization_success">授权成功</string>
-    <string name="authorization_error">授权出错</string>
-    <string name="authorization_cancel">授权取消</string>
-    <string name="share">分享</string>
-    <string name="delete">删除</string>
-    <string name="phone_format_correct">手机号码格式不正确</string>
-    <string name="phone_been_binding">该手机号已被绑定</string>
-    <string name="enter_the_password">输入密码不一致</string>
-    <string name="enter_the_phone">输入手机号码不一致</string>
-    <string name="enter_password_consistent">输入密码一致</string>
-    <string name="newpassword_oldpassword_same">新密码与旧密码相同</string>
-    <string name="enter_correct_password">请输入正确的密码</string>
-    <string name="ensure_correct_password">请保证密码输入一致</string>
-    <string name="determine_cancellation">确定注销?</string>
-    <string name="user_name">用户名</string>
-    <string name="sex_info">性别</string>
-    <string name="harmful_materials">有害内容</string>
-    <string name="pornographic">淫秽色情</string>
-    <string name="falsity_content">虚假内容</string>
-    <string name="information_disclosure">信息泄露</string>
-    <string name="spam">垃圾广告</string>
-    <string name="copyright_disputes">版权纠纷</string>
-    <string name="submit">提交</string>
-    <string name="setting">设置</string>
-    <string name="account_security">账号与安全</string>
-    <string name="system_setting">系统设置</string>
-    <string name="about_giiisp">关于集思谱</string>
-    <string name="giiisp">集思谱</string>
-    <string name="logout">退出登录</string>
-    <string name="binding_phone">绑定手机</string>
-    <string name="input_verification_code">请输入4位数证码</string>
-    <string name="correct_verification_code">请输入正确的验证码</string>
-    <string name="current_password">当前密码:</string>
-    <string name="show_password">显示密码</string>
-    <string name="confirm_password">确认密码:</string>
-    <string name="new_password">输入新密码</string>
-    <string name="new_pwd">新密码　:</string>
-    <string name="camera">拍照</string>
-    <string name="album">图库</string>
-    <string name="msg_title">系统消息</string>
-    <string name="cleancache">清除缓存</string>
-    <string name="company">集思谱(北京)科技有限公司</string>
-    <string name="feedback">反馈</string>
-    <string name="giiisp_copyright">Copyright © 2017 GIIISP</string>
-    <string name="name">姓名</string>
-    <string name="area_code">+86</string>
-    <string name="user_mechanism">机构</string>
-    <string name="user_position">职称</string>
-    <string name="user_department">部门</string>
-    <string name="user_jobtitle">职务</string>
-    <string name="user_resume">履历</string>
-    <string name="at_my">\@我的</string>
-    <string name="praise">赞</string>
-    <string name="problem">问题</string>
-    <string name="answer">回答</string>
-    <string name="friend_request">好友请求</string>
-    <string name="same_question">同问</string>
-    <string name="news">消息</string>
-    <string name="my_suggest">我有建议</string>
-    <string name="comment_failure">问答发送失败</string>
-    <string name="share_failure">播放失败</string>
-    <string name="crash">产品闪退</string>
-    <string name="contact">联系方式:邮箱、QQ、手机号 (选填)</string>
-    <string name="prompt">请勿提交不良信息，否则将导致你的账号被封禁</string>
-    <string name="phone_login">手机登录</string>
-    <string name="weixin_login">微信登录</string>
-    <string name="tourist">游客进入</string>
-    <string name="slogan">是一种科研方式</string>
-    <string name="retrieve_password">找回密码</string>
-    <string name="notification_settings">通知设置</string>
-    <string name="my_points">我的积分</string>
-    <string name="icon">头像</string>
-    <string name="image_watermarking">图片水印</string>
-    <string name="voice_selection">语音选择</string>
-    <string name="school">学校</string>
-    <string name="major">专业</string>
-    <string name="edubackground">学历</string>
-    <string name="degree">学位</string>
-    <string name="starttime">开始时间</string>
-    <string name="endtime">结束时间</string>
-    <string name="select_your_person">请选择您的认证人</string>
-    <string name="professional_identity">选择以下一位认证人，请Ta证明您的职业身份</string>
-    <string name="someone_may_know">您可能认识的人</string>
-    <string name="edit">编辑</string>
-    <string name="add_to">添加</string>
-    <string name="self_introduction">自我介绍</string>
-    <string name="education_experience">教育经历</string>
-    <string name="add_job_information">添加职位信息</string>
-    <string name="subordinate_institution">所属机构</string>
-    <string name="fieldmajor">领域/专业</string>
-    <string name="real_name">真实姓名</string>
-    <string name="fill_in_email">请填写您的机构邮箱</string>
-    <string name="email">邮箱</string>
-    <string name="contact_information">联系方式</string>
-    <string name="welcome_page">欢迎页</string>
-    <string name="choose_areas_interest">请选择您关注的专业领域</string>
-    <string name="areas_of_concern">关注的领域</string>
-    <string name="key_words">关注的关键字</string>
-    <string name="concerned_scholar">关注的学者</string>
-    <string name="you_are_welcome">完成，欢迎进入集思谱！</string>
-    <string name="empty">清空</string>
-    <string name="answer_concise">提问请尽量简洁,控制在100字以内…</string>
-    <string name="publish">发表</string>
-    <string name="put_question">提问</string>
-    <string name="congratulations">恭喜您!</string>
-    <string name="successful_submission">您的认证资料已成功提交!</string>
-    <string name="Return_home">返回首页</string>
-    <string name="examine_prompt">我们会在3~5个工作日完成对资料的审核</string>
-    <string name="sms_notification">并以短信的形式通知您。</string>
-    <string name="confirm_submission">确认提交</string>
-    <string name="confirm_delete">确认删除</string>
-    <string name="screening_certificate">筛选证明人</string>
-    <string name="privacy_setting">隐私设置</string>
-    <string name="unknown">未知</string>
-    <string name="dubbing_consistent_with_text">配音请与文本保持一致</string>
-    <string name="field">领域</string>
-    <string name="keyword">关键字</string>
-    <string name="scholars">学者</string>
-    <string name="click_start_voice">点击开始配音</string>
-    <string name="reset">重录</string>
-    <string name="click_on_the_audition">点击试听</string>
-    <string name="there_is_no_data">There is no data</string>
-    <string name="follow">关注</string>
-    <string name="fans">粉丝</string>
-    <string name="summary">综述</string>
-    <string name="paper">论文</string>
-    <string name="answers">答:</string>
-    <string name="author">作者:</string>
-    <string name="open_up">展开</string>
-    <string name="examine_minutely">追问</string>
-    <string name="reply">回复</string>
-    <string name="to_answer">追答</string>
-    <string name="web_link">网页链接</string>
-    <string name="you_search">你搜过的</string>
-    <string name="more">更多</string>
-    <string name="follow_add">+关注</string>
-    <string name="abstract_version">摘要版</string>
-    <string name="en">EN</string>
-    <string name="release">发布</string>
-    <string name="preview">预览</string>
-    <string name="department">部 门:</string>
-    <string name="position">职 位:</string>
-    <string name="research_field">研究领域:</string>
-    <string name="introduction_of_scholars">学者简介</string>
-    <string name="paper_list">论文列表</string>
-    <string name="review_list">综述列表</string>
-    <string name="organization">机 构:</string>
-    <string name="authentication_information">认证信息</string>
-    <string name="journal_name_author_keyword">刊物名称/作者/关键字</string>
-    <string name="giiisp_slogan">是 一 种 科 研 方 式</string>
-    <string name="all_start">全部开始</string>
-    <string name="all_suspended">全部暂停</string>
-    <string name="later">稍后</string>
-    <string name="upgrade">升级</string>
-    <string name="search">搜索</string>
-    <string name="remake">重录</string>
-    <string name="audition">试听</string>
-    <string name="timer">00:00:00</string>
-    <string name="next">下一步</string>
-    <string name="next_choose_references">下一步：选择证明人</string>
-    <string name="mandatory">必选</string>
-    <string name="select_area_expertise">点击选择您关注的专业领域</string>
-    <string name="access_to_home">直接进入首页</string>
-    <string name="search_hint">关键字、论文标题、机构、期刊、学者等</string>
-    <string name="history">历史</string>
-    <string name="download">下载</string>
-    <string name="giiisp_com">giiisp.com</string>
-    <string name="unauthorized">未认证</string>
-    <string name="question_and_answer">问答</string>
-    <string name="subscribe">订阅</string>
-    <string name="play_the_history">播放历史</string>
-    <string name="contacts">联系人</string>
-    <string name="collection">收藏</string>
-    <string name="my_inquires">我要提问</string>
-    <string name="cn">CN</string>
-    <string name="integrity">完整</string>
-    <string name="essence">精华</string>
-    <string name="digest">摘要</string>
-    <string name="all_the_people">所有人</string>
-    <string name="only_friends">仅好友</string>
-    <string name="only_yourself">仅自己</string>
-    <string name="information_auth">资料认证</string>
-    <string name="see_my_information">谁可以看我的资料</string>
-    <string name="see_my_email">谁可以看我的邮箱</string>
-    <string name="see_my_phone">谁可以看我的电话号码</string>
-    <string name="problem_hint">追问次数仅限一次,请简要您的问题。</string>
-    <string name="record_hint">配音请于文本保持一致</string>
-    <string name="complete_record_hint">点击开始朗读您的长文本解答</string>
-    <string name="click_start_recording">点击开始配音</string>
-    <string name="dubbing">配音</string>
-    <string name="is_dubbing">正在配音</string>
-    <string name="dubbing_pause">配音已暂停</string>
-    <string name="cancel_storage_permission">取消存储授权,不能存储录音文件</string>
-    <string name="prohibit_storage_permission">您已经禁止弹出存储的授权操作,请在设置中手动开启</string>
-    <string name="cancel_audio_permission">取消录音授权,不能录音</string>
-    <string name="prohibit_audio_permission">您已经禁止弹出录音的授权操作,请在设置中手动开启</string>
-    <string name="failed_create_file">创建文件失败</string>
-    <string name="audio_error">录音出现异常,请检查相关权限</string>
-    <string name="edit_information">编辑名片信息</string>
-    <string name="save">保存</string>
-    <string name="my_education_experience">我的教育经历</string>
-    <string name="home">首页</string>
-    <string name="mine">我的</string>
-    <string name="questions_answers">问答</string>
-    <string name="literature_index">文献索引</string>
-    <string name="label">标签</string>
-    <string name="meeting">会议</string>
-    <string name="please_input_answered">请输入你回答的内容…</string>
-    <string name="please_input_content">请输入内容…</string>
-    <string name="problem_exists">此图片存在改问题</string>
-    <string name="verified_complete">      完成</string>
-    <string name="select_a_witness"> 选择证明人</string>
-    <string name="upload_msg"> 资料上传</string>
-    <string name="essential_information">  基本信息</string>
-    <string name="not_binding_mobile">未绑定手机号码</string>
-    <string name="not_binding_email">未绑定邮箱</string>
-    <string name="not_binding_web">未添加个人网站</string>
-    <string name="link_page">链接页面</string>
-    <string name="journalname_author_keyword">刊物名称/作者/关键字</string>
-    <string name="recommended">推荐</string>
-    <string name="next_choose_keywords">下一步：选择关注的关键字</string>
-    <string name="next_attention_scholars">下一步：选择关注的学者</string>
-    <string name="my_sub">我订阅的</string>
-    <string name="my_msg">我的消息</string>
-    <string name="scholars_details_page">学者详情页</string>
-    <string name="plays">播放历史</string>
-    <string name="play">播放列表</string>
-    <string name="course">教程列表</string>
-    <string name="group">我的团组</string>
-    <string name="group_mine">团组</string>
-    <string name="technology_label">技术标签</string>
-    <string name="mathematics_label">数学标签</string>
-    <string name="data_labels">数据标签</string>
-    <string name="my_paper_list">我的论文列表</string>
-    <string name="my_review_list">我的综述列表</string>
-    <string name="voice_file_list">待配音文件列表</string>
-    <string name="my_fans">我的粉丝</string>
-    <string name="ta_fans">TA的粉丝</string>
-    <string name="my_follow">我的关注</string>
-    <string name="ta_follow">TA的关注</string>
-    <string name="download_begins">下载开始</string>
-    <string name="everyone_search">大家都在搜的</string>
-    <string name="in_a_batch">换一批</string>
-    <string name="list_of_scholars">学者列表</string>
-    <string name="more_scholars">更多学者>></string>
-    <string name="more_papers">更多论文>></string>
-    <string name="paused">已暂停</string>
-    <string name="download_completes">下载完成</string>
-    <string name="version_only_language">此版本只有本语言</string>
-    <string name="mailbox_authentication">邮箱认证</string>
-    <string name="enter_working_email">请输入工作邮箱</string>
-    <string name="submit_applications">提交申请</string>
-    <string name="unfinished">此版本另一种语言没配音完</string>
-    <string name="temporarily_not_opened">暂未开放</string>
-    <string name="need_login">需要登录才能执行此操作</string>
-    <string name="determine_cancel_attention">确定取消关注</string>
-    <string name="confirm_delete_this_entry">确定删除本条目</string>
-    <string name="sure_delete_alldata">确定删除全部数据</string>
-    <string name="determine_cancel_collection">确定取消收藏</string>
-    <string name="downloading">下载中</string>
-    <string name="in_a_column">综述专栏</string>
-    <string name="hot_recommended">热门推荐</string>
-    <string name="login_failed">登录失败</string>
-    <string name="in_authentication">认证中…</string>
-    <string name="auth_pass">认证已通过</string>
-    <string name="log_in_again">修改成功！请重新登录</string>
-    <string name="look_profile">谁可以看我的资料</string>
-    <string name="privacy_settings">隐私设置</string>
-    <string name="clear_the_cache">确定清除缓存?</string>
-    <string name="newest">最新</string>
-    <string name="notice">通知</string>
-    <string name="interactive">互动</string>
-    <string name="set_data">设置个人资料</string>
-    <string name="web_editing_data">可在电脑上登录giiisp.com网页版快捷编辑资料</string>
-    <string name="input">输入</string>
-    <string name="uploaded_successfully">上传成功</string>
-    <string name="complete_dubbing">完成配音</string>
-    <string name="email_not_correct">邮箱格式不正确</string>
-    <string name="email_not_tu">请添加论文图片</string>
-    <string name="position_verified">身份认证</string>
-    <string name="phone_verified">手机号不能为空</string>
-    <string name="professional_verified">机构不能为空</string>
-    <string name="degree_verified">学位信息不能为空</string>
-    <string name="edubackground_verified">学历信息不能为空</string>
-    <string name="time_start_verified">开始时间不能为空</string>
-    <string name="time_end_verified">结束时间不能为空</string>
-    <string name="edit_user_web">个人网址</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name" tools:ignore="MissingTranslation">集思谱</string>
+    <string name="prompt_exit_app" tools:ignore="MissingTranslation">再按一次退出程序</string>
+    <string name="et_login_input_nunbers_phone" tools:ignore="MissingTranslation">输入手机号</string>
+    <string name="et_input_psw" tools:ignore="MissingTranslation">输入密码</string>
+    <string name="bt_forget_psw" tools:ignore="MissingTranslation">密码</string>
+    <string name="loginID" tools:ignore="MissingTranslation">注册新账号</string>
+    <string name="back" tools:ignore="MissingTranslation">  返回</string>
+    <string name="register" tools:ignore="MissingTranslation">登录</string>
+    <string name="login" tools:ignore="MissingTranslation">手机号或邮箱注册</string>
+    <string name="confirm" tools:ignore="MissingTranslation">确定</string>
+    <string name="user_agreement" tools:ignore="MissingTranslation">用户协议</string>
+    <string name="forget_password" tools:ignore="MissingTranslation">忘记密码?</string>
+    <string name="enter_password" tools:ignore="MissingTranslation">输入密码</string>
+    <string name="login_enter_password" tools:ignore="MissingTranslation">输入密码</string>
+    <string name="login_second_password" tools:ignore="MissingTranslation">确认密码</string>
+    <string name="enter_phone" tools:ignore="MissingTranslation">手机号码</string>
+    <string name="enter_nickname" tools:ignore="MissingTranslation">输入昵称</string>
+    <string name="sex" tools:ignore="MissingTranslation">性别</string>
+    <string name="area_major" tools:ignore="MissingTranslation">领域/专业</string>
+    <string name="man" tools:ignore="MissingTranslation">男</string>
+    <string name="gril" tools:ignore="MissingTranslation">女</string>
+    <string name="get_verification_code" tools:ignore="MissingTranslation">获取验证码</string>
+    <string name="enter_verification_code" tools:ignore="MissingTranslation">输入验证码</string>
+    <string name="err" tools:ignore="MissingTranslation">服务器异常或网络异常</string>
+    <string name="share_result" tools:ignore="MissingTranslation">"分享成功啦"</string>
+    <string name="share_error" tools:ignore="MissingTranslation">"分享失败啦"</string>
+    <string name="share_cancel" tools:ignore="MissingTranslation">"分享取消了"</string>
+    <string name="please_log_in" tools:ignore="MissingTranslation">请登录</string>
+    <string name="format_not_correct" tools:ignore="MissingTranslation">手机号码格式不正确</string>
+    <string name="input_phone" tools:ignore="MissingTranslation">请输入手机号码</string>
+    <string name="phone_not_registered" tools:ignore="MissingTranslation">该手机号未注册</string>
+    <string name="phone_existing" tools:ignore="MissingTranslation">该手机号已存在</string>
+    <string name="comment" tools:ignore="MissingTranslation">评论  </string>
+    <string name="cancel" tools:ignore="MissingTranslation">取消</string>
+    <string name="credits" tools:ignore="MissingTranslation">积分</string>
+    <string name="complete" tools:ignore="MissingTranslation">完成</string>
+    <string name="not_found" tools:ignore="MissingTranslation">未找到结果</string>
+    <string name="unbounded" tools:ignore="MissingTranslation">未绑定</string>
+    <string name="verification_code_empty" tools:ignore="MissingTranslation">验证码不能为空</string>
+    <string name="password_cannot_empty" tools:ignore="MissingTranslation">密码不能为空</string>
+    <string name="name_cannot_empty" tools:ignore="MissingTranslation">姓名不能为空</string>
+    <string name="passwords_match" tools:ignore="MissingTranslation">密码不一致</string>
+    <string name="password_can_only" tools:ignore="MissingTranslation">密码不能少于6位,且只能包含数字字母下划线</string>
+    <string name="change_password" tools:ignore="MissingTranslation">修改密码</string>
+    <string name="select_type_feedback" tools:ignore="MissingTranslation">请选择反馈类型!</string>
+    <string name="input_feedback_content" tools:ignore="MissingTranslation">请输入反馈内容!</string>
+    <string name="account_cannot_empty" tools:ignore="MissingTranslation">账号不能为空</string>
+    <string name="authorization_success" tools:ignore="MissingTranslation">授权成功</string>
+    <string name="authorization_error" tools:ignore="MissingTranslation">授权出错</string>
+    <string name="authorization_cancel" tools:ignore="MissingTranslation">授权取消</string>
+    <string name="share" tools:ignore="MissingTranslation">分享</string>
+    <string name="delete" tools:ignore="MissingTranslation">删除</string>
+    <string name="phone_format_correct" tools:ignore="MissingTranslation">手机号码格式不正确</string>
+    <string name="phone_been_binding" tools:ignore="MissingTranslation">该手机号已被绑定</string>
+    <string name="enter_the_password" tools:ignore="MissingTranslation">输入密码不一致</string>
+    <string name="enter_the_phone" tools:ignore="MissingTranslation">输入手机号码不一致</string>
+    <string name="enter_password_consistent" tools:ignore="MissingTranslation">输入密码一致</string>
+    <string name="newpassword_oldpassword_same" tools:ignore="MissingTranslation">新密码与旧密码相同</string>
+    <string name="enter_correct_password" tools:ignore="MissingTranslation">请输入正确的密码</string>
+    <string name="ensure_correct_password" tools:ignore="MissingTranslation">请保证密码输入一致</string>
+    <string name="determine_cancellation" tools:ignore="MissingTranslation">确定注销?</string>
+    <string name="user_name" tools:ignore="MissingTranslation">用户名</string>
+    <string name="sex_info" tools:ignore="MissingTranslation">性别</string>
+    <string name="harmful_materials" tools:ignore="MissingTranslation">有害内容</string>
+    <string name="pornographic" tools:ignore="MissingTranslation">淫秽色情</string>
+    <string name="falsity_content" tools:ignore="MissingTranslation">虚假内容</string>
+    <string name="information_disclosure" tools:ignore="MissingTranslation">信息泄露</string>
+    <string name="spam" tools:ignore="MissingTranslation">垃圾广告</string>
+    <string name="copyright_disputes" tools:ignore="MissingTranslation">版权纠纷</string>
+    <string name="submit" tools:ignore="MissingTranslation">提交</string>
+    <string name="setting" tools:ignore="MissingTranslation">设置</string>
+    <string name="account_security" tools:ignore="MissingTranslation">账号与安全</string>
+    <string name="system_setting" tools:ignore="MissingTranslation">系统设置</string>
+    <string name="about_giiisp" tools:ignore="MissingTranslation">关于集思谱</string>
+    <string name="giiisp" tools:ignore="MissingTranslation">集思谱</string>
+    <string name="logout" tools:ignore="MissingTranslation">退出登录</string>
+    <string name="binding_phone" tools:ignore="MissingTranslation">绑定手机</string>
+    <string name="input_verification_code" tools:ignore="MissingTranslation">请输入4位数证码</string>
+    <string name="correct_verification_code" tools:ignore="MissingTranslation">请输入正确的验证码</string>
+    <string name="current_password" tools:ignore="MissingTranslation">当前密码:</string>
+    <string name="show_password" tools:ignore="MissingTranslation">显示密码</string>
+    <string name="confirm_password" tools:ignore="MissingTranslation">确认密码:</string>
+    <string name="new_password" tools:ignore="MissingTranslation">输入新密码</string>
+    <string name="new_pwd" tools:ignore="MissingTranslation">新密码　:</string>
+    <string name="camera" tools:ignore="MissingTranslation">拍照</string>
+    <string name="album" tools:ignore="MissingTranslation">图库</string>
+    <string name="msg_title" tools:ignore="MissingTranslation">系统消息</string>
+    <string name="cleancache" tools:ignore="MissingTranslation">清除缓存</string>
+    <string name="company" tools:ignore="MissingTranslation">集思谱(北京)科技有限公司</string>
+    <string name="feedback" tools:ignore="MissingTranslation">反馈</string>
+    <string name="giiisp_copyright" tools:ignore="MissingTranslation">Copyright © 2017 GIIISP</string>
+    <string name="name" tools:ignore="MissingTranslation">姓名</string>
+    <string name="area_code" tools:ignore="MissingTranslation">+86</string>
+    <string name="user_mechanism" tools:ignore="MissingTranslation">机构</string>
+    <string name="user_position" tools:ignore="MissingTranslation">职称</string>
+    <string name="user_department" tools:ignore="MissingTranslation">部门</string>
+    <string name="user_jobtitle" tools:ignore="MissingTranslation">职务</string>
+    <string name="user_resume" tools:ignore="MissingTranslation">履历</string>
+    <string name="at_my" tools:ignore="MissingTranslation">\@我的</string>
+    <string name="praise" tools:ignore="MissingTranslation">赞</string>
+    <string name="problem" tools:ignore="MissingTranslation">问题</string>
+    <string name="answer" tools:ignore="MissingTranslation">回答</string>
+    <string name="friend_request" tools:ignore="MissingTranslation">好友请求</string>
+    <string name="same_question" tools:ignore="MissingTranslation">同问</string>
+    <string name="news" tools:ignore="MissingTranslation">消息</string>
+    <string name="my_suggest" tools:ignore="MissingTranslation">我有建议</string>
+    <string name="comment_failure" tools:ignore="MissingTranslation">问答发送失败</string>
+    <string name="share_failure" tools:ignore="MissingTranslation">播放失败</string>
+    <string name="crash" tools:ignore="MissingTranslation">产品闪退</string>
+    <string name="contact" tools:ignore="MissingTranslation">联系方式:邮箱、QQ、手机号 (选填)</string>
+    <string name="prompt" tools:ignore="MissingTranslation">请勿提交不良信息，否则将导致你的账号被封禁</string>
+    <string name="phone_login" tools:ignore="MissingTranslation">手机登录</string>
+    <string name="weixin_login" tools:ignore="MissingTranslation">微信登录</string>
+    <string name="tourist" tools:ignore="MissingTranslation">游客进入</string>
+    <string name="slogan" tools:ignore="MissingTranslation">是一种科研方式</string>
+    <string name="retrieve_password" tools:ignore="MissingTranslation">找回密码</string>
+    <string name="notification_settings" tools:ignore="MissingTranslation">通知设置</string>
+    <string name="my_points" tools:ignore="MissingTranslation">我的积分</string>
+    <string name="icon" tools:ignore="MissingTranslation">头像</string>
+    <string name="image_watermarking" tools:ignore="MissingTranslation">图片水印</string>
+    <string name="voice_selection" tools:ignore="MissingTranslation">语音选择</string>
+    <string name="school" tools:ignore="MissingTranslation">学校</string>
+    <string name="major" tools:ignore="MissingTranslation">专业</string>
+    <string name="edubackground" tools:ignore="MissingTranslation">学历</string>
+    <string name="degree" tools:ignore="MissingTranslation">学位</string>
+    <string name="starttime" tools:ignore="MissingTranslation">开始时间</string>
+    <string name="endtime" tools:ignore="MissingTranslation">结束时间</string>
+    <string name="select_your_person" tools:ignore="MissingTranslation">请选择您的认证人</string>
+    <string name="professional_identity" tools:ignore="MissingTranslation">选择以下一位认证人，请Ta证明您的职业身份</string>
+    <string name="someone_may_know" tools:ignore="MissingTranslation">您可能认识的人</string>
+    <string name="edit" tools:ignore="MissingTranslation">编辑</string>
+    <string name="add_to" tools:ignore="MissingTranslation">添加</string>
+    <string name="self_introduction" tools:ignore="MissingTranslation">自我介绍</string>
+    <string name="education_experience" tools:ignore="MissingTranslation">教育经历</string>
+    <string name="add_job_information" tools:ignore="MissingTranslation">添加职位信息</string>
+    <string name="subordinate_institution" tools:ignore="MissingTranslation">所属机构</string>
+    <string name="fieldmajor" tools:ignore="MissingTranslation">领域/专业</string>
+    <string name="real_name" tools:ignore="MissingTranslation">真实姓名</string>
+    <string name="fill_in_email" tools:ignore="MissingTranslation">请填写您的机构邮箱</string>
+    <string name="email" tools:ignore="MissingTranslation">邮箱</string>
+    <string name="contact_information" tools:ignore="MissingTranslation">联系方式</string>
+    <string name="welcome_page" tools:ignore="MissingTranslation">欢迎页</string>
+    <string name="choose_areas_interest" tools:ignore="MissingTranslation">请选择您关注的专业领域</string>
+    <string name="areas_of_concern" tools:ignore="MissingTranslation">关注的领域</string>
+    <string name="key_words" tools:ignore="MissingTranslation">关注的关键字</string>
+    <string name="concerned_scholar" tools:ignore="MissingTranslation">关注的学者</string>
+    <string name="you_are_welcome" tools:ignore="MissingTranslation">完成，欢迎进入集思谱！</string>
+    <string name="empty" tools:ignore="MissingTranslation">清空</string>
+    <string name="answer_concise" tools:ignore="MissingTranslation">提问请尽量简洁,控制在100字以内…</string>
+    <string name="publish" tools:ignore="MissingTranslation">发表</string>
+    <string name="put_question" tools:ignore="MissingTranslation">提问</string>
+    <string name="congratulations" tools:ignore="MissingTranslation">恭喜您!</string>
+    <string name="successful_submission" tools:ignore="MissingTranslation">您的认证资料已成功提交!</string>
+    <string name="Return_home" tools:ignore="MissingTranslation">返回首页</string>
+    <string name="examine_prompt" tools:ignore="MissingTranslation">我们会在3~5个工作日完成对资料的审核</string>
+    <string name="sms_notification" tools:ignore="MissingTranslation">并以短信的形式通知您。</string>
+    <string name="confirm_submission" tools:ignore="MissingTranslation">确认提交</string>
+    <string name="confirm_delete" tools:ignore="MissingTranslation">确认删除</string>
+    <string name="screening_certificate" tools:ignore="MissingTranslation">筛选证明人</string>
+    <string name="privacy_setting" tools:ignore="MissingTranslation">隐私设置</string>
+    <string name="unknown" tools:ignore="MissingTranslation">未知</string>
+    <string name="dubbing_consistent_with_text" tools:ignore="MissingTranslation">配音请与文本保持一致</string>
+    <string name="field" tools:ignore="MissingTranslation">领域</string>
+    <string name="keyword" tools:ignore="MissingTranslation">关键字</string>
+    <string name="scholars" tools:ignore="MissingTranslation">学者</string>
+    <string name="click_start_voice" tools:ignore="MissingTranslation">点击开始配音</string>
+    <string name="reset" tools:ignore="MissingTranslation">重录</string>
+    <string name="click_on_the_audition" tools:ignore="MissingTranslation">点击试听</string>
+    <string name="there_is_no_data" tools:ignore="MissingTranslation">There is no data</string>
+    <string name="follow" tools:ignore="MissingTranslation">关注</string>
+    <string name="fans" tools:ignore="MissingTranslation">粉丝</string>
+    <string name="summary" tools:ignore="MissingTranslation">综述</string>
+    <string name="paper" tools:ignore="MissingTranslation">论文</string>
+    <string name="answers" tools:ignore="MissingTranslation">答:</string>
+    <string name="author" tools:ignore="MissingTranslation">作者:</string>
+    <string name="open_up" tools:ignore="MissingTranslation">展开</string>
+    <string name="examine_minutely" tools:ignore="MissingTranslation">追问</string>
+    <string name="reply" tools:ignore="MissingTranslation">回复</string>
+    <string name="to_answer" tools:ignore="MissingTranslation">追答</string>
+    <string name="web_link" tools:ignore="MissingTranslation">网页链接</string>
+    <string name="you_search" tools:ignore="MissingTranslation">你搜过的</string>
+    <string name="more" tools:ignore="MissingTranslation">更多</string>
+    <string name="follow_add" tools:ignore="MissingTranslation">+关注</string>
+    <string name="abstract_version" tools:ignore="MissingTranslation">摘要版</string>
+    <string name="en" tools:ignore="MissingTranslation">EN</string>
+    <string name="release" tools:ignore="MissingTranslation">发布</string>
+    <string name="preview" tools:ignore="MissingTranslation">预览</string>
+    <string name="department" tools:ignore="MissingTranslation">部 门:</string>
+    <string name="position" tools:ignore="MissingTranslation">职 位:</string>
+    <string name="research_field" tools:ignore="MissingTranslation">研究领域:</string>
+    <string name="introduction_of_scholars" tools:ignore="MissingTranslation">学者简介</string>
+    <string name="paper_list" tools:ignore="MissingTranslation">论文列表</string>
+    <string name="review_list" tools:ignore="MissingTranslation">综述列表</string>
+    <string name="organization" tools:ignore="MissingTranslation">机 构:</string>
+    <string name="authentication_information" tools:ignore="MissingTranslation">认证信息</string>
+    <string name="journal_name_author_keyword" tools:ignore="MissingTranslation">刊物名称/作者/关键字</string>
+    <string name="giiisp_slogan" tools:ignore="MissingTranslation">是 一 种 科 研 方 式</string>
+    <string name="all_start" tools:ignore="MissingTranslation">全部开始</string>
+    <string name="all_suspended" tools:ignore="MissingTranslation">全部暂停</string>
+    <string name="later" tools:ignore="MissingTranslation">稍后</string>
+    <string name="upgrade" tools:ignore="MissingTranslation">升级</string>
+    <string name="search" tools:ignore="MissingTranslation">搜索</string>
+    <string name="remake" tools:ignore="MissingTranslation">重录</string>
+    <string name="audition" tools:ignore="MissingTranslation">试听</string>
+    <string name="timer" tools:ignore="MissingTranslation">00:00:00</string>
+    <string name="next" tools:ignore="MissingTranslation">下一步</string>
+    <string name="next_choose_references" tools:ignore="MissingTranslation">下一步：选择证明人</string>
+    <string name="mandatory" tools:ignore="MissingTranslation">必选</string>
+    <string name="select_area_expertise" tools:ignore="MissingTranslation">点击选择您关注的专业领域</string>
+    <string name="access_to_home" tools:ignore="MissingTranslation">直接进入首页</string>
+    <string name="search_hint" tools:ignore="MissingTranslation">关键字、论文标题、机构、期刊、学者等</string>
+    <string name="history" tools:ignore="MissingTranslation">历史</string>
+    <string name="download" tools:ignore="MissingTranslation">下载</string>
+    <string name="giiisp_com" tools:ignore="MissingTranslation">giiisp.com</string>
+    <string name="unauthorized" tools:ignore="MissingTranslation">未认证</string>
+    <string name="question_and_answer" tools:ignore="MissingTranslation">问答</string>
+    <string name="subscribe" tools:ignore="MissingTranslation">订阅</string>
+    <string name="play_the_history" tools:ignore="MissingTranslation">播放历史</string>
+    <string name="contacts" tools:ignore="MissingTranslation">联系人</string>
+    <string name="collection" tools:ignore="MissingTranslation">收藏</string>
+    <string name="my_inquires" tools:ignore="MissingTranslation">我要提问</string>
+    <string name="cn" tools:ignore="MissingTranslation">CN</string>
+    <string name="integrity" tools:ignore="MissingTranslation">完整</string>
+    <string name="essence" tools:ignore="MissingTranslation">精华</string>
+    <string name="digest" tools:ignore="MissingTranslation">摘要</string>
+    <string name="all_the_people" tools:ignore="MissingTranslation">所有人</string>
+    <string name="only_friends" tools:ignore="MissingTranslation">仅好友</string>
+    <string name="only_yourself" tools:ignore="MissingTranslation">仅自己</string>
+    <string name="information_auth" tools:ignore="MissingTranslation">资料认证</string>
+    <string name="see_my_information" tools:ignore="MissingTranslation">谁可以看我的资料</string>
+    <string name="see_my_email" tools:ignore="MissingTranslation">谁可以看我的邮箱</string>
+    <string name="see_my_phone" tools:ignore="MissingTranslation">谁可以看我的电话号码</string>
+    <string name="problem_hint" tools:ignore="MissingTranslation">追问次数仅限一次,请简要您的问题。</string>
+    <string name="record_hint" tools:ignore="MissingTranslation">配音请于文本保持一致</string>
+    <string name="complete_record_hint" tools:ignore="MissingTranslation">点击开始朗读您的长文本解答</string>
+    <string name="click_start_recording" tools:ignore="MissingTranslation">点击开始配音</string>
+    <string name="dubbing" tools:ignore="MissingTranslation">配音</string>
+    <string name="is_dubbing" tools:ignore="MissingTranslation">正在配音</string>
+    <string name="dubbing_pause" tools:ignore="MissingTranslation">配音已暂停</string>
+    <string name="cancel_storage_permission" tools:ignore="MissingTranslation">取消存储授权,不能存储录音文件</string>
+    <string name="prohibit_storage_permission" tools:ignore="MissingTranslation">您已经禁止弹出存储的授权操作,请在设置中手动开启</string>
+    <string name="cancel_audio_permission" tools:ignore="MissingTranslation">取消录音授权,不能录音</string>
+    <string name="prohibit_audio_permission" tools:ignore="MissingTranslation">您已经禁止弹出录音的授权操作,请在设置中手动开启</string>
+    <string name="failed_create_file" tools:ignore="MissingTranslation">创建文件失败</string>
+    <string name="audio_error" tools:ignore="MissingTranslation">录音出现异常,请检查相关权限</string>
+    <string name="edit_information" tools:ignore="MissingTranslation">编辑名片信息</string>
+    <string name="save" tools:ignore="MissingTranslation">保存</string>
+    <string name="my_education_experience" tools:ignore="MissingTranslation">我的教育经历</string>
+    <string name="home" tools:ignore="MissingTranslation">首页</string>
+    <string name="mine" tools:ignore="MissingTranslation">我的</string>
+    <string name="questions_answers" tools:ignore="MissingTranslation">问答</string>
+    <string name="literature_index" tools:ignore="MissingTranslation">文献索引</string>
+    <string name="label" tools:ignore="MissingTranslation">标签</string>
+    <string name="meeting" tools:ignore="MissingTranslation">会议</string>
+    <string name="please_input_answered" tools:ignore="MissingTranslation">请输入你回答的内容…</string>
+    <string name="please_input_content" tools:ignore="MissingTranslation">请输入内容…</string>
+    <string name="problem_exists" tools:ignore="MissingTranslation">此图片存在改问题</string>
+    <string name="verified_complete" tools:ignore="MissingTranslation">      完成</string>
+    <string name="select_a_witness" tools:ignore="MissingTranslation"> 选择证明人</string>
+    <string name="upload_msg" tools:ignore="MissingTranslation"> 资料上传</string>
+    <string name="essential_information" tools:ignore="MissingTranslation">  基本信息</string>
+    <string name="not_binding_mobile" tools:ignore="MissingTranslation">未绑定手机号码</string>
+    <string name="not_binding_email" tools:ignore="MissingTranslation">未绑定邮箱</string>
+    <string name="not_binding_web" tools:ignore="MissingTranslation">未添加个人网站</string>
+    <string name="link_page" tools:ignore="MissingTranslation">链接页面</string>
+    <string name="journalname_author_keyword" tools:ignore="MissingTranslation">刊物名称/作者/关键字</string>
+    <string name="recommended" tools:ignore="MissingTranslation">推荐</string>
+    <string name="next_choose_keywords" tools:ignore="MissingTranslation">下一步：选择关注的关键字</string>
+    <string name="next_attention_scholars" tools:ignore="MissingTranslation">下一步：选择关注的学者</string>
+    <string name="my_sub" tools:ignore="MissingTranslation">我订阅的</string>
+    <string name="my_msg" tools:ignore="MissingTranslation">我的消息</string>
+    <string name="scholars_details_page" tools:ignore="MissingTranslation">学者详情页</string>
+    <string name="plays" tools:ignore="MissingTranslation">播放历史</string>
+    <string name="play" tools:ignore="MissingTranslation">播放列表</string>
+    <string name="course" tools:ignore="MissingTranslation">教程列表</string>
+    <string name="group" tools:ignore="MissingTranslation">我的团组</string>
+    <string name="group_mine" tools:ignore="MissingTranslation">团组</string>
+    <string name="technology_label" tools:ignore="MissingTranslation">技术标签</string>
+    <string name="mathematics_label" tools:ignore="MissingTranslation">数学标签</string>
+    <string name="data_labels" tools:ignore="MissingTranslation">数据标签</string>
+    <string name="my_paper_list" tools:ignore="MissingTranslation">我的论文列表</string>
+    <string name="my_review_list" tools:ignore="MissingTranslation">我的综述列表</string>
+    <string name="voice_file_list" tools:ignore="MissingTranslation">待配音文件列表</string>
+    <string name="my_fans" tools:ignore="MissingTranslation">我的粉丝</string>
+    <string name="ta_fans" tools:ignore="MissingTranslation">TA的粉丝</string>
+    <string name="my_follow" tools:ignore="MissingTranslation">我的关注</string>
+    <string name="ta_follow" tools:ignore="MissingTranslation">TA的关注</string>
+    <string name="download_begins" tools:ignore="MissingTranslation">下载开始</string>
+    <string name="everyone_search" tools:ignore="MissingTranslation">大家都在搜的</string>
+    <string name="in_a_batch" tools:ignore="MissingTranslation">换一批</string>
+    <string name="list_of_scholars" tools:ignore="MissingTranslation">学者列表</string>
+    <string name="more_scholars" tools:ignore="MissingTranslation">更多学者>></string>
+    <string name="more_papers" tools:ignore="MissingTranslation">更多论文>></string>
+    <string name="paused" tools:ignore="MissingTranslation">已暂停</string>
+    <string name="download_completes" tools:ignore="MissingTranslation">下载完成</string>
+    <string name="version_only_language" tools:ignore="MissingTranslation">此版本只有本语言</string>
+    <string name="mailbox_authentication" tools:ignore="MissingTranslation">邮箱认证</string>
+    <string name="enter_working_email" tools:ignore="MissingTranslation">请输入工作邮箱</string>
+    <string name="submit_applications" tools:ignore="MissingTranslation">提交申请</string>
+    <string name="unfinished" tools:ignore="MissingTranslation">此版本另一种语言没配音完</string>
+    <string name="temporarily_not_opened" tools:ignore="MissingTranslation">暂未开放</string>
+    <string name="need_login" tools:ignore="MissingTranslation">需要登录才能执行此操作</string>
+    <string name="determine_cancel_attention" tools:ignore="MissingTranslation">确定取消关注</string>
+    <string name="confirm_delete_this_entry" tools:ignore="MissingTranslation">确定删除本条目</string>
+    <string name="sure_delete_alldata" tools:ignore="MissingTranslation">确定删除全部数据</string>
+    <string name="determine_cancel_collection" tools:ignore="MissingTranslation">确定取消收藏</string>
+    <string name="downloading" tools:ignore="MissingTranslation">下载中</string>
+    <string name="in_a_column" tools:ignore="MissingTranslation">综述专栏</string>
+    <string name="hot_recommended" tools:ignore="MissingTranslation">热门推荐</string>
+    <string name="login_failed" tools:ignore="MissingTranslation">登录失败</string>
+    <string name="in_authentication" tools:ignore="MissingTranslation">认证中…</string>
+    <string name="auth_pass" tools:ignore="MissingTranslation">认证已通过</string>
+    <string name="log_in_again" tools:ignore="MissingTranslation">修改成功！请重新登录</string>
+    <string name="look_profile" tools:ignore="MissingTranslation">谁可以看我的资料</string>
+    <string name="privacy_settings" tools:ignore="MissingTranslation">隐私设置</string>
+    <string name="clear_the_cache" tools:ignore="MissingTranslation">确定清除缓存?</string>
+    <string name="newest" tools:ignore="MissingTranslation">最新</string>
+    <string name="notice" tools:ignore="MissingTranslation">通知</string>
+    <string name="interactive" tools:ignore="MissingTranslation">互动</string>
+    <string name="set_data" tools:ignore="MissingTranslation">设置个人资料</string>
+    <string name="web_editing_data" tools:ignore="MissingTranslation">可在电脑上登录giiisp.com网页版快捷编辑资料</string>
+    <string name="input" tools:ignore="MissingTranslation">输入</string>
+    <string name="uploaded_successfully" tools:ignore="MissingTranslation">上传成功</string>
+    <string name="complete_dubbing" tools:ignore="MissingTranslation">完成配音</string>
+    <string name="email_not_correct" tools:ignore="MissingTranslation">邮箱格式不正确</string>
+    <string name="email_not_tu" tools:ignore="MissingTranslation">请添加论文图片</string>
+    <string name="position_verified" tools:ignore="MissingTranslation">身份认证</string>
+    <string name="phone_verified" tools:ignore="MissingTranslation">手机号不能为空</string>
+    <string name="professional_verified" tools:ignore="MissingTranslation">机构不能为空</string>
+    <string name="degree_verified" tools:ignore="MissingTranslation">学位信息不能为空</string>
+    <string name="edubackground_verified" tools:ignore="MissingTranslation">学历信息不能为空</string>
+    <string name="time_start_verified" tools:ignore="MissingTranslation">开始时间不能为空</string>
+    <string name="time_end_verified" tools:ignore="MissingTranslation">结束时间不能为空</string>
+    <string name="edit_user_web" tools:ignore="MissingTranslation">个人网址</string>
 
-    <string name="icAndpassport_verified">证件类别</string>
-    <string name="icAndpassport_one">身份证</string>
-    <string name="icAndpassport_two">护照</string>
-    <string name="icimg_verified">证件图</string>
-    <string name="zzAndzd_verified">在职/在读</string>
-    <string name="zzAndzd_one">在职</string>
-    <string name="zzAndzd_two">在读</string>
-    <string name="stuimg_verified">工作证或学生证</string>
-    <string name="paperimg_verified">论文首页图片</string>
-    <string name="email_verified_tu">论文截图</string>
+    <string name="icAndpassport_verified" tools:ignore="MissingTranslation">证件类别</string>
+    <string name="icAndpassport_one" tools:ignore="MissingTranslation">身份证</string>
+    <string name="icAndpassport_two" tools:ignore="MissingTranslation">护照</string>
+    <string name="icimg_verified" tools:ignore="MissingTranslation">证件图</string>
+    <string name="zzAndzd_verified" tools:ignore="MissingTranslation">在职/在读</string>
+    <string name="zzAndzd_one" tools:ignore="MissingTranslation">在职</string>
+    <string name="zzAndzd_two" tools:ignore="MissingTranslation">在读</string>
+    <string name="stuimg_verified" tools:ignore="MissingTranslation">工作证或学生证</string>
+    <string name="paperimg_verified" tools:ignore="MissingTranslation">论文首页图片</string>
+    <string name="email_verified_tu" tools:ignore="MissingTranslation">论文截图</string>
 
-    <string name="tishi_meitu">图片可能已经移位或删除</string>
-    <string name="tishi_qtx">请填写完整内容</string>
-    <string name="tishi_zsyg">至少选择两个认证人</string>
+    <string name="tishi_meitu" tools:ignore="MissingTranslation">图片可能已经移位或删除</string>
+    <string name="tishi_qtx" tools:ignore="MissingTranslation">请填写完整内容</string>
+    <string name="tishi_zsyg" tools:ignore="MissingTranslation">至少选择两个认证人</string>
 
-    <string name="title_checkpwd">此文档需要输入密码</string>
-    <string name="time">学时</string>
-    <string name="et_email">请输入工作邮箱</string>
-    <string name="submit_email_auth">提交认证申请</string>
-    <string name="back_main">返回首页</string>
-    <string name="email_result">恭喜您！ 您认证邮箱已成功提交！请到您的邮箱点击链接，完成认证</string>
+    <string name="title_checkpwd" tools:ignore="MissingTranslation">此文档需要输入密码</string>
+    <string name="time" tools:ignore="MissingTranslation">学时</string>
+    <string name="et_email" tools:ignore="MissingTranslation">请输入工作邮箱</string>
+    <string name="submit_email_auth" tools:ignore="MissingTranslation">提交认证申请</string>
+    <string name="back_main" tools:ignore="MissingTranslation">返回首页</string>
+    <string name="email_result" tools:ignore="MissingTranslation">恭喜您！ 您认证邮箱已成功提交！请到您的邮箱点击链接，完成认证</string>
     <item name="tag_app_size" type="id"/>
 
 </resources>
