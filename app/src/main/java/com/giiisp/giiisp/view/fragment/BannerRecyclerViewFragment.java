@@ -2574,17 +2574,20 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     }
 
     public void submitFollow(String isFollowed, String id) {
-        ArrayMap<String, Object> map = new ArrayMap<>();
+        HashMap<String, Object> map = new HashMap<>();
 //        map.put("token", token);
         map.put("uid", uid);
-        map.put("oid", id);
+        map.put("fid", id);
         switch (isFollowed) {
-            case "0":
-                presenter.getSaveFollowUserData(map);
+            case "0"://关注
+                presenter.getDataAll("309", map);
                 break;
-            case "1":
-            case "2":
-                presenter.getCancelFollowUserData(map);
+            case "1"://删除粉丝
+            case "2"://删除粉丝(互相关注)
+                presenter.getDataAll("310", map);
+                break;
+            case "3"://删除关注
+                presenter.getDataAll("311", map);
                 break;
         }
     }
@@ -2643,6 +2646,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         if (swipeRefreshLayout == null)
             return;
         swipeRefreshLayout.setRefreshing(false);
+        HashMap<String,Object> hMap = new HashMap<>();
         switch (url) {
             case "203":
                 PaperBean bean = (PaperBean) baseBean;
@@ -2866,6 +2870,21 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     itemClickAdapter.loadMoreEnd(false);
                 }
                 break;
+            case "309":
+                ToastUtils.showShort("关注成功！");
+                break;
+            case "310":
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+                presenter.getDataAll("307", hMap);
+                ToastUtils.showShort("取消成功！");
+                break;
+            case "311":
+                hMap.put("uid", getUserID());
+                hMap.put("pageno", page);
+                presenter.getDataAll("308", hMap);
+                ToastUtils.showShort("取消成功！");
+                break;
             case "316"://待配音列表
                 DubbingListBean bean4 = (DubbingListBean) baseBean;
                 dubbingAdapter.loadMoreComplete();
@@ -3011,7 +3030,6 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "341":
                 ToastUtils.showShort("操作成功！");
                 page = 0;
-                HashMap<String, Object> hMap = new HashMap<>();
                 hMap.put("uid", uid);
                 hMap.put("pageno", page);
                 hMap.put("pagesize", pageSize);

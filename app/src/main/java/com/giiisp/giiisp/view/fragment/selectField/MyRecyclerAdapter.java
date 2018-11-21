@@ -3,11 +3,9 @@ package com.giiisp.giiisp.view.fragment.selectField;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.blankj.utilcode.util.SPUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.PeopleVO;
 import com.giiisp.giiisp.dto.SubjectVO;
@@ -17,8 +15,7 @@ import com.giiisp.giiisp.view.adapter.ClickEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.giiisp.giiisp.api.UrlConstants.CN;
+import java.util.Locale;
 
 public class MyRecyclerAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHolder> {
     private int type;
@@ -98,7 +95,9 @@ public class MyRecyclerAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHol
     }
 
     private boolean isChinese() {
-        return CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN));
+        return Locale.getDefault().getLanguage().endsWith("zh");
+//        return true;
+//        return CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE, CN));
     }
 
     public void setSelectIdsData(String id) {

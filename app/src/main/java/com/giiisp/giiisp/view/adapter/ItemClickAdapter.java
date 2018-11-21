@@ -67,6 +67,7 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.functions.Consumer;
 import zlc.season.rxdownload2.RxDownload;
@@ -1291,9 +1292,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             if (activity instanceof SearchActivity) {
-                                                ((SearchActivity) activity).submitFollow(1 + "", id);
+                                                ((SearchActivity) activity).submitFollow("3", id);
                                             } else if (activity instanceof FragmentActivity) {
-                                                ((FragmentActivity) activity).submitFollow(1 + "", id);
+                                                ((FragmentActivity) activity).submitFollow("3", id);
                                             }
                                         }
                                     });
@@ -1343,7 +1344,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     String timeEnd = heEduListVO.getTimeend().substring(0, 4);
                     helper.setText(R.id.tv_university_name, timeStart + "-" + timeEnd);
                     String text = "";
-                    if (CN.equals(SPUtils.getInstance().getString(UrlConstants.LANGUAGE))) {
+                    if (Locale.getDefault().getLanguage().endsWith("zh")) {
                         text = heEduListVO.getCcname() + heEduListVO.getUcname() + heEduListVO.getMcname() + "," + heEduListVO.getEcname();
                     } else {
                         text = heEduListVO.getCename() + heEduListVO.getUename() + heEduListVO.getMename() + "," + heEduListVO.getEename();
