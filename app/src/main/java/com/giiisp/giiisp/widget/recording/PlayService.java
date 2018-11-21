@@ -503,7 +503,7 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
 
     @Override
     public void onDestroy() {
-        AppCache.setPlayService(null);
+//        AppCache.setPlayService(null);
         super.onDestroy();
         Log.i(TAG, "onDestroy: " + getClass().getSimpleName());
     }
@@ -515,7 +515,7 @@ public class PlayService extends Service implements BaseImpl, MediaPlayer.OnComp
         mPlayer.release();
         mPlayer = null;
         //        Notifier.cancelAll();
-        AppCache.setPlayService(null);
+//        AppCache.setPlayService(null);
         stopSelf();
     }
 

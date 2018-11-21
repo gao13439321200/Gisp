@@ -234,7 +234,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     >
 
                     <TextView
@@ -246,6 +246,7 @@
                         android:layout_toLeftOf="@+id/tv_dubbing_re_record"
                         android:drawableTop="@drawable/dubbing_audition"
                         android:text="@string/audition"
+                        android:visibility="invisible"
                         android:textColor="@color/colorWhite"/>
 
                     <TextView
@@ -255,6 +256,7 @@
                         android:layout_centerInParent="true"
                         android:drawableTop="@mipmap/dubbing_re_record"
                         android:text="@string/remake"
+                        android:visibility="invisible"
                         android:textColor="@color/colorWhite"/>
 
                     <TextView
@@ -266,6 +268,7 @@
                         android:layout_toRightOf="@+id/tv_dubbing_re_record"
                         android:drawableTop="@mipmap/btn_queding"
                         android:text="@string/complete"
+                        android:visibility="invisible"
                         android:textColor="@color/colorWhite"/>
                 </RelativeLayout>
             </LinearLayout>

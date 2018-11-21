@@ -3,49 +3,53 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
     <include layout="@layout/layout_fragment_banner"/>
 
     <EditText
         android:id="@+id/ed_enter_phone"
+        style="@style/login_edittext"
         android:hint="@string/enter_phone"
+        android:imeOptions="actionNext"
         android:inputType="phone"
         android:maxLength="11"
-        android:text="13439321200"
-        android:imeOptions="actionNext"
-        style="@style/login_edittext"/>
+        android:text=""/>
 
     <EditText
         android:id="@+id/ed_enter_password"
+        style="@style/login_edittext"
         android:layout_marginTop="10dp"
-        android:inputType="textPassword"
         android:hint="@string/enter_password"
-        android:text="123456"
         android:imeOptions="actionDone"
+        android:inputType="textPassword"
         android:maxLength="8"
-        style="@style/login_edittext"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/tv_register"
-        android:text="@string/register"
         style="@style/btn_blue"
+        android:text="@string/register"
         />
 
 
     <TextView
         android:id="@+id/tv_forget_password"
-        android:text="@string/forget_password"
-        style="@style/login_text_colorsize" />
+        style="@style/login_text_colorsize"
+        android:text="@string/forget_password"/>
+
     <android.support.v4.widget.Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+
     <TextView
         android:id="@+id/tv_user_agreement"
+        style="@style/login_text_colorsize"
         android:layout_marginBottom="30dp"
         android:text="@string/user_agreement"
-        style="@style/login_text_colorsize" />
+        android:visibility="invisible"/>
 
 
 </LinearLayout>

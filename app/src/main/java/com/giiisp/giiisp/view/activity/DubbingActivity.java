@@ -36,6 +36,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
@@ -102,12 +103,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     TextView tvHint;
     @BindView(R.id.tv_dubbing_audition)
     TextView tvDubbingAudition;
+    @BindView(R.id.tv_dubbing_re_record)
+    TextView tvDubbingReRecord;
     @BindView(R.id.tv_dubbing_determine)
     TextView tvFinish;
     @BindView(R.id.iv_btn)
     ImageView ivBtn;
     @BindView(R.id.linear_layout)
-    RelativeLayout linearLayout;
+    RelativeLayout mRlFinish;
     @BindView(R.id.recycler_view_dubbing)
     RecyclerView recyclerViewDubbing;
     @BindView(R.id.iv_dubbing)
@@ -179,6 +182,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     /*** 记录当前page页面是否为视频 ***/
     static Map<Integer, Boolean> mIsVideo;
 
+    private List<String> markFinishList = new ArrayList<>();
+
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, DubbingActivity.class);
@@ -222,6 +227,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             getPlayService().playPause();
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         super.initData();
+        hideImg();
         language = getIntent().getIntExtra("language", 0);
         typeActivity = getIntent().getStringExtra("type");
         pid = getIntent().getStringExtra("id");
@@ -305,7 +311,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 } else {//开始
                     resolveRecord();
                     tvHint.setText(R.string.is_dubbing);
-                    linearLayout.setVisibility(View.GONE);
+//                    mRlFinish.setVisibility(View.GONE);
+                    setFinishLayout(false, false, true);
                     if (isVideo(dubbingPosition)) {
                         mImageAdapter.setVolume0();
                         if (mVideoViewMap != null && mVideoViewMap.get(dubbingPosition) != null)
@@ -361,7 +368,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             tvHint.setText(R.string.is_dubbing);
             ivBtn.setImageResource(R.mipmap.in_recording);
             mRecorder.setPause(false);
-            linearLayout.setVisibility(View.GONE);
+//            mRlFinish.setVisibility(View.GONE);
+            setFinishLayout(false, false, true);
             resolvePausePlayRecord();
             startTimer();
 //            if (isVideo(dubbingPosition)) {
@@ -377,10 +385,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             mRecorder.setPause(true);
             tvHint.setText(R.string.dubbing_pause);
             isPause = false;
-            ivBtn.setImageResource(R.mipmap.in_recording_spot);
-            linearLayout.setVisibility(View.VISIBLE);
-            tvFinish.setVisibility(View.VISIBLE);
-            tvDubbingAudition.setVisibility(View.VISIBLE);
+            ivBtn.setImageResource(R.mipmap.btn_dubbing_before);
+//            mRlFinish.setVisibility(View.VISIBLE);
+            setFinishLayout(true, true, true);
+//            tvFinish.setVisibility(View.VISIBLE);
+//            tvDubbingAudition.setVisibility(View.VISIBLE);
+
 //            if (isVideo(dubbingPosition)) {
 //                mBtnSolo.setVisibility(View.INVISIBLE);
             //这里需要播放原视频声音
@@ -434,18 +444,30 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 isDiaoYong = true;
                 mRlBig.setVisibility(View.GONE);
                 mTvUse.setText("返回");
+                Glide.with(this).load(R.mipmap.img_quxiao).into(mBtnUse);
                 break;
             case R.id.btn_no://调用-取消
 //                sendData304(0, 0, 5);
                 showDiaoYong = false;
                 mRlBig.setVisibility(View.GONE);
                 mTvUse.setText("调用");
+                Glide.with(this).load(R.mipmap.img_diaoyong).into(mBtnUse);
                 break;
             case R.id.tv_back:
                 back = true;
                 finish();
                 break;
             case R.id.tv_dubbing_determine://完成
+                if (isDubbing) {
+                    if (mVideoViewMap != null && mVideoViewMap.get(dubbingPosition) != null)
+                        mVideoViewMap.get(dubbingPosition).pause();
+                    isDubbing = false;
+                    stopTimer();
+                    mRecorder.setPause(true);
+                    tvHint.setText(R.string.dubbing_pause);
+                    isPause = false;
+                    ivBtn.setImageResource(R.mipmap.btn_dubbing_before);
+                }
 
                 type = 0;
                 back = false;
@@ -551,7 +573,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 sendData304(0, 0, 1);
                 break;
             case R.id.iv_dubbing:
-                linearLayout.setVisibility(View.VISIBLE);
+//                mRlFinish.setVisibility(View.VISIBLE);
+                setFinishLayout(true, true, true);
                 tvHint.setText(R.string.click_start_voice);
                 recorderSecondsElapsed = 0;
                 tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
@@ -810,13 +833,15 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     sendData304(0, 0, 5);
                     isDiaoYong = false;
                 }
+                setFinishLayout(false, false, this.dubbingPosition == position);
             } else {//未录音
                 if (ObjectUtils.isNotEmpty(dataList.get(position).getDubbingVO().getRid())) {//已经录过音了
                     mCbMark.setVisibility(View.GONE);
                     mTvMark.setVisibility(View.GONE);
-                    linearLayout.setVisibility(View.VISIBLE);
-                    tvDubbingAudition.setVisibility(View.INVISIBLE);
-                    tvFinish.setVisibility(View.INVISIBLE);
+                    setFinishLayout(false, true, false);
+//                    mRlFinish.setVisibility(View.VISIBLE);
+//                    tvDubbingAudition.setVisibility(View.INVISIBLE);
+//                    tvFinish.setVisibility(View.INVISIBLE);
                     mBtnSolo.setVisibility(View.INVISIBLE);
                 } else {
                     if (isVideo(position)) {//视频不可放大
@@ -824,7 +849,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     } else {//图片
                         mBtnFull.setVisibility(View.VISIBLE);
                     }
-                    linearLayout.setVisibility(View.GONE);
+//                    mRlFinish.setVisibility(View.GONE);
+                    setFinishLayout(false, false, false);
                     mCbMark.setVisibility(View.VISIBLE);
                     mTvMark.setVisibility(View.VISIBLE);
                 }
@@ -1046,7 +1072,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
             case "315"://重录
                 mMyCustomView.clearData();
-                linearLayout.setVisibility(View.GONE);
+//                mRlFinish.setVisibility(View.GONE);
+                setFinishLayout(false, false, false);
                 mLlAddMark.setVisibility(View.GONE);
                 mLlDubbingAll.setVisibility(View.VISIBLE);
                 mCbMark.setChecked(false);
@@ -1107,7 +1134,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 type = 1;
                 progressPopupWindow.dismiss();
                 tvTime.setText(Util.formatSeconds(recorderSecondsElapsed));
-                linearLayout.setVisibility(View.GONE);
+//                mRlFinish.setVisibility(View.GONE);
+                setFinishLayout(false, false, false);
                 if (typeActivity != null)
                     switch (typeActivity) {
                         case "wait_dubbing":
@@ -1154,10 +1182,23 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 for (MarkVO vo : bean2.getList()) {
                     imgMarkList.add(vo.getId());
                 }
+                //已经标记过了
+                if (!markFinishList.contains(getImageId()) && imgMarkList.size() != 0) {
+                    markFinishList.add(getImageId());
+                }
+
                 mMarkAdapter.setMarks(imgMarkList);
                 mMarkAdapter.notifyDataSetChanged();
                 break;
             case "345"://标签保存完成
+                ToastUtils.showShort("标签保存成功！");
+                if (!markFinishList.contains(getImageId())) {
+                    markFinishList.add(getImageId());
+                }
+                if (markFinishList.size() == dataList.size()) {//全都标记完成后关闭当前页
+                    finish();
+                    break;
+                }
                 if (viewPager.getCurrentItem() < viewPager.getChildCount() - 1) {
                     setImageStatus(viewPager.getCurrentItem() + 1);
                 } else {
@@ -1186,5 +1227,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
         mmr.release();
         return (Integer.parseInt(duration)) / 1000;
+    }
+
+    private void setFinishLayout(boolean listen, boolean again, boolean finish) {
+        tvDubbingAudition.setVisibility(listen ? View.VISIBLE : View.INVISIBLE);
+        tvDubbingReRecord.setVisibility(again ? View.VISIBLE : View.INVISIBLE);
+        tvFinish.setVisibility(finish ? View.VISIBLE : View.INVISIBLE);
     }
 }
