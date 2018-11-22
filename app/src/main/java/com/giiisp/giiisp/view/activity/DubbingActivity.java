@@ -459,6 +459,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
             case R.id.tv_dubbing_determine://完成
                 if (isDubbing) {
+                    //这里判断如果是视频的话 并且 录音时间大于视频时间 才可以暂停
+                    if (isVideo(dubbingPosition)
+                            && recorderSecondsElapsed < videoAllTime) {
+                        ToastUtils.showShort("录音时长需大于或等于视频时长");
+                        return;
+                    }
+
                     if (mVideoViewMap != null && mVideoViewMap.get(dubbingPosition) != null)
                         mVideoViewMap.get(dubbingPosition).pause();
                     isDubbing = false;
@@ -1146,6 +1153,24 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                                 dubbingPosition = 0;
                                 setImageStatus(0);
                             }
+                            boolean isFinish = true;
+                            for (ClickEntity entity : dataList) {
+                                if (ObjectUtils.isEmpty(entity.getDubbingVO().getRid())) {
+                                    isFinish = false;
+                                    break;
+                                }
+                            }
+                            // 2018/11/22 这里需要加上自动录音 = 下一张是图片 + 该图片未录音
+                            if (!isFinish && ObjectUtils.isEmpty(dataList.get(dubbingPosition).getDubbingVO().getRid())
+                                    && !isVideo(dubbingPosition)) {
+                                // 2018/11/22 自动录音
+                                mBtnSolo.setVisibility(View.INVISIBLE);
+                                isDubbing = true;
+                                imgId = getImageId();
+                                toggleRecording(null);
+                            }
+
+
 //                            position++;
 //                        if (photoRows != null)
 //                            if (position == photoRows.size()) {
