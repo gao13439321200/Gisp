@@ -117,6 +117,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     LinearLayout mLlAuth;
     @BindView(R.id.ll_email)
     LinearLayout mLlEmail;
+    @BindView(R.id.ll_dubbing)
+    LinearLayout mLlDubbing;
     private int downloadNunber;
     private String imageUrl = "";
 
@@ -209,22 +211,28 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             switch (isVip) {
                 case "0":
                     mLlAuth.setVisibility(View.VISIBLE);
-                    tvVerified.setVisibility(View.VISIBLE);
+//                    tvVerified.setVisibility(View.VISIBLE);
                     tvVerified.setText("身份认证");
                     break;
                 case "1":
                     mLlAuth.setVisibility(View.INVISIBLE);
-                    tvVerified.setVisibility(View.GONE);
+//                    tvVerified.setVisibility(View.GONE);
                     break;
                 case "2":
                     mLlAuth.setVisibility(View.INVISIBLE);
-                    tvVerified.setVisibility(View.GONE);
+//                    tvVerified.setVisibility(View.GONE);
                     break;
                 case "3":
                     mLlAuth.setVisibility(View.VISIBLE);
-                    tvVerified.setVisibility(View.VISIBLE);
+//                    tvVerified.setVisibility(View.VISIBLE);
                     tvVerified.setText("认证中");
                     break;
+            }
+
+            if ("2".equals(isVip) || "3".equals(isVip) || "2".equals(emailauthen)) {
+                mLlDubbing.setVisibility(View.VISIBLE);
+            } else {
+                mLlDubbing.setVisibility(View.GONE);
             }
         }
         tvPrompt.setText(infoBean.getSchool());

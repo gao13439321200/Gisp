@@ -13,8 +13,10 @@ import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.dto.WordBean;
 import com.giiisp.giiisp.dto.WordVO;
+import com.giiisp.giiisp.entity.APPConstants;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
+import com.giiisp.giiisp.utils.RxBus;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
@@ -25,6 +27,7 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,6 +36,8 @@ import butterknife.OnClick;
  * 选择关键字
  */
 public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements MyRecyclerAdapter.OnMyItemClick {
+
+    private static final String TAG = "SelectWordFragment";
 
     public static final String TYPE = "type";
     @BindView(R.id.tag_word_system)
@@ -64,6 +69,12 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
         SelectWordFragment fragment = new SelectWordFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static void newRxBus() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(APPConstants.MyBus.TO, TAG);
+        RxBus.getInstance().send(map);
     }
 
 
@@ -149,12 +160,26 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
             return true;
         });
 
+        requestData();
+
+        RxBus.getInstance().register(Map.class, map1 -> {
+            switch ((String) map1.get(APPConstants.MyBus.TO)) {
+                case TAG:
+                    requestData();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+    }
+
+    private void requestData() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
         map.put("language",
                 getLanguage());
         presenter.getDataAll("112", map);
-
     }
 
     @OnClick(R.id.btn_next)
@@ -224,6 +249,8 @@ public class SelectWordFragment extends BaseMvpFragment<BaseImpl, WholePresenter
                 map.put("uid", getUserID());
                 map.put("language", getLanguage());
                 presenter.getDataAll("113", map);
+                //更新学者界面
+                SelectPeopleFragment.newRxBus();
                 break;
             default:
                 break;

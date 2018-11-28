@@ -723,8 +723,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
 //                                helper.setText(R.id.tv_progress, rint + "%");
 //                            }
 
-//                            ImageLoader.getInstance().displayCricleImage(activity,
-//                                    item.getPlayNoteVo().getPath(), (ImageView) helper.getView(R.id.iv_icon));
+                            ImageLoader.getInstance().displayCricleImage(activity,
+                                    BASE_IMG_URL + item.getPlayNoteVo().getImg(), (ImageView) helper.getView(R.id.iv_icon));
 
                             switch (item.getPlayNoteVo().getVersion()) {
                                 case "2":

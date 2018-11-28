@@ -13,8 +13,10 @@ import com.giiisp.giiisp.dto.MajorBean;
 import com.giiisp.giiisp.dto.MajorVO;
 import com.giiisp.giiisp.dto.PeopleBean;
 import com.giiisp.giiisp.dto.PeopleVO;
+import com.giiisp.giiisp.entity.APPConstants;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
+import com.giiisp.giiisp.utils.RxBus;
 import com.giiisp.giiisp.view.activity.SelectFieldActivity;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
@@ -22,6 +24,7 @@ import com.giiisp.giiisp.view.impl.BaseImpl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,6 +33,8 @@ import butterknife.OnClick;
  * 选择学者
  */
 public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresenter> implements MyRecyclerAdapter.OnMyItemClick {
+
+    private static final String TAG = "SelectPeopleFragment";
 
     public static final String TYPE = "type";
     @BindView(R.id.btn_next)
@@ -59,6 +64,13 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
         SelectPeopleFragment fragment = new SelectPeopleFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    public static void newRxBus() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(APPConstants.MyBus.TO, TAG);
+        RxBus.getInstance().send(map);
     }
 
     @Override
@@ -107,10 +119,25 @@ public class SelectPeopleFragment extends BaseMvpFragment<BaseImpl, WholePresent
         mRecyclerUser.setLayoutManager(mManagerUser);
         mRecyclerUser.setAdapter(mAdapterUser);
 
+        requestData();
+
+        RxBus.getInstance().register(Map.class, map1 -> {
+            switch ((String) map1.get(APPConstants.MyBus.TO)) {
+                case TAG:
+                    requestData();
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
+    private void requestData() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("uid", getUserID());
         presenter.getDataAll("115", map);//获取关注的专业
     }
+
 
     @OnClick(R.id.btn_next)
     public void onViewClicked() {

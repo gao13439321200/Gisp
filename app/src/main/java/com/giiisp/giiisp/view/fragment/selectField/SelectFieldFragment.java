@@ -169,7 +169,9 @@ public class SelectFieldFragment extends BaseMvpFragment<BaseImpl, WholePresente
 
                 break;
             case "111":
-//                ToastUtils.showShort("成功！");
+                //更新关键字和学者
+                SelectWordFragment.newRxBus();
+                SelectPeopleFragment.newRxBus();
                 break;
             case "115":
                 MajorBean bean2 = (MajorBean) entity;

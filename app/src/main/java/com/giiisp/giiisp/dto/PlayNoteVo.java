@@ -17,11 +17,20 @@ public class PlayNoteVo {
     private String createTime;
     private String downloadnum;
     private String id;
+    private String img;
     private String quiznum;
     private String readnum;
     private String title;
     private String version;
     private String language;
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     public String getLanguage() {
         return language;

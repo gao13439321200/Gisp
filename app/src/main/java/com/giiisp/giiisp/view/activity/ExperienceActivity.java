@@ -63,8 +63,8 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     TextView tvUserEdubackground;
     @BindView(R.id.tv_user_country)
     TextView tvUserCountry;
-    //    @BindView(R.id.tv_user_degree)
-//    TextView tvUserDagree;
+    @BindView(R.id.tv_user_degree)
+    TextView tvUserDagree;
     @BindView(R.id.tv_user_starttime)
     TextView tvUserStarttime;
     @BindView(R.id.tv_user_endtime)
@@ -78,6 +78,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
     private String nId = "";
     private String mId = "";
     private String eId = "";
+    private String degree = "";
     private ListPopupWindow namePop;
     private ListPopupWindow majorPop;
     private ListPopupWindow eduPop;
@@ -131,7 +132,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                     tvUserSchool.setText(TextUtils.isEmpty(introductionBean.getUcname()) ? "" : introductionBean.getUcname());
                     tvUserMajor.setText(TextUtils.isEmpty(introductionBean.getMcname()) ? "" : introductionBean.getMcname());
                     tvUserEdubackground.setText(introductionBean.getEcname());
-//                    tvUserDagree.setText(introductionBean.getEcname());
+                    tvUserDagree.setText(introductionBean.getEcname());
                     tvUserStarttime.setText(introductionBean.getTimestart());
                     tvUserEndtime.setText(introductionBean.getTimeend());
                     rid = introductionBean.getId();
@@ -246,7 +247,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 eduPop.show();
                 break;
             case R.id.fl_user_degree:
-//                inputTitleDialog(tvUserDagree, getString(R.string.degree));
+                inputTitleDialog(tvUserDagree, getString(R.string.degree));
                 break;
             case R.id.fl_user_starttime:
                 showDate(tvUserStarttime, getString(R.string.starttime));
@@ -286,12 +287,12 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 } else {
                     map.put("eid", eId);
                 }
-//                if (TextUtils.isEmpty(degree)) {
-//                    Utils.showToast(R.string.degree_verified);
-//                    return;
-//                } else {
-//                    map.put("degree", degree);
-//                }
+                if (TextUtils.isEmpty(degree)) {
+                    Utils.showToast(R.string.degree_verified);
+                    return;
+                } else {
+                    map.put("degree", degree);
+                }
                 if (TextUtils.isEmpty(ToolString.getString(tvUserStarttime))) {
                     Utils.showToast(R.string.time_start_verified);
                     return;
@@ -328,26 +329,25 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         builder.setTitle(getString(R.string.input) + name).setIcon(
                 R.mipmap.ic_launcher).setView(inputServer).setNegativeButton(R.string.cancel, null);
         builder.setPositiveButton(R.string.confirm,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String inputName = inputServer.getText().toString();
-                        switch (name) {
-                            case "学校":
-                                view.setText(inputName);
-                                break;
-                            case "专业":
-                                view.setText(inputName);
-                                break;
-                            case "学历":
-                                view.setText(inputName);
-                                break;
-                            case "学位":
-                                view.setText(inputName);
-                                break;
-                        }
-
-
+                (dialog, which) -> {
+                    String inputName = inputServer.getText().toString();
+                    switch (name) {
+                        case "学校":
+                            view.setText(inputName);
+                            break;
+                        case "专业":
+                            view.setText(inputName);
+                            break;
+                        case "学历":
+                            view.setText(inputName);
+                            break;
+                        case "学位":
+                            view.setText(inputName);
+                            degree = inputName;
+                            break;
                     }
+
+
                 });
         builder.show();
     }
@@ -425,7 +425,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
             case "322":
                 countryListBean = (CountryListBean) baseBean;
                 for (CountryVO vo : countryListBean.getList()) {
-                    countrys.add(isChinese()?vo.getCname():vo.getEname());
+                    countrys.add(isChinese() ? vo.getCname() : vo.getEname());
                 }
                 countryAdapter.notifyDataSetChanged();
 //                cId = countryListBean.getList().get(0).getId();
@@ -435,7 +435,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 names.clear();
                 nameListBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : nameListBean.getList()) {
-                    names.add(isChinese()?vo.getCname():vo.getEname());
+                    names.add(isChinese() ? vo.getCname() : vo.getEname());
                 }
                 nameAdapter.notifyDataSetChanged();
                 break;
@@ -443,7 +443,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 majors.clear();
                 majorListBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : majorListBean.getList()) {
-                    majors.add(isChinese()?vo.getCname():vo.getEname());
+                    majors.add(isChinese() ? vo.getCname() : vo.getEname());
                 }
                 majorAdapter.notifyDataSetChanged();
                 break;
@@ -451,7 +451,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 edus.clear();
                 eduListBean = (SchoolListBean) baseBean;
                 for (SchoolVO vo : eduListBean.getList()) {
-                    edus.add(isChinese()?vo.getCname():vo.getEname());
+                    edus.add(isChinese() ? vo.getCname() : vo.getEname());
                 }
                 eduAdapter.notifyDataSetChanged();
                 break;

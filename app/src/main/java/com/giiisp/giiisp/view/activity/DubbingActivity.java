@@ -63,6 +63,7 @@ import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.widget.MyCustomView;
 import com.giiisp.giiisp.widget.WrapVideoView;
 import com.giiisp.giiisp.widget.recording.Util;
+import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -184,6 +185,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     private List<String> markFinishList = new ArrayList<>();
 
+    private LoadingDialog mLoadingDialog;
+
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, DubbingActivity.class);
@@ -235,6 +238,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //        photoRows = getIntent().getParcelableArrayListExtra("photoRows");
         mMyCustomView.setDrawListen(this);
         getImageData();
+        mLoadingDialog = new LoadingDialog(this);
+        mLoadingDialog.setLoadingText("上传中")
+                .setSuccessText("上传成功")//显示加载成功时的文字
+                //.setFailedText("加载失败")
+                .setInterceptBack(true)
+                .setLoadSpeed(LoadingDialog.Speed.SPEED_TWO);
+
     }
 
     @Override
@@ -458,6 +468,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 finish();
                 break;
             case R.id.tv_dubbing_determine://完成
+                if (recorderSecondsElapsed < 2) {
+                    ToastUtils.showShort("录音时间不可少于2秒");
+                    return;
+                }
+
                 if (isDubbing) {
                     //这里判断如果是视频的话 并且 录音时间大于视频时间 才可以暂停
                     if (isVideo(dubbingPosition)
@@ -475,6 +490,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     isPause = false;
                     ivBtn.setImageResource(R.mipmap.btn_dubbing_before);
                 }
+
+//                mLoadingDialog.show();
 
                 type = 0;
                 back = false;
@@ -1062,6 +1079,18 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     }
 
     @Override
+    public void onFailNew(String url, String msg) {
+        super.onFailNew(url, msg);
+        switch (url) {
+            case "sendData":
+                mLoadingDialog.loadFailed();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onSuccessNew(String url, BaseBean baseBean) {
         super.onSuccessNew(url, baseBean);
         switch (url) {
@@ -1191,6 +1220,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
                             break;
                     }
+                mLoadingDialog.close();
                 break;
             case "343":
                 MarkBean bean1 = (MarkBean) baseBean;
