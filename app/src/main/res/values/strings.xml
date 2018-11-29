@@ -354,7 +354,7 @@
     <string name="et_email" tools:ignore="MissingTranslation">请输入工作邮箱</string>
     <string name="submit_email_auth" tools:ignore="MissingTranslation">提交认证申请</string>
     <string name="back_main" tools:ignore="MissingTranslation">返回首页</string>
-    <string name="email_result" tools:ignore="MissingTranslation">恭喜您！ 您认证邮箱已成功提交！请到您的邮箱点击链接，完成认证</string>
+    <string name="email_result" tools:ignore="MissingTranslation">恭喜您！ 您认证邮箱已成功提交！\n请到您的邮箱点击链接，完成认证</string>
     <item name="tag_app_size" type="id"/>
 
 </resources>

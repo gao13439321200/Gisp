@@ -289,6 +289,20 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/ll_empty"
+                        style="@style/main_ll"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"/>
+
+                        <TextView
+                            style="@style/mine_tv_btn"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
 

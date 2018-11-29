@@ -119,6 +119,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     LinearLayout mLlEmail;
     @BindView(R.id.ll_dubbing)
     LinearLayout mLlDubbing;
+    @BindView(R.id.ll_empty)
+    LinearLayout mLlEmpty;
     private int downloadNunber;
     private String imageUrl = "";
 
@@ -231,8 +233,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 
             if ("2".equals(isVip) || "3".equals(isVip) || "2".equals(emailauthen)) {
                 mLlDubbing.setVisibility(View.VISIBLE);
+                mLlEmpty.setVisibility(View.GONE);
             } else {
                 mLlDubbing.setVisibility(View.GONE);
+                mLlEmpty.setVisibility(View.VISIBLE);
             }
         }
         tvPrompt.setText(infoBean.getSchool());
