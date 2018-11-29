@@ -61,9 +61,9 @@ import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.widget.MyCustomView;
+import com.giiisp.giiisp.widget.ProgressPopupWindow;
 import com.giiisp.giiisp.widget.WrapVideoView;
 import com.giiisp.giiisp.widget.recording.Util;
-import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -185,7 +185,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     private List<String> markFinishList = new ArrayList<>();
 
-    private LoadingDialog mLoadingDialog;
 
 
     public static void actionActivity(Context context) {
@@ -238,13 +237,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //        photoRows = getIntent().getParcelableArrayListExtra("photoRows");
         mMyCustomView.setDrawListen(this);
         getImageData();
-        mLoadingDialog = new LoadingDialog(this);
-        mLoadingDialog.setLoadingText("上传中")
-                .setSuccessText("上传成功")//显示加载成功时的文字
-                //.setFailedText("加载失败")
-                .setInterceptBack(true)
-                .setLoadSpeed(LoadingDialog.Speed.SPEED_TWO);
-
+        progressPopupWindow = new ProgressPopupWindow(this);
     }
 
     @Override
@@ -491,8 +484,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     ivBtn.setImageResource(R.mipmap.btn_dubbing_before);
                 }
 
-//                mLoadingDialog.show();
-
+//                progressPopupWindow.showPopupWindow();
                 type = 0;
                 back = false;
                 resolveStopRecord();
@@ -1083,7 +1075,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         super.onFailNew(url, msg);
         switch (url) {
             case "sendData":
-                mLoadingDialog.loadFailed();
+                progressPopupWindow.dismiss();
                 break;
             default:
                 break;
@@ -1220,7 +1212,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
                             break;
                     }
-                mLoadingDialog.close();
+                progressPopupWindow.dismiss();
                 break;
             case "343":
                 MarkBean bean1 = (MarkBean) baseBean;

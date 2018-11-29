@@ -228,5 +228,4 @@ dependencies {
 
     compile 'com.github.chrisbanes:PhotoView:2.1.2'
 
-    compile 'com.github.ForgetAll:LoadingDialog:v1.0.1'
 }
