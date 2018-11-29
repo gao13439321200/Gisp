@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -511,5 +512,9 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
         HashMap<String, Object> map = new HashMap<>();
         map.put("unid", nId);
         presenter.getDataAll("325", map);
+    }
+
+    public boolean isChinese() {
+        return Locale.getDefault().getLanguage().endsWith("zh");
     }
 }
