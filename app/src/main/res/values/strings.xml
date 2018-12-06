@@ -15,6 +15,7 @@
     <string name="login_enter_password" tools:ignore="MissingTranslation">输入密码</string>
     <string name="login_second_password" tools:ignore="MissingTranslation">确认密码</string>
     <string name="enter_phone" tools:ignore="MissingTranslation">手机号码</string>
+    <string name="enter_phone_email" tools:ignore="MissingTranslation">手机号码/邮箱</string>
     <string name="enter_nickname" tools:ignore="MissingTranslation">输入昵称</string>
     <string name="sex" tools:ignore="MissingTranslation">性别</string>
     <string name="area_major" tools:ignore="MissingTranslation">领域/专业</string>
@@ -29,6 +30,7 @@
     <string name="please_log_in" tools:ignore="MissingTranslation">请登录</string>
     <string name="format_not_correct" tools:ignore="MissingTranslation">手机号码格式不正确</string>
     <string name="input_phone" tools:ignore="MissingTranslation">请输入手机号码</string>
+    <string name="input_phone_email" tools:ignore="MissingTranslation">请输入手机号码/邮箱</string>
     <string name="phone_not_registered" tools:ignore="MissingTranslation">该手机号未注册</string>
     <string name="phone_existing" tools:ignore="MissingTranslation">该手机号已存在</string>
     <string name="comment" tools:ignore="MissingTranslation">评论  </string>
@@ -55,6 +57,7 @@
     <string name="phone_been_binding" tools:ignore="MissingTranslation">该手机号已被绑定</string>
     <string name="enter_the_password" tools:ignore="MissingTranslation">输入密码不一致</string>
     <string name="enter_the_phone" tools:ignore="MissingTranslation">输入手机号码不一致</string>
+    <string name="enter_the_phone_email" tools:ignore="MissingTranslation">输入手机号码/邮箱不一致</string>
     <string name="enter_password_consistent" tools:ignore="MissingTranslation">输入密码一致</string>
     <string name="newpassword_oldpassword_same" tools:ignore="MissingTranslation">新密码与旧密码相同</string>
     <string name="enter_correct_password" tools:ignore="MissingTranslation">请输入正确的密码</string>

@@ -306,6 +306,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        onRefresh();
     }
 
     @Override
@@ -445,7 +446,22 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 }
                 break;
             case R.id.ll_email://邮箱认证
-                FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
+                switch (emailauthen) {
+                    case "1"://认证中
+                        Utils.showToast(R.string.in_authentication);
+                        break;
+                    case "2"://已通过
+                        Utils.showToast(R.string.auth_pass);
+                        break;
+                    case "3"://未认证
+                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
+                        break;
+                    default:
+                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
+                        break;
+                }
+
+
                 break;
             case R.id.fl_auth://资料认证
 //                switch (emailauthen) {

@@ -87,7 +87,7 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
                     break;
                 }
                 if (!Objects.equals(mobile, phone)) {
-                    Utils.showToast(R.string.enter_the_phone);
+                    Utils.showToast(R.string.enter_the_phone_email);
                     break;
                 }
                 if (TextUtils.isEmpty(pwd) && TextUtils.isEmpty(secondPwd)) {
@@ -95,7 +95,8 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
                     break;
                 } else if (!pwd.equals(secondPwd)) {
                     Utils.showToast(R.string.passwords_match);
-                } else if (pwd.length() > 8 | pwd.length() < 6) {
+                    break;
+                } else if (pwd.length() > 50 | pwd.length() < 6) {
                     Utils.showToast(R.string.password_can_only);
                     break;
                 }
@@ -109,17 +110,22 @@ public class RetrievePwdFragment extends BaseMvpFragment<BaseImpl, WholePresente
             case R.id.tv_verification_code:
                 phone = edEnterPhones.getText().toString();
                 if (!TextUtils.isEmpty(phone)) {
-                    if (Utils.checkMobileNumber(phone)) {
-                        HashMap<String, Object> map1 = new HashMap<>();
-                        map1.put("loginname", phone);
-                        map1.put("sendtype", 1);
-                        map1.put("type", 3);
-                        presenter.getDataAll("101", map1);
-                    } else {
+                    if (!phone.contains("@") && !Utils.checkMobileNumber(phone)) {
                         Utils.showToast(R.string.format_not_correct);
+                        return;
                     }
+                    if (phone.contains("@") && !Utils.checkEmail(phone)) {
+                        Utils.showToast(R.string.email_not_correct);
+                        return;
+                    }
+                    HashMap<String, Object> map1 = new HashMap<>();
+                    map1.put("loginname", phone);
+                    map1.put("sendtype", phone.contains("@") ? 2 : 1);
+                    map1.put("type", 3);
+                    presenter.getDataAll("101", map1);
+
                 } else {
-                    Utils.showToast(R.string.input_phone);
+                    Utils.showToast(R.string.input_phone_email);
                 }
                 break;
         }
