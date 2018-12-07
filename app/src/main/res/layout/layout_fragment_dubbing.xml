@@ -305,6 +305,18 @@
                     >
 
                     <TextView
+                        android:id="@+id/tv_dubbing_audition_new"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="72dp"
+                        android:layout_marginEnd="65dp"
+                        android:layout_toLeftOf="@+id/tv_dubbing_re_record_mark"
+                        android:drawableTop="@drawable/dubbing_audition"
+                        android:text="@string/audition"
+                        android:visibility="visible"
+                        android:textColor="@color/colorWhite"/>
+
+                    <TextView
                         android:id="@+id/tv_dubbing_re_record_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

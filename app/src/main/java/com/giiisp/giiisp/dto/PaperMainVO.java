@@ -28,7 +28,17 @@ public class PaperMainVO {
     private String code;
     private String version;
     private String myLanguage = CN;//默认是中文
+    private String major;
     private List<VlistBean> vlist;
+
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
 
     public String getVersion() {
         return version;

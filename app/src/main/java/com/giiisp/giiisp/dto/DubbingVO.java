@@ -15,6 +15,15 @@ public class DubbingVO {
     private String url;
     private String language;
     private String rid;
+    private String rurl;
+
+    public String getRurl() {
+        return rurl;
+    }
+
+    public void setRurl(String rurl) {
+        this.rurl = rurl;
+    }
 
     public String getPid() {
         return pid;

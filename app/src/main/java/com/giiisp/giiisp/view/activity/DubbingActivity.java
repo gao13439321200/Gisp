@@ -104,6 +104,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     TextView tvHint;
     @BindView(R.id.tv_dubbing_audition)
     TextView tvDubbingAudition;
+    @BindView(R.id.tv_dubbing_audition_new)
+    TextView tvDubbingAuditionNew;
     @BindView(R.id.tv_dubbing_re_record)
     TextView tvDubbingReRecord;
     @BindView(R.id.tv_dubbing_determine)
@@ -238,6 +240,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         mMyCustomView.setDrawListen(this);
         getImageData();
         progressPopupWindow = new ProgressPopupWindow(this);
+
+        tvPlayOld = tvDubbingAudition;
+        tvPlayNew = tvDubbingAuditionNew;
     }
 
     @Override
@@ -409,6 +414,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             R.id.tv_dubbing_re_record, R.id.iv_left_slip, R.id.iv_right_slide,
             R.id.tv_mark, R.id.img_mark, R.id.btn_use, R.id.tv_use, R.id.btn_solo,
             R.id.tv_dubbing_re_record_mark, R.id.tv_dubbing_determine_mark,
+            R.id.tv_dubbing_audition_new,
             R.id.btn_yes, R.id.btn_no, R.id.btn_full, R.id.img_full, R.id.btn_small})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -517,6 +523,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
             case R.id.tv_dubbing_re_record://重录
             case R.id.tv_dubbing_re_record_mark://重录(选标签)
+                tvDubbingAudition.setSelected(false);
                 dataList.get(viewPager.getCurrentItem()).getDubbingVO().setRid("");
                 if (isVideo(viewPager.getCurrentItem())) {
                     mBtnSolo.setVisibility(View.VISIBLE);
@@ -536,6 +543,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             case R.id.tv_dubbing_audition://试听
                 togglePlaying(view);
                 break;
+
+            case R.id.tv_dubbing_audition_new://试听（标签）
+                String url = dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRurl();
+                playNewAudio(ToolString.getUrl(url));
+                tvDubbingAuditionNew.setSelected(true);
+                break;
+
             case R.id.iv_left_slip://上一张图片
                 if (viewPager.getCurrentItem() > 1) {
                     setImageStatus(viewPager.getCurrentItem() - 1);
@@ -1025,7 +1039,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //                PhotoView imageView = new PhotoView(activity);
                 ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, BASE_IMG_URL + path,
                         viewPager.getWidth(), viewPager.getHeight(), mDouble);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                imageView.setScaleType(ImageView.ScaleType.MATRIX);
                 //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
                 ViewParent vp = imageView.getParent();
                 if (vp != null) {

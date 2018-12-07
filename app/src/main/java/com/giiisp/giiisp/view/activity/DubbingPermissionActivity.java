@@ -72,6 +72,8 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
     protected ProgressWheel progressWheel;
     protected int type;
     protected boolean back;
+    protected TextView tvPlayOld;
+    protected TextView tvPlayNew;
 //    protected String QnToken;
 
     //    @NeedsPermission({Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
@@ -162,6 +164,8 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
                         curPosition = (int) msg.obj / 1000;
                         break;
                     case AudioPlayer.HANDLER_COMPLETE://播放结束
+                        tvPlayOld.setSelected(false);
+                        tvPlayNew.setSelected(false);
                         mIsPlay = false;
                         break;
                     case AudioPlayer.HANDLER_PREPARED://播放开始
@@ -313,6 +317,13 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
         audioPlayer.pause();
     }
 
+    protected void playNewAudio(String url) {
+        if (audioPlayer != null) {
+            audioPlayer.pause();
+            audioPlayer.playUrl(url);
+        }
+    }
+
 
     /**
      * 重置录制
@@ -426,7 +437,7 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
                     return;
                 String key = response.optString("key");
 
-                if (!TextUtils.isEmpty(key)){
+                if (!TextUtils.isEmpty(key)) {
                     keyCompete(key);
                 }
 

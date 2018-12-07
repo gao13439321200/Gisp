@@ -18,12 +18,22 @@
 
         <TextView
             android:id="@+id/tv_no"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Giiisp编号"
             android:textColor="@color/colorAuxiliary"
             android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_major"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text=""
+            android:visibility="invisible"
+            android:textSize="12sp"/>
+
 
         <TextView
             android:id="@+id/tv_naov"
