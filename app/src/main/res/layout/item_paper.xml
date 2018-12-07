@@ -5,7 +5,10 @@
               android:layout_marginBottom="5dp"
               android:background="@color/colorWhite"
               android:orientation="vertical"
-              android:padding="10dp">
+              android:paddingStart="15dp"
+              android:paddingTop="10dp"
+              android:paddingEnd="15dp"
+              android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,24 +22,26 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Giiisp编号"
-            android:textColor="@color/colorAuxiliary"/>
+            android:textColor="@color/colorAuxiliary"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/tv_naov"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawablePadding="5dp"
             android:drawableStart="@mipmap/subscribe_item_mechanism"
+            android:drawablePadding="5dp"
             android:text="Giiisp编号"
-            android:textColor="@color/blue"/>
+            android:textColor="@color/blue"
+            android:textSize="12sp"/>
 
         <ImageView
             android:id="@+id/iv_user_icon"
             android:layout_width="29dp"
             android:layout_height="29dp"
-            android:layout_marginBottom="6.7dp"
             android:layout_marginStart="11dp"
             android:layout_marginTop="6.7dp"
+            android:layout_marginBottom="6.7dp"
             android:src="@mipmap/ic_launcher"/>
 
     </LinearLayout>
@@ -49,7 +54,8 @@
         android:maxLines="1"
         android:text="这里是标题"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp"/>
+        android:textSize="15sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_author"
@@ -57,10 +63,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:drawableLeft="@mipmap/guide_user_icon"
+        android:drawablePadding="10dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="这里是作者"
-        android:textColor="@color/colorBlack"/>
+        android:textSize="12sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,7 +83,8 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="这里是subject"/>
+            android:text="这里是subject"
+            android:textSize="12sp"/>
 
 
         <RadioGroup

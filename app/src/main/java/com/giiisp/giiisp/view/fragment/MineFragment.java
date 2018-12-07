@@ -358,28 +358,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 break;
             case R.id.ll_dubbing:
                 // 2018/11/20 只要邮箱认证和资料认证 有一个通过 就可以进去录音
-                if ("2".equals(emailauthen) || "1".equals(isVip) || "2".equals(isVip)) {
+//                if ("2".equals(emailauthen) || "1".equals(isVip) || "2".equals(isVip)) {
                     FragmentActivity.actionActivity(getContext(), "wait_dubbing"); //  认证完成开始录音
-                } else {
-                    ToastUtils.showShort("请先认证身份信息");
-                }
-
-                //
-//                switch (emailauthen) { //  开始录音是否Ok  test 1 BaseActivity.emailauthen
-//                    case "3"://未认证
-//                        ToastUtils.showShort("请先认证身份信息");
-////                        FragmentActivity.actionActivity(getContext(), "mailbox_authentication");
-//                        break;
-//                    case "2"://认证成功
-//
-//                        break;
-//                    case "1"://认证中
-//                        Utils.showToast(R.string.in_authentication);
-//                        break;
-//                    default:
-//                        ToastUtils.showShort("请先认证身份信息");
-//                        //FragmentActivity.actionActivity(getContext(), "wait_dubbing");
-//                        break;
+//                } else {
+//                    ToastUtils.showShort("请先认证身份信息");
 //                }
 
                 break;

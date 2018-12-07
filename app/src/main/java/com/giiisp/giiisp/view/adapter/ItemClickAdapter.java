@@ -867,8 +867,8 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                 case R.layout.item_paper://首页综述、论文、订阅
                     if (item.getPaperMainVO() != null) {
                         PaperMainVO vo = item.getPaperMainVO();
-                        helper.setText(R.id.tv_no, "[" + getParentPosition(item) + 1 + "]" + vo.getCode());
-                        helper.setText(R.id.tv_naov, vo.getUsername());
+                        helper.setText(R.id.tv_no, "[" + (getParentPosition(item) + 1) + "]" + vo.getCode());
+                        helper.setText(R.id.tv_naov, vo.getUserorgeng());
                         helper.setText(R.id.tv_title, vo.getTitle());
                         helper.setText(R.id.tv_author, vo.getAuthors());
                         helper.setText(R.id.tv_subject, vo.getSubject());
