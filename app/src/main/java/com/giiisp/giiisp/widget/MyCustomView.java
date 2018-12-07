@@ -68,7 +68,7 @@ public class MyCustomView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.point);
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.point1);
         for (Map<String, Float> map : mPointList) {
             canvas.drawBitmap(bitmap,
                     map.get("x") - (bitmap.getWidth() / 2),
@@ -114,6 +114,10 @@ public class MyCustomView extends View {
             mDrawListen.drawListen(event.getX(), event.getY());
         }
         return super.onTouchEvent(event);
+    }
+
+    public boolean hasPoint() {
+        return mPointList.size() > 0;
     }
 
     public interface DrawListen {

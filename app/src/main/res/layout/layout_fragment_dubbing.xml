@@ -311,7 +311,7 @@
                         android:layout_centerInParent="true"
                         android:drawableTop="@mipmap/dubbing_re_record"
                         android:text="@string/remake"
-                        android:visibility="invisible"
+                        android:visibility="visible"
                         android:textColor="@color/colorWhite"/>
 
                     <TextView

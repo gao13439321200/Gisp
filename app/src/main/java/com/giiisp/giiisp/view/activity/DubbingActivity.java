@@ -155,6 +155,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     private int dubbingPosition = 0;
     private int abc = -1;
+    private int markTime = 0;
     //    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
 //    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.PhotosBean.RowsBeanXX> photoRows;
     private DubbingListVO mVO;
@@ -184,7 +185,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     static Map<Integer, Boolean> mIsVideo;
 
     private List<String> markFinishList = new ArrayList<>();
-
 
 
     public static void actionActivity(Context context) {
@@ -737,6 +737,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             @Override
             public void run() {
                 if (mIsRecord) {
+                    if (recorderSecondsElapsed - markTime >= 3) {//3秒清除标记点
+                        if (mMyCustomView != null && mMyCustomView.hasPoint())
+                            mMyCustomView.clearData();
+                    }
                     tvTime.setText(Util.formatSeconds(recorderSecondsElapsed++));
                 }
             }
@@ -909,6 +913,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     @Override
     public void drawListen(float x, float y) {
+        markTime = recorderSecondsElapsed;//标记点时间
         sendData304(x, y, 3);
     }
 
@@ -1020,7 +1025,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //                PhotoView imageView = new PhotoView(activity);
                 ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, BASE_IMG_URL + path,
                         viewPager.getWidth(), viewPager.getHeight(), mDouble);
-                imageView.setScaleType(ImageView.ScaleType.MATRIX);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
                 ViewParent vp = imageView.getParent();
                 if (vp != null) {
