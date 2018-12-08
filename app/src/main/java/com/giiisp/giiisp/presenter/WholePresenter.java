@@ -925,6 +925,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
                     BaseEntity entity = response.body();
                     BaseBean baseBean = new BaseBean();
                     baseBean.setRid(response.body().getRid());
+                    baseBean.setRurl(response.body().getRurl());
                     impl.onSuccessNew("sendData", baseBean);
                 } else {
                     impl.onFailNew("sendData", "发送失败");

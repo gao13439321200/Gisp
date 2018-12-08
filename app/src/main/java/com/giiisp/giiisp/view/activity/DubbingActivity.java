@@ -1175,6 +1175,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 mMyCustomView.clearData();
                 mMyCustomView.setCanMark(false);
                 dataList.get(dubbingPosition).getDubbingVO().setRid(baseBean.getRid());
+                dataList.get(dubbingPosition).getDubbingVO().setRurl(baseBean.getRurl());
                 Utils.showToast(R.string.uploaded_successfully);
                 tvHint.setText(R.string.click_start_voice);
                 recorderSecondsElapsed = 0;

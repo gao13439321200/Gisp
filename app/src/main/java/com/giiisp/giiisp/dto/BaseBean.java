@@ -10,6 +10,15 @@ public class BaseBean {
     private int statusCode;
     private String message;
     private String rid;
+    private String rurl;
+
+    public String getRurl() {
+        return rurl;
+    }
+
+    public void setRurl(String rurl) {
+        this.rurl = rurl;
+    }
 
     public String getRid() {
         return rid;

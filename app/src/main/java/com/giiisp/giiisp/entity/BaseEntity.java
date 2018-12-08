@@ -13,7 +13,16 @@ public class BaseEntity {
     private String info;
     private String uid;
     private String rid;
+    private String rurl;
     private String firstUser ;
+
+    public String getRurl() {
+        return rurl;
+    }
+
+    public void setRurl(String rurl) {
+        this.rurl = rurl;
+    }
 
     public String getRid() {
         return rid;
