@@ -935,6 +935,7 @@ public class WholePresenter extends BasePresenter<BaseImpl> {
             @Override
             public void onFailure(Call<BaseEntity> call, Throwable t) {
                 impl.onFailure(call + "", (Exception) t);
+                impl.onFailNew("sendData", "");
             }
 
 

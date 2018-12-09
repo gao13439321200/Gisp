@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.czt.mp3recorder.MP3Recorder;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
@@ -317,11 +318,36 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
         audioPlayer.pause();
     }
 
+    private String oldUrl = "";//记录当前试听播放的地址
+
+    //播放和继续播放试听
     protected void playNewAudio(String url) {
         if (audioPlayer != null) {
             audioPlayer.pause();
-            audioPlayer.playUrl(url);
+            if (!oldUrl.equals(url)) {//播放新的录音
+                oldUrl = url;
+                audioPlayer.playUrl(url);
+            } else {//继续播放
+                audioPlayer.play();
+            }
+        } else {
+            ToastUtils.showShort("播放异常，请重试");
         }
+    }
+
+    //试听暂停播放
+    protected void pauseNewAudio() {
+        if (audioPlayer != null)
+            audioPlayer.pause();
+        else {
+            ToastUtils.showShort("播放异常，请重试");
+        }
+    }
+
+    //试听暂停播放
+    protected void stopNewAudio() {
+        if (audioPlayer != null)
+            audioPlayer.stop();
     }
 
 

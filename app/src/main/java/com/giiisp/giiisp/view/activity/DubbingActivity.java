@@ -490,12 +490,13 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     ivBtn.setImageResource(R.mipmap.btn_dubbing_before);
                 }
 
-//                progressPopupWindow.showPopupWindow();
+                progressPopupWindow.showPopupWindow();
                 type = 0;
                 back = false;
                 resolveStopRecord();
                 resolvePausePlayRecord();
-                upAudio(false);//上传录音
+                isSolo = false;
+                upAudio();//上传录音
 
                 break;
             case R.id.tv_dubbing_determine_mark://保存标签
@@ -519,10 +520,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 map.put("ids", ids);
                 map.put("language", language);
                 presenter.getDataAll("345", map);
-
+                stopNewAudio();//停止播放试听
                 break;
             case R.id.tv_dubbing_re_record://重录
             case R.id.tv_dubbing_re_record_mark://重录(选标签)
+                stopNewAudio();//停止播放试听
                 tvDubbingAudition.setSelected(false);
                 dataList.get(viewPager.getCurrentItem()).getDubbingVO().setRid("");
                 if (isVideo(viewPager.getCurrentItem())) {
@@ -545,9 +547,14 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
 
             case R.id.tv_dubbing_audition_new://试听（标签）
-                String url = dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRurl();
-                playNewAudio(ToolString.getUrl(url));
-                tvDubbingAuditionNew.setSelected(true);
+                if (!tvDubbingAuditionNew.isSelected()) {
+                    String url = dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRurl();
+                    playNewAudio(ToolString.getUrl(url));
+                    tvDubbingAuditionNew.setSelected(true);
+                } else {
+                    pauseNewAudio();
+                    tvDubbingAuditionNew.setSelected(false);
+                }
                 break;
 
             case R.id.iv_left_slip://上一张图片
@@ -631,7 +638,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             case R.id.btn_solo://原音
                 //直接上传原音
 //                filePath = "";
-                upAudio(true);
+                isSolo = true;
+                upAudio();
 //                if (viewPager.getCurrentItem() < viewPager.getChildCount()) {
 //                    setImageStatus(viewPager.getCurrentItem() + 1);
 //                } else {
@@ -639,6 +647,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //                }
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopNewAudio();
+        super.onDestroy();
     }
 
     /**
@@ -683,10 +697,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
     /**
      * 上传录音
-     *
-     * @param isSolo 是否是原音
      */
-    public void upAudio(boolean isSolo) {
+    public void upAudio() {
         ArrayMap<String, Object> map = new ArrayMap<>();
 //        double duration = 0;
         long fileSize = 0;
@@ -1089,16 +1101,27 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         super.onPause();
     }
 
+    private int sendNum = 1;//发送次数
+    private boolean isSolo = false;//是否是原音
+
     @Override
     public void onFailNew(String url, String msg) {
-        super.onFailNew(url, msg);
+
         switch (url) {
             case "sendData":
-                progressPopupWindow.dismiss();
-                break;
+                if (sendNum == 1) {//失败的情况重新上传一次
+                    sendNum++;
+                    upAudio();//
+                } else {
+                    sendNum = 1;//重置状态
+                    ToastUtils.showShort("上传失败，请重试");
+                    progressPopupWindow.dismiss();
+                }
+                return;
             default:
                 break;
         }
+        super.onFailNew(url, msg);
     }
 
     @Override
@@ -1169,6 +1192,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 setImageStatus(position);
                 break;
             case "sendData":
+                sendNum = 1;//重置上传状态
                 //重置标记状态
                 mCbMark.setChecked(false);
                 canMark = false;
@@ -1232,7 +1256,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 
                             break;
                     }
-                progressPopupWindow.dismiss();
                 break;
             case "343":
                 MarkBean bean1 = (MarkBean) baseBean;
