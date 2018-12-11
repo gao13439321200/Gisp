@@ -864,7 +864,66 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     ImageLoader.getInstance().displayCricleImage(activity, myScholarBean.getAvatar(), imageView);
                     helper.setText(R.id.tv_scholar_name, myScholarBean.getRealName()).addOnClickListener(R.id.iv_scholar_icon);
                     break;
-                case R.layout.item_paper://首页综述、论文、订阅
+                case R.layout.item_paper://首页综述、论文(不显示学科)
+                    if (item.getPaperMainVO() != null) {
+                        PaperMainVO vo = item.getPaperMainVO();
+                        helper.setText(R.id.tv_no, "[" + (getParentPosition(item) + 1) + "]" + vo.getCode());
+                        helper.setText(R.id.tv_naov, vo.getUserorgeng());
+                        helper.setText(R.id.tv_title, vo.getTitle());
+                        helper.setText(R.id.tv_author, vo.getAuthors());
+                        helper.setText(R.id.tv_subject, vo.getSubject());
+                        GlideApp.with(mContext)
+                                .load(vo.getUseravatar())
+                                .into((ImageView) helper.getView(R.id.iv_user_icon));
+                        if (vo.getVlist() != null && vo.getVlist().size() != 0) {
+                            helper.setVisible(R.id.cb_menu, true);
+                            List<ClickEntity> list = new ArrayList<>();
+                            for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                bean.setPid(vo.getId());
+                                ClickEntity entity = new ClickEntity();
+                                bean.setEnglish(false);
+                                entity.setBean(bean);
+                                list.add(entity);
+                            }
+
+                            ItemClickAdapter adapter = new ItemClickAdapter(activity, R.layout.item_paper_child_new, list, mListItemClick);
+                            ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setLayoutManager(new LinearLayoutManager(activity));
+                            ((MyRecyclerView) helper.getView(R.id.my_recycler_view)).setAdapter(adapter);
+                            ((CheckBox) helper.getView(R.id.cb_menu)).setOnCheckedChangeListener((compoundButton, b) -> {
+                                helper.getView(R.id.my_recycler_view).setVisibility(b ? View.VISIBLE : View.GONE);
+                            });
+                            ((RadioButton) helper.getView(R.id.rb_cn)).setOnCheckedChangeListener((compoundButton, b) -> {
+                                if (b) {
+                                    vo.setMyLanguage(CN);//记录是中文
+                                    list.clear();
+                                    for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                        ClickEntity entity = new ClickEntity();
+                                        bean.setEnglish(false);
+                                        entity.setBean(bean);
+                                        list.add(entity);
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                            ((RadioButton) helper.getView(R.id.rb_en)).setOnCheckedChangeListener((compoundButton, b) -> {
+                                if (b) {
+                                    vo.setMyLanguage(EN);//记录是英文
+                                    list.clear();
+                                    for (PaperMainVO.VlistBean bean : vo.getVlist()) {
+                                        ClickEntity entity = new ClickEntity();
+                                        bean.setEnglish(true);
+                                        entity.setBean(bean);
+                                        list.add(entity);
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        } else {
+                            helper.setVisible(R.id.cb_menu, false);
+                        }
+                    }
+                    break;
+                case R.layout.item_subscribe_new://订阅（显示学科）
                     if (item.getPaperMainVO() != null) {
                         PaperMainVO vo = item.getPaperMainVO();
                         helper.setText(R.id.tv_no, "[" + (getParentPosition(item) + 1) + "]" + vo.getCode());

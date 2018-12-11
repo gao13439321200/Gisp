@@ -162,7 +162,7 @@ public class SubscribeNewFragment extends BaseMvpFragment<BaseImpl, WholePresent
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRvPaper.setLayoutManager(manager);
         mItemClickAdapter = new ItemClickAdapter((BaseActivity) getActivity(),
-                R.layout.item_paper, mLvPaper, this);
+                R.layout.item_subscribe_new, mLvPaper, this);
         mItemClickAdapter.bindToRecyclerView(mRvPaper);
         mItemClickAdapter.setOnItemClickListener(this);
         mItemClickAdapter.disableLoadMoreIfNotFullPage();
