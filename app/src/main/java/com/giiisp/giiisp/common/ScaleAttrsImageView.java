@@ -22,6 +22,7 @@ public class ScaleAttrsImageView extends ImageView
     private Matrix mMatrix;
     private GestureDetector mGestureDetector1;
     private float mInitScale;
+    private float mInitScaleY;
     private int much = 1;
     private int intrinsicWidth = 0;
     private int intrinsicHeight = 0;
@@ -62,6 +63,7 @@ public class ScaleAttrsImageView extends ImageView
                 }
 //            //得到初始化时图片需要进行缩放的值
                 mInitScale = scale;
+                mInitScaleY = scaley;
                 mMatrix.postTranslate(0, 0);
                 mMatrix.postScale(scale, scaley, 0, 0);
                 setImageMatrix(mMatrix);
@@ -94,7 +96,7 @@ public class ScaleAttrsImageView extends ImageView
             final int attr = typedArray.getIndex(i);
             switch (attr) {
                 case R.styleable.ScaleImageView_isScaleImage:
-                    isScale = typedArray.getBoolean(attr, false);
+                    isScale = typedArray.getBoolean(attr, true);
             }
         }
         //在mGestureDetector1的方法onDoubleTap中进行相关操作
@@ -117,9 +119,9 @@ public class ScaleAttrsImageView extends ImageView
                         much = 1;
                         mMatrix = new Matrix();
                         mMatrix.postTranslate(0, 0);
-                        mMatrix.postScale(mInitScale, mInitScale, 0, 0);
+                        mMatrix.postScale(mInitScale, mInitScaleY, 0, 0);
                         setImageMatrix(mMatrix);
-                        setScaleType(ScaleType.FIT_XY);
+                        setScaleType(ScaleType.MATRIX);
                         mImageviewDouble.doubleClick(x, y, 2);
                         return true;
                     default:

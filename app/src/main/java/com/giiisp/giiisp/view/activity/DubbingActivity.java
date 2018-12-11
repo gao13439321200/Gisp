@@ -1047,7 +1047,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 container.addView(videoview_layout);
                 return videoview_layout;
             } else {
-//                PhotoView imageView = new PhotoView(activity);
                 ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, BASE_IMG_URL + path,
                         viewPager.getWidth(), viewPager.getHeight(), mDouble);
                 imageView.setScaleType(ImageView.ScaleType.MATRIX);
@@ -1064,7 +1063,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             }
         }
 
-        public Bitmap getVideoBitmap(String mVideoUrl) {
+        Bitmap getVideoBitmap(String mVideoUrl) {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.setDataSource(mVideoUrl, new HashMap<>());
             Bitmap bitmap = retriever.getFrameAtTime(1000000, OPTION_CLOSEST_SYNC);
