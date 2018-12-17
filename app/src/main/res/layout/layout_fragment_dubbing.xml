@@ -263,11 +263,10 @@
                         android:id="@+id/tv_dubbing_determine"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="72dp"
-                        android:layout_marginEnd="65dp"
+                        android:layout_marginStart="47dp"
                         android:layout_toRightOf="@+id/tv_dubbing_re_record"
                         android:drawableTop="@mipmap/btn_queding"
-                        android:text="@string/complete"
+                        android:text="@string/nextAndFinish"
                         android:visibility="invisible"
                         android:textColor="@color/colorWhite"/>
                 </RelativeLayout>
@@ -330,11 +329,10 @@
                         android:id="@+id/tv_dubbing_determine_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="72dp"
-                        android:layout_marginEnd="65dp"
+                        android:layout_marginStart="47dp"
                         android:layout_toRightOf="@+id/tv_dubbing_re_record_mark"
                         android:drawableTop="@mipmap/btn_queding"
-                        android:text="@string/complete"
+                        android:text="@string/nextAndFinish"
                         android:textColor="@color/colorWhite"/>
                 </RelativeLayout>
 

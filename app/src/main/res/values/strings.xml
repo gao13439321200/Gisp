@@ -37,6 +37,7 @@
     <string name="cancel" tools:ignore="MissingTranslation">取消</string>
     <string name="credits" tools:ignore="MissingTranslation">积分</string>
     <string name="complete" tools:ignore="MissingTranslation">完成</string>
+    <string name="nextAndFinish" tools:ignore="MissingTranslation">确定/下一页</string>
     <string name="not_found" tools:ignore="MissingTranslation">未找到结果</string>
     <string name="unbounded" tools:ignore="MissingTranslation">未绑定</string>
     <string name="verification_code_empty" tools:ignore="MissingTranslation">验证码不能为空</string>

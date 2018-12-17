@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -230,6 +231,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         if (getPlayService() != null && getPlayService().isPlaying())
             getPlayService().playPause();
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        //屏幕不息屏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         super.initData();
         hideImg();
         language = getIntent().getIntExtra("language", 0);
@@ -599,6 +604,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     mBtnSolo.setVisibility(View.INVISIBLE);
                     isDubbing = true;
                     imgId = getImageId();
+                    viewPager.setDubbing(isDubbing);
                 }
                 toggleRecording(view);
                 break;
@@ -1231,23 +1237,10 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                                 isDubbing = true;
                                 imgId = getImageId();
                                 toggleRecording(null);
+                            } else {
+                                isDubbing = false;
                             }
-
-
-//                            position++;
-//                        if (photoRows != null)
-//                            if (position == photoRows.size()) {
-//                                Utils.showToast(R.string.complete_dubbing);
-//                                setResult(3000);
-//                                finish();
-//                            }
-//                            if (position < itemClickAdapte.getItemCount()) {
-//                                itemClickAdapte.setSelectedPosition(position);
-//                                itemClickAdapte.notifyDataSetChanged();
-//                                recyclerView.scrollToPosition(position);
-//                                viewPager.setCurrentItem(position);
-//                            }
-
+                            viewPager.setDubbing(isDubbing);
 
                             break;
                         case "edit_dubbing":
