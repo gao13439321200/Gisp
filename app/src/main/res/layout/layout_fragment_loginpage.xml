@@ -11,10 +11,8 @@
     <EditText
         android:id="@+id/ed_enter_phone"
         style="@style/login_edittext"
-        android:hint="@string/enter_phone"
+        android:hint="@string/enter_phone_email"
         android:imeOptions="actionNext"
-        android:inputType="phone"
-        android:maxLength="11"
         android:text=""/>
 
     <EditText
