@@ -365,7 +365,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
     @OnClick({R.id.tv_back, R.id.fl_user_icon, R.id.tv_right,
             R.id.fl_user_professional, R.id.fl_user_name, R.id.fl_user_email,
             R.id.fl_user_phone, R.id.fl_user_sex, R.id.fl_user_mechanism,
-            R.id.fl_user_position,R.id.fl_user_department,R.id.fl_user_jobtitle,
+            R.id.fl_user_position, R.id.fl_user_department, R.id.fl_user_jobtitle,
             R.id.fl_user_resume, R.id.fl_user_web})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -862,8 +862,16 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
 
                 break;
             case R.id.but_album:
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                    File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Giiisp/download");
+                    if (!folder.exists()) {
+                        folder.mkdirs();
+                    }
+                } else {
+                    Utils.showToast("外部储存没有挂载");
+                }
                 Intent intent1 = new Intent(Intent.ACTION_PICK, null);
-                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/jpg");
                 startActivityForResult(intent1, 1);
                 dialog.dismiss();
                 break;
