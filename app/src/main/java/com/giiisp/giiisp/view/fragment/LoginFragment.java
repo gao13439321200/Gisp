@@ -118,6 +118,18 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
                     Utils.showToast(R.string.password_cannot_empty);
                     break;
                 }
+                if (!mobile.contains("@") && !Utils.checkMobileNumber(mobile)) {
+                    Utils.showToast(R.string.format_not_correct);
+                    break;
+                }
+                if (mobile.contains("@") && !Utils.checkEmail(mobile)) {
+                    Utils.showToast(R.string.email_not_correct);
+                    break;
+                }
+                if (pwd.length() > 50 | pwd.length() < 6) {
+                    Utils.showToast(R.string.password_can_only);
+                    break;
+                }
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("loginname", mobile);
                 map.put("password", pwd);
