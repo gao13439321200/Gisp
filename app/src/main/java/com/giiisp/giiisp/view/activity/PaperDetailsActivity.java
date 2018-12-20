@@ -1411,9 +1411,9 @@ public class PaperDetailsActivity extends
                     if (!isVideo() && sScaleAttrsImageViews != null) {
                         matrix = new Matrix();
                         matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
-                                , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
+                                , sScaleAttrsImageViews.get(position).getScaleY(), 0, 0);
                         sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
-                        sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.MATRIX);
                     }
                     break;
                 case "3"://标记
@@ -1421,6 +1421,9 @@ public class PaperDetailsActivity extends
                     mMyCustomView.addPoint(Float.valueOf(vo.getX()), Float.valueOf(vo.getY()));
                     break;
                 case "4"://调用开始
+                    if (mMyCustomView != null) {
+                        mMyCustomView.clearData();
+                    }
                     if (imageId.contains(vo.getTimgid())) {
                         isEvent = true;
                         int timgPositon = imageId.indexOf(vo.getTimgid());
@@ -1430,6 +1433,9 @@ public class PaperDetailsActivity extends
                     }
                     break;
                 case "5"://调用结束
+                    if (mMyCustomView != null) {
+                        mMyCustomView.clearData();
+                    }
                     viewpagerPaper.setCurrentItem(position);
                     isEvent = false;
                     break;
@@ -1500,9 +1506,9 @@ public class PaperDetailsActivity extends
         if (!isVideo() && sScaleAttrsImageViews != null) {
             matrix = new Matrix();
             matrix.setScale(sScaleAttrsImageViews.get(position).getScale()
-                    , sScaleAttrsImageViews.get(position).getScale(), 0, 0);
+                    , sScaleAttrsImageViews.get(position).getScaleY(), 0, 0);
             sScaleAttrsImageViews.get(position).setImageMatrix(matrix);
-            sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.FIT_CENTER);
+            sScaleAttrsImageViews.get(position).setScaleType(ImageView.ScaleType.MATRIX);
         }
 
         if (getPlayService() != null) {
@@ -1704,16 +1710,8 @@ public class PaperDetailsActivity extends
                 } else {
                     mIsVideo.put(i, false);
                     ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, path,
-                            viewpagerPaper.getWidth(), viewpagerPaper.getHeight(), null);
+                            viewpagerPaper.getMeasuredWidth(), viewpagerPaper.getMeasuredHeight(), null);
                     imageView.setScaleType(ImageView.ScaleType.MATRIX);
-
-//                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-//                            viewpagerPaper.getWidth(),
-//                            viewpagerPaper.getHeight());
-//                    param.leftMargin = 40;
-//                    param.gravity = Gravity.CENTER_HORIZONTAL;
-//                    imageView.setLayoutParams(param);
-
                     sScaleAttrsImageViews.add(imageView);
                     ImageLoader.getInstance().displayImage((BaseActivity) activity, path, imageView);
                     ViewParent vp = imageView.getParent();

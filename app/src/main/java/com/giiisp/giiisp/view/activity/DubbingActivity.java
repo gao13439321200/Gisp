@@ -435,10 +435,12 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     if ("调用".equals(ToolString.getString(mTvUse))) {
                         showDiaoYong = true;
                         mRlBig.setVisibility(View.VISIBLE);
+                        viewPager.setDiaoYong(true);
 //                        mTvUse.setText(showDiaoYong ? "调用" : "返回");
                     } else if ("返回".equals(ToolString.getString(mTvUse))) {
                         sendData304(0, 0, 5);
                         isDiaoYong = false;
+                        viewPager.setDiaoYong(false);
                         // 这里需要跳到录音的图片页
                         setImageStatus(dubbingPosition);
                         if (isDubbing) {
@@ -458,6 +460,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 mRlBig.setVisibility(View.GONE);
                 mTvUse.setText("返回");
                 Glide.with(this).load(R.mipmap.img_quxiao).into(mBtnUse);
+                viewPager.setDiaoYong(true);
                 break;
             case R.id.btn_no://调用-取消
 //                sendData304(0, 0, 5);
@@ -471,6 +474,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 finish();
                 break;
             case R.id.tv_dubbing_determine://完成
+                viewPager.setDiaoYong(false);//重置滑动状态
                 if (recorderSecondsElapsed < 2) {
                     ToastUtils.showShort("录音时间不可少于2秒");
                     return;
@@ -530,6 +534,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 break;
             case R.id.tv_dubbing_re_record://重录
             case R.id.tv_dubbing_re_record_mark://重录(选标签)
+                viewPager.setDiaoYong(false);//重置滑动状态
                 pauseNewAudio();//停止播放试听
                 tvDubbingAudition.setSelected(false);
                 tvDubbingAuditionNew.setSelected(false);
@@ -792,6 +797,18 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             setImageStatus(position);
             abc = position;
         }
+
+//        // 正在录音 + 滑动 = 暂停录音
+//        if (position != abc && mRecorder != null && !mRecorder.isPause() && isDubbing) {
+//            if (mVideoViewMap != null && mVideoViewMap.get(dubbingPosition) != null)
+//                mVideoViewMap.get(dubbingPosition).pause();
+//            stopTimer();
+//            mRecorder.setPause(true);
+//            tvHint.setText(R.string.dubbing_pause);
+//            isPause = false;
+//            ivBtn.setImageResource(R.mipmap.btn_dubbing_before);
+//            setFinishLayout(true, true, true);
+//        }
     }
 
     @Override
@@ -839,6 +856,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     }
 
     private void setImageStatus(int position) {
+        if (mMyCustomView != null) {
+            mMyCustomView.clearData();
+        }
         if (dataList != null && position < dataList.size()) {
 
             if (dataList != null && isVideo(position)) {
@@ -867,8 +887,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 } else {
                     ivBtn.setImageResource(R.mipmap.btn_zanting);
                 }
-                mCbMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
-                mTvMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
+//                mCbMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
+//                mTvMark.setVisibility(this.dubbingPosition != position ? View.GONE : View.VISIBLE);
                 mBtnUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
                 if (!isVideo(position)) {
                     mRlBig.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
@@ -881,6 +901,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 if (isDiaoYong && dubbingPosition == position) {
                     sendData304(0, 0, 5);
                     isDiaoYong = false;
+                    viewPager.setDiaoYong(false);
                 }
 //                setFinishLayout(false, false, this.dubbingPosition == position);
                 setFinishLayout(false, false, true);
@@ -1053,8 +1074,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 container.addView(videoview_layout);
                 return videoview_layout;
             } else {
-                ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity, BASE_IMG_URL + path,
-                        viewPager.getWidth(), viewPager.getHeight(), mDouble);
+                ScaleAttrsImageView imageView = new ScaleAttrsImageView(activity,
+                        BASE_IMG_URL + path,
+                        viewPager.getMeasuredWidth(), viewPager.getMeasuredHeight(), mDouble);
                 imageView.setScaleType(ImageView.ScaleType.MATRIX);
                 //如果View已经在之前添加到了一个父组件，则必须先remove，否则会抛出IllegalStateException。
                 ViewParent vp = imageView.getParent();
@@ -1093,7 +1115,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         map.put("type", type + "");// 1放大 2缩小  3标记 4图片调用开始 5图片调用结束
         map.put("time", recorderSecondsElapsed);
         map.put("imgid", imgId);
-        map.put("timgid", type == 4 || type == 5 ? getImageId() : "");
+        map.put("timgid", type == 3 || type == 4 || type == 5 ? getImageId() : "");
         map.put("x", x);
         map.put("y", y);
         presenter.getDataAll("304", map);

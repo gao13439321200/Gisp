@@ -45,22 +45,24 @@ public class ScaleAttrsImageView extends ImageView
                 float scale = 1.0f;
                 float scaley = 1.0f;
 //            如果图片宽度大于控件宽度，图片高度小于控件高度  图片缩小
-                if (intrinsicWidth > width && intrinsicHeight < height) {
-                    scale = intrinsicWidth * 1.0f / width;
-                }
-//            //如果图片的高度大于控件的高度，图片的宽度小于控件的宽度  图片缩小
-                if (intrinsicHeight > height && intrinsicWidth < width) {
-                    scale = intrinsicHeight * 1.0f / height;
-                }
-//            //如果图片的宽与高都大于控件的宽与高 或者 图片的宽与高都小于控件的宽与高
-                if ((intrinsicHeight > height && intrinsicWidth > width)) {
-                    scale = width * 1.0f / intrinsicWidth;
-                    scaley = height * 1.0f / intrinsicHeight;
-                }
-                if (isScale && (intrinsicHeight < height && intrinsicWidth < width)) {
-                    scale = width * 1.0f / intrinsicWidth;
-                    scaley = height * 1.0f / intrinsicHeight;
-                }
+//                if (intrinsicWidth > width && intrinsicHeight < height) {
+//                    scale = intrinsicWidth * 1.0f / width;
+//                }
+////            //如果图片的高度大于控件的高度，图片的宽度小于控件的宽度  图片缩小
+//                if (intrinsicHeight > height && intrinsicWidth < width) {
+//                    scaley = intrinsicHeight * 1.0f / height;
+//                }
+////            //如果图片的宽与高都大于控件的宽与高 或者 图片的宽与高都小于控件的宽与高
+//                if ((intrinsicHeight > height && intrinsicWidth > width)) {
+//                    scale = width * 1.0f / intrinsicWidth;
+//                    scaley = height * 1.0f / intrinsicHeight;
+//                }
+//                if (isScale && (intrinsicHeight < height && intrinsicWidth < width)) {
+//                    scale = width * 1.0f / intrinsicWidth;
+//                    scaley = height * 1.0f / intrinsicHeight;
+//                }
+                scale = width * 1.0f / intrinsicWidth;
+                scaley = height * 1.0f / intrinsicHeight;
 //            //得到初始化时图片需要进行缩放的值
                 mInitScale = scale;
                 mInitScaleY = scaley;
@@ -77,6 +79,10 @@ public class ScaleAttrsImageView extends ImageView
 
     public float getScale() {
         return mInitScale;
+    }
+
+    public float getScaleY() {
+        return mInitScaleY;
     }
 
 

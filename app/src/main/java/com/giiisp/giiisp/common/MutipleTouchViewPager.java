@@ -21,13 +21,17 @@ public class MutipleTouchViewPager extends ViewPager {
     private boolean mIsDisallowIntercept = false;
 
     private boolean isDubbing = false;
-    private boolean isRight = false;
+    private boolean isDiaoYong = false;
     private int dubbingPosition = 0;
 
 
     public void setDubbing(boolean dubbing) {
         isDubbing = dubbing;
         dubbingPosition = getCurrentItem();
+    }
+
+    public void setDiaoYong(boolean diaoYong) {
+        isDiaoYong = diaoYong;
     }
 
     @Override
@@ -40,6 +44,10 @@ public class MutipleTouchViewPager extends ViewPager {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (isDiaoYong) {
+            return false;
+        }
+
         //正在录音 +向右滑动 +当前位置为正在录音图片 = 不允许滑动
         if (isDubbing && getCurrentItem() == dubbingPosition) {
             switch (ev.getAction()) {
