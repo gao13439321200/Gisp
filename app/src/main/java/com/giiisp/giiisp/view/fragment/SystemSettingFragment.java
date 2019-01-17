@@ -106,12 +106,12 @@ public class SystemSettingFragment extends BaseMvpFragment<BaseImpl, WholePresen
                 getSettingActivity().getVpLogin().setCurrentItem(0, false);
                 break;
             case R.id.fl_notice_praise:
-                showNormalDialog();
+                showLoginDialog();
                 break;
         }
     }
 
-    private void showNormalDialog() {
+    private void showLoginDialog() {
         /* @setIcon 设置对话框图标
          * @setTitle 设置对话框标题
          * @setMessage 设置对话框消息提示

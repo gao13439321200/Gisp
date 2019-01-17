@@ -44,7 +44,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.giiisp.giiisp.R.id.recycler_view;
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 //import static com.giiisp.giiisp.base.BaseActivity.token;
 
 /**
@@ -135,7 +134,7 @@ public class HomeFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 FragmentActivity.actionActivity(getContext(), "news");
                 break;
             case R.id.tv_home_search:
-                if (uid.equals("15")) {
+                if (getUserID().equals("15")) {
                     AlertDialog.Builder normalDialog =
                             new AlertDialog.Builder(getActivity());
                     normalDialog.setIcon(null);

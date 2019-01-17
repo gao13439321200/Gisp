@@ -78,7 +78,6 @@ import zlc.season.rxdownload2.entity.DownloadStatus;
 import static com.giiisp.giiisp.api.UrlConstants.CN;
 import static com.giiisp.giiisp.api.UrlConstants.EN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 import static com.giiisp.giiisp.view.activity.PaperDetailsActivity.PLAYQA;
 
 /**
@@ -1267,7 +1266,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 FragmentActivity.actionActivity(activity, "he", id + "");
                             }
                         });
-                        if (uid.equals(id)) {
+                        if (getUserID().equals(id)) {
                             textViewAttention.setVisibility(View.GONE);
                         }
                         if (!TextUtils.isEmpty(isFollowed)) {
@@ -1345,7 +1344,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                 FragmentActivity.actionActivity(activity, "he", id + "");
                             }
                         });
-                        if (!id.equals(uid)) {
+                        if (!id.equals(getUserID())) {
                             textViewAttention.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

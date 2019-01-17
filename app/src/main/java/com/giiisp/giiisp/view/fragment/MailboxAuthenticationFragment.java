@@ -44,8 +44,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.giiisp.giiisp.base.BaseActivity.uid;
-
 
 /**
  * 邮箱认证
@@ -102,7 +100,7 @@ public class MailboxAuthenticationFragment extends BaseMvpFragment<BaseImpl, Who
 //                    map.put("email", trim);
 //                    map.put("uid", uid);
 
-                    presenter.getAuthenUserlData(trim, uid, part);
+                    presenter.getAuthenUserlData(trim, getUserID(), part);
                     progressPopupWindow.showPopupWindow();
                 }
                 break;

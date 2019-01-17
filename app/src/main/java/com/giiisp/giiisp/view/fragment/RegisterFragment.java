@@ -27,8 +27,6 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.giiisp.giiisp.base.BaseActivity.uid;
-
 
 /**
  * 注册页面
@@ -221,7 +219,6 @@ public class RegisterFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
             case "104":
                 LoginBean bean = (LoginBean) entity;
                 //注册并登录成功！
-                uid = bean.getId();
                 SPUtils.getInstance().put(UrlConstants.UID, bean.getId());
                 SPUtils.getInstance().put(UrlConstants.UNAME, userName);
                 Utils.showToast("注册成功！");

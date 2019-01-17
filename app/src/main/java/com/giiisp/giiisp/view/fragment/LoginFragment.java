@@ -23,8 +23,6 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.giiisp.giiisp.base.BaseActivity.uid;
-
 /**
  * 登录页面
  * Created by Android on 2016/11/29.
@@ -159,7 +157,6 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
     public void onSuccessNew(String url, BaseBean entity) {
         super.onSuccessNew(url, entity);
         LoginBean bean = (LoginBean) entity;
-        uid = bean.getId();
         SPUtils.getInstance().put(UrlConstants.UID, bean.getId());
         SPUtils.getInstance().put(UrlConstants.ISVIP, bean.getIsvip());
         SPUtils.getInstance().put(UrlConstants.EMAILAUTHEN, bean.getEmailauthen());

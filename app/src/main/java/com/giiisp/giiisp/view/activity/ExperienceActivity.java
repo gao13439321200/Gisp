@@ -276,7 +276,7 @@ public class ExperienceActivity extends BaseMvpActivity<BaseImpl, WholePresenter
                 break;
             case R.id.tv_right:
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("uid", uid);
+                map.put("uid", getUserID());
                 if (!TextUtils.isEmpty(nId)) {
                     map.put("unid", nId);
                 }

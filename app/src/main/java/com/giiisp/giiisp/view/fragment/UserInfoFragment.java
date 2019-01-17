@@ -74,8 +74,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.giiisp.giiisp.base.BaseActivity.uid;
-
 /**
  * 用户的详细信息
  * Created by Thinkpad on 2017/5/4.
@@ -758,7 +756,7 @@ public class UserInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part imageBodyPart = MultipartBody.Part.createFormData("image", file.getName(), imageBody);
 
-        presenter.getUpdatePortraitData(uid, imageBodyPart);
+        presenter.getUpdatePortraitData(getUserID(), imageBodyPart);
 
     }
 

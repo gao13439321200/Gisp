@@ -36,7 +36,7 @@
                     android:layout_marginStart="6.3dp"
                     android:layout_marginTop="12.7dp"
                     android:layout_toEndOf="@+id/iv_user_icon"
-                    android:text=""
+                    android:text="游客模式"
                     android:textSize="20sp"/>
 
 
@@ -71,7 +71,8 @@
                     android:layout_alignStart="@+id/tv_user_name"
                     android:layout_below="@+id/tv_user_name"
                     android:layout_marginTop="9.3dp"
-                    android:text="@string/add_job_information"/>
+                    android:text="@string/add_job_information"
+                    android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/tv_user_position"

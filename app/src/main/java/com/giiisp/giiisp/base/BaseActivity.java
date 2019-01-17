@@ -40,6 +40,7 @@ import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportActivity;
 
 import static com.giiisp.giiisp.api.UrlConstants.CN;
+import static com.giiisp.giiisp.api.UrlConstants.UID;
 
 
 public abstract class BaseActivity extends SupportActivity implements NetChangeObserver {
@@ -48,7 +49,6 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
     protected boolean mLastNetworkConnect; // 上次网络连接状态
     protected boolean isResume = false;
     //    public static String token = "";
-    public static String uid = "";
     public static String emailauthen = ""; //  替代原先 isVIP 的功能
     public static String isVip = "";  // 用作身份认证按钮 的判断
     public Unbinder unbinder;
@@ -93,7 +93,9 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
 
         if (savedInstanceState != null) {
 //            token = savedInstanceState.getString("token");
-            uid = savedInstanceState.getString("uid");
+            String stateUid = savedInstanceState.getString("uid");
+            assert stateUid != null;
+            SPUtils.getInstance().put(UID, stateUid);
         }
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         FlymeSetStatusBarLightMode(getWindow(), true);
@@ -271,7 +273,7 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 //        outState.putString("token", token);
-        outState.putString("uid", uid);
+        outState.putString("uid", getUserID());
         super.onSaveInstanceState(outState);
     }
 

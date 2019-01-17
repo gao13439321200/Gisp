@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ObjectUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
@@ -678,7 +679,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                     @Override
                     public void onClick(View view) {
                         Log.i("--->>", "onClick: " + view.isSelected());
-                        if (ObjectUtils.isEmpty(BaseActivity.uid)) {
+                        if (ObjectUtils.isEmpty(getUserID())) {
                             AlertDialog.Builder normalDialog =
                                     new AlertDialog.Builder(activity);
                             normalDialog.setIcon(null);
@@ -704,7 +705,7 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
                 holder.getView(R.id.iv_paper_download).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        if (ObjectUtils.isEmpty(BaseActivity.uid)) {
+                        if (ObjectUtils.isEmpty(getUserID())) {
                             AlertDialog.Builder normalDialog =
                                     new AlertDialog.Builder(activity);
                             normalDialog.setIcon(null);
@@ -856,4 +857,9 @@ public class ExpandableItemAdapter extends BaseMultiItemQuickAdapter<ClickEntity
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
+
+    public String getUserID() {
+        return SPUtils.getInstance().getString(UrlConstants.UID, "");
+    }
+
 }

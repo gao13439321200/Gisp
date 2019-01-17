@@ -24,8 +24,6 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.giiisp.giiisp.base.BaseActivity.uid;
-
 /**
  * 修改手机号码页面
  * Created by Thinkpad on 2017/5/4.
@@ -123,7 +121,7 @@ public class ModifyPhoneFragment extends BaseMvpFragment<BaseImpl, WholePresente
                     Utils.showToast(R.string.verification_code_empty);
                 } else {
                     ArrayMap<String, Object> map = new ArrayMap<>();
-                    map.put("uid", uid + "");
+                    map.put("uid", getUserID());
                     map.put("mobile", phone);
                     map.put("code", code);
                     number = 100;

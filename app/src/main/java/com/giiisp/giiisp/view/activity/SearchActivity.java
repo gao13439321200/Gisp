@@ -138,7 +138,7 @@ public class SearchActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
         ArrayMap<String, Object> map = new ArrayMap<>();
 //        map.put("token", token);
         map.put("oid", id);
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         switch (isFollowed) {
             case "1": //getIsFollowed 1 未关注， 0 已关注
                 presenter.getSaveFollowUserData(map);

@@ -206,7 +206,7 @@ public class VerifiedActivity extends BaseActivity implements ScreenPopupWindow.
         }
 
         if (map.size() > 0) {
-            map.put("uid", uid);
+            map.put("uid", getUserID());
             witnessFragment.updateData(map);
         }
     }

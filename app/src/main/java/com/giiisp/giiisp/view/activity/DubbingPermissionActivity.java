@@ -450,13 +450,13 @@ public class DubbingPermissionActivity extends BaseMvpActivity<BaseImpl, WholePr
     }
 
     protected void postDubbing() {
-        Log.i("--->>", "postDubbing: filePath" + filePath + "  uid" + uid + " uploadManager" + uploadManager);
-        if (TextUtils.isEmpty(filePath) || TextUtils.isEmpty(uid) || uploadManager == null)
+        Log.i("--->>", "postDubbing: filePath" + filePath + "  uid" + getUserID() + " uploadManager" + uploadManager);
+        if (TextUtils.isEmpty(filePath) || TextUtils.isEmpty(getUserID()) || uploadManager == null)
             return;
         progressPopupWindow.showPopupWindow();
         String simpe = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String upkey = simpe + "_" + Utils.fileName(filePath);
-        uploadManager.put(filePath, upkey, uid, new UpCompletionHandler() {
+        uploadManager.put(filePath, upkey, getUserID(), new UpCompletionHandler() {
             public void complete(String key1, ResponseInfo rinfo, JSONObject response) {
                 Log.i("qiniu", key1 + ",\r\n " + rinfo + ",\r\n " + response);
                 if (response == null)

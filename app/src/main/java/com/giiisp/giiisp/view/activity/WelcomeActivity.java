@@ -55,7 +55,7 @@ public class WelcomeActivity extends BaseActivity {
             LogInActivity.actionActivity(this);
         } else {
 //            BaseActivity.token = tokens;
-            BaseActivity.uid = uid;
+//            BaseActivity.uid = uid;
             GiiispActivity.actionActivity(this, getIntent());
 //            SelectFieldActivity.intentActivity(this);
 //            VerifiedActivity.actionActivity(this);

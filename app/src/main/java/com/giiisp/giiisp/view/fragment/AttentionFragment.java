@@ -28,15 +28,11 @@ import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 /**
  * 订阅的关键字领域学者的fragment
@@ -94,9 +90,9 @@ public class AttentionFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
         ArrayMap<String, Object> mapt1 = new ArrayMap<>();
         ArrayMap<String, Object> mapt2 = new ArrayMap<>();
 //        mapt1.put("token", token);
-        mapt1.put("uid", uid);
+        mapt1.put("uid", getUserID());
 //        mapt2.put("token", token);
-        mapt2.put("uid", uid);
+        mapt2.put("uid", getUserID());
         switch (superType) {
             case "first":
                 tvNext.setVisibility(View.VISIBLE);
@@ -296,7 +292,7 @@ public class AttentionFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
         ArrayMap<String, Object> map = new ArrayMap<>();
 //        map.put("token", token);
         map.put("oid", id);
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         if (isFollowed) {
             presenter.getSaveFollowUserData(map);
         } else {
@@ -318,7 +314,7 @@ public class AttentionFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
                 break;
 
         }
-        map.put("uid", uid);
+        map.put("uid", getUserID());
 //        map.put("token", token);
         map.put("anids", id);
         presenter.getSaveFollowTypeData(map);
@@ -335,7 +331,7 @@ public class AttentionFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
                 break;
 
         }
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         map.put("id", id);
         presenter.getCancelFollowTypeInfo(map);
     }

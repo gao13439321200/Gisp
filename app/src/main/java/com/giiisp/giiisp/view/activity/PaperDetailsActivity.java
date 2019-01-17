@@ -937,7 +937,7 @@ public class PaperDetailsActivity extends
 
                 break;
             case R.id.fl_collection://收藏
-                if (ObjectUtils.isEmpty(BaseActivity.uid)) {
+                if (ObjectUtils.isEmpty(getUserID())) {
                     AlertDialog.Builder normalDialog = new AlertDialog.Builder(this);
                     normalDialog.setIcon(null);
                     normalDialog.setTitle("需要登录才能执行此操作");
@@ -954,7 +954,7 @@ public class PaperDetailsActivity extends
                 FragmentActivity.actionActivity(this, "play");
                 break;
             case R.id.fl_download://下载
-                if (ObjectUtils.isEmpty(BaseActivity.uid)) {
+                if (ObjectUtils.isEmpty(getUserID())) {
                     AlertDialog.Builder normalDialog =
                             new AlertDialog.Builder(this);
                     normalDialog.setIcon(null);
@@ -1074,7 +1074,7 @@ public class PaperDetailsActivity extends
         map.put("pbid", PaperDetailsActivity.id);
         map.put("flag", 1);
         map.put("tabFlag", 1);
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         map.put("version", integer);
         //pbid=1&flag=1&tabFlag=1
         presenter.getSaveFollowPaperPictureData(map);*/
@@ -1082,11 +1082,11 @@ public class PaperDetailsActivity extends
 //        map.put("pbid", id);
 //        map.put("flag", 1);
 //        map.put("tabFlag", 1);
-//        map.put("uid", uid);
+//        map.put("uid", getUserID());
 //        map.put("version", myVersionNo);
 
         HashMap<String, Object> hMap = new HashMap<>();
-        hMap.put("uid", uid);
+        hMap.put("uid", getUserID());
         hMap.put("pid", pid);
         hMap.put("version", myVersionNo);
         hMap.put("picid", imageId.get(position));
@@ -1122,7 +1122,7 @@ public class PaperDetailsActivity extends
             Utils.showToast(getString(R.string.share_result));
             //uId=1&pid=5&ptype=1&ttype=1
             ArrayMap<String, Object> map = new ArrayMap<>();
-            map.put("uid", uid);
+            map.put("uid", getUserID());
             map.put("pid", pid);
             map.put("ttype", 1);
             map.put("ptype", 1);

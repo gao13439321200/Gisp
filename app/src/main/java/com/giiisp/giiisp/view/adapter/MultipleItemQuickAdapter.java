@@ -13,10 +13,12 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.giiisp.giiisp.R;
+import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.common.ScrollSpeedLinearLayoutManger;
 import com.giiisp.giiisp.dto.HeadImgBean;
@@ -37,7 +39,6 @@ import java.util.Objects;
 import static com.giiisp.giiisp.R.layout.item_user_info;
 import static com.giiisp.giiisp.api.UrlConstants.CN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 
 /**
@@ -96,8 +97,8 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
                     } else {
                         helper.setText(R.id.tv_user_email, "未绑定邮箱");
                     }
-                    helper.setVisible(R.id.iv_attention, !Objects.equals(item.getPaperId(), uid + ""));
-                    helper.setVisible(R.id.tv_user_phone, Objects.equals(item.getPaperId(), uid + ""));
+                    helper.setVisible(R.id.iv_attention, !Objects.equals(item.getPaperId(), getUserID() + ""));
+                    helper.setVisible(R.id.tv_user_phone, Objects.equals(item.getPaperId(), getUserID() + ""));
 //                    helper.getView(R.id.iv_attention).setSelected(Objects.equals("0", userInfoEntity.getIsFollowed())); // getIsFollowed
                     ImageLoader.getInstance().displayCricleImage(context, userInfo.getAvatar(), (ImageView) helper.getView(R.id.iv_user_icon));
                     helper.setText(R.id.tv_prompt, userInfo.getSchool());
@@ -400,4 +401,9 @@ public class MultipleItemQuickAdapter extends BaseMultiItemQuickAdapter<ClickEnt
             return imageView;
         }
     }
+
+    public String getUserID() {
+        return SPUtils.getInstance().getString(UrlConstants.UID, "");
+    }
+
 }

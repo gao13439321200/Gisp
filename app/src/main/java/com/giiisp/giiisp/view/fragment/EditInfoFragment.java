@@ -45,8 +45,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MultipartBody;
 
-import static com.giiisp.giiisp.base.BaseActivity.uid;
-
 /**
  * 编辑信息页面
  * Created by Thinkpad on 2017/5/8.
@@ -261,7 +259,7 @@ public class EditInfoFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         tvUserName.setText(nickName);
         tvUserEmail.setText(userInfo.getEmail());
         ArrayMap<String, Object> map = new ArrayMap<>();
-        map.put("uid", uid);
+        map.put("uid", getUserID());
 //        map.put("token", token);
         map.put("mobile", userInfo.getPhone());
         map.put("loginType", 2);

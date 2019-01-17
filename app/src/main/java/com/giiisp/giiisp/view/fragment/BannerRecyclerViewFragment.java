@@ -138,7 +138,6 @@ import static android.content.ContentValues.TAG;
 import static com.giiisp.giiisp.api.UrlConstants.CN;
 import static com.giiisp.giiisp.api.UrlConstants.EN;
 import static com.giiisp.giiisp.api.UrlConstants.RequestUrl.BASE_IMG_URL;
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 /**
  * 众多Fragment的基类
@@ -912,7 +911,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "mine_scholar"://我的粉丝
                 lineBanner.setVisibility(View.VISIBLE);
-                if (Objects.equals("" + uid, string)) {
+                if (Objects.equals("" + getUserID(), string)) {
                     tvTitle.setText(R.string.my_fans);
                 } else {
                     tvTitle.setText(R.string.ta_fans);
@@ -924,7 +923,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case "mine_follow"://我的关注
                 lineBanner.setVisibility(View.VISIBLE);
-                if (Objects.equals("" + uid, string)) {
+                if (Objects.equals("" + getUserID(), string)) {
                     tvTitle.setText(R.string.my_follow);
                 } else {
                     tvTitle.setText(R.string.ta_follow);
@@ -1117,33 +1116,33 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 presenter.getDataAll("212", hMap);
                 break;
             case "msg_new":
-                hMap.put("uid", uid);
+                hMap.put("uid", getUserID());
                 hMap.put("pageno", page);
                 hMap.put("pagesize", pageSize);
                 presenter.getDataAll("342", hMap);
                 break;
             case "notice":
-                map.put("uid", uid);
+                map.put("uid", getUserID());
                 map.put("page", page);
                 map.put("type", 1);
                 presenter.getMsgListData(map);
                 break;
             case "interactive":
-                map.put("uid", uid);
+                map.put("uid", getUserID());
                 map.put("page", page);
                 map.put("type", 2);
                 presenter.getMsgListData(map);
                 break;
             case "answer":
 //                map.put("page", page);
-//                map.put("uid", uid);
+//                map.put("uid", getUserID());
 //                presenter.getListAnswerData(map);
                 hMap.put("pageno", page);
                 hMap.put("uid", getUserID());
                 presenter.getDataAll("314", hMap);
                 break;
             case "questions":
-//                map.put("uid", uid);
+//                map.put("uid", getUserID());
 //                map.put("page", page);
 //                presenter.getListQuizData(map);
                 hMap.put("pageno", page);
@@ -1151,7 +1150,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 presenter.getDataAll("313", hMap);
                 break;
             case "search_hint":
-                map.put("uid", uid);
+                map.put("uid", getUserID());
                 map.put("page", page);
                 presenter.getSearchHistoryData(map);
                 break;
@@ -1233,7 +1232,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         if (Objects.equals(type, "search_result")) {
             ArrayMap<String, Object> map = new ArrayMap<>();
 //            map.put("token", token);
-            map.put("uid", uid);
+            map.put("uid", getUserID());
             map.put("content", searchContent);
             presenter.getHomeSearchData(map);
         } else if (Objects.equals(type, "search_hint")) {
@@ -1280,7 +1279,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "group":
 //                page = 1;
                 HashMap<String, Object> hMap = new HashMap<>();
-                hMap.put("uid", getUserID());
+                hMap.put("getUserID()", getUserID());
 //                hMap.put("pageno", page);
 //                hMap.put("pageSize", pageSize);
                 presenter.getDataAll("337", hMap);
@@ -2082,7 +2081,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         public void onOKClick() {
                             HashMap<String, Object> map = new HashMap<>();
                             map.put("pid", newVO.getId());
-                            map.put("uid", getUserID());
+                            map.put("getUserID()", getUserID());
                             map.put("status", "1");
                             presenter.getDataAll("341", map);
                         }
@@ -2217,7 +2216,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                     if (Objects.equals(item.getString(), getString(R.string.you_search))) {
                         presenter.getCleanHistoryData(map);
                     } else if (Objects.equals(item.getString(), getString(R.string.everyone_search))) {
-                        map.put("uid", uid);
+                        map.put("uid", getUserID());
                         map.put("page", 1);
                         presenter.getSearchHistoryData(map);
                     }
@@ -2265,7 +2264,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 break;
             case R.id.iv_attention: // iv_attention
                 ClickEntity item1 = multipleItemQuickAdapter.getItem(position);
-                if (ObjectUtils.isEmpty(BaseActivity.uid)) {
+                if (ObjectUtils.isEmpty(getUserID())) {
                     AlertDialog.Builder normalDialog =
                             new AlertDialog.Builder(getActivity());
                     normalDialog.setIcon(null);
@@ -2287,7 +2286,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                         final String id = userInfo.getId();
 //                        map.put("token", token);
                         map.put("oid", id);
-                        map.put("uid", uid);
+                        map.put("uid", getUserID());
                         switch (userInfoEntity.getIsFollowed()) { //  getIsFollowed 1 未关注。0以关注
                             case "1":
                                 presenter.getSaveFollowUserData(map);
@@ -2298,7 +2297,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         ArrayMap<String, Object> map = new ArrayMap<>();
 //                                        map.put("token", token);
-                                        map.put("uid", uid);
+                                        map.put("uid", getUserID());
                                         map.put("oid", id);
                                         presenter.getCancelFollowUserData(map);
                                     }
@@ -2576,7 +2575,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
     public void submitFollow(String isFollowed, String id) {
         HashMap<String, Object> map = new HashMap<>();
 //        map.put("token", token);
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         map.put("fid", id);
         switch (isFollowed) {
             case "0"://关注
@@ -2602,7 +2601,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         map.put("pbid", id);
         map.put("flag", 1);
         map.put("tabFlag", 1);
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         map.put("version", integer);
       /*  Log.i(TAG, "collection: " + type);
         switch (type) {
@@ -2616,7 +2615,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
                 map.put("pbid", id);
                 map.put("flag", 1);
                 map.put("tabFlag", 1);
-                map.put("uid", uid);
+                map.put("uid", getUserID());
                 map.put("version", integer);
                 //pbid=1&flag=1&tabFlag=1
                 presenter.getSaveFollowPaperPictureData(map);
@@ -3030,7 +3029,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
             case "341":
                 ToastUtils.showShort("操作成功！");
                 page = 0;
-                hMap.put("uid", uid);
+                hMap.put("uid", getUserID());
                 hMap.put("pageno", page);
                 hMap.put("pagesize", pageSize);
                 presenter.getDataAll("342", hMap);

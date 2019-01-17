@@ -694,7 +694,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
 //                map.put("id", recordId);
 //            }
 ////            map.put("token", token);
-//            map.put("uid", uid);
+//            map.put("uid", getUserID());
 //            map.put("pcid", id);
 //            map.put("size", duration);
 //            map.put("duration", recorderSecondsElapsed);
@@ -736,7 +736,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         map.put("id", dataList.get(dubbingPosition).getDubbingVO().getRid());//修改录音是使用，第一次录音 传 “”
 //      }
 //      map.put("token", token);
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         map.put("pcid", dataList.get(dubbingPosition).getDubbingVO().getPcid());
         map.put("useinit", isSolo ? "1" : "2");//1原音2录音
         map.put("duration", (long) recorderSecondsElapsed);

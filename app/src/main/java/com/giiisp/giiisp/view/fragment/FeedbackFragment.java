@@ -19,8 +19,6 @@ import com.giiisp.giiisp.view.impl.BaseImpl;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.giiisp.giiisp.base.BaseActivity.uid;
-
 //import static com.giiisp.giiisp.base.BaseActivity.token;
 
 /**
@@ -108,7 +106,7 @@ public class FeedbackFragment extends BaseMvpFragment<BaseImpl, WholePresenter> 
         map.put("type", type);
         map.put("content", content);
         map.put("contactInfo", contactInfo);
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         presenter.getFeedbackData(map);
 
     }

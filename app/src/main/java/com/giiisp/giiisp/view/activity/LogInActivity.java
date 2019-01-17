@@ -58,7 +58,7 @@ public class LogInActivity extends BaseActivity {
 
     public static void actionActivity(Context context) {
         Intent sIntent = new Intent(context, LogInActivity.class);
-        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        sIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(sIntent);
     }
 

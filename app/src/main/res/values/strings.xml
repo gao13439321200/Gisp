@@ -64,6 +64,7 @@
     <string name="enter_correct_password" tools:ignore="MissingTranslation">请输入正确的密码</string>
     <string name="ensure_correct_password" tools:ignore="MissingTranslation">请保证密码输入一致</string>
     <string name="determine_cancellation" tools:ignore="MissingTranslation">确定注销?</string>
+    <string name="no_login" tools:ignore="MissingTranslation">当前为游客模式，请登录</string>
     <string name="user_name" tools:ignore="MissingTranslation">用户名</string>
     <string name="sex_info" tools:ignore="MissingTranslation">性别</string>
     <string name="harmful_materials" tools:ignore="MissingTranslation">有害内容</string>

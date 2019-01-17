@@ -43,7 +43,6 @@ import zlc.season.rxdownload2.entity.DownloadRecord;
 
 import static com.giiisp.giiisp.base.BaseActivity.emailauthen;
 import static com.giiisp.giiisp.base.BaseActivity.isVip;
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 /**
  * '我的'页面
@@ -172,7 +171,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 //            tvUserWeb.setText(web);
 //        }
 //        ArrayMap<String, Object> map = new ArrayMap<>();
-//        map.put("uid", uid);
+//        map.put("uid", getUserID());
 //        map.put("token", token);
 //        map.put("mobile", userInfo.getMobile() + "");
 //        map.put("loginType", 2);
@@ -239,6 +238,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 mLlEmpty.setVisibility(View.VISIBLE);
             }
         }
+        tvPrompt.setVisibility(View.VISIBLE);
         tvPrompt.setText(infoBean.getSchool());
         if (!TextUtils.isEmpty(infoBean.getDepartment()) && TextUtils.isEmpty(infoBean.getPosition())) {
             tvUserPosition.setText(infoBean.getDepartment() + "|" + infoBean.getPosition());
@@ -290,10 +290,12 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
 
     @Override
     public void initNetwork() {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("uid", getUserID());
-        map.put("language", getLanguage());
-        presenter.getDataAll("306", map);
+        if (isLoginIn()) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid", getUserID());
+            map.put("language", getLanguage());
+            presenter.getDataAll("306", map);
+        }
         super.initNetwork();
     }
 
@@ -338,6 +340,10 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             R.id.ll_course, R.id.ll_group,
             R.id.fl_mine_news, R.id.fl_mine_contacts, R.id.fl_mine_collection, R.id.fl_mine_setting})
     public void onViewClicked(View view) {
+        if (!isLoginIn()) {
+            showNormalDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.iv_empty:
             case R.id.tv_empty:
@@ -348,7 +354,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 SettingActivity.actionActivity(getContext());
                 break;
 //            case R.id.rl_user_info:
-//                FragmentActivity.actionActivity(getContext(), "he", uid + "");
+//                FragmentActivity.actionActivity(getContext(), "he", getUserID() + "");
 //                break;
             case R.id.ll_group:
                 FragmentActivity.actionActivity(getContext(), "group");
@@ -359,7 +365,7 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.ll_dubbing:
                 // 2018/11/20 只要邮箱认证和资料认证 有一个通过 就可以进去录音
 //                if ("2".equals(emailauthen) || "1".equals(isVip) || "2".equals(isVip)) {
-                    FragmentActivity.actionActivity(getContext(), "wait_dubbing"); //  认证完成开始录音
+                FragmentActivity.actionActivity(getContext(), "wait_dubbing"); //  认证完成开始录音
 //                } else {
 //                    ToastUtils.showShort("请先认证身份信息");
 //                }
@@ -373,11 +379,11 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                 break;
             case R.id.tv_follow_number:
             case R.id.tv_follow:
-                FragmentActivity.actionActivity(getContext(), "mine_follow", uid + "");
+                FragmentActivity.actionActivity(getContext(), "mine_follow", getUserID() + "");
                 break;
             case R.id.tv_fans_number:
             case R.id.tv_fans:
-                FragmentActivity.actionActivity(getContext(), "mine_scholar", uid + "");
+                FragmentActivity.actionActivity(getContext(), "mine_scholar", getUserID() + "");
                 break;
             case R.id.fl_mine_qa://问答
                 FragmentActivity.actionActivity(getContext(), "qa");

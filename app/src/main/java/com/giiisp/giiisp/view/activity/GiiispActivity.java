@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -234,7 +233,7 @@ public class GiiispActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         //        stopService(new Intent(this, PlayerService.class));
-        Log.i("--->>", "onDestroy: ");
+        Log.i("--->>", "GiiispActivity.onDestroy: ");
         super.onDestroy();
     }
 
@@ -256,7 +255,7 @@ public class GiiispActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
                 .setSelectedIcons(R.mipmap.home_select, R.mipmap.subscribe_select, R.mipmap.demonstration_play, R.mipmap.collection_select, R.mipmap.mine_select).generate();
         //        tabLayoutGiiisp.showCircleBadge(4);
         tabLayoutGiiisp.setIconSize(19);
-        tabLayoutGiiisp.setUid(BaseActivity.uid);
+        tabLayoutGiiisp.setUid(getUserID());
         tabLayoutGiiisp.setContainer(viewPagerGiiisp);
         viewPagerGiiisp.setOffscreenPageLimit(4);
         tabLayoutGiiisp.setOnPageChangeListener(this);
@@ -415,4 +414,6 @@ public class GiiispActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
     public String getNowActivityName() {
         return this.getClass().getName();
     }
+
+
 }

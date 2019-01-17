@@ -110,12 +110,12 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
                 getSettingActivity().getVpLogin().setCurrentItem(7, false);
                 break;
             case R.id.tv_signout:
-                showNormalDialog();
+                showLoginDialog();
                 break;
         }
     }
 
-    private void showNormalDialog() {
+    private void showLoginDialog() {
         /* @setIcon 设置对话框图标
          * @setTitle 设置对话框标题 Attempt to invoke virtual method 'android.content.res.Resources$Theme' on a null object reference
 	at android.app.AlertDialog.resolveDialogTheme(AlertDialog.java:225)
@@ -130,7 +130,6 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
         normalDialog.setTitle(R.string.determine_cancellation);
         normalDialog.setPositiveButton(R.string.confirm,
                 (dialog, which) -> {
-                    String uid = SPUtils.getInstance().getString(UrlConstants.UID);
                     SPUtils.getInstance().put(UrlConstants.UID, "");
                     SPUtils.getInstance().put(UrlConstants.UNAME, "");
                     LogInActivity.actionActivity(getContext());

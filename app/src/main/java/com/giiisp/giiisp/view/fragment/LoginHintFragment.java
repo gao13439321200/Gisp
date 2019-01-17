@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.giiisp.giiisp.R;
-import com.giiisp.giiisp.base.BaseActivity;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.presenter.WholePresenter;
@@ -25,6 +25,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.giiisp.giiisp.api.UrlConstants.UID;
 
 /**
  * 登录引导页
@@ -66,7 +68,7 @@ public class LoginHintFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
         Utils.showToast(entity.getInfo());
         if (entity.getUid() != null) {
 //            BaseActivity.token = entity.getToken();
-            BaseActivity.uid = entity.getUid();
+            SPUtils.getInstance().put(UID,entity.getUid());
 //            SharedPreferencesHelper.getInstance(context).putStringValue("token", entity.getToken());
             SharedPreferencesHelper.getInstance(context).putStringValue("Uid", entity.getUid());
 //            GiiispActivity.actionActivity(getContext());
@@ -137,9 +139,10 @@ public class LoginHintFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
             case R.id.tv_weixin_login://微信登录
                 UMShareAPI.get(getActivity()).getPlatformInfo(getActivity(), SHARE_MEDIA.WEIXIN, umAuthListener);
                 break;
-            case R.id.tv_tourist:
+            case R.id.tv_tourist://游客登录
 //                BaseActivity.token = "8CE7C86C6B32F90074CBDCEEAF0D42DA";
-                BaseActivity.uid = "15";
+                SPUtils.getInstance().put(UID, "");
+//                BaseActivity.uid = "15";
                 GiiispActivity.actionActivity(getContext());
                 getActivity().finish();
                 break;

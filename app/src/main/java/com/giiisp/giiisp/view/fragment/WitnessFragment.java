@@ -4,12 +4,10 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseActivity;
-import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.SelectUser;
@@ -19,22 +17,15 @@ import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.VerifiedActivity;
 import com.giiisp.giiisp.view.adapter.ClickEntity;
 import com.giiisp.giiisp.view.adapter.ItemClickAdapter;
-import com.giiisp.giiisp.view.adapter.MultipleItemQuickAdapter;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 import com.giiisp.giiisp.widget.ProgressPopupWindow;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-
-import static com.giiisp.giiisp.base.BaseActivity.uid;
 
 /**
  * 选择证明人页面
@@ -61,7 +52,7 @@ public class WitnessFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
         super.initData();
         progressPopupWindow = new ProgressPopupWindow((BaseActivity) getActivity());
         map = new ArrayMap<>();
-        map.put("uid", uid);
+        map.put("uid", getUserID());
         initNetwork();
     }
 
@@ -101,7 +92,7 @@ public class WitnessFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
             }
             netType = 2;
             MultipartBody.Part part1 = MultipartBody.Part.createFormData("ids",ids);
-            MultipartBody.Part part2 = MultipartBody.Part.createFormData("uid",uid);
+            MultipartBody.Part part2 = MultipartBody.Part.createFormData("uid",getUserID());
             ((VerifiedActivity) getActivity()).parts.add(part1);
             ((VerifiedActivity) getActivity()).parts.add(part2);
 

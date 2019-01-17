@@ -1,13 +1,16 @@
 package com.giiisp.giiisp.base;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.utils.Utils;
+import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import static com.giiisp.giiisp.api.UrlConstants.CN;
@@ -94,6 +97,38 @@ public abstract class BaseMvpFragment<V, P extends BasePresenter> extends BaseFr
 
     public String getUserID() {
         return SPUtils.getInstance().getString(UrlConstants.UID, "");
+    }
+
+    public boolean isLoginIn() {
+        return ObjectUtils.isNotEmpty(getUserID());
+    }
+
+    public void showNormalDialog() {
+        /* @setIcon 设置对话框图标
+         * @setTitle 设置对话框标题 Attempt to invoke virtual method 'android.content.res.Resources$Theme' on a null object reference
+	at android.app.AlertDialog.resolveDialogTheme(AlertDialog.java:225)
+         * @setMessage 设置对话框消息提示
+         * setXXX方法返回Dialog对象，因此可以链式设置属性
+         */
+        if (getContext() == null)
+            return;
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(getContext());
+        normalDialog.setIcon(null);
+        normalDialog.setTitle(R.string.no_login);
+        normalDialog.setPositiveButton(R.string.confirm,
+                (dialog, which) -> {
+                    SPUtils.getInstance().put(UrlConstants.UID, "");
+                    SPUtils.getInstance().put(UrlConstants.UNAME, "");
+                    LogInActivity.actionActivity(getContext());
+//                    HashMap<String, Object> map = new HashMap<>();
+//                    map.put("id", uid);
+//                    presenter.getDataAll("105", map);
+                    getActivity().finish();
+                });
+        normalDialog.setNegativeButton(R.string.cancel, null);
+        // 显示
+        normalDialog.show();
     }
 
 }
