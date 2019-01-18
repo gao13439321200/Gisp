@@ -1179,6 +1179,8 @@ public class PaperDetailsActivity extends
             }
         }
         if (list.size() > 0) {
+            downloadNunber++;
+            tvDownloadNumber.setText(downloadNunber + "");
             new RxPermissions(this)
                     .request(WRITE_EXTERNAL_STORAGE)
                     .doOnNext(granted -> {
@@ -2096,7 +2098,7 @@ public class PaperDetailsActivity extends
                         Utils.showToast("下载完成");
                     }
                 });
-                loadDownloadNunber();
+//                loadDownloadNunber();
 
                 break;
             case "217":
