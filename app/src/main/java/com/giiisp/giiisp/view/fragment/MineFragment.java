@@ -277,6 +277,9 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
         loadDownloadNunber();
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAuxiliary);
         swipeRefreshLayout.setOnRefreshListener(this);
+        if (!isLoginIn()) {
+            swipeRefreshLayout.setEnabled(false);
+        }
         ivMenu.setVisibility(View.VISIBLE);
         ivMenu.setBackgroundResource(R.mipmap.img_setting);
     }

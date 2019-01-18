@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseMvpFragment;
@@ -22,6 +23,8 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.giiisp.giiisp.api.UrlConstants.LOGINTIME;
 
 /**
  * 登录页面
@@ -162,7 +165,7 @@ public class LoginFragment extends BaseMvpFragment<BaseImpl, WholePresenter> {
         SPUtils.getInstance().put(UrlConstants.EMAILAUTHEN, bean.getEmailauthen());
         SPUtils.getInstance().put(UrlConstants.UNAME,
                 edEnterPhone.getText().toString().trim());
-
+        SPUtils.getInstance().put(LOGINTIME, TimeUtils.getNowMills());//登录时间
 //        if ("0".equals(bean.getNewUser() + "")) {
         GiiispActivity.actionActivity(getContext());
 //        } else {

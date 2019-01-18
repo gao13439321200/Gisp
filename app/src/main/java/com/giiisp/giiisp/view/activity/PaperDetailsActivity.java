@@ -904,21 +904,8 @@ public class PaperDetailsActivity extends
             case R.id.et_comm_post://提问
 //                if (photosBeanRows == null || photosBeanRows.size() <= position)
 //                    return;
-                if (ObjectUtils.isEmpty(getUserID())) {
-                    AlertDialog.Builder normalDialog =
-                            new AlertDialog.Builder(this);
-                    normalDialog.setIcon(null);
-                    normalDialog.setTitle("需要登录才能执行此操作");
-                    normalDialog.setPositiveButton("登录",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    LogInActivity.actionActivity(PaperDetailsActivity.this);
-                                }
-                            });
-                    normalDialog.setNegativeButton("取消", null);
-                    // 显示
-                    normalDialog.show();
+                if (!isLoginIn()) {
+                    showNormalDialog();
                 } else
                     switch (BaseActivity.emailauthen) { //  按照 emailauthen 判断
                         case "3":
@@ -937,15 +924,8 @@ public class PaperDetailsActivity extends
 
                 break;
             case R.id.fl_collection://收藏
-                if (ObjectUtils.isEmpty(getUserID())) {
-                    AlertDialog.Builder normalDialog = new AlertDialog.Builder(this);
-                    normalDialog.setIcon(null);
-                    normalDialog.setTitle("需要登录才能执行此操作");
-                    normalDialog.setPositiveButton("登录",
-                            (dialogInterface, i) -> LogInActivity.actionActivity(PaperDetailsActivity.this));
-                    normalDialog.setNegativeButton("取消", null);
-                    // 显示
-                    normalDialog.show();
+                if (!isLoginIn()) {
+                    showNormalDialog();
                 } else {
                     collection();
                 }
@@ -954,21 +934,8 @@ public class PaperDetailsActivity extends
                 FragmentActivity.actionActivity(this, "play");
                 break;
             case R.id.fl_download://下载
-                if (ObjectUtils.isEmpty(getUserID())) {
-                    AlertDialog.Builder normalDialog =
-                            new AlertDialog.Builder(this);
-                    normalDialog.setIcon(null);
-                    normalDialog.setTitle("需要登录才能执行此操作");
-                    normalDialog.setPositiveButton("登录",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    LogInActivity.actionActivity(PaperDetailsActivity.this);
-                                }
-                            });
-                    normalDialog.setNegativeButton("取消", null);
-                    // 显示
-                    normalDialog.show();
+                if (!isLoginIn()) {
+                    showNormalDialog();
                 } else {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("uid", getUserID());

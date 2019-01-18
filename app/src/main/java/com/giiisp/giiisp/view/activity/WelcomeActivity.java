@@ -10,7 +10,10 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.constant.TimeConstants;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.TimeUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.api.UrlConstants;
 import com.giiisp.giiisp.base.BaseActivity;
@@ -18,6 +21,8 @@ import com.giiisp.giiisp.widget.recording.AppCache;
 import com.giiisp.giiisp.widget.recording.PlayService;
 
 import butterknife.BindView;
+
+import static com.giiisp.giiisp.api.UrlConstants.LOGINTIME;
 
 /**
  * 欢迎引导页
@@ -51,14 +56,18 @@ public class WelcomeActivity extends BaseActivity {
     private void intentMethod() {
 //        String tokens = SharedPreferencesHelper.getInstance(WelcomeActivity.this).getStringValue("token");
         String uid = SPUtils.getInstance().getString(UrlConstants.UID, "");
+        long loginTime = SPUtils.getInstance().getLong(LOGINTIME, 0);
+
         if (TextUtils.isEmpty(uid)) {
             LogInActivity.actionActivity(this);
         } else {
-//            BaseActivity.token = tokens;
-//            BaseActivity.uid = uid;
-            GiiispActivity.actionActivity(this, getIntent());
-//            SelectFieldActivity.intentActivity(this);
-//            VerifiedActivity.actionActivity(this);
+            if (TimeUtils.getTimeSpanByNow(loginTime, TimeConstants.DAY) > 10) {//登录信息大于10天，登录信息已过期
+                ToastUtils.showShort("登录信息已失效，请重新登录");
+                LogInActivity.actionActivity(this);
+            } else {
+                SPUtils.getInstance().put(LOGINTIME, TimeUtils.getNowMills());
+                GiiispActivity.actionActivity(this, getIntent());
+            }
         }
         finish();
 

@@ -576,7 +576,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAuxiliary);
         swipeRefreshLayout.setOnRefreshListener(this);
         //        swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setRefreshing(isLoginIn());
         mRxDownload = RxDownload.getInstance(getContext());
 
         View notDataView = getActivity().getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) recyclerView.getParent(), false);
@@ -1073,12 +1073,14 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 
                 break;
             case "collection_paper":
-                hMap.put("uid", getUserID());
-                hMap.put("pageno", page);
-                hMap.put("type", 1);
-                hMap.put("ftype", 1);
-                presenter.getDataAll("212", hMap);
-
+                swipeRefreshLayout.setEnabled(isLoginIn());
+                if (isLoginIn()) {
+                    hMap.put("uid", getUserID());
+                    hMap.put("pageno", page);
+                    hMap.put("type", 1);
+                    hMap.put("ftype", 1);
+                    presenter.getDataAll("212", hMap);
+                }
 //                map.put("uid", uid);
 //                map.put("page", page);
 //                //                map.put("upTime", "asc");
@@ -1086,11 +1088,14 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
 //                presenter.getListFollowedPaperData(map);
                 break;
             case "collection_summary":
-                hMap.put("uid", getUserID());
-                hMap.put("pageno", page);
-                hMap.put("type", 2);
-                hMap.put("ftype", 1);
-                presenter.getDataAll("212", hMap);
+                swipeRefreshLayout.setEnabled(isLoginIn());
+                if (isLoginIn()) {
+                    hMap.put("uid", getUserID());
+                    hMap.put("pageno", page);
+                    hMap.put("type", 2);
+                    hMap.put("ftype", 1);
+                    presenter.getDataAll("212", hMap);
+                }
 //                map.put("uid", uid);
 //                map.put("page", page);
 //                //                map.put("upTime", "asc");
@@ -2645,7 +2650,7 @@ public class BannerRecyclerViewFragment extends BaseMvpFragment<BaseImpl, WholeP
         if (swipeRefreshLayout == null)
             return;
         swipeRefreshLayout.setRefreshing(false);
-        HashMap<String,Object> hMap = new HashMap<>();
+        HashMap<String, Object> hMap = new HashMap<>();
         switch (url) {
             case "203":
                 PaperBean bean = (PaperBean) baseBean;

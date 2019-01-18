@@ -168,13 +168,15 @@ public class SubscribeNewFragment extends BaseMvpFragment<BaseImpl, WholePresent
         mItemClickAdapter.disableLoadMoreIfNotFullPage();
         mItemClickAdapter.setEmptyView(R.layout.empty_view);
         mRvPaper.setAdapter(mItemClickAdapter);
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("uid", getUserID());
-        map.put("language", getLanguage());
-        presenter.getDataAll("115", map);//专业115,关键字113,学者117
-        presenter.getDataAll("113", map);//专业115,关键字113,学者117
-        presenter.getDataAll("117", map);//专业115,关键字113,学者117
+        swipeRefreshLayout.setEnabled(isLoginIn());
+        if (isLoginIn()) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("uid", getUserID());
+            map.put("language", getLanguage());
+            presenter.getDataAll("115", map);//专业115,关键字113,学者117
+            presenter.getDataAll("113", map);//专业115,关键字113,学者117
+            presenter.getDataAll("117", map);//专业115,关键字113,学者117
+        }
     }
 
     @Override

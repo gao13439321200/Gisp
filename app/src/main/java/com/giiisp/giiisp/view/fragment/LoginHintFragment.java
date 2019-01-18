@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpFragment;
 import com.giiisp.giiisp.entity.BaseEntity;
@@ -26,6 +27,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.giiisp.giiisp.api.UrlConstants.LOGINTIME;
 import static com.giiisp.giiisp.api.UrlConstants.UID;
 
 /**
@@ -66,6 +68,7 @@ public class LoginHintFragment extends BaseMvpFragment<BaseImpl, WholePresenter>
             return;
         Log.i("--->>", "onSuccess: " + entity.toString());
         Utils.showToast(entity.getInfo());
+        SPUtils.getInstance().put(LOGINTIME, TimeUtils.getNowMills());//登录时间
         if (entity.getUid() != null) {
 //            BaseActivity.token = entity.getToken();
             SPUtils.getInstance().put(UID,entity.getUid());

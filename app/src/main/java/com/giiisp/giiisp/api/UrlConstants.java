@@ -254,6 +254,7 @@ public class UrlConstants {
 
     public static final String UUID = "uuid";
     public static final String UID = "uid";
+    public static final String LOGINTIME = "loginTime";
     public static final String ISVIP = "isvip";
     public static final String EMAILAUTHEN = "emailauthen";
     public static final String UNAME = "uname";

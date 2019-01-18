@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ObjectUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseFragment;
 import com.giiisp.giiisp.base.BaseMvpActivity;
@@ -186,7 +185,7 @@ public class GiiispActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
         final TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         final GsmCellLocation gsm = (GsmCellLocation) telephony.getCellLocation();
         try {
-            if (ObjectUtils.isNotEmpty(getUserID())) {
+            if (isLoginIn()) {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("uid", getUserID());
                 map.put("longitude", location.getLongitude());
@@ -251,7 +250,8 @@ public class GiiispActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
         fragments.add(CollectionDownloadFragment.newInstance("collection_fragment", "4"));
         fragments.add(new MineFragment());
         viewPagerGiiisp.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragments, null));
-        tabLayoutGiiisp.setTitles(getString(R.string.home), getString(R.string.subscribe), "", getString(R.string.collection), getString(R.string.mine)).setNormalIcons(R.mipmap.home_icon, R.mipmap.subscribe_icon, R.mipmap.main_stop, R.mipmap.collection_icon, R.mipmap.mine_icon)
+        tabLayoutGiiisp.setTitles(getString(R.string.home), getString(R.string.subscribe), "", getString(R.string.collection), getString(R.string.mine))
+                .setNormalIcons(R.mipmap.home_icon, R.mipmap.subscribe_icon, R.mipmap.main_stop, R.mipmap.collection_icon, R.mipmap.mine_icon)
                 .setSelectedIcons(R.mipmap.home_select, R.mipmap.subscribe_select, R.mipmap.demonstration_play, R.mipmap.collection_select, R.mipmap.mine_select).generate();
         //        tabLayoutGiiisp.showCircleBadge(4);
         tabLayoutGiiisp.setIconSize(19);
@@ -369,6 +369,14 @@ public class GiiispActivity extends BaseMvpActivity<BaseImpl, WholePresenter> im
             } else if (baseFragment instanceof BannerRecyclerViewFragment) {
                 if (Objects.equals("play", baseFragment.getType()))
                     ((BannerRecyclerViewFragment) baseFragment).onRefresh();
+            } else if (baseFragment instanceof SubscribeNewFragment) {
+                if (!isLoginIn()) {
+                    showNormalDialog();
+                }
+            } else if (baseFragment instanceof CollectionDownloadFragment) {
+                if (!isLoginIn()) {
+                    showNormalDialog();
+                }
             }
         }
     }

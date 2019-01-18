@@ -1,5 +1,6 @@
 package com.giiisp.giiisp.view.adapter;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +56,7 @@ import com.giiisp.giiisp.utils.PlayerUtil;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.activity.ExperienceActivity;
 import com.giiisp.giiisp.view.activity.FragmentActivity;
+import com.giiisp.giiisp.view.activity.LogInActivity;
 import com.giiisp.giiisp.view.activity.PaperDetailsActivity;
 import com.giiisp.giiisp.view.activity.ProblemActivity;
 import com.giiisp.giiisp.view.activity.SearchActivity;
@@ -1004,20 +1006,38 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         }
                         helper.setChecked(R.id.cb_collect, "1".equals(vlistBean.getIsfollow()));
                         helper.getView(R.id.cb_collect).setOnClickListener(view -> {
-                            if (((CheckBox) helper.getView(R.id.cb_collect)).isChecked()) {
-                                mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                            if (isLoginIn()) {
+                                if (((CheckBox) helper.getView(R.id.cb_collect)).isChecked()) {
+                                    mListItemClick.listClick("collect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                                } else {
+                                    mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                                }
                             } else {
-                                mListItemClick.listClick("nocollect", vlistBean.getPid(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                                helper.setChecked(R.id.cb_collect, false);
+                                showNormalDialog();
                             }
                         });
+                        helper.getView(R.id.cb_download).setOnClickListener(view -> {
+                            if (isLoginIn())
+                                mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                            else {
+                                helper.setChecked(R.id.cb_download, false);
+                                showNormalDialog();
+                            }
+                        });
+
                         helper.setChecked(R.id.cb_download, "1".equals(vlistBean.getIsdownload()));
-                        helper.getView(R.id.cb_download).setOnClickListener(view -> mListItemClick.listClick("download", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN));
                         helper.setChecked(R.id.cb_add, "1".equals(vlistBean.getIsaddplay()));
                         helper.getView(R.id.cb_add).setOnClickListener(view -> {
-                            if (((CheckBox) helper.getView(R.id.cb_add)).isChecked()) {
-                                mListItemClick.listClick("add", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
-                            } else {
-                                mListItemClick.listClick("noadd", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                            if (isLoginIn())
+                                if (((CheckBox) helper.getView(R.id.cb_add)).isChecked()) {
+                                    mListItemClick.listClick("add", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                                } else {
+                                    mListItemClick.listClick("noadd", vlistBean.getId(), vlistBean.getVersion() + "", vlistBean.isEnglish() ? EN : CN);
+                                }
+                            else {
+                                helper.setChecked(R.id.cb_add, false);
+                                showNormalDialog();
                             }
                         });
                         String btnString;
@@ -1595,5 +1615,33 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
         return SPUtils.getInstance().getString(UrlConstants.UID, "");
     }
 
+    public boolean isLoginIn() {
+        return ObjectUtils.isNotEmpty(getUserID());
+    }
 
+    public void showNormalDialog() {
+        /* @setIcon 设置对话框图标
+         * @setTitle 设置对话框标题 Attempt to invoke virtual method 'android.content.res.Resources$Theme' on a null object reference
+	at android.app.AlertDialog.resolveDialogTheme(AlertDialog.java:225)
+         * @setMessage 设置对话框消息提示
+         * setXXX方法返回Dialog对象，因此可以链式设置属性
+         */
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(activity);
+        normalDialog.setIcon(null);
+        normalDialog.setTitle(R.string.no_login);
+        normalDialog.setPositiveButton(R.string.confirm,
+                (dialog, which) -> {
+                    SPUtils.getInstance().put(UrlConstants.UID, "");
+                    SPUtils.getInstance().put(UrlConstants.UNAME, "");
+                    LogInActivity.actionActivity(mContext);
+//                    HashMap<String, Object> map = new HashMap<>();
+//                    map.put("id", uid);
+//                    presenter.getDataAll("105", map);
+                    activity.finish();
+                });
+        normalDialog.setNegativeButton(R.string.cancel, null);
+        // 显示
+        normalDialog.show();
+    }
 }
