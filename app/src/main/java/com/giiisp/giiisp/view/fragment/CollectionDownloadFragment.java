@@ -50,7 +50,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
     ImageView tvHomeNews;
     @BindView(R.id.fl_news)
     FrameLayout flNews;
-    @BindView(R.id.tv_back)
+    @BindView(R.id.tv_back_rt)
     TextView tvBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -191,7 +191,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
                 //                map.put("isOneOrTwo", 2);
                 //                presenter.getListFollowedPaperData(map);
                 tvTitleRt.setText(R.string.collection);
-//                tvBack.setVisibility("5".equals(string) ? View.VISIBLE : View.GONE);
+                tvBack.setVisibility("5".equals(string) ? View.VISIBLE : View.GONE);
                 ivMenu.setImageResource(R.mipmap.collection_download);
                 ivMenu.setVisibility(View.VISIBLE);
 
@@ -280,7 +280,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
     }
 
 
-    @OnClick({R.id.tv_home_news, R.id.tv_back, R.id.fl_menu, R.id.iv_play, R.id.iv_download})
+    @OnClick({R.id.tv_home_news, R.id.tv_back_rt, R.id.fl_menu, R.id.iv_play, R.id.iv_download})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_home_news:
@@ -294,7 +294,7 @@ public class CollectionDownloadFragment extends BaseMvpFragment<BaseImpl, WholeP
                     getActivity().finish();
                 }
                 break;
-            case R.id.tv_back:
+            case R.id.tv_back_rt:
                 getActivity().finish();
                 break;
             case R.id.iv_play:
