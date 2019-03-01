@@ -639,10 +639,10 @@ public class PaperDetailsActivity extends
                 llEmptyView.setVisibility(View.GONE);
                 break;
             case "download_paper": {//下载
-                getPlayService().setPlayType(PlayService.DOWN);
                 linerBottomComm.setVisibility(View.GONE);
                 llEmptyView.setVisibility(View.GONE);
                 if (getPlayService() != null) {
+                    getPlayService().setPlayType(PlayService.DOWN);
                     PlayService playService = getPlayService();
 
                     playService.setOnPlayEventListener(this);
@@ -653,7 +653,11 @@ public class PaperDetailsActivity extends
                             if (photoList != null) photoList.clear();
                             photoList = (ArrayList<String>) playService.getImageList();
                             for (String photo : photoList) {
-                                itemClickAdapter.addData(new ClickEntity(photo));
+                                ClickEntity entity = new ClickEntity();
+                                PaperInfoVO vo = new PaperInfoVO();
+                                vo.setUrl(photo);
+                                entity.setPaperInfoVO(vo);
+                                itemClickAdapter.addData(entity);
                             }
                             mImageAdapter = new ImageAdapter(this, photoList, this);
                             viewpagerPaper.setAdapter(mImageAdapter);
@@ -674,7 +678,11 @@ public class PaperDetailsActivity extends
                     } else {
                         if (photoList != null) {
                             for (String photo : photoList) {
-                                itemClickAdapter.addData(new ClickEntity(photo));
+                                ClickEntity entity = new ClickEntity();
+                                PaperInfoVO vo = new PaperInfoVO();
+                                vo.setUrl(photo);
+                                entity.setPaperInfoVO(vo);
+                                itemClickAdapter.addData(entity);
                             }
                             mImageAdapter = new ImageAdapter(this, photoList, this);
                             viewpagerPaper.setAdapter(mImageAdapter);
@@ -725,6 +733,8 @@ public class PaperDetailsActivity extends
                     }
                     downloadId = myVersionNo;
                     paperId = "";
+                } else {
+                    ToastUtils.showShort("程序异常，请返回重试");
                 }
             }
             break;
