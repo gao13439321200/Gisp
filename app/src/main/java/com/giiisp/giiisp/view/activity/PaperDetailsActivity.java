@@ -1350,13 +1350,16 @@ public class PaperDetailsActivity extends
 
     private Matrix matrix = new Matrix();
     private String eventTime = "";
+    private int pointTime = 0;
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         Log.d("PaperDetailsActivity", "progress:" + progress);
         this.nowProgress = progress;
         tvPlayTime.setText(Util.formatSeconds((progress + 1000) / 1000));
-
+        if (nowProgress - pointTime > 3000) {//标记点只显示3秒钟
+            mMyCustomView.clearData();
+        }
         if (timeString.contains(Util.formatSeconds((progress + 1000) / 1000))) {
             PaperEventVO vo = mBeanMap.get(Util.formatSeconds((progress + 1000) / 1000));
             switch (vo.getType()) {
@@ -1396,8 +1399,10 @@ public class PaperDetailsActivity extends
                     }
                     break;
                 case "3"://标记
+                    pointTime = nowProgress;
                     mMyCustomView.clearData();
                     mMyCustomView.addPoint(Float.valueOf(vo.getX()), Float.valueOf(vo.getY()));
+
                     break;
                 case "4"://调用开始
                     if (mMyCustomView != null) {

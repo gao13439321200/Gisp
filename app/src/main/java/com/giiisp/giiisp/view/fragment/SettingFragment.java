@@ -27,6 +27,8 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.giiisp.giiisp.widget.recording.AppCache.getPlayService;
+
 /**
  * 设置页面
  * Created by Thinkpad on 2017/5/4.
@@ -130,6 +132,9 @@ public class SettingFragment extends BaseMvpFragment<BaseImpl, WholePresenter> i
         normalDialog.setTitle(R.string.determine_cancellation);
         normalDialog.setPositiveButton(R.string.confirm,
                 (dialog, which) -> {
+                    //退出登录需暂停播放
+                    if (getPlayService() != null && getPlayService().isPlaying())
+                        getPlayService().playPause();
                     SPUtils.getInstance().put(UrlConstants.UID, "");
                     SPUtils.getInstance().put(UrlConstants.UNAME, "");
                     LogInActivity.actionActivity(getContext());
