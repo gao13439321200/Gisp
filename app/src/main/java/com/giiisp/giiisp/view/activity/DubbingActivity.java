@@ -156,7 +156,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private ItemClickAdapter mMarkAdapter;
     private ImageAdapter mImageAdapter;
 
-    private int dubbingPosition = 0;
+    private int dubbingPosition = -1;
     private int abc = -1;
     private int markTime = 0;
     //    private ArrayList<SubscribeEntity.PageInfoBean.RowsBeanXXXXX.PhotoOneBean.RowsBeanXXXX.RecordOneBean.RowsBeanXXX> recordRows;
@@ -435,6 +435,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                     if ("调用".equals(ToolString.getString(mTvUse))) {
                         showDiaoYong = true;
                         mRlBig.setVisibility(View.VISIBLE);
+                        //弹出调用弹窗后暂停录音
+                        resolvePause();
                         viewPager.setDiaoYong(true);
 //                        mTvUse.setText(showDiaoYong ? "调用" : "返回");
                     } else if ("返回".equals(ToolString.getString(mTvUse))) {
@@ -454,6 +456,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 }
                 break;
             case R.id.btn_yes://调用-确定
+                resolvePause();//点击调用后继续录音
                 sendData304(0, 0, 4);
                 showDiaoYong = false;
                 isDiaoYong = true;
@@ -463,6 +466,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 viewPager.setDiaoYong(true);
                 break;
             case R.id.btn_no://调用-取消
+                resolvePause();//点击不调用后继续录音
 //                sendData304(0, 0, 5);
                 showDiaoYong = false;
                 mRlBig.setVisibility(View.GONE);
@@ -838,6 +842,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
             switch (typeActivity) {
                 case "wait_dubbing":
                     setImageStatus(position);
+                    abc = position;
                     break;
                 case "edit_dubbing":
 //                    this.position = position;
@@ -893,6 +898,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 if (!isVideo(position)) {
                     mRlBig.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
                     mTvUse.setVisibility(this.dubbingPosition > position ? View.VISIBLE : View.GONE);
+                    if (this.dubbingPosition > position) {//如果弹出调用选择框，则暂停录音
+                        resolvePause();
+                    }
                 } else {
                     mRlBig.setVisibility(View.GONE);
                     mTvUse.setVisibility(View.GONE);
@@ -921,8 +929,11 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                         mBtnFull.setVisibility(View.VISIBLE);
                     }
 //                    mRlFinish.setVisibility(View.GONE);
-                    if (recorderSecondsElapsed == 0)//暂停录音 + 调用返回 = 录音时间不为0（不重置完成布局）
+                    if (recorderSecondsElapsed == 0 || dubbingPosition != position)//暂停录音 + 调用返回 = 录音时间不为0 或者当前图片为非录音图片（不重置完成布局）
                         setFinishLayout(false, false, false);
+                    else //暂停录音 + 有录音 + 回到当前录音图片位置 = 继续上传
+                        setFinishLayout(true, true, true);
+
                     mCbMark.setVisibility(View.VISIBLE);
                     mTvMark.setVisibility(View.VISIBLE);
                 }
