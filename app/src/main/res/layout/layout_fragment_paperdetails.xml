@@ -102,228 +102,239 @@
         />
 
     <RelativeLayout
-        android:id="@+id/rl_all"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinator_layout"
+        <RelativeLayout
+            android:id="@+id/rl_all"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/app_bar"
+            <android.support.design.widget.CoordinatorLayout
+                android:id="@+id/coordinator_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:theme="@style/AppTheme.AppBarOverlay">
+                android:layout_height="match_parent">
 
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/toolbar_layout"
+
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/app_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    >
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
+                    android:theme="@style/AppTheme.AppBarOverlay">
 
-
-                    <RelativeLayout
-                        android:id="@+id/relative_full"
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:id="@+id/toolbar_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <android.support.v4.view.ViewPager
-                            android:id="@+id/viewpager_paper"
-                            android:layout_width="match_parent"
-                            android:layout_height="280dp"
-                            android:background="@color/colorPrimary"/>
-
-                        <com.giiisp.giiisp.widget.MyCustomView
-                            android:id="@+id/cv_mark"
-                            android:layout_width="match_parent"
-                            android:layout_height="280dp"
-                            android:layout_centerHorizontal="true"
-                            android:background="#00000000"/>
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_below="@+id/viewpager_paper"
-                            android:layout_marginTop="2dp"
-                            android:background="@color/colorInterface"/>
-
-                        <ImageView
-                            android:id="@+id/iv_fullscreen_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignBottom="@+id/recycler_view"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="5.7dp"
-                            android:layout_marginBottom="3.3dp"
-                            android:src="@mipmap/fullscreen_button"/>
-
-                        <TextView
-                            android:id="@+id/tv_play_time"
-                            style="@style/text_12sp_colorwhite"
-                            android:layout_alignTop="@+id/recycler_view"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            />
-
-                        <TextView
-                            android:id="@+id/tv_duration"
-                            style="@style/text_12sp_colorwhite"
-                            android:layout_alignTop="@+id/recycler_view"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_toEndOf="@+id/tv_play_time"
-                            />
-
-                        <SeekBar
-                            android:id="@+id/seek_bar_paper"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/viewpager_paper"
-                            android:layout_marginTop="-8dp"
-                            android:focusable="true"
-                            android:maxHeight="2dp"
-                            android:minHeight="2dp"
-                            android:paddingStart="0dp"
-                            android:paddingTop="0dp"
-                            android:paddingEnd="0dp"
-                            android:paddingBottom="0dp"
-                            android:progressDrawable="@drawable/seek_bar"
-                            android:thumb="@mipmap/notification"
-                            android:thumbOffset="0dp"/>
+                        android:fitsSystemWindows="true"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                        >
 
 
                         <RelativeLayout
-                            android:id="@+id/relative_layout"
+                            android:id="@+id/relative_full"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_below="@+id/recycler_view"
-                            android:orientation="horizontal">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/viewpager_paper"
+                                android:layout_width="match_parent"
+                                android:layout_height="280dp"
+                                android:background="@color/colorPrimary"/>
+
+                            <com.giiisp.giiisp.widget.MyCustomView
+                                android:id="@+id/cv_mark"
+                                android:layout_width="match_parent"
+                                android:layout_height="280dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="#00000000"/>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:layout_below="@+id/viewpager_paper"
+                                android:layout_marginTop="2dp"
+                                android:background="@color/colorInterface"/>
+
+                            <ImageView
+                                android:id="@+id/iv_fullscreen_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@+id/recycler_view"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginEnd="5.7dp"
+                                android:layout_marginBottom="3.3dp"
+                                android:src="@mipmap/fullscreen_button"/>
 
                             <TextView
-                                android:id="@+id/tv_left"
-                                android:layout_width="18.7dp"
-                                android:layout_height="18.7dp"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:layout_toLeftOf="@+id/iv_back_off"
-                                android:background="@mipmap/zuo"
-                                android:gravity="center"
-                                android:text="15"
-                                android:textColor="@color/colorAuxiliary"
-                                android:textSize="10sp"
+                                android:id="@+id/tv_play_time"
+                                style="@style/text_12sp_colorwhite"
+                                android:layout_alignTop="@+id/recycler_view"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
                                 />
-
-                            <ImageView
-                                android:id="@+id/iv_back_off"
-                                android:layout_width="18.7dp"
-                                android:layout_height="18.7dp"
-                                android:layout_centerVertical="true"
-                                android:layout_toLeftOf="@+id/iv_play_stop"
-                                android:src="@mipmap/back_off"/>
-
-                            <ImageView
-                                android:id="@+id/iv_play_stop"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_centerInParent="true"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginEnd="20dp"
-                                android:src="@drawable/play_bar_btn_play_pause_selector"/>
-
-                            <ImageView
-                                android:id="@+id/iv_fast_forward"
-                                android:layout_width="18.7dp"
-                                android:layout_height="18.7dp"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/iv_play_stop"
-                                android:src="@mipmap/fast_forward"/>
 
                             <TextView
-                                android:id="@+id/tv_right"
-                                android:layout_width="18.7dp"
-                                android:layout_height="18.7dp"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="10dp"
-                                android:layout_toRightOf="@+id/iv_fast_forward"
-                                android:background="@mipmap/you"
-                                android:gravity="center"
-                                android:text="15"
-                                android:textColor="@color/colorAuxiliary"
-                                android:textSize="10sp"
+                                android:id="@+id/tv_duration"
+                                style="@style/text_12sp_colorwhite"
+                                android:layout_alignTop="@+id/recycler_view"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_toEndOf="@+id/tv_play_time"
                                 />
 
-                            <CheckBox
-                                android:id="@+id/tv_cn"
-                                style="@style/text_12sp_colorwhite"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:layout_toLeftOf="@+id/tv_en"
-                                android:background="@drawable/cn_en_selector"
-                                android:button="@null"
-                                android:gravity="center"
-                                android:text="@string/cn"/>
+                            <SeekBar
+                                android:id="@+id/seek_bar_paper"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/viewpager_paper"
+                                android:layout_marginTop="-8dp"
+                                android:focusable="true"
+                                android:maxHeight="2dp"
+                                android:minHeight="2dp"
+                                android:paddingStart="0dp"
+                                android:paddingTop="0dp"
+                                android:paddingEnd="0dp"
+                                android:paddingBottom="0dp"
+                                android:progressDrawable="@drawable/seek_bar"
+                                android:thumb="@mipmap/notification"
+                                android:thumbOffset="0dp"/>
 
-                            <CheckBox
-                                android:id="@+id/tv_en"
-                                style="@style/text_12sp_colorwhite"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:layout_gravity="center_vertical|end"
-                                android:layout_marginRight="10dp"
-                                android:background="@drawable/cn_en_selector"
-                                android:button="@null"
-                                android:gravity="center"
-                                android:text="@string/en"/>
+
+                            <RelativeLayout
+                                android:id="@+id/relative_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_below="@+id/recycler_view"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_left"
+                                    android:layout_width="18.7dp"
+                                    android:layout_height="18.7dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_toLeftOf="@+id/iv_back_off"
+                                    android:background="@mipmap/zuo"
+                                    android:gravity="center"
+                                    android:text="15"
+                                    android:textColor="@color/colorAuxiliary"
+                                    android:textSize="10sp"
+                                    />
+
+                                <ImageView
+                                    android:id="@+id/iv_back_off"
+                                    android:layout_width="18.7dp"
+                                    android:layout_height="18.7dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toLeftOf="@+id/iv_play_stop"
+                                    android:src="@mipmap/back_off"/>
+
+                                <ImageView
+                                    android:id="@+id/iv_play_stop"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginStart="20dp"
+                                    android:layout_marginEnd="20dp"
+                                    android:src="@drawable/play_bar_btn_play_pause_selector"/>
+
+                                <ImageView
+                                    android:id="@+id/iv_fast_forward"
+                                    android:layout_width="18.7dp"
+                                    android:layout_height="18.7dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toRightOf="@+id/iv_play_stop"
+                                    android:src="@mipmap/fast_forward"/>
+
+                                <TextView
+                                    android:id="@+id/tv_right"
+                                    android:layout_width="18.7dp"
+                                    android:layout_height="18.7dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_toRightOf="@+id/iv_fast_forward"
+                                    android:background="@mipmap/you"
+                                    android:gravity="center"
+                                    android:text="15"
+                                    android:textColor="@color/colorAuxiliary"
+                                    android:textSize="10sp"
+                                    />
+
+                                <CheckBox
+                                    android:id="@+id/tv_cn"
+                                    style="@style/text_12sp_colorwhite"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_toLeftOf="@+id/tv_en"
+                                    android:background="@drawable/cn_en_selector"
+                                    android:button="@null"
+                                    android:gravity="center"
+                                    android:text="@string/cn"/>
+
+                                <CheckBox
+                                    android:id="@+id/tv_en"
+                                    style="@style/text_12sp_colorwhite"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:layout_marginRight="10dp"
+                                    android:background="@drawable/cn_en_selector"
+                                    android:button="@null"
+                                    android:gravity="center"
+                                    android:text="@string/en"/>
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="6.7dp"
+                                android:layout_below="@+id/linear_layout"
+                                android:background="@color/colorBackground"
+                                />
                         </RelativeLayout>
+                    </android.support.design.widget.CollapsingToolbarLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="6.7dp"
-                            android:layout_below="@+id/linear_layout"
-                            android:background="@color/colorBackground"
-                            />
-                    </RelativeLayout>
-                </android.support.design.widget.CollapsingToolbarLayout>
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/tab_layout_paper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:tabIndicatorColor="@color/colorInterface"
+                        app:tabIndicatorHeight="1dp"
+                        app:tabSelectedTextColor="@color/colorInterface"
+                        app:tabTextColor="@color/colorTextLineGrey"
+                        />
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tab_layout_paper"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/tv_switch"
+                        android:background="@color/colorBackground"/>
+                </android.support.design.widget.AppBarLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:tabIndicatorColor="@color/colorInterface"
-                    app:tabIndicatorHeight="1dp"
-                    app:tabSelectedTextColor="@color/colorInterface"
-                    app:tabTextColor="@color/colorTextLineGrey"
-                    />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@+id/tv_switch"
-                    android:background="@color/colorBackground"/>
-            </android.support.design.widget.AppBarLayout>
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/viewpager_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            </android.support.design.widget.CoordinatorLayout>
+        </RelativeLayout>
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewpager_tab"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rl_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-        </android.support.design.widget.CoordinatorLayout>
     </RelativeLayout>
 
     <LinearLayout

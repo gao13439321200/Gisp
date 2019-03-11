@@ -125,13 +125,13 @@ public class StatisticsFragment extends BaseMvpFragment<BaseImpl, WholePresenter
                 for (int i = 0; i < bean.getX().size(); i++) {
 //                    xDataList.add(bean.getX().get(i) + ":00");
                     if (down)
-                        downtimeDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i))
+                        downtimeDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i)) + 1
                                 , Float.parseFloat(bean.getDownload().get(i))));
                     if (collect)
-                        collectDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i))
+                        collectDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i)) + 1
                                 , Float.parseFloat(bean.getCollect().get(i))));
                     if (time)
-                        timeDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i))
+                        timeDataList.add(new BarEntry(Float.parseFloat(bean.getX().get(i)) + 1
                                 , Float.parseFloat(bean.getTime().get(i))));
                 }
 //                //曲线图显示图表,参数（ 上下文，图表对象， X轴数据，Y轴数据，图表标题，曲线图例名称，坐标点击弹出提示框中数字单位）

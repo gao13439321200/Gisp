@@ -230,7 +230,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
                     break;
             }
 
-            if ("2".equals(isVip) || "3".equals(isVip) || "2".equals(emailauthen)) {
+            //只有核心用户才可以配音
+            if ("2".equals(isVip) || "2".equals(emailauthen)) {
                 mLlDubbing.setVisibility(View.VISIBLE);
                 mLlEmpty.setVisibility(View.GONE);
             } else {
@@ -368,6 +369,8 @@ public class MineFragment extends BaseMvpFragment<BaseImpl, WholePresenter> impl
             case R.id.ll_dubbing:
                 // 2018/11/20 只要邮箱认证和资料认证 有一个通过 就可以进去录音
 //                if ("2".equals(emailauthen) || "1".equals(isVip) || "2".equals(isVip)) {
+
+
                 FragmentActivity.actionActivity(getContext(), "wait_dubbing"); //  认证完成开始录音
 //                } else {
 //                    ToastUtils.showShort("请先认证身份信息");

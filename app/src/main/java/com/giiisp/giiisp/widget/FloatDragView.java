@@ -1,5 +1,6 @@
 package com.giiisp.giiisp.widget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Point;
 import android.view.MotionEvent;
@@ -37,11 +38,12 @@ public class FloatDragView {
      * @param mViewContainer 可拖动按钮要存放的对应的Layout
      * @param clickListener  可拖动按钮的点击事件
      */
-    public static ImageView addFloatDragView(Activity context, RelativeLayout mViewContainer,
+    public static ImageView addFloatDragView(Activity context, int y, RelativeLayout mViewContainer,
                                              View.OnClickListener clickListener, OnMyListening onMyListening) {
         FloatDragView floatDragView = new FloatDragView(context);
         ImageView imageView = floatDragView.getFloatDragView(clickListener, onMyListening);
-        imageView.setY(200);
+        imageView.setY(y);
+        imageView.setTop(0);
         mViewContainer.addView(imageView);
         return imageView;
     }
@@ -95,6 +97,7 @@ public class FloatDragView {
     }
 
     // 可拖动按钮的touch事件
+    @SuppressLint("ClickableViewAccessibility")
     private void setFloatDragViewTouch(final ImageView floatDragView) {
 
         floatDragView.setOnTouchListener(new View.OnTouchListener() {
@@ -131,8 +134,8 @@ public class FloatDragView {
                             top = 0;
                             bottom = top + v.getHeight();
                         }
-                        if (bottom > mScreenHeight) {
-                            bottom = mScreenHeight;
+                        if (bottom > mScreenHeight * 0.8) {
+                            bottom = (int) (mScreenHeight * 0.8);
                             top = bottom - v.getHeight();
                         }
                         v.layout(left, top, right, bottom);

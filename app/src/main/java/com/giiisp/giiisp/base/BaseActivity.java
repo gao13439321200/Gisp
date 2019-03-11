@@ -118,7 +118,9 @@ public abstract class BaseActivity extends SupportActivity implements NetChangeO
             mBaseRl.addView(view, layoutParams);
 
         //添加可拖动悬浮按钮
-        baseImg = FloatDragView.addFloatDragView(this, mBaseRl, new View.OnClickListener() {
+        baseImg = FloatDragView.addFloatDragView(this,
+                (int) ((Utils.getScreenSize(this).y - Utils.getStatusBarHeight(this)) * 0.8),
+                mBaseRl, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ObjectUtils.isNotEmpty(SPUtils.getInstance().getString(UrlConstants.PID))

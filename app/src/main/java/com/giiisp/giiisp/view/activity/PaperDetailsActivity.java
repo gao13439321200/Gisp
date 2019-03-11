@@ -235,6 +235,8 @@ public class PaperDetailsActivity extends
     MyCustomView mMyCustomView;
     @BindView(R.id.rl_all)
     RelativeLayout mRlAll;
+    @BindView(R.id.rl_btn)
+    RelativeLayout mRlBtn;
 
 //    public static final String CN = "1";
 //    public static final String EN = "2";
@@ -741,41 +743,43 @@ public class PaperDetailsActivity extends
         }
 
         //添加可拖动悬浮按钮
-        FloatDragView.addFloatDragView(this, mRlAll, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewpagerPaper.setCurrentItem(getPlayService().getPlayingPosition());
-                viewpagerPaper.setOffscreenPageLimit(getPlayService().getPlayingPosition() + 1);
-            }
-        }, new FloatDragView.OnMyListening() {
-            @Override
-            public void myListening(int action) {
-                //在播放的时候，拖动按钮有问题，暂时这样：在拖动的时候暂停，结束在播放
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (getPlayService().isPlaying()) {
-                            getPlayService().playPause();
-                            isMove = true;
+        FloatDragView.addFloatDragView(this,
+                0,
+                mRlBtn, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewpagerPaper.setCurrentItem(getPlayService().getPlayingPosition());
+                        viewpagerPaper.setOffscreenPageLimit(getPlayService().getPlayingPosition() + 1);
+                    }
+                }, new FloatDragView.OnMyListening() {
+                    @Override
+                    public void myListening(int action) {
+                        //在播放的时候，拖动按钮有问题，暂时这样：在拖动的时候暂停，结束在播放
+                        switch (action) {
+                            case MotionEvent.ACTION_DOWN:
+//                        if (getPlayService().isPlaying()) {
+//                            getPlayService().playPause();
+//                            isMove = true;
+//                        }
+//                        toolbarLayout.requestDisallowInterceptTouchEvent(true);
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+//                        if (getPlayService().isPlaying()) {
+//                            getPlayService().playPause();
+//                            isMove = true;
+//                        }
+//                        toolbarLayout.requestDisallowInterceptTouchEvent(true);
+                                break;
+                            case MotionEvent.ACTION_UP:
+//                        if (getPlayService().isPausing() && isMove) {
+//                            getPlayService().playPause();
+//                            isMove = false;
+//                        }
+//                        toolbarLayout.requestDisallowInterceptTouchEvent(false);
+                                break;
                         }
-                        toolbarLayout.requestDisallowInterceptTouchEvent(true);
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (getPlayService().isPlaying()) {
-                            getPlayService().playPause();
-                            isMove = true;
-                        }
-                        toolbarLayout.requestDisallowInterceptTouchEvent(true);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (getPlayService().isPausing() && isMove) {
-                            getPlayService().playPause();
-                            isMove = false;
-                        }
-                        toolbarLayout.requestDisallowInterceptTouchEvent(false);
-                        break;
-                }
-            }
-        });
+                    }
+                });
 
     }
 
