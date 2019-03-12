@@ -1104,6 +1104,9 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     } else {
                         helper.getView(R.id.iv_bg).setVisibility(View.VISIBLE);
                     }
+                    helper.getView(R.id.iv_bg_finish).setVisibility(
+                            ObjectUtils.isNotEmpty(dubbingVO.getRid()) ? View.VISIBLE : View.INVISIBLE);
+
                     if (paths.contains(dubbingVO.getUrl())) {
                         break;
                     }
@@ -1124,6 +1127,10 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     } else {
                         viewBg.setVisibility(View.VISIBLE);
                     }
+
+                    helper.getView(R.id.iv_bg_finish).setVisibility(
+                            ObjectUtils.isNotEmpty(vo.getRid()) ? View.VISIBLE : View.INVISIBLE);
+
                     if ("mp4".equals(FileUtils.parseSuffix(vo.getUrl()))) { // 视频
                         ImageView imageView1 = helper.getView(R.id.iv_pic);
                         imageView1.setImageBitmap(ImageLoader.getInstance().createVideoThumbnail(BASE_IMG_URL + vo.getUrl(), 1));

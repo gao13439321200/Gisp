@@ -9,9 +9,18 @@
         android:layout_width="60dp"
         android:layout_height="match_parent"
         android:scaleType="fitXY"/>
+
     <View
         android:id="@+id/iv_bg"
         android:layout_width="60dp"
-        android:background="@color/colorPaperBg"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@color/colorPaperBg"/>
+
+    <View
+        android:id="@+id/iv_bg_finish"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end|bottom"
+        android:background="@mipmap/img_finish_dubbing"/>
+
 </FrameLayout>

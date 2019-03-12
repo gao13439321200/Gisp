@@ -543,6 +543,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 tvDubbingAudition.setSelected(false);
                 tvDubbingAuditionNew.setSelected(false);
                 dataList.get(viewPager.getCurrentItem()).getDubbingVO().setRid("");
+                itemClickAdapte.notifyDataSetChanged();//为了清除图片列表中的已完成的标记
                 if (isVideo(viewPager.getCurrentItem())) {
                     mBtnSolo.setVisibility(View.VISIBLE);
                 }
@@ -554,7 +555,7 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 resolvePausePlayRecord();
                 //清空当前图片事件
                 HashMap<String, Object> map1 = new HashMap<>();
-                map1.put("imgid", imgId);
+                map1.put("imgid", getImageId());
                 map1.put("language", language);
                 presenter.getDataAll("315", map1);
                 break;
