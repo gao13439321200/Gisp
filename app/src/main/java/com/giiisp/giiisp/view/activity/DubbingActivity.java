@@ -175,6 +175,8 @@ public class DubbingActivity extends DubbingPermissionActivity implements
     private int videoAllTime = 0;
     private boolean isDiaoYong = false; // 是否正在调用图片
     private List<String> imgMarkList = new ArrayList<>();
+    private boolean playUrl = false;//是否播放已经上传的录音
+
 //    private boolean isFinish = true;
 
     /*** 页面的视频控件集合,Integer所处位置 ***/
@@ -560,7 +562,17 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 presenter.getDataAll("315", map1);
                 break;
             case R.id.tv_dubbing_audition://试听
-                togglePlaying(view);
+                if (playUrl) { //播放在线录音
+                    if (!tvDubbingAudition.isSelected()) {
+                        String url = dataList.get(viewPager.getCurrentItem()).getDubbingVO().getRurl();
+                        playNewAudio(ToolString.getUrl(url));
+                        tvDubbingAudition.setSelected(true);
+                    } else {
+                        pauseNewAudio();
+                        tvDubbingAudition.setSelected(false);
+                    }
+                } else //播放本地录音
+                    togglePlaying(view);
                 break;
 
             case R.id.tv_dubbing_audition_new://试听（标签）
@@ -918,10 +930,9 @@ public class DubbingActivity extends DubbingPermissionActivity implements
                 if (ObjectUtils.isNotEmpty(dataList.get(position).getDubbingVO().getRid())) {//已经录过音了
                     mCbMark.setVisibility(View.GONE);
                     mTvMark.setVisibility(View.GONE);
-                    setFinishLayout(false, true, false);
-//                    mRlFinish.setVisibility(View.VISIBLE);
-//                    tvDubbingAudition.setVisibility(View.INVISIBLE);
-//                    tvFinish.setVisibility(View.INVISIBLE);
+                    setFinishLayout(true, true, false);
+                    playUrl = true;
+
                     mBtnSolo.setVisibility(View.INVISIBLE);
                 } else {
                     if (isVideo(position)) {//视频不可放大
@@ -1348,5 +1359,6 @@ public class DubbingActivity extends DubbingPermissionActivity implements
         tvDubbingAudition.setVisibility(listen ? View.VISIBLE : View.INVISIBLE);
         tvDubbingReRecord.setVisibility(again ? View.VISIBLE : View.INVISIBLE);
         tvFinish.setVisibility(finish ? View.VISIBLE : View.INVISIBLE);
+        playUrl = false;//重置播放录音的方式，默认为本地录音
     }
 }
