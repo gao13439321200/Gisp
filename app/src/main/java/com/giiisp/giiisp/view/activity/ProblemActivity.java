@@ -18,17 +18,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.giiisp.giiisp.R;
 import com.giiisp.giiisp.base.BaseMvpActivity;
+import com.giiisp.giiisp.common.MyDialog;
+import com.giiisp.giiisp.common.MyDialogOnClick;
+import com.giiisp.giiisp.dto.BaseBean;
 import com.giiisp.giiisp.entity.BaseEntity;
 import com.giiisp.giiisp.entity.QuizHintEntity;
 import com.giiisp.giiisp.model.GlideApp;
 import com.giiisp.giiisp.presenter.WholePresenter;
 import com.giiisp.giiisp.utils.KeyBoardUtils;
+import com.giiisp.giiisp.utils.ToolString;
 import com.giiisp.giiisp.utils.Utils;
 import com.giiisp.giiisp.view.impl.BaseImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -278,24 +284,68 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                 break;
             case R.id.tv_confirm:
                 KeyBoardUtils.closeKeybord(editTextAnswer, this);
-                AnswerVoiceMP3Activity.actionActivity(this,
-                        type,
-                        editTextAnswer.getText().toString(),
-                        pid,
-                        questionid,
-                        imgId);
+                int txtNum = editTextAnswer.getText().length();
+                if (txtNum > 0 && txtNum <= 50) {//可以不录音直接提交
+                    MyDialog dialogSubmit = new MyDialog(this, new MyDialogOnClick() {
+                        @Override
+                        public void onOKClick() {
+                            AnswerVoiceMP3Activity.actionActivity(ProblemActivity.this,
+                                    type,
+                                    editTextAnswer.getText().toString(),
+                                    pid,
+                                    questionid,
+                                    imgId);
+                        }
 
-//                switch (type) {
-//                    case "answer":
-//                        AnswerVoiceMP3Activity.actionActivity(this, editTextAnswer.getText().toString(), imgId, uid);
-//                        break;
-//                    case "Problem":
-//
-//                        break;
-//                    case "examineMinutely":
-//
-//                        break;
-//                }
+                        @Override
+                        public void onCancelClick() {
+                            HashMap<String, Object> map = new HashMap<>();
+                            switch (type) {
+                                case "answer":
+                                case "answer_again":
+                                    map.put("uid", getUserID());
+                                    map.put("qid", questionid);
+                                    map.put("pid", pid);
+                                    map.put("content", ToolString.getString(editTextAnswer));
+                                    presenter.getDataAll("348", map);
+                                    break;
+                                case "Problem":
+                                    map.put("uid", getUserID());
+                                    map.put("pid", pid);
+                                    map.put("picid", imgId);
+                                    map.put("content", ToolString.getString(editTextAnswer));
+                                    map.put("firstquiz", "1");
+                                    map.put("pqid", "");
+                                    presenter.getDataAll("347", map);
+                                    break;
+                                case "examineMinutely"://追问
+                                    map.put("uid", getUserID());
+                                    map.put("pid", pid);
+                                    map.put("picid", imgId);
+                                    map.put("content", ToolString.getString(editTextAnswer));
+                                    map.put("firstquiz", "2");
+                                    map.put("pqid", questionid);
+                                    presenter.getDataAll("347", map);
+                                    break;
+                            }
+
+
+                        }
+                    }, 2);
+                    dialogSubmit.setNameText("是否录制提问/回答语音？");//内容
+                    dialogSubmit.setButtonOK("去录音");//确定的按钮
+                    dialogSubmit.setButtonCancel("直接提交");//取消的按钮
+                    dialogSubmit.setCancelable(true);//点击外部是否可以取消
+                    dialogSubmit.show();
+                } else {
+                    AnswerVoiceMP3Activity.actionActivity(this,
+                            type,
+                            editTextAnswer.getText().toString(),
+                            pid,
+                            questionid,
+                            imgId);
+                }
+
 
                 break;
             case R.id.img_photo:
@@ -353,6 +403,20 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
     @Override
     public void onFailure(String msg, Exception ex) {
 
+    }
+
+    @Override
+    public void onSuccessNew(String url, BaseBean baseEntity) {
+        super.onSuccessNew(url, baseEntity);
+        switch (url) {
+            case "347":
+            case "348":
+                ToastUtils.showShort("提交成功！");
+                finish();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
