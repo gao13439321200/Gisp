@@ -229,36 +229,47 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                     helper.setVisible(R.id.img_photo, ObjectUtils.isNotEmpty(qaVO.getImgurl()));
                     helper.setText(R.id.tv_qa_title, "Q：" + qaVO.getQuiz());//首问问题
                     helper.setText(R.id.tv_ask_time_1, qaVO.getQtime());//首问时长
+                    helper.setVisible(R.id.ll_ask_1, !"0:0".equals(qaVO.getQtime()));
+
 
                     if ("1".equals(qaVO.getHasanswer())) {//有首答
-                        helper.setText(R.id.tv_answer_1, "A:" + qaVO.getAusername() + qaVO.getAnswer());//首答答案
+                        helper.setText(R.id.tv_answer_1, "A：" + qaVO.getAusername() + " " + qaVO.getAnswer());//首答答案
                         helper.setVisible(R.id.tv_answer_1, true);
-                        helper.setVisible(R.id.ll_answer_1, true);
                         helper.setText(R.id.tv_answer_time_1, qaVO.getAtime());//首答时长
+                        helper.setVisible(R.id.ll_answer_1, !"0:0".equals(qaVO.getAtime()));//是否有语音
+                        helper.setVisible(R.id.btn_ask_2_new, "0:0".equals(qaVO.getAtime()));
+
                         helper.setVisible(R.id.btn_answer_1, false);
+                        helper.setVisible(R.id.btn_answer_1_new, false);
                     } else {
                         helper.setText(R.id.tv_answer_1, "");
                         helper.setVisible(R.id.ll_answer_1, false);
-                        helper.setVisible(R.id.tv_answer_1, false);
-                        helper.setVisible(R.id.btn_answer_1, true);
+                        helper.setVisible(R.id.ll_answer_1_new, false);
+                        helper.setVisible(R.id.btn_answer_1, !"0:0".equals(qaVO.getQtime()));
+                        helper.setVisible(R.id.btn_answer_1_new, "0:0".equals(qaVO.getQtime()));
                     }
 
                     if (qaVO.getNextQuiz() != null && qaVO.getNextQuiz().size() != 0 &&
                             ObjectUtils.isNotEmpty(qaVO.getNextQuiz().get(0).getQuiz())) {//有追问
                         helper.setVisible(R.id.btn_ask_2, false);
+                        helper.setVisible(R.id.btn_ask_2_new, false);
                         helper.setText(R.id.tv_ask_2, qaVO.getNextQuiz().get(0).getQuiz());
                         helper.setVisible(R.id.tv_ask_2, true);
                         helper.setVisible(R.id.ll_ask_hint, true);
                         helper.setText(R.id.tv_ask_time_2, qaVO.getNextQuiz().get(0).getQtime());
+                        helper.setVisible(R.id.ll_ask_2, !"0:0".equals(qaVO.getNextQuiz().get(0).getQtime()));
+
                         if ("1".equals(qaVO.getNextQuiz().get(0).getHasanswer())) {//有追答
                             helper.setVisible(R.id.btn_answer_2, false);
-                            helper.setText(R.id.tv_answer_2, "A:" + qaVO.getNextQuiz().get(0).getAusername()
-                                    + qaVO.getNextQuiz().get(0).getAnswer());
+                            helper.setVisible(R.id.btn_answer_2_new, false);
+                            helper.setText(R.id.tv_answer_2, "A：" + qaVO.getNextQuiz().get(0).getAusername()
+                                    + " " + qaVO.getNextQuiz().get(0).getAnswer());
                             helper.setText(R.id.tv_answer_time_2, qaVO.getNextQuiz().get(0).getAtime());//追答时长
                             helper.setVisible(R.id.ll_answer_2_all, true);
                             helper.setVisible(R.id.tv_answer_2, true);
                         } else {//无追答
-                            helper.setVisible(R.id.btn_answer_2, true);
+                            helper.setVisible(R.id.btn_answer_2, !"0:0".equals(qaVO.getNextQuiz().get(0).getQtime()));
+                            helper.setVisible(R.id.btn_answer_2_new, "0:0".equals(qaVO.getNextQuiz().get(0).getQtime()));
                             helper.setText(R.id.tv_answer_2, "");
                             helper.setVisible(R.id.ll_answer_2_all, false);
                             helper.setVisible(R.id.tv_answer_2, false);
@@ -283,12 +294,35 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     qaVO.getImgurl());
                         }
                     });
+                    helper.getView(R.id.btn_answer_1_new).setOnClickListener(view -> {
+                        if ("2".equals(qaVO.getHasanswer())) {
+                            ProblemActivity.actionActivity(
+                                    activity,
+                                    "answer",
+                                    imgId,
+                                    pid,
+                                    qaVO.getQid(),
+                                    qaVO.getImgurl());
+                        }
+                    });
+
                     helper.getView(R.id.btn_answer_2).setOnClickListener(view -> {
                         if ("2".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "answer_again", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }
                     });
+                    helper.getView(R.id.btn_answer_2_new).setOnClickListener(view -> {
+                        if ("2".equals(qaVO.getHasanswer())) {
+                            ProblemActivity.actionActivity(activity, "answer_again", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
+                        }
+                    });
+
                     helper.getView(R.id.btn_ask_2).setOnClickListener(view -> {
+                        if ("1".equals(qaVO.getHasanswer())) {
+                            ProblemActivity.actionActivity(activity, "examineMinutely", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
+                        }
+                    });
+                    helper.getView(R.id.btn_ask_2_new).setOnClickListener(view -> {
                         if ("1".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "examineMinutely", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }

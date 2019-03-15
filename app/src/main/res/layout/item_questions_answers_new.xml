@@ -64,6 +64,18 @@
             android:src="@mipmap/img_photo_orange"
             />
 
+        <TextView
+            android:id="@+id/btn_answer_1_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bg_answer"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="回答"
+            android:textColor="@color/colorAuxiliary"
+            android:textSize="12sp"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -133,13 +145,33 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tv_answer_1"
+        <LinearLayout
+            android:id="@+id/ll_answer_1_new"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text=""
-            android:visibility="gone"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_answer_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text=""
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/btn_ask_2_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_answer"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="追问"
+                android:textColor="@color/colorAuxiliary"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_answer_1"
@@ -197,13 +229,31 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_ask_2"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text=""
-            android:visibility="gone"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_ask_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text=""
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/btn_answer_2_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_answer"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="追答"
+                android:visibility="gone"
+                android:textColor="@color/colorAuxiliary"
+                android:textSize="12sp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_ask_hint"
@@ -251,6 +301,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="追答"
+                android:visibility="gone"
                 android:textColor="@color/colorAuxiliary"
                 android:textSize="12sp"/>
 
