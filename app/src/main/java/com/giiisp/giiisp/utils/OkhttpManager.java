@@ -22,7 +22,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by Gao on 2017/10/12.
@@ -87,7 +86,7 @@ public class OkhttpManager {
         mTrustrCertificate = new ArrayList<>();
     }
 
-    public OkHttpClient build(HttpLoggingInterceptor interceptor) {
+    public OkHttpClient build(OkHttpClient.Builder builder) {
         OkHttpClient okHttpClient = null;
         final X509TrustManager trustManager;
         SSLSocketFactory sslSocketFactory;
@@ -119,16 +118,14 @@ public class OkhttpManager {
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
-        okHttpClient = new OkHttpClient.Builder()
+        okHttpClient = builder
                 .sslSocketFactory(sslSocketFactory, trustManager)
-                .addInterceptor(interceptor)
-                .readTimeout(3000, TimeUnit.MILLISECONDS)
-//                .hostnameVerifier(new HostnameVerifier() {
-//                    @Override
-//                    public boolean verify(String hostname, SSLSession session) {
-//                        Log.d("OkhttpManager", "地址：" + hostname);
-//                        return MyUrl.HTML.contains(hostname) || MyUrl.WXHTML.contains(hostname);
-//                    }
+                .readTimeout(10000, TimeUnit.MILLISECONDS)
+//                .hostnameVerifier((hostname, session) -> {
+//                    Log.d("OkhttpManager", "地址：" + hostname);// 2017/10/13 高鹏 这里判断地址是否正确
+//                    return BuildConfig.BASE_URL.contains(hostname)
+//                            || BuildConfig.WX_BASE_URL.contains(hostname)
+//                            || "https://api.weixin.qq.com".contains(hostname);
 //                })
                 .build();
         return okHttpClient;

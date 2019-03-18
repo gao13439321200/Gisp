@@ -11,6 +11,8 @@ import com.giiisp.giiisp.base.BaseApp;
 import com.giiisp.giiisp.utils.OkhttpManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ihsanbal.logging.Level;
+import com.ihsanbal.logging.LoggingInterceptor;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -25,6 +27,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.internal.platform.Platform;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -140,17 +143,26 @@ public class ApiStoreNew {
 
         //        builder.interceptors().add(new ReceivedCookiesInterceptor(BaseApp.app));
         if (retrofit == null) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
             OkhttpManager.getInstance().setTrustrCertificates();
-            OkHttpClient httpClient = OkhttpManager.getInstance().build(logging);
-            httpClient.newBuilder().connectTimeout(10, TimeUnit.SECONDS);
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.connectTimeout(10, TimeUnit.SECONDS)
+                    .addInterceptor(new LoggingInterceptor.Builder()
+                            .loggable(BuildConfig.DEBUG)
+                            .setLevel(Level.BASIC)
+                            .log(Platform.INFO)
+                            .build())
+                    .build();
+            OkHttpClient client = OkhttpManager.getInstance().build(builder);
+
             retrofit = new Retrofit.Builder().client(getUnsafeOkHttpClient())
                     .baseUrl(UrlConstants.RequestUrl.URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     //可以接收自定义的Gson，当然也可以不传
                     .addConverterFactory(GsonConverterFactory.create(getGson()))
-                    .client(httpClient)
+                    .client(client)
                     .build();
         }
         return retrofit;

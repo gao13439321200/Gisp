@@ -282,7 +282,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                         helper.setVisible(R.id.tv_answer_2, false);
                         helper.setVisible(R.id.ll_answer_2_all, false);
                     }
-
+                    //首答
                     helper.getView(R.id.btn_answer_1).setOnClickListener(view -> {
                         if ("2".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(
@@ -294,6 +294,7 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     qaVO.getImgurl());
                         }
                     });
+                    //首答
                     helper.getView(R.id.btn_answer_1_new).setOnClickListener(view -> {
                         if ("2".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(
@@ -305,23 +306,25 @@ public class ItemClickAdapter extends BaseQuickAdapter<ClickEntity, BaseViewHold
                                     qaVO.getImgurl());
                         }
                     });
-
+                    //追答
                     helper.getView(R.id.btn_answer_2).setOnClickListener(view -> {
-                        if ("2".equals(qaVO.getHasanswer())) {
+                        if ("2".equals(qaVO.getNextQuiz().get(0).getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "answer_again", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }
                     });
+                    //追答
                     helper.getView(R.id.btn_answer_2_new).setOnClickListener(view -> {
-                        if ("2".equals(qaVO.getHasanswer())) {
+                        if ("2".equals(qaVO.getNextQuiz().get(0).getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "answer_again", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }
                     });
-
+                    //追问
                     helper.getView(R.id.btn_ask_2).setOnClickListener(view -> {
                         if ("1".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "examineMinutely", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
                         }
                     });
+                    //追问
                     helper.getView(R.id.btn_ask_2_new).setOnClickListener(view -> {
                         if ("1".equals(qaVO.getHasanswer())) {
                             ProblemActivity.actionActivity(activity, "examineMinutely", imgId, pid, qaVO.getQid(), qaVO.getImgurl());
