@@ -1988,8 +1988,8 @@ public class PaperDetailsActivity extends
                     paperQA.setImageId(imageId.get(position));
                     paperQA.initNetwork();
                 }
-                isFollowed = bean.getIsfollow();
-                ivLikedIcon.setSelected("1".equals(isFollowed));
+//                isFollowed = bean.getIsfollow();
+//                ivLikedIcon.setSelected("1".equals(isFollowed));
                 break;
             case "317"://获取待配音预览论文信息
                 DubbingBean dubbingBean = (DubbingBean) baseBean;
@@ -2179,6 +2179,20 @@ public class PaperDetailsActivity extends
         if (mVideoViewMap != null && mVideoViewMap.get(position) != null) {//暂停视频
             mVideoViewMap.get(position).pause();
         }
+        switch (language) {
+            case CN:
+                isFollowed = itemClickAdapter.getItem(position).getPaperInfoVO().getIsCnFollow() + "";
+                break;
+            case EN:
+                isFollowed = itemClickAdapter.getItem(position).getPaperInfoVO().getIsEnFollow() + "";
+                break;
+            default:
+                isFollowed = "2";//默认为未收藏
+                break;
+        }
+        ivLikedIcon.setSelected("1".equals(isFollowed));
+
+
         HashMap<String, Object> map = new HashMap<>();
         map.put("imgid", imageId.get(position));
         map.put("pid", pid);
