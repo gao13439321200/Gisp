@@ -301,15 +301,15 @@ public class ProblemActivity extends BaseMvpActivity<BaseImpl, WholePresenter> i
                         public void onCancelClick() {
                             HashMap<String, Object> map = new HashMap<>();
                             switch (type) {
-                                case "answer":
-                                case "answer_again":
+                                case "answer"://首答
+                                case "answer_again"://追答
                                     map.put("uid", getUserID());
                                     map.put("qid", questionid);
                                     map.put("pid", pid);
                                     map.put("content", ToolString.getString(editTextAnswer));
                                     presenter.getDataAll("348", map);
                                     break;
-                                case "Problem":
+                                case "Problem"://首问
                                     map.put("uid", getUserID());
                                     map.put("pid", pid);
                                     map.put("picid", imgId);

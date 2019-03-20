@@ -76,9 +76,22 @@
             android:textColor="@color/colorAuxiliary"
             android:textSize="12sp"/>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_open_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="展开"/>
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/all_ask_first_voice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -143,20 +156,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:visibility="gone">
 
         <LinearLayout
-            android:id="@+id/ll_answer_1_new"
+            android:id="@+id/all_answer_first"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_answer_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text=""
-                android:visibility="gone"/>
+                android:text=""/>
 
             <TextView
                 android:id="@+id/btn_ask_2_new"
@@ -168,13 +183,12 @@
                 android:paddingRight="5dp"
                 android:text="追问"
                 android:textColor="@color/colorAuxiliary"
-                android:textSize="12sp"
-                android:visibility="gone"/>
+                android:textSize="12sp"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_answer_1"
+            android:id="@+id/all_answer_first_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -186,7 +200,6 @@
                 android:id="@+id/ll_answer"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_voice"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -230,16 +243,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/all_ask_again"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_ask_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text=""
-                android:visibility="gone"/>
+                android:text=""/>
 
             <TextView
                 android:id="@+id/btn_answer_2_new"
@@ -250,13 +264,12 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="追答"
-                android:visibility="gone"
                 android:textColor="@color/colorAuxiliary"
                 android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_ask_hint"
+            android:id="@+id/all_ask_again_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -268,7 +281,6 @@
                 android:id="@+id/ll_ask_2"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_voice"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
@@ -301,7 +313,6 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="追答"
-                android:visibility="gone"
                 android:textColor="@color/colorAuxiliary"
                 android:textSize="12sp"/>
 
@@ -316,12 +327,12 @@
             android:id="@+id/tv_answer_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_marginTop="5dp"
             android:text=""
             android:visibility="gone"/>
 
         <LinearLayout
-            android:id="@+id/ll_answer_2_all"
+            android:id="@+id/all_answer_again_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -333,7 +344,6 @@
                 android:id="@+id/ll_answer_2"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_voice"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"

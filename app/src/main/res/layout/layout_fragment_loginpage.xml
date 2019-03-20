@@ -13,7 +13,7 @@
         style="@style/login_edittext"
         android:hint="@string/enter_phone_email"
         android:imeOptions="actionNext"
-        android:text=""/>
+        android:text="18210019243"/>
 
     <EditText
         android:id="@+id/ed_enter_password"
@@ -23,7 +23,7 @@
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:maxLength="50"
-        android:text=""/>
+        android:text="123456"/>
 
     <TextView
         android:id="@+id/tv_register"
