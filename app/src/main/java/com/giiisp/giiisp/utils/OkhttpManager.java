@@ -122,7 +122,7 @@ public class OkhttpManager {
                 .sslSocketFactory(sslSocketFactory, trustManager)
                 .readTimeout(10000, TimeUnit.MILLISECONDS)
 //                .hostnameVerifier((hostname, session) -> {
-//                    Log.d("OkhttpManager", "地址：" + hostname);// 2017/10/13 高鹏 这里判断地址是否正确
+//                    Log.d("OkhttpManager", "地址：" + hostname);// 2017/10/13 这里判断地址是否正确
 //                    return BuildConfig.BASE_URL.contains(hostname)
 //                            || BuildConfig.WX_BASE_URL.contains(hostname)
 //                            || "https://api.weixin.qq.com".contains(hostname);
